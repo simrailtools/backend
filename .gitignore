@@ -1,0 +1,76 @@
+!.idea
+.idea/*
+
+# code style settings
+!/.idea/codeStyles
+.idea/codeStyles/*
+!/.idea/codeStyles/Project.xml
+!/.idea/codeStyles/codeStyleConfig.xml
+
+# copyright settings
+!/.idea/copyright
+.idea/copyright/*
+!/.idea/copyright/simrail_tools.xml
+!/.idea/copyright/profiles_settings.xml
+
+# inspection profiles
+!/.idea/inspectionProfiles
+.idea/inspectionProfiles/*
+!/.idea/inspectionProfiles/simrail_tools.xml
+!/.idea/inspectionProfiles/profiles_settings.xml
+
+# local testing
+.local/.env.secret
+
+# gradle
+.gradle/
+build/
+
+# fleet
+.fleet/
+
+# eclipse
+*.classpath
+*.project
+*.settings
+/bin/
+/subprojects/*/bin/
+.metadata/
+atlassian-ide-plugin.xml
+
+# NetBeans
+.nb-gradle
+.nb-gradle-properties
+
+# Vim
+*.sw[nop]
+
+# Emacs
+*~
+\#*\#
+.\#*
+
+# Textmate
+.textmate
+
+# Sublime Text
+*.sublime-*
+
+# jEnv
+.java-version
+
+# macOS
+.DS_Store
+
+# HPROF
+*.hprof
+
+# Work dirs
+/incoming-distributions
+/intTestHomeDir
+
+# Logs
+/*.log
+
+# delombok
+*/src/main/lombok

@@ -1,0 +1,40 @@
+[versions]
+# plugins
+spotless = "6.25.0"
+springBoot = "3.2.4"
+checkstyleTools = "10.14.2"
+springDependencyManagement = "1.1.4"
+
+# direct dependencies
+vavr = "0.10.4"
+feign = "13.2.1"
+lombok = "1.18.32"
+jackson = "2.17.0"
+fuzzywuzzy = "1.4.0"
+annotations = "24.1.0"
+
+[libraries]
+# jackson
+jacksonCore = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
+jacksonDatatypeJdk8 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jdk8", version.ref = "jackson" }
+jacksonDatatypeJsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
+
+# feign
+feignCore = { group = "io.github.openfeign", name = "feign-core", version.ref = "feign" }
+feignJackson = { group = "io.github.openfeign", name = "feign-jackson", version.ref = "feign" }
+feignLoggingSlf4j = { group = "io.github.openfeign", name = "feign-slf4j", version.ref = "feign" }
+feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", version.ref = "feign" }
+
+# general
+vavr = { group = "io.vavr", name = "vavr", version.ref = "vavr" }
+lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
+annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+
+# dummy versions, just here for renovate to detect that there is something to update
+checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
+
+[plugins]
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
+springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }

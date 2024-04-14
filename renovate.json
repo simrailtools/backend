@@ -1,0 +1,50 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "config:base",
+    ":rebaseStalePrs"
+  ],
+  "labels": [
+    "t: dependencies"
+  ],
+  "packageRules": [
+    {
+      "matchManagers": [
+        "github-actions"
+      ],
+      "groupName": "github actions"
+    },
+    {
+      "matchUpdateTypes": [
+        "patch"
+      ],
+      "excludePackageNames": [
+        "gradle"
+      ],
+      "groupName": "all dependencies with patch changes"
+    },
+    {
+      "matchPackagePrefixes": [
+        "azul/zulu-openjdk-alpine"
+      ],
+      "enabled": false
+    }
+  ],
+  "vulnerabilityAlerts": {
+    "addLabels": [
+      "t: security"
+    ],
+    "assignees": [
+      "@derklaro"
+    ]
+  },
+  "timezone": "Europe/Berlin",
+  "schedule": [
+    "before 6:00am"
+  ],
+  "prHourlyLimit": 10,
+  "rebaseLabel": "s: rebase",
+  "stopUpdatingLabel": "s: stop updates",
+  "commitMessagePrefix": "chore: ",
+  "commitMessageAction": "update"
+}
