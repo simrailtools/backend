@@ -30,29 +30,20 @@ import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.FeignClientProvider;
 
-public interface SimRailAwsApiClient {
+public interface SimRailIntAwsApiClient {
 
   @Contract(" -> new")
-  static @NotNull SimRailAwsApiClient create() {
-    return FeignClientProvider.prepareJsonFeignInstance()
-      .target(SimRailAwsApiClient.class, "https://api1.aws.simrail.eu:8082/api");
+  static @NotNull SimRailIntAwsApiClient create() {
+    return FeignClientProvider.prepareFeignInstance()
+      .target(SimRailIntAwsApiClient.class, "https://api1.aws.simrail.eu:8083");
   }
 
   /**
-   * Get the timezone offset hours of the server with the given code.
+   * Get the thumbnail image (as png) of the train with the given type.
    *
-   * @param serverCode the code of the server to get the offset of.
-   * @return the timezone offset hours of the requested server.
+   * @param trainType the type of the train to get a thumbnail of.
+   * @return the thumbnail for the train with the given type.
    */
-  @RequestLine("GET /getTimeZone?serverCode={serverCode}")
-  int getServerTimeOffset(@Param("serverCode") String serverCode);
-
-  /**
-   * Get the server time in milliseconds since the epoch.
-   *
-   * @param serverCode the code of the server to get the time of.
-   * @return the time of the requested server in millis since the epoch.
-   */
-  @RequestLine("GET /getTime?serverCode={serverCode}")
-  long getServerTimeMillis(@Param("serverCode") String serverCode);
+  @RequestLine("GET /Thumbnails/Locomotives/{type}.png")
+  byte[] getTrainThumbnail(@Param("type") String trainType);
 }

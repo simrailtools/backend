@@ -41,7 +41,7 @@ public interface SteamApiClient {
 
   @Contract("_ -> new")
   static @NotNull SteamApiClient create(@NotNull String apiKey) {
-    return FeignClientProvider.prepareFeignInstance()
+    return FeignClientProvider.prepareJsonFeignInstance()
       .requestInterceptor(new SteamApiKeyInterceptor(apiKey))
       .target(SteamApiClient.class, "https://api.steampowered.com");
   }

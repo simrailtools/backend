@@ -22,37 +22,31 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.sraws;
+package tools.simrail.backend.external.simkol;
 
-import feign.Param;
+import feign.Headers;
 import feign.RequestLine;
+import java.util.List;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.FeignClientProvider;
+import tools.simrail.backend.external.simkol.model.SimKolSpeedLimit;
 
-public interface SimRailAwsApiClient {
+@Headers({"Accept: application/json"})
+public interface SimKolApiClient {
 
-  @Contract(" -> new")
-  static @NotNull SimRailAwsApiClient create() {
+  @Contract("-> new")
+  static @NotNull SimKolApiClient create() {
     return FeignClientProvider.prepareJsonFeignInstance()
-      .target(SimRailAwsApiClient.class, "https://api1.aws.simrail.eu:8082/api");
+      .target(SimKolApiClient.class, "https://webhost.simkol.pl");
   }
 
   /**
-   * Get the timezone offset hours of the server with the given code.
+   * Get the speed limits that globally apply to all tracks.
    *
-   * @param serverCode the code of the server to get the offset of.
-   * @return the timezone offset hours of the requested server.
+   * @return the speed limits that globally apply to all tracks.
    */
-  @RequestLine("GET /getTimeZone?serverCode={serverCode}")
-  int getServerTimeOffset(@Param("serverCode") String serverCode);
-
-  /**
-   * Get the server time in milliseconds since the epoch.
-   *
-   * @param serverCode the code of the server to get the time of.
-   * @return the time of the requested server in millis since the epoch.
-   */
-  @RequestLine("GET /getTime?serverCode={serverCode}")
-  long getServerTimeMillis(@Param("serverCode") String serverCode);
+  @NotNull
+  @RequestLine("GET /speeds.json")
+  List<SimKolSpeedLimit> getSpeedLimits();
 }

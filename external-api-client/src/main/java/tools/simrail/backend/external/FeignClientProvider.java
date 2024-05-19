@@ -53,6 +53,15 @@ public final class FeignClientProvider {
   }
 
   public static @NotNull Feign.Builder prepareFeignInstance() {
+    var callingClass = CLASS_REF_RETAINING_STACK_WALKER.getCallerClass();
+    return Feign.builder()
+      .client(new Http2Client())
+      .logLevel(Logger.Level.FULL)
+      .logger(new Slf4jLogger(callingClass))
+      .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);
+  }
+
+  public static @NotNull Feign.Builder prepareJsonFeignInstance() {
     // build json object mapper for encoding/decoding requests
     var bodyMapper = JsonMapper.builder()
       .addModule(new Jdk8Module())

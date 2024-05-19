@@ -22,37 +22,43 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.sraws;
+package tools.simrail.backend.external.simkol.model;
 
-import feign.Param;
-import feign.RequestLine;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
-import tools.simrail.backend.external.FeignClientProvider;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-public interface SimRailAwsApiClient {
-
-  @Contract(" -> new")
-  static @NotNull SimRailAwsApiClient create() {
-    return FeignClientProvider.prepareJsonFeignInstance()
-      .target(SimRailAwsApiClient.class, "https://api1.aws.simrail.eu:8082/api");
-  }
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public final class SimKolSpeedLimit {
 
   /**
-   * Get the timezone offset hours of the server with the given code.
-   *
-   * @param serverCode the code of the server to get the offset of.
-   * @return the timezone offset hours of the requested server.
+   * The identifier of the track direction. N for northbound, P for southbound.
    */
-  @RequestLine("GET /getTimeZone?serverCode={serverCode}")
-  int getServerTimeOffset(@Param("serverCode") String serverCode);
+  @JsonProperty("track")
+  private String direction;
+  /**
+   * The identifier of the track in the local section.
+   */
+  @JsonProperty("lineNo")
+  private String lineNumber;
 
   /**
-   * Get the server time in milliseconds since the epoch.
-   *
-   * @param serverCode the code of the server to get the time of.
-   * @return the time of the requested server in millis since the epoch.
+   * The start point of the axis, given in kilometer from the track start point.
    */
-  @RequestLine("GET /getTime?serverCode={serverCode}")
-  long getServerTimeMillis(@Param("serverCode") String serverCode);
+  @JsonProperty("axisStart")
+  private String axisStart;
+  /**
+   * The end point of the axis, given in kilometer from the track start point.
+   */
+  @JsonProperty("axisEnd")
+  private String axisEnd;
+
+  /**
+   * The allowed speed on the track.
+   */
+  @JsonProperty("vMax")
+  private int speedLimit;
 }

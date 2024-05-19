@@ -43,7 +43,7 @@ public interface SimRailPanelApiClient {
 
   @Contract(" -> new")
   static @NotNull SimRailPanelApiClient create() {
-    return FeignClientProvider.prepareFeignInstance()
+    return FeignClientProvider.prepareJsonFeignInstance()
       .target(SimRailPanelApiClient.class, "https://panel.simrail.eu:8084");
   }
 
