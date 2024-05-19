@@ -98,15 +98,15 @@ public final class SimRailPanelTrain {
     @JsonProperty("Velocity")
     private double currentSpeed;
     /**
-     * The latitude of the train position.
+     * The latitude of the train position. Can be null in rare cases.
      */
     @JsonProperty("Latititute")
-    private double positionLatitude;
+    private Double positionLatitude;
     /**
-     * The longitude of the train position.
+     * The longitude of the train position. Can be null in rare cases.
      */
     @JsonProperty("Longitute")
-    private double positionLongitude;
+    private Double positionLongitude;
 
     /**
      * The id of the signal in front of the train. Can be null if >5 km away.
@@ -119,9 +119,9 @@ public final class SimRailPanelTrain {
     @JsonProperty("SignalInFrontSpeed")
     private short nextSignalSpeed;
     /**
-     * The distance to the next signal.
+     * The distance to the next signal. Can be null in rare cases.
      */
     @JsonProperty("DistanceToSignalInFront")
-    private double nextSignalDistance;
+    private Double nextSignalDistance;
   }
 }

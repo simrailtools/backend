@@ -13,6 +13,12 @@ jackson = "2.17.0"
 fuzzywuzzy = "1.4.0"
 annotations = "24.1.0"
 
+# testing
+junit = "5.10.2"
+mockito = "5.12.0"
+junitLauncher = "1.10.2"
+testcontainers = "1.19.8"
+
 [libraries]
 # jackson
 jacksonCore = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
@@ -31,6 +37,19 @@ lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" 
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 
+# junit
+junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
+junitParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
+junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
+junitLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitLauncher" }
+
+# general testing
+mockito = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
+
+# testcontainers
+testContainers = { group = "org.testcontainers", name = "testcontainers", version.ref = "testcontainers" }
+testContainersJunit = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "testcontainers" }
+
 # dummy versions, just here for renovate to detect that there is something to update
 checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
 
@@ -38,3 +57,7 @@ checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
 springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
+
+[bundles]
+junit = ["junitApi", "junitParams", "junitEngine"]
+testContainers = ["testContainers", "testContainersJunit"]

@@ -22,40 +22,26 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.srpanel.model;
+package tools.simrail.backend.external.sraws;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import javax.imageio.ImageIO;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * Position and speed information about a train that is driving on a server.
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public final class SimRailPanelTrainPosition {
+public final class SimRailIntAwsApiClientTest {
 
-  /**
-   * The id of the train that is associated with the data.
-   */
-  @JsonProperty("id")
-  private String id;
-
-  /**
-   * The current speed of the train.
-   */
-  @JsonProperty("Velocity")
-  private double currentSpeed;
-  /**
-   * The latitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Latitude")
-  private Double positionLatitude;
-  /**
-   * The longitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Longitude")
-  private Double positionLongitude;
+  @Test
+  void testTrainThumbnail() throws IOException {
+    var client = SimRailIntAwsApiClient.create();
+    var et25Response = client.getTrainThumbnail("ET25-002");
+    try (var responseStream = new ByteArrayInputStream(et25Response)) {
+      var image = Assertions.assertDoesNotThrow(() -> ImageIO.read(responseStream));
+      Assertions.assertEquals(BufferedImage.TYPE_3BYTE_BGR, image.getType());
+      Assertions.assertEquals(720, image.getHeight());
+      Assertions.assertEquals(1699, image.getWidth());
+    }
+  }
 }

@@ -62,6 +62,12 @@ subprojects {
 
     "compileOnly"(rootProject.libs.annotations)
     "implementation"(platform(SpringBootPlugin.BOM_COORDINATES))
+
+    // testing
+    "testImplementation"(rootProject.libs.mockito)
+    "testRuntimeOnly"(rootProject.libs.junitLauncher)
+    "testImplementation"(rootProject.libs.bundles.junit)
+    "testImplementation"(rootProject.libs.bundles.testContainers)
   }
 
   tasks.withType<JavaCompile> {
@@ -74,6 +80,13 @@ subprojects {
     options.compilerArgs.add("-parameters")
     options.compilerArgs.add("-Xlint:-preview")
     options.compilerArgs.add("--enable-preview")
+  }
+
+  tasks.withType<Test> {
+    useJUnitPlatform()
+    testLogging {
+      events("started", "passed", "skipped", "failed")
+    }
   }
 
   tasks.withType<BootRun> {

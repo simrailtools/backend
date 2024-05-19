@@ -22,40 +22,37 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.srpanel.model;
+package tools.simrail.backend.external.sraws;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import java.time.Instant;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * Position and speed information about a train that is driving on a server.
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public final class SimRailPanelTrainPosition {
+public final class SimRailAwsApiClientTest {
 
-  /**
-   * The id of the train that is associated with the data.
-   */
-  @JsonProperty("id")
-  private String id;
+  @Test
+  void testServerTimeOffset() {
+    var client = SimRailAwsApiClient.create();
+    var de1Offset = client.getServerTimeOffset("de1");
+    Assertions.assertTrue(de1Offset == 1 || de1Offset == 2);
 
-  /**
-   * The current speed of the train.
-   */
-  @JsonProperty("Velocity")
-  private double currentSpeed;
-  /**
-   * The latitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Latitude")
-  private Double positionLatitude;
-  /**
-   * The longitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Longitude")
-  private Double positionLongitude;
+    var pl1Offset = client.getServerTimeOffset("pl1");
+    Assertions.assertEquals(0, pl1Offset);
+  }
+
+  @Test
+  void testServerTimeMillis() {
+    var client = SimRailAwsApiClient.create();
+
+    var de1Offset = client.getServerTimeOffset("de1");
+    var de1ZoneOffset = ZoneOffset.ofHours(de1Offset);
+
+    var de1Time = client.getServerTimeMillis("de1");
+    var instant = Instant.ofEpochMilli(de1Time);
+    var convertedTime = OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
+    var inTimezone = convertedTime.withOffsetSameLocal(de1ZoneOffset);
+    Assertions.assertTrue(inTimezone.getYear() >= 2024);
+  }
 }

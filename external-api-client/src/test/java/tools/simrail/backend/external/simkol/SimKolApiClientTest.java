@@ -22,40 +22,33 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.srpanel.model;
+package tools.simrail.backend.external.simkol;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
-/**
- * Position and speed information about a train that is driving on a server.
- */
-@Data
-@NoArgsConstructor
-@AllArgsConstructor
-public final class SimRailPanelTrainPosition {
+public final class SimKolApiClientTest {
 
-  /**
-   * The id of the train that is associated with the data.
-   */
-  @JsonProperty("id")
-  private String id;
+  @Test
+  void testSpeedLimits() {
+    var client = SimKolApiClient.create();
+    var speedLimits = Assertions.assertDoesNotThrow(client::getSpeedLimits);
+    Assertions.assertFalse(speedLimits.isEmpty());
 
-  /**
-   * The current speed of the train.
-   */
-  @JsonProperty("Velocity")
-  private double currentSpeed;
-  /**
-   * The latitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Latitude")
-  private Double positionLatitude;
-  /**
-   * The longitude of the train position. Can be null in some rare cases.
-   */
-  @JsonProperty("Longitude")
-  private Double positionLongitude;
+    for (var speedLimit : speedLimits) {
+      // assert direction is correct
+      var direction = speedLimit.getDirection();
+      Assertions.assertTrue(direction.equals("P") || direction.equals("N"));
+
+      // validate speed limits
+      var limit = speedLimit.getSpeedLimit();
+      Assertions.assertEquals(0, limit % 10);
+      Assertions.assertTrue(limit >= 0 && limit <= 200);
+
+      // other stuff
+      Assertions.assertNotNull(speedLimit.getAxisEnd());
+      Assertions.assertNotNull(speedLimit.getAxisStart());
+      Assertions.assertNotNull(speedLimit.getLineNumber());
+    }
+  }
 }
