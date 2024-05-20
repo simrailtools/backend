@@ -44,7 +44,7 @@ subprojects {
   apply(plugin = "io.spring.dependency-management")
 
   // nothing to boot in shared
-  if (name == "rest-api") {
+  if (name in arrayOf("rest-api", "info-collector")) {
     apply(plugin = "org.springframework.boot")
   }
 

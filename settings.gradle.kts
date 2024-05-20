@@ -34,4 +34,4 @@ pluginManagement {
 }
 
 rootProject.name = "simrail-information-tools-backend"
-include("external-api-client", "rest-api")
+include("external-api-client", "common", "info-collector", "rest-api")
