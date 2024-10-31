@@ -26,6 +26,7 @@ package tools.simrail.backend.external.srpanel.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,6 +44,16 @@ public final class SimRailPanelTrain {
    */
   @JsonProperty("id")
   private String id;
+  /**
+   * The id of the train run.
+   */
+  @JsonProperty("RunId")
+  private UUID runId;
+  /**
+   * The server code on which the train is running.
+   */
+  @JsonProperty("ServerCode")
+  private String serverCode;
 
   /**
    * The name of the train.
