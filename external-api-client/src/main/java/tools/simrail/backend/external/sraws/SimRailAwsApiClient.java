@@ -26,9 +26,11 @@ package tools.simrail.backend.external.sraws;
 
 import feign.Param;
 import feign.RequestLine;
+import java.util.List;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.FeignClientProvider;
+import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
 
 public interface SimRailAwsApiClient {
 
@@ -55,4 +57,23 @@ public interface SimRailAwsApiClient {
    */
   @RequestLine("GET /getTime?serverCode={serverCode}")
   long getServerTimeMillis(@Param("serverCode") String serverCode);
+
+  /**
+   * Get all current and future scheduled train runs of a specific server.
+   *
+   * @param serverCode the code of the server to get the train runs of.
+   * @return all current and future train runs of the specified server.
+   */
+  @RequestLine("GET /getAllTimetables?serverCode={serverCode}")
+  List<SimRailAwsTrainRun> getTrainRuns(@Param("serverCode") String serverCode);
+
+  /**
+   * Get the train runs (currently only returns the most recent one) of the train with the specified number.
+   *
+   * @param serverCode  the code of the server to get the train runs on.
+   * @param trainNumber the number of the train to get the runs of.
+   * @return the train runs of the given train on the given server.
+   */
+  @RequestLine("GET /getAllTimetables?serverCode={serverCode}&train={train}")
+  List<SimRailAwsTrainRun> getTrainRuns(@Param("serverCode") String serverCode, @Param("train") String trainNumber);
 }
