@@ -9,4 +9,7 @@ dependencies {
   implementation(libs.feignJackson)
   implementation(libs.feignClientJava11)
   implementation(libs.feignLoggingSlf4j)
+
+  // jetbrains annotations
+  compileOnly(libs.annotations)
 }

@@ -60,7 +60,6 @@ subprojects {
     "compileOnly"(rootProject.libs.lombok)
     "annotationProcessor"(rootProject.libs.lombok)
 
-    "compileOnly"(rootProject.libs.annotations)
     "implementation"(platform(SpringBootPlugin.BOM_COORDINATES))
 
     // testing
@@ -71,8 +70,8 @@ subprojects {
   }
 
   tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.VERSION_21.toString()
-    targetCompatibility = JavaVersion.VERSION_21.toString()
+    sourceCompatibility = JavaVersion.VERSION_23.toString()
+    targetCompatibility = JavaVersion.VERSION_23.toString()
 
     options.encoding = "UTF-8"
     options.isIncremental = true
