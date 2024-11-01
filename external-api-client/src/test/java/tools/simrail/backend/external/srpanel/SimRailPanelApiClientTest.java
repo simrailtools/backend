@@ -62,6 +62,7 @@ public final class SimRailPanelApiClientTest {
       Assertions.assertNotNull(entry.getId());
       Assertions.assertNotNull(entry.getName());
       Assertions.assertNotNull(entry.getNumber());
+      Assertions.assertNotNull(entry.getRunId());
 
       var vehicles = entry.getVehicles();
       Assertions.assertNotNull(vehicles);
