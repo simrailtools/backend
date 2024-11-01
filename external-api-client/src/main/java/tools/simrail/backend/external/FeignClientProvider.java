@@ -41,12 +41,13 @@ import feign.http2client.Http2Client;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.slf4j.Slf4jLogger;
+import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 
 public final class FeignClientProvider {
 
   private static final StackWalker CLASS_REF_RETAINING_STACK_WALKER =
-    StackWalker.getInstance(StackWalker.Option.RETAIN_CLASS_REFERENCE);
+    StackWalker.getInstance(Set.of(StackWalker.Option.RETAIN_CLASS_REFERENCE, StackWalker.Option.DROP_METHOD_INFO));
 
   private FeignClientProvider() {
     throw new UnsupportedOperationException();
