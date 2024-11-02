@@ -22,12 +22,25 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.postgreSqlDriver)
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+package tools.simrail.backend.collector;
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.envers.repository.config.EnableEnversRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
+@EnableCaching
+@EnableScheduling
+@EntityScan(basePackages = "tools.simrail.backend")
+@ComponentScan(basePackages = "tools.simrail.backend")
+@EnableEnversRepositories(basePackages = "tools.simrail.backend")
+@SpringBootApplication(scanBasePackages = "tools.simrail.backend")
+public class SimRailToolsCollectorApplication {
+
+  public static void main(String[] args) {
+    SpringApplication.run(SimRailToolsCollectorApplication.class, args);
+  }
 }

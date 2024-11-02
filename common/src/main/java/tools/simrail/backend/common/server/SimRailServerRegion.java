@@ -22,12 +22,23 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.postgreSqlDriver)
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+package tools.simrail.backend.common.server;
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+/**
+ * The possible regions where a SimRail server can be located.
+ */
+public enum SimRailServerRegion {
+
+  /**
+   * Asia region.
+   */
+  ASIA,
+  /**
+   * Europe region.
+   */
+  EUROPE,
+  /**
+   * North america region.
+   */
+  US_NORTH,
 }

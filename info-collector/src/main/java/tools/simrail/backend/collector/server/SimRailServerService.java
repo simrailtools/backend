@@ -22,12 +22,20 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.postgreSqlDriver)
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+package tools.simrail.backend.collector.server;
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+import jakarta.annotation.Nonnull;
+import java.util.List;
+import org.springframework.stereotype.Service;
+
+@Service
+public interface SimRailServerService {
+
+  /**
+   * Get the server descriptors that were retrieved on the last collection run.
+   *
+   * @return the server descriptors that were retrieved on the last collection run.
+   */
+  @Nonnull
+  List<SimRailServerDescriptor> getServers();
 }

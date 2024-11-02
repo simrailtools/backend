@@ -23,9 +23,15 @@
  */
 
 dependencies {
+  implementation(projects.common)
+  implementation(projects.externalApiClient)
+
+  implementation(libs.postgreSqlDriver)
+
+  implementation("org.springframework.data:spring-data-envers")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-mongodb")
+  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

@@ -22,12 +22,36 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.postgreSqlDriver)
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+package tools.simrail.backend.common.server;
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+import jakarta.annotation.Nonnull;
+import java.util.Optional;
+import java.util.UUID;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.history.RevisionRepository;
+
+/**
+ * A repository for SimRail server information.
+ */
+public interface SimRailServerRepository extends
+  CrudRepository<SimRailServerEntity, UUID>,
+  RevisionRepository<SimRailServerEntity, UUID, Long> {
+
+  /**
+   * Finds a single SimRail server by the given server code.
+   *
+   * @param code the code of the server to get.
+   * @return an optional holding the server entity if an entity with the given code exists.
+   */
+  @Nonnull
+  Optional<SimRailServerEntity> findByCode(@Nonnull String code);
+
+  /**
+   * Finds a single SimRail server by the given foreign id.
+   *
+   * @param foreignId the foreign id of the server to get.
+   * @return an optional holding the server entity if an entity with the given foreign id exists.
+   */
+  @Nonnull
+  Optional<SimRailServerEntity> findByForeignId(@Nonnull String foreignId);
 }
