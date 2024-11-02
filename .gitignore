@@ -19,8 +19,9 @@
 !/.idea/inspectionProfiles/simrail_tools.xml
 !/.idea/inspectionProfiles/profiles_settings.xml
 
-# local testing
-.local/.env.secret
+# local
+.dev/volumes/
+.dev/.env.secret
 
 # gradle
 .gradle/
