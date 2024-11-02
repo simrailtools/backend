@@ -1,23 +1,23 @@
 [versions]
 # plugins
-spotless = "6.25.0"
-springBoot = "3.2.4"
-checkstyleTools = "10.14.2"
-springDependencyManagement = "1.1.4"
+spotless = "7.0.0.BETA4"
+springBoot = "3.3.5"
+checkstyleTools = "10.20.0"
+springDependencyManagement = "1.1.6"
 
 # direct dependencies
-vavr = "0.10.4"
-feign = "13.2.1"
-lombok = "1.18.32"
-jackson = "2.17.0"
+feign = "13.5"
+lombok = "1.18.34"
+jackson = "2.18.1"
 fuzzywuzzy = "1.4.0"
-annotations = "24.1.0"
+annotations = "26.0.1"
+postgreSqlDriver = "42.7.4"
 
 # testing
-junit = "5.10.2"
-mockito = "5.12.0"
-junitLauncher = "1.10.2"
-testcontainers = "1.19.8"
+junit = "5.11.3"
+mockito = "5.14.2"
+junitLauncher = "1.11.3"
+testcontainers = "1.20.3"
 
 [libraries]
 # jackson
@@ -32,10 +32,10 @@ feignLoggingSlf4j = { group = "io.github.openfeign", name = "feign-slf4j", versi
 feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", version.ref = "feign" }
 
 # general
-vavr = { group = "io.vavr", name = "vavr", version.ref = "vavr" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+postgreSqlDriver = { group = "org.postgresql", name = "postgresql", version.ref = "postgreSqlDriver" }
 
 # junit
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
