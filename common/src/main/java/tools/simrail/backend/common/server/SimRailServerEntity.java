@@ -35,7 +35,7 @@ import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
-import java.util.Set;
+import java.util.List;
 import java.util.UUID;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -132,5 +132,5 @@ public final class SimRailServerEntity {
   @Audited
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-  private Set<String> tags;
+  private List<String> tags;
 }

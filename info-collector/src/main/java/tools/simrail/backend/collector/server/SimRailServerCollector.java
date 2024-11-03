@@ -32,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,8 +122,11 @@ public final class SimRailServerCollector implements SimRailServerService {
         var tagList = Arrays.stream(tags.split(","))
           .map(String::strip)
           .filter(tag -> !tag.isEmpty())
-          .collect(Collectors.toSet());
-        serverEntity.setTags(tagList);
+          .toList();
+        var currentTags = serverEntity.getTags();
+        if (!tagList.equals(currentTags)) {
+          serverEntity.setTags(tagList);
+        }
       } else {
         LOGGER.warn("Cannot parse language and/or tags from server name {}", server.getName());
         continue;
