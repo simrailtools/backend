@@ -22,19 +22,18 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.jts)
-  implementation("org.springframework.data:spring-data-envers")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
+package tools.simrail.backend.common.util;
 
-tasks.register<Copy>("copyDataFiles") {
-  from("../.data/")
-  include("**/*.json", "**/*.json5")
-  into(project.layout.buildDirectory.dir("resources/main/data"))
-}
+import org.locationtech.jts.geom.GeometryFactory;
 
-tasks.withType<ProcessResources>().configureEach {
-  dependsOn("copyDataFiles")
+public final class GeometryConstants {
+
+  /**
+   * The JVM-static geometry factory to use for all geometry operations.
+   */
+  public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
+
+  private GeometryConstants() {
+    throw new UnsupportedOperationException();
+  }
 }

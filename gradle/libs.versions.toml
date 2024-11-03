@@ -6,6 +6,7 @@ checkstyleTools = "10.20.0"
 springDependencyManagement = "1.1.6"
 
 # direct dependencies
+jts = "1.16.1"
 feign = "13.5"
 lombok = "1.18.34"
 jackson = "2.18.1"
@@ -32,6 +33,7 @@ feignLoggingSlf4j = { group = "io.github.openfeign", name = "feign-slf4j", versi
 feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", version.ref = "feign" }
 
 # general
+jts = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }

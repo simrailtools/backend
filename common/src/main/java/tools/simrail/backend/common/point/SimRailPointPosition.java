@@ -22,19 +22,29 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(libs.jts)
-  implementation("org.springframework.data:spring-data-envers")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
-}
+package tools.simrail.backend.common.point;
 
-tasks.register<Copy>("copyDataFiles") {
-  from("../.data/")
-  include("**/*.json", "**/*.json5")
-  into(project.layout.buildDirectory.dir("resources/main/data"))
-}
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-tasks.withType<ProcessResources>().configureEach {
-  dependsOn("copyDataFiles")
+/**
+ * The position of a SimRail point.
+ */
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public final class SimRailPointPosition {
+
+  /**
+   * The latitude of the position.
+   */
+  @JsonProperty("lat")
+  private double latitude;
+  /**
+   * The longitude of the position.
+   */
+  @JsonProperty("lng")
+  private double longitude;
 }

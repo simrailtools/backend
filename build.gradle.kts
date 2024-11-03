@@ -76,6 +76,7 @@ subprojects {
     options.encoding = "UTF-8"
     options.isIncremental = true
 
+    options.compilerArgs.add("-proc:full")
     options.compilerArgs.add("-parameters")
     options.compilerArgs.add("-Xlint:-preview")
     options.compilerArgs.add("--enable-preview")
@@ -86,6 +87,11 @@ subprojects {
     testLogging {
       events("started", "passed", "skipped", "failed")
     }
+
+    jvmArgs(
+      "--enable-preview", // enable preview features in tests as well
+      "-XX:+EnableDynamicAgentLoading", // allow mockito to dynamically attach to the jvm
+    )
   }
 
   tasks.withType<BootRun> {
