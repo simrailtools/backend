@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,6 +42,7 @@ import tools.simrail.backend.common.server.SimRailServerEntity;
 import tools.simrail.backend.common.server.SimRailServerRegion;
 import tools.simrail.backend.common.server.SimRailServerRepository;
 import tools.simrail.backend.common.util.MongoIdDecodeUtil;
+import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 
@@ -51,6 +53,7 @@ public final class SimRailServerCollector implements SimRailServerService {
   // https://regex101.com/r/8kPxyF/2
   private static final Pattern SERVER_NAME_REGEX = Pattern.compile("^.+ \\((?<lang>.+)\\) ?(\\[(?<tags>.+)])?$");
 
+  private final UuidV5Factory serverIdFactory;
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPanelApiClient panelApiClient;
   private final SimRailServerRepository serverRepository;
@@ -63,6 +66,7 @@ public final class SimRailServerCollector implements SimRailServerService {
     this.serverRepository = serverRepository;
     this.awsApiClient = SimRailAwsApiClient.create();
     this.panelApiClient = SimRailPanelApiClient.create();
+    this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
   }
 
   /**
@@ -88,6 +92,7 @@ public final class SimRailServerCollector implements SimRailServerService {
         var newServer = new SimRailServerEntity();
         newServer.setForeignId(server.getId());
         newServer.setTimezone(ZoneOffset.UTC.getId());
+        newServer.setId(this.serverIdFactory.create(server.getCode() + server.getId()));
         return newServer;
       });
       serverEntity.setCode(server.getCode());
@@ -118,7 +123,7 @@ public final class SimRailServerCollector implements SimRailServerService {
         var tagList = Arrays.stream(tags.split(","))
           .map(String::strip)
           .filter(tag -> !tag.isEmpty())
-          .toList();
+          .collect(Collectors.toSet());
         serverEntity.setTags(tagList);
       } else {
         LOGGER.warn("Cannot parse language and/or tags from server name {}", server.getName());
