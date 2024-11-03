@@ -30,6 +30,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
 import org.slf4j.Logger;
@@ -160,5 +162,20 @@ public final class SimRailServerCollector implements SimRailServerService {
   @Override
   public @Nonnull List<SimRailServerDescriptor> getServers() {
     return this.collectedServers;
+  }
+
+  @Override
+  public @Nonnull Optional<SimRailServerDescriptor> findServerByIntId(@Nonnull UUID id) {
+    return this.collectedServers.stream().filter(desc -> desc.id().equals(id)).findFirst();
+  }
+
+  @Override
+  public @Nonnull Optional<SimRailServerDescriptor> findServerBySimRailId(@Nonnull String id) {
+    return this.collectedServers.stream().filter(desc -> desc.foreignId().equals(id)).findFirst();
+  }
+
+  @Override
+  public @Nonnull Optional<SimRailServerDescriptor> findServerByCode(@Nonnull String code) {
+    return this.collectedServers.stream().filter(desc -> desc.code().equals(code)).findFirst();
   }
 }

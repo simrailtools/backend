@@ -22,47 +22,45 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.server;
+package tools.simrail.backend.common.dispatchpost;
 
 import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.history.RevisionRepository;
 
-public interface SimRailServerService {
-
-  /**
-   * Get the server descriptors that were retrieved on the last collection run.
-   *
-   * @return the server descriptors that were retrieved on the last collection run.
-   */
-  @Nonnull
-  List<SimRailServerDescriptor> getServers();
-
-  /**
-   * Finds a single server descriptor by the given internal identifier.
-   *
-   * @param id the internal identifier of the server to get.
-   * @return an optional holding the server descriptor with the given internal id if one exists.
-   */
-  @Nonnull
-  Optional<SimRailServerDescriptor> findServerByIntId(@Nonnull UUID id);
+/**
+ * A repository for SimRail dispatch post information.
+ */
+public interface SimRailDispatchPostRepository extends
+  CrudRepository<SimRailDispatchPostEntity, UUID>,
+  RevisionRepository<SimRailDispatchPostEntity, UUID, Long> {
 
   /**
-   * Finds a single server descriptor by the given SimRail identifier.
+   * Finds a single dispatch post by the given point id.
    *
-   * @param id the SimRail identifier of the server to get.
-   * @return an optional holding the server descriptor with the given SimRail id if one exists.
+   * @param pointId the point id of the dispatch post to get.
+   * @return an optional holding the dispatch post entity if an entity with the given point id exists.
    */
   @Nonnull
-  Optional<SimRailServerDescriptor> findServerBySimRailId(@Nonnull String id);
+  Optional<SimRailDispatchPostEntity> findByPointId(@Nonnull UUID pointId);
 
   /**
-   * Finds a single server descriptor by the given server code.
+   * Finds a single dispatch post by the given foreign id.
    *
-   * @param code the code of the server to get.
-   * @return an optional holding the server descriptor with the given code if one exists.
+   * @param id         the foreign id of the dispatch post to get.
+   * @param serverCode the server code of the server to get the dispatch post on.
+   * @return an optional holding the dispatch post entity if an entity with the given foreign id exists.
    */
   @Nonnull
-  Optional<SimRailServerDescriptor> findServerByCode(@Nonnull String code);
+  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerCode(@Nonnull String id, @Nonnull String serverCode);
+
+  /**
+   * @param serverCode
+   * @return
+   */
+  @Nonnull
+  List<SimRailDispatchPostEntity> findAllByServerCode(@Nonnull String serverCode);
 }
