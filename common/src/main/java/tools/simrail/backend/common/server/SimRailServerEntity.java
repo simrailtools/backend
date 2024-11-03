@@ -69,7 +69,7 @@ public final class SimRailServerEntity {
    * The revision version of this entity.
    */
   @Version
-  @Column(nullable = false)
+  @Column
   private long version;
   /**
    * The foreign (mongo identifier) of the server provided by the SimRail api.
@@ -122,8 +122,14 @@ public final class SimRailServerEntity {
    * If this server is currently online.
    */
   @Audited
-  @Column(nullable = false)
+  @Column
   private boolean online;
+  /**
+   * If this server is no longer registered in the SimRail backend.
+   */
+  @Audited
+  @Column
+  private boolean deleted;
 
   /**
    * The tags that are applied to the server, can be an empty list if no tags are applied.

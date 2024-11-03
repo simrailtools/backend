@@ -78,12 +78,12 @@ public final class SimRailServerCollector implements SimRailServerService {
     var fullCollection = this.collectionRuns++ % 2 == 0;
 
     var response = this.panelApiClient.getServers();
-    if (!response.isSuccess()) {
+    var servers = response.getEntries();
+    if (!response.isSuccess() || servers == null || servers.isEmpty()) {
       LOGGER.warn("API did not return a successful result while getting server list");
       return;
     }
 
-    var servers = response.getEntries();
     var foundServers = new ArrayList<SimRailServerDescriptor>();
     for (var server : servers) {
       // get or create the server entity & update the base information
@@ -143,6 +143,14 @@ public final class SimRailServerCollector implements SimRailServerService {
       var savedEntity = this.serverRepository.save(serverEntity);
       var serverDescriptor = new SimRailServerDescriptor(savedEntity.getId(), server.getId(), server.getCode());
       foundServers.add(serverDescriptor);
+    }
+
+    // mark all servers which are not included in the response as deleted
+    var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
+    var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
+    for (var missingServer : missingServers) {
+      missingServer.setDeleted(true);
+      this.serverRepository.save(missingServer);
     }
 
     // update the found servers during the run to make them available to readers

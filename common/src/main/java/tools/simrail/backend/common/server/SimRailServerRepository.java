@@ -25,10 +25,14 @@
 package tools.simrail.backend.common.server;
 
 import jakarta.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
+import org.springframework.data.repository.query.Param;
 
 /**
  * A repository for SimRail server information.
@@ -54,4 +58,14 @@ public interface SimRailServerRepository extends
    */
   @Nonnull
   Optional<SimRailServerEntity> findByForeignId(@Nonnull String foreignId);
+
+  /**
+   * Finds all server whose id is not in the given id collection and is not deleted.
+   *
+   * @param ids the ids of the servers which shouldn't be returned.
+   * @return all servers whose id is not in the given collection and not marked as deleted.
+   */
+  @Nonnull
+  @Query("SELECT s FROM sr_server s WHERE s.id NOT IN :ids AND s.deleted IS false")
+  List<SimRailServerEntity> findAllByIdNotInAndNotDeleted(@Nonnull @Param("ids") Collection<UUID> ids);
 }
