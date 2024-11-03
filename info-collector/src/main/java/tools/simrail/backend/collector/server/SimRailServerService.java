@@ -26,9 +26,7 @@ package tools.simrail.backend.collector.server;
 
 import jakarta.annotation.Nonnull;
 import java.util.List;
-import org.springframework.stereotype.Service;
 
-@Service
 public interface SimRailServerService {
 
   /**

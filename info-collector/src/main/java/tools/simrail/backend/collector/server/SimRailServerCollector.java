@@ -37,7 +37,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import tools.simrail.backend.common.server.SimRailServerEntity;
 import tools.simrail.backend.common.server.SimRailServerRegion;
 import tools.simrail.backend.common.server.SimRailServerRepository;
@@ -46,7 +46,7 @@ import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 
-@Component
+@Service
 public final class SimRailServerCollector implements SimRailServerService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerCollector.class);
