@@ -60,7 +60,7 @@ public final class SimRailServerEntity {
   public static final UUID ID_NAMESPACE = UUID.fromString("8fb462f5-82ab-4096-8538-fff7a96a0094");
 
   /**
-   * The unique identifier of the server
+   * The unique identifier of the server.
    */
   @Id
   @Nonnull
