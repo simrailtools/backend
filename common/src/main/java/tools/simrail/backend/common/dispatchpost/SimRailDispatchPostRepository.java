@@ -58,8 +58,10 @@ public interface SimRailDispatchPostRepository extends
   Optional<SimRailDispatchPostEntity> findByForeignIdAndServerCode(@Nonnull String id, @Nonnull String serverCode);
 
   /**
-   * @param serverCode
-   * @return
+   * Finds all dispatch post entities for the given server code.
+   *
+   * @param serverCode the code of the server to get the dispatch posts of.
+   * @return all dispatch posts that are registered for the given server code.
    */
   @Nonnull
   List<SimRailDispatchPostEntity> findAllByServerCode(@Nonnull String serverCode);
