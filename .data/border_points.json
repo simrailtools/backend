@@ -1,0 +1,70 @@
+[
+  {
+    "name": "Katowice Muchowiec Staszic",
+    "ext_point_id": "1637"
+  },
+  {
+    "name": "Staszic",
+    "ext_point_id": "4096"
+  },
+  {
+    "name": "Brynów",
+    "ext_point_id": "333"
+  },
+  {
+    "name": "Katowice Tow. KTC",
+    "ext_point_id": "1653"
+  },
+  {
+    "name": "Szabelnia",
+    "ext_point_id": "4236"
+  },
+  {
+    "name": "Sosnowiec Maczki",
+    "ext_point_id": "4006"
+  },
+  {
+    "name": "Dąbrowa Górnicza Towarowa",
+    "ext_point_id": "728"
+  },
+  {
+    "name": "Myszków",
+    "ext_point_id": "2777"
+  },
+  {
+    "name": "Tunel",
+    "ext_point_id": "4595"
+  },
+  {
+    "name": "Sędziszów",
+    "ext_point_id": "3795"
+  },
+  {
+    "name": "Żelisławice",
+    "ext_point_id": "5392"
+  },
+  {
+    "name": "Czarnca",
+    "ext_point_id": "613"
+  },
+  {
+    "name": "Radzice",
+    "ext_point_id": "3519"
+  },
+  {
+    "name": "Radzice PZS R31",
+    "ext_point_id": "3520"
+  },
+  {
+    "name": "Żyrardów",
+    "ext_point_id": "5431"
+  },
+  {
+    "name": "Warszawa Gł.Tow.Sr18",
+    "ext_point_id": "4723"
+  },
+  {
+    "name": "Warszawa Grochów",
+    "ext_point_id": "4732"
+  }
+]
