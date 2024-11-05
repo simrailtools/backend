@@ -24,6 +24,7 @@
 
 package tools.simrail.backend.common.point;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -33,6 +34,7 @@ import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.util.GeometryConstants;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
@@ -47,7 +49,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(399, points.size());
+    Assertions.assertEquals(404, points.size());
   }
 
   @Test
@@ -164,5 +166,27 @@ public final class SimRailPointProviderTest {
     var point = this.pointProvider.findPointWherePosInBounds(20.9989804, 52.2277704);
     Assertions.assertTrue(point.isPresent());
     Assertions.assertEquals("Warszawa Centralna", point.get().getName());
+  }
+
+  @Test
+  void testAllTimetableEntriesHaveAPointMapping() {
+    var missingPoints = new HashSet<String>();
+    var trainRuns = TimetableHolder.getDefaultServerTimetable();
+    for (var trainRun : trainRuns) {
+      var timetable = (ArrayNode) trainRun.get("timetable");
+      for (var timetableEntry : timetable) {
+        var pointId = timetableEntry.get("pointId").asText();
+        var pointName = timetableEntry.get("nameOfPoint").asText();
+        var point = this.pointProvider.findPointByPointId(pointId);
+        if (point.isEmpty()) {
+          missingPoints.add(pointName);
+        }
+      }
+    }
+
+    Assertions.assertEquals(111, missingPoints.size(), () -> {
+      var allMissingPointNames = String.join(", ", missingPoints);
+      return "Found unexpected count of missing points: " + allMissingPointNames;
+    });
   }
 }
