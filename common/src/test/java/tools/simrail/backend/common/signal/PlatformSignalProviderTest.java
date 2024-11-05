@@ -27,16 +27,11 @@ package tools.simrail.backend.common.signal;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
-import java.net.URI;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -46,6 +41,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
+import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.common.util.RomanNumberConverter;
 
@@ -55,9 +51,6 @@ import tools.simrail.backend.common.util.RomanNumberConverter;
   JacksonAutoConfiguration.class,
 })
 public class PlatformSignalProviderTest {
-
-  // all train runs from the SimRail api, raw
-  private static ArrayNode allTrainRuns;
 
   @Autowired
   private SimRailPointProvider pointProvider;
@@ -74,19 +67,6 @@ public class PlatformSignalProviderTest {
       Arguments.of(UUID.fromString("6840caa1-ef46-4cc4-93fb-0f26abf7c7d9"), "Zw_G2"),
       Arguments.of(UUID.fromString("a50dcebe-76b0-43d4-840e-6a8475c9756d"), "SG_N2")
     );
-  }
-
-  @BeforeAll
-  static void setupTrainRuns() throws Exception {
-    var mapper = new JsonMapper();
-    var client = HttpClient.newHttpClient();
-    var request = HttpRequest.newBuilder()
-      .GET()
-      .uri(URI.create("https://api1.aws.simrail.eu:8082/api/getAllTimetables?serverCode=de1"))
-      .build();
-    var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
-    Assertions.assertEquals(200, response.statusCode());
-    allTrainRuns = (ArrayNode) mapper.readTree(response.body());
   }
 
   @Test
@@ -127,7 +107,8 @@ public class PlatformSignalProviderTest {
   @Test
   void testAllScheduledPlatformsHaveASignalMapping() {
     var missingPoints = new HashSet<String>();
-    for (var trainRun : allTrainRuns) {
+    var trainRuns = TimetableHolder.getDefaultServerTimetable();
+    for (var trainRun : trainRuns) {
       var timetable = (ArrayNode) trainRun.get("timetable");
       for (var timetableEntry : timetable) {
         var stopType = timetableEntry.get("stopType").asText();

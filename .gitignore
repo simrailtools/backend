@@ -20,6 +20,7 @@
 !/.idea/inspectionProfiles/profiles_settings.xml
 
 # local
+tmp/
 .dev/volumes/
 .dev/.env.secret
 
