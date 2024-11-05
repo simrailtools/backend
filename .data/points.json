@@ -338,7 +338,7 @@
     "name": "Przemiarki",
     "id": "e7be0efb-91d9-467b-a6f7-0f4e8be18ae0",
     "mileage": 7.717,
-    "prefix": null,
+    "prefix": "Pmi",
     "ids": [
       "3398"
     ],
@@ -782,7 +782,7 @@
     "name": "Katowice Brynów",
     "id": "84cf0d7b-d5c0-49c4-a0f6-87676073c631",
     "mileage": 3.77,
-    "prefix": null,
+    "prefix": "l139_bry",
     "ids": [
       "1615"
     ],
@@ -4673,7 +4673,7 @@
     "name": "Sędziszów",
     "id": "aad22ec5-18ba-4da6-910d-87d2f2219e7a",
     "mileage": 251.232,
-    "prefix": "Sd3",
+    "prefix": "Sd",
     "ids": [
       "3795"
     ],
@@ -6526,7 +6526,7 @@
     "name": "Żyrardów",
     "id": "93b161a2-be98-4a52-9c4c-6ee60c288e50",
     "mileage": 43.141,
-    "prefix": null,
+    "prefix": "5431_Zy",
     "ids": [
       "5431"
     ],
@@ -6750,7 +6750,7 @@
     "name": "Katowice Muchowiec Staszic",
     "id": "84b162e7-1a2c-4331-8444-59d55960fa0f",
     "mileage": 3.7,
-    "prefix": null,
+    "prefix": "StA",
     "ids": [
       "1637"
     ],
@@ -10269,7 +10269,7 @@
     "name": "Radzice",
     "id": "b87a7c3d-db78-4000-a6f2-69f9d185bb49",
     "mileage": 28.43,
-    "prefix": null,
+    "prefix": "Rd",
     "ids": [
       "3519"
     ],
@@ -11567,7 +11567,7 @@
     "name": "Dąbrowa Górnicza Towarowa",
     "id": "71a5408e-e81d-4d57-b27a-1bb43ec32ce3",
     "mileage": 20.297,
-    "prefix": null,
+    "prefix": "DTA",
     "ids": [
       "728"
     ],
