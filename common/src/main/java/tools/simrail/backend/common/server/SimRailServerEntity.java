@@ -36,16 +36,19 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
 
 /**
  * The entity that holds all information about a single server registered in the SimRail api.
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity(name = "sr_server")
 @Table(indexes = {
@@ -139,4 +142,34 @@ public final class SimRailServerEntity {
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   private List<String> tags;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SimRailServerEntity entity)) {
+      return false;
+    }
+    return Objects.equals(this.id, entity.getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.id);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @Nonnull String toString() {
+    return "ServerEntity{id=" + this.id + ", code=" + this.code + "}";
+  }
 }

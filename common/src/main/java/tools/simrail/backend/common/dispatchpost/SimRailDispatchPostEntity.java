@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.dispatchpost;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
@@ -36,10 +37,12 @@ import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
@@ -47,7 +50,8 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 /**
  * The entity that holds all information about a single dispatch post registered in the SimRail api.
  */
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Entity(name = "sr_dispatch_post")
 @Table(indexes = {
@@ -149,4 +153,34 @@ public final class SimRailDispatchPostEntity {
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   private Set<String> dispatcherSteamIds;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof SimRailDispatchPostEntity entity)) {
+      return false;
+    }
+    return Objects.equals(this.id, entity.getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.id);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @Nonnull String toString() {
+    return "DispatchPostEntity{id=" + this.id + ", name=" + this.name + "}";
+  }
 }
