@@ -29,6 +29,7 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
@@ -119,8 +120,8 @@ public final class JourneyEntity {
   /**
    * The events that are along the route of this journey.
    */
-  @OneToMany
   @JoinColumn(nullable = false)
+  @OneToMany(fetch = FetchType.EAGER)
   private List<JourneyEventEntity> events;
 
   /**
