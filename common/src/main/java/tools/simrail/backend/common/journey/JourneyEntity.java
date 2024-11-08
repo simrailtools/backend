@@ -1,0 +1,143 @@
+/*
+ * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
+ *
+ * Copyright (c) 2024 Pasqual Koschmieder and contributors
+ *
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ */
+
+package tools.simrail.backend.common.journey;
+
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.Version;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.envers.Audited;
+import tools.simrail.backend.common.shared.GeoPositionEntity;
+
+/**
+ * Represents information about the complete journey of a train.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@Entity(name = "sit_journey")
+@Table(indexes = {
+  @Index(columnList = "serverCode, foreignRunId"),
+  @Index(columnList = "serverCode, foreignId, firstSeenTime")
+})
+public final class JourneyEntity {
+
+  /**
+   * The namespace used to generate UUIDv5 ids for journey entities.
+   */
+  public static final UUID ID_NAMESPACE = UUID.fromString("36b63943-4f28-4f1e-a333-376b39f6022e");
+
+  /**
+   * The id of this journey.
+   */
+  @Id
+  private UUID id;
+  /**
+   * The code of the server where the journey will happen.
+   */
+  @Column(nullable = false)
+  private String serverCode;
+  /**
+   * The foreign identifier of the train provided by the SimRail api, this one repeats itself every day.
+   */
+  @Column
+  private String foreignId;
+  /**
+   * The foreign run id provided by the SimRail api.
+   */
+  @Column(nullable = false)
+  private UUID foreignRunId;
+  /**
+   * The revision version of this entity.
+   */
+  @Column
+  @Version
+  private long version;
+
+  /**
+   * The last time when this journey was last updated.
+   */
+  @UpdateTimestamp
+  private OffsetDateTime updateTime;
+  /**
+   * The time when the journey was first seen as active on the associated server.
+   */
+  @Column
+  private OffsetDateTime firstSeenTime;
+  /**
+   * The time when the journey was last seen as active on the associated server.
+   */
+  @Column
+  private OffsetDateTime lastSeenTime;
+
+  /**
+   * Indicates if the journey is cancelled (did not spawn after a fixed period of time).
+   */
+  private boolean cancelled;
+  /**
+   * The id of the journey that this train transitions into at the final stop.
+   */
+  @Column
+  private UUID continuationJourneyId;
+  /**
+   * The events that are along the route of this journey.
+   */
+  @OneToMany
+  @JoinColumn(nullable = false)
+  private List<JourneyEventEntity> events;
+
+  /**
+   * The current speed of the train, null if the train is currently not active.
+   */
+  @Column
+  @Audited
+  private Double speed;
+  /**
+   * The current position of the train, null if the train is currently not active.
+   */
+  @Column
+  @Audited
+  @Embedded
+  private GeoPositionEntity position;
+  /**
+   * The steam id of the player that currently controls the train, null if the train is currently not active or not
+   * driven by a player.
+   */
+  @Audited
+  @Column(length = 20)
+  private String driverSteamId;
+}
