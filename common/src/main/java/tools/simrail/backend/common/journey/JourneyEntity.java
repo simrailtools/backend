@@ -24,6 +24,8 @@
 
 package tools.simrail.backend.common.journey;
 
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -35,6 +37,7 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -140,4 +143,34 @@ public final class JourneyEntity {
   @Audited
   @Column(length = 20)
   private String driverSteamId;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof JourneyEntity entity)) {
+      return false;
+    }
+    return Objects.equals(this.id, entity.getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.id);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @Nonnull String toString() {
+    return "Journey{id=" + this.id + "}";
+  }
 }
