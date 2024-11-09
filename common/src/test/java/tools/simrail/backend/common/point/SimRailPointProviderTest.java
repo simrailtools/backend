@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.point;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
@@ -110,6 +111,16 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
+  void testMaxSpeedAtPointIsValid() {
+    var points = this.pointProvider.points;
+    for (var point : points) {
+      var maxSpeed = point.getMaxSpeed();
+      Assertions.assertTrue(maxSpeed > 0);
+      Assertions.assertEquals(0, maxSpeed % 5, () -> String.format("%s at %s", maxSpeed, point.getId()));
+    }
+  }
+
+  @Test
   void testAllSimRailPointIdsAreOnlyAssociatedOnce() {
     var points = this.pointProvider.points;
     var seenPointIds = new HashSet<String>();
@@ -188,5 +199,30 @@ public final class SimRailPointProviderTest {
       var allMissingPointNames = String.join(", ", missingPoints);
       return "Found unexpected count of missing points: " + allMissingPointNames;
     });
+  }
+
+  @Test
+  void testAllPointMappingsHaveAValidMaxSpeed() {
+    var speedLimitsPerPoint = new HashMap<UUID, Integer>();
+    var trainRuns = TimetableHolder.getDefaultServerTimetable();
+    for (var trainRun : trainRuns) {
+      var timetable = trainRun.get("timetable");
+      for (var timetableEntry : timetable) {
+        var pointId = timetableEntry.get("pointId").asText();
+        var maxSpeed = timetableEntry.get("maxSpeed").asInt();
+        this.pointProvider
+          .findPointByPointId(pointId)
+          .ifPresent(point -> speedLimitsPerPoint.merge(point.getId(), maxSpeed, Math::max));
+      }
+    }
+
+    for (var entry : speedLimitsPerPoint.entrySet()) {
+      var pointId = entry.getKey();
+      var point = this.pointProvider.findPointByIntId(pointId).orElseThrow();
+      Assertions.assertEquals(
+        entry.getValue(),
+        point.getMaxSpeed(),
+        () -> String.format("Expected max speed of %s, got %s at %s", entry.getValue(), point.getMaxSpeed(), pointId));
+    }
   }
 }

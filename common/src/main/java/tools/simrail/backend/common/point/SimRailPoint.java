@@ -74,6 +74,11 @@ public final class SimRailPoint {
   @JsonProperty("mileage")
   private double mileage;
   /**
+   * The maximum speed of trains at this point.
+   */
+  @JsonProperty("max_speed")
+  private int maxSpeed;
+  /**
    * The OSM node id of the point.
    */
   @JsonProperty("osm_id")
