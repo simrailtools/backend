@@ -24,32 +24,22 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
+import jakarta.persistence.Embeddable;
 import jakarta.persistence.Id;
-import java.util.Objects;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Describes a single station along a journey.
  */
-@Getter
-@Setter
+@Data
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "sit_journey_stop_desc")
-public final class JourneyStopDescriptorEntity {
-
-  /**
-   * The namespace used to generate UUIDv5 ids for stop descriptor entities.
-   */
-  public static final UUID ID_NAMESPACE = UUID.fromString("c23667e6-13bf-4221-9158-8b96e55a28ed");
+public final class JourneyStopDescriptor {
 
   /**
    * The id of the point represented by this descriptor.
@@ -66,34 +56,4 @@ public final class JourneyStopDescriptorEntity {
    */
   @Column
   private boolean playable;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(@Nullable Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof JourneyStopDescriptorEntity entity)) {
-      return false;
-    }
-    return Objects.equals(this.id, entity.getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(this.id);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public @Nonnull String toString() {
-    return "JourneyStopDescriptor{id=" + this.id + ", name=" + this.name + "}";
-  }
 }

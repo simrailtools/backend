@@ -22,19 +22,21 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(projects.common)
-  implementation(projects.externalApiClient)
+package tools.simrail.backend.common.journey;
 
-  implementation(libs.postgreSqlDriver)
+import jakarta.annotation.Nonnull;
+import java.util.UUID;
+import org.springframework.data.jpa.repository.JpaRepository;
 
-  implementation("com.github.ben-manes.caffeine:caffeine")
-  implementation("org.springframework.data:spring-data-envers")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-cache")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+/**
+ * A repository for journey events.
+ */
+public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity, UUID> {
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+  /**
+   * Deletes all journey events that are associated with the given journey id.
+   *
+   * @param journeyId the journey id to delete the associated events of.
+   */
+  void deleteAllByJourneyId(@Nonnull UUID journeyId);
 }

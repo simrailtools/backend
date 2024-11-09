@@ -34,6 +34,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
@@ -43,6 +44,7 @@ import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
@@ -55,6 +57,7 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @NoArgsConstructor
 @Entity(name = "sit_journey")
 @Table(indexes = {
+  @Index(columnList = "serverId, foreignRunId"),
   @Index(columnList = "serverCode, foreignRunId"),
   @Index(columnList = "serverCode, foreignId, firstSeenTime")
 })
@@ -71,11 +74,6 @@ public final class JourneyEntity {
   @Id
   private UUID id;
   /**
-   * The code of the server where the journey will happen.
-   */
-  @Column(nullable = false)
-  private String serverCode;
-  /**
    * The foreign identifier of the train provided by the SimRail api, this one repeats itself every day.
    */
   @Column
@@ -83,7 +81,7 @@ public final class JourneyEntity {
   /**
    * The foreign run id provided by the SimRail api.
    */
-  @Column(nullable = false)
+  @Column(nullable = false, unique = true)
   private UUID foreignRunId;
   /**
    * The revision version of this entity.
@@ -91,6 +89,17 @@ public final class JourneyEntity {
   @Column
   @Version
   private long version;
+
+  /**
+   * The internal id of the server.
+   */
+  @Column(nullable = false)
+  private UUID serverId;
+  /**
+   * The code of the server where the journey will happen.
+   */
+  @Column(nullable = false)
+  private String serverCode;
 
   /**
    * The last time when this journey was last updated.
@@ -120,8 +129,10 @@ public final class JourneyEntity {
   /**
    * The events that are along the route of this journey.
    */
-  @JoinColumn(nullable = false)
+  @BatchSize(size = 100)
+  @OrderBy("eventIndex")
   @OneToMany(fetch = FetchType.EAGER)
+  @JoinColumn(name = "journeyId", insertable = false, updatable = false)
   private List<JourneyEventEntity> events;
 
   /**

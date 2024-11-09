@@ -32,8 +32,8 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,6 +42,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.Persistable;
 
 /**
  * A single event along the route of a journey.
@@ -51,7 +52,10 @@ import org.hibernate.annotations.CreationTimestamp;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "sit_journey_event")
-public final class JourneyEventEntity {
+@Table(indexes = {
+  @Index(columnList = "journeyId"),
+})
+public final class JourneyEventEntity implements Persistable<UUID> {
 
   /**
    * The namespace used to generate UUIDv5 ids for event entities.
@@ -64,6 +68,11 @@ public final class JourneyEventEntity {
   @Id
   private UUID id;
   /**
+   * The id of the journey which is related to this event.
+   */
+  @Column(nullable = false)
+  private UUID journeyId;
+  /**
    * The time when this event was created.
    */
   @CreationTimestamp
@@ -74,11 +83,15 @@ public final class JourneyEventEntity {
   @Column(nullable = false)
   private JourneyEventType eventType;
   /**
+   * The index of this event along the journey route.
+   */
+  @Column
+  private int eventIndex;
+  /**
    * The descriptor of the stop where the event is scheduled to happen.
    */
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "stop_descriptor_id", nullable = false)
-  private JourneyStopDescriptorEntity stopDescriptor;
+  @Embedded
+  private JourneyStopDescriptor stopDescriptor;
 
   /**
    * The time when this event was scheduled to happen.
@@ -127,9 +140,8 @@ public final class JourneyEventEntity {
   /**
    * Get the transport that is used for the journey at this event.
    */
-  @ManyToOne(optional = false)
-  @JoinColumn(name = "transport_id", nullable = false)
-  private JourneyTransportEntity transport;
+  @Embedded
+  private JourneyTransport transport;
 
   /**
    * Indicates if this event was cancelled.
@@ -141,6 +153,16 @@ public final class JourneyEventEntity {
    */
   @Column
   private boolean additional;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean isNew() {
+    // always indicate that this object is new - an event shouldn't be updated in
+    // the database. re-create the entity if a change occurred
+    return true;
+  }
 
   /**
    * {@inheritDoc}

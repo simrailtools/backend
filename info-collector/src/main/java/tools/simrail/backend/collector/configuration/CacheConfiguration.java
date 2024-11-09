@@ -22,19 +22,29 @@
  * SOFTWARE.
  */
 
-dependencies {
-  implementation(projects.common)
-  implementation(projects.externalApiClient)
+package tools.simrail.backend.collector.configuration;
 
-  implementation(libs.postgreSqlDriver)
+import com.github.benmanes.caffeine.cache.Caffeine;
+import jakarta.annotation.Nonnull;
+import java.util.concurrent.TimeUnit;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.EnableCaching;
+import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-  implementation("com.github.ben-manes.caffeine:caffeine")
-  implementation("org.springframework.data:spring-data-envers")
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-cache")
-  implementation("org.springframework.boot:spring-boot-starter-actuator")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+/**
+ * Configures all caches used in the application.
+ */
+@Configuration
+@EnableCaching
+public class CacheConfiguration {
 
-  developmentOnly("org.springframework.boot:spring-boot-devtools")
-  annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
+  @Bean
+  public @Nonnull CacheManager journeyCacheManager() {
+    var cacheBuilder = Caffeine.newBuilder().initialCapacity(500).expireAfterWrite(5, TimeUnit.MINUTES);
+    var caffeineCacheManager = new CaffeineCacheManager("journey");
+    caffeineCacheManager.setCaffeine(cacheBuilder);
+    return caffeineCacheManager;
+  }
 }

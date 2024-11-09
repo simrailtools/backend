@@ -24,38 +24,20 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import java.util.Objects;
-import java.util.UUID;
+import jakarta.persistence.Embeddable;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 /**
  * Information about the transport used for a journey.
  */
-@Getter
-@Setter
+@Data
+@Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity(name = "sit_journey_transport")
-public final class JourneyTransportEntity {
-
-  /**
-   * The namespace used to generate UUIDv5 ids for transport entities.
-   */
-  public static final UUID ID_NAMESPACE = UUID.fromString("18003c0d-f225-40e2-a406-8b69604c4361");
-
-  /**
-   * The unique identifier of the transport.
-   */
-  @Id
-  private UUID id;
+public final class JourneyTransport {
 
   /**
    * Category of the transport used for the journey.
@@ -82,34 +64,4 @@ public final class JourneyTransportEntity {
    */
   @Column
   private int maxSpeed;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean equals(@Nullable Object o) {
-    if (this == o) {
-      return true;
-    }
-    if (!(o instanceof JourneyTransportEntity entity)) {
-      return false;
-    }
-    return Objects.equals(this.id, entity.getId());
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public int hashCode() {
-    return Objects.hashCode(this.id);
-  }
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public @Nonnull String toString() {
-    return "JourneyTransport{id=" + this.id + ", category=" + this.category + ", number=" + this.number + "}";
-  }
 }
