@@ -134,29 +134,38 @@ public final class SimRailServerCollector implements SimRailServerService {
         continue;
       }
 
+      ZoneOffset serverZoneOffset = null;
       if (fullCollection) {
         // collect the server timezone identifier
         var serverUtcOffset = this.awsApiClient.getServerTimeOffset(server.getCode());
-        var serverTimezoneId = ZoneOffset.ofHours(serverUtcOffset).getId();
-        serverEntity.setTimezone(serverTimezoneId);
+        serverZoneOffset = ZoneOffset.ofHours(serverUtcOffset);
+        serverEntity.setTimezone(serverZoneOffset.getId());
       }
 
-      // save the entity and register it as discovered during the run
+      // save the entity and register it as discovered during the run if we did a full collection
       var savedEntity = this.serverRepository.save(serverEntity);
-      var serverDescriptor = new SimRailServerDescriptor(savedEntity.getId(), server.getId(), server.getCode());
-      foundServers.add(serverDescriptor);
+      if (serverZoneOffset != null) {
+        var serverDescriptor = new SimRailServerDescriptor(
+          savedEntity.getId(),
+          server.getId(),
+          server.getCode(),
+          serverZoneOffset);
+        foundServers.add(serverDescriptor);
+      }
     }
 
-    // mark all servers which are not included in the response as deleted
-    var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
-    var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
-    for (var missingServer : missingServers) {
-      missingServer.setDeleted(true);
-      this.serverRepository.save(missingServer);
-    }
+    if (fullCollection) {
+      // mark all servers which are not included in the response as deleted
+      var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
+      var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
+      for (var missingServer : missingServers) {
+        missingServer.setDeleted(true);
+        this.serverRepository.save(missingServer);
+      }
 
-    // update the found servers during the run to make them available to readers
-    this.collectedServers = foundServers;
+      // update the found servers during the run to make them available to readers
+      this.collectedServers = foundServers;
+    }
   }
 
   @Override

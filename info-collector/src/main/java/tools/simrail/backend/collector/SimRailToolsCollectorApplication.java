@@ -27,13 +27,9 @@ package tools.simrail.backend.collector;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.envers.repository.config.EnableEnversRepositories;
-import org.springframework.scheduling.annotation.EnableScheduling;
 
-@EnableCaching
-@EnableScheduling
 @EntityScan(basePackages = "tools.simrail.backend")
 @ComponentScan(basePackages = "tools.simrail.backend")
 @EnableEnversRepositories(basePackages = "tools.simrail.backend")

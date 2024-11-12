@@ -26,6 +26,8 @@ package tools.simrail.backend.common.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -58,8 +60,8 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Entity(name = "sit_journey")
 @Table(indexes = {
   @Index(columnList = "serverId, foreignRunId"),
-  @Index(columnList = "serverCode, foreignRunId"),
-  @Index(columnList = "serverCode, foreignId, firstSeenTime")
+  @Index(columnList = "firstSeenTime, lastSeenTime"),
+  @Index(columnList = "serverId, firstSeenTime, lastSeenTime"),
 })
 public final class JourneyEntity {
 
@@ -148,6 +150,18 @@ public final class JourneyEntity {
   @Audited
   @Embedded
   private GeoPositionEntity position;
+  /**
+   * The signal that is in front of this journey, null if the train is not active or the signal is too far away.
+   */
+  @Column
+  @Audited
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "signal_name", column = @Column(name = "next_signal_name")),
+    @AttributeOverride(name = "signal_distance", column = @Column(name = "next_signal_distance")),
+    @AttributeOverride(name = "signal_max_speed", column = @Column(name = "next_signal_max_speed")),
+  })
+  private JourneySignalInfo nextSignal;
   /**
    * The steam id of the player that currently controls the train, null if the train is currently not active or not
    * driven by a player.

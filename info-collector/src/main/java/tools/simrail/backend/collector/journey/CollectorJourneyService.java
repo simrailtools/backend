@@ -25,105 +25,127 @@
 package tools.simrail.backend.collector.journey;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
-import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Optional;
+import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.CacheEvict;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.cache.annotation.Caching;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneyEventRepository;
-import tools.simrail.backend.common.journey.JourneyRepository;
 
 /**
  * Service for accessing and updating journeys.
  */
 @Service
-public class CollectorJourneyService {
+class CollectorJourneyService {
 
   private final EntityManager entityManager;
-  private final JourneyRepository journeyRepository;
+  private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
+
+  // caches all active trains per server. while the outer map is concurrent, the inner map is not
+  // this is done as the inner map is only accessed by one collector thread concurrently and doesn't
+  // need to be synchronized at all. this also allows for every caller that gets an instance of the
+  // internal map to make changes that directly reflect into the cache, without having to call some
+  // server methods or having to copy the map every time it's accessed. beware that this also has the
+  // risk of being used improperly and causing exceptions or even crashes of the collector
+  private final Map<UUID, Map<UUID, JourneyEntity>> activeJourneysByServer;
 
   @Autowired
   public CollectorJourneyService(
     @Nonnull EntityManager entityManager,
-    @Nonnull JourneyRepository journeyRepository,
+    @Nonnull CollectorJourneyRepository journeyRepository,
     @Nonnull JourneyEventRepository journeyEventRepository
   ) {
     this.entityManager = entityManager;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
+    this.activeJourneysByServer = new ConcurrentHashMap<>();
   }
 
   /**
-   * Finds a single journey by the given id, either from cache or using the database.
-   *
-   * @param journeyId the id of the journey to get.
-   * @return an optional holding the journey with the given id, if one exists.
+   * Populates the active journey cache when this service is constructed for the first time.
    */
-  @Nonnull
-  @Cacheable(cacheNames = "journey", key = "'ji_' + #journeyId")
-  public Optional<JourneyEntity> findJourneyById(@Nonnull UUID journeyId) {
-    return this.journeyRepository.findById(journeyId);
+  @PostConstruct
+  public void populateActiveJourneyCache() {
+    var storedActiveJourney = this.journeyRepository.findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
+    for (var journey : storedActiveJourney) {
+      var journeysOfServer = this.activeJourneysByServer.computeIfAbsent(journey.getServerId(), _ -> new HashMap<>());
+      journeysOfServer.put(journey.getId(), journey);
+    }
   }
 
   /**
-   * Finds a single journey by the given server code and foreign run id, either from cache or using the database.
+   * Retrieves all inactive journeys that are running on the given server and use one of the given run ids directly from
+   * the database without using the cache.
    *
-   * @param serverCode   the server code on which the journey is running.
-   * @param foreignRunId the run id provided by the SimRail api of the journey.
-   * @return an optional holding the journey on the given server with the given run id, if one exists.
+   * @param serverId the id of the server where the inactive journeys are
+   * @param runIds   the ids of the runs to get the associated journey of.
+   * @return the journeys on the given server and one of the given run ids.
    */
   @Nonnull
-  @Cacheable(cacheNames = "journey", key = "'jfr_' + #serverCode + '_' + #foreignRunId")
-  public Optional<JourneyEntity> findByServerCodeAndForeignRunId(
-    @Nonnull String serverCode,
-    @Nonnull UUID foreignRunId
-  ) {
-    return this.journeyRepository.findByServerCodeAndForeignRunId(serverCode, foreignRunId);
-  }
-
-  /**
-   * Finds a single active journey by the given server code and foreign id, either from cache or using the database.
-   *
-   * @param serverCode the server code on which the journey is running.
-   * @param foreignId  the foreign id of the journey provided by the SimRail api.
-   * @return an optional holding the active journey on the given server with the given foreign id, if one exists.
-   */
-  @Nonnull
-  @Cacheable(cacheNames = "journey", key = "'jf_' + #serverCode + '_' + #foreignId")
-  public Optional<JourneyEntity> findActiveTrainByServerCodeAndForeignId(
-    @Nonnull String serverCode,
-    @Nonnull String foreignId
-  ) {
-    return this.journeyRepository.findLastActiveTrainByServerCodeAndForeignId(serverCode, foreignId)
-      .map(journey -> {
-        var firstSeenTime = journey.getFirstSeenTime();
-        var elapsed = Duration.between(OffsetDateTime.now(), firstSeenTime).abs();
-        return elapsed.toHours() >= 12 ? null : journey;
-      });
-  }
-
-  /**
-   * Finds all journeys that are happening on the server with the given id and whose foreign run id is in the given
-   * collection of runs.
-   *
-   * @param serverId the server id to filter for the journeys.
-   * @param runIds   the id of the runs to filter for.
-   * @return all journeys on the server with the given id and whose run id is in the given run id list.
-   */
-  @Nonnull
-  public List<JourneyEntity> findJourneysOnServerByRunIds(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
+  public List<JourneyEntity> retrieveJourneysOfServerByRunIds(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
     return this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds);
+  }
+
+  /**
+   * Resolves the active journeys for the given server by using the given server id. Note that changes to the returned
+   * map will directly reflect into the cache and vice versa. If no data is cached for the server with the given id, the
+   * data is loaded from the database.
+   *
+   * @param serverId the id of the server to get the active journeys of, either from cache or from database.
+   * @return the active journeys of the server with the given id.
+   */
+  @Nonnull
+  public Map<UUID, JourneyEntity> resolveCachedActiveJourneysOfServer(@Nonnull UUID serverId) {
+    return this.activeJourneysByServer.computeIfAbsent(serverId, _ -> {
+      // resolve the active journeys from the database
+      var stored = this.journeyRepository.findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(serverId);
+      return stored.stream().collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
+    });
+  }
+
+  /**
+   * Resolves the active journeys for the given server by using the given server id, fetching and caching all missing
+   * journeys which are not cached but requested by the given runs id collection. Note that changes to the returned
+   * collection are reflected into the cache and vice vera. Additions to the returned collection are not possible.
+   *
+   * @param serverId the id of the server to get the active journeys of, either from cache or from database.
+   * @param runIds   the ids of the runs that must be included in the cache.
+   * @return the active journeys for the given server, at least containing the runs with the given ids.
+   */
+  @Nonnull
+  public Collection<JourneyEntity> resolveCachedJourneysOfServer(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
+    var cachedJourneys = this.activeJourneysByServer.get(serverId);
+    if (cachedJourneys == null) {
+      // there are no journeys cached for the server currently, retrieve them from the database
+      var journeysOfServer = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds)
+        .stream()
+        .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
+      this.activeJourneysByServer.put(serverId, journeysOfServer);
+      return journeysOfServer.values();
+    } else {
+      // there are journeys cached already for the requested server, check if all requested
+      // run ids are in the cache as well, else request them from the database
+      var missingRunIds = new ArrayList<>(runIds);
+      cachedJourneys.forEach((_, journey) -> missingRunIds.remove(journey.getForeignRunId()));
+      if (!missingRunIds.isEmpty()) {
+        var remainingRuns = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, missingRunIds);
+        remainingRuns.forEach(journey -> cachedJourneys.put(journey.getId(), journey));
+      }
+
+      return cachedJourneys.values();
+    }
   }
 
   /**
@@ -131,13 +153,31 @@ public class CollectorJourneyService {
    *
    * @param journey the journey to persist.
    */
-  @Caching(put = {
-    @CachePut(cacheNames = "journey", key = "'ji_' + #journey.id"),
-    @CachePut(cacheNames = "journey", key = "'jf_' + #journey.serverCode + '_' + #journey.foreignId"),
-    @CachePut(cacheNames = "journey", key = "'jfr_' + #journey.serverCode + '_' + #journey.foreignRunId"),
-  })
   public @Nonnull JourneyEntity persistJourney(@Nonnull JourneyEntity journey) {
     return this.journeyRepository.save(journey);
+  }
+
+  /**
+   * Updates all the given journeys that are running on the server with the given id in one batch while also updating
+   * the references to these entities in the active journey cache. If an entity is not already stored in the said
+   * journey cache, it won't be added into the cache by this method.
+   *
+   * @param serverId the id of the server on which all the given journeys to update are happening.
+   * @param journeys the journeys that should be updated in the database and potentially in the cache.
+   */
+  public void persistJourneysAndPopulateCache(@Nonnull UUID serverId, @Nonnull Collection<JourneyEntity> journeys) {
+    var savedEntities = this.journeyRepository.saveAll(journeys);
+    var cachedServerJourneys = this.activeJourneysByServer.get(serverId);
+    if (cachedServerJourneys != null) {
+      // update the cache based on the entities that were saved for the next save attempt
+      // if a journey was removed from the cache, don't try to re-add it to the cache as it means
+      // that the journey was removed on the server as well
+      for (var savedEntity : savedEntities) {
+        if (cachedServerJourneys.containsKey(savedEntity.getId())) {
+          cachedServerJourneys.put(savedEntity.getId(), savedEntity);
+        }
+      }
+    }
   }
 
   /**
@@ -147,12 +187,7 @@ public class CollectorJourneyService {
    * @param events  the events that are associated with the given journey that should be persisted.
    */
   @Transactional
-  @Caching(evict = {
-    @CacheEvict(cacheNames = "journey", key = "'ji_' + #journey.id"),
-    @CacheEvict(cacheNames = "journey", key = "'jf_' + #journey.serverCode + '_' + #journey.foreignId"),
-    @CacheEvict(cacheNames = "journey", key = "'jfr_' + #journey.serverCode + '_' + #journey.foreignRunId"),
-  })
-  public void updateJourneyEvents(@Nonnull JourneyEntity journey, @Nonnull List<JourneyEventEntity> events) {
+  public void forcePersistJourneyEvents(@Nonnull JourneyEntity journey, @Nonnull List<JourneyEventEntity> events) {
     // pre-delete all entities that are associated with the journey
     this.journeyEventRepository.deleteAllByJourneyId(journey.getId());
 

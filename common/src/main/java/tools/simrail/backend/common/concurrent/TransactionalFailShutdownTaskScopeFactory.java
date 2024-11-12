@@ -22,24 +22,29 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.server;
+package tools.simrail.backend.common.concurrent;
 
 import jakarta.annotation.Nonnull;
-import java.time.ZoneOffset;
-import java.util.UUID;
+import java.util.function.Supplier;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 
 /**
- * A descriptor of a server that was retrieved on the last collection run.
- *
- * @param id        our id of the server.
- * @param foreignId the SimRail backend id of the server.
- * @param code      the server code.
+ * A factory for {@link TransactionalFailShutdownTaskScope} task scopes.
  */
-public record SimRailServerDescriptor(
-  @Nonnull UUID id,
-  @Nonnull String foreignId,
-  @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset
-) {
+@Component
+public final class TransactionalFailShutdownTaskScopeFactory implements Supplier<TransactionalFailShutdownTaskScope> {
 
+  private final TransactionTemplate transactionTemplate;
+
+  @Autowired
+  public TransactionalFailShutdownTaskScopeFactory(@Nonnull TransactionTemplate transactionTemplate) {
+    this.transactionTemplate = transactionTemplate;
+  }
+
+  @Override
+  public @Nonnull TransactionalFailShutdownTaskScope get() {
+    return new TransactionalFailShutdownTaskScope(this.transactionTemplate);
+  }
 }

@@ -22,24 +22,35 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.server;
+package tools.simrail.backend.collector.configuration;
 
 import jakarta.annotation.Nonnull;
-import java.time.ZoneOffset;
-import java.util.UUID;
+import java.util.concurrent.Executors;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.scheduling.TaskScheduler;
+import org.springframework.scheduling.annotation.EnableScheduling;
+import org.springframework.scheduling.concurrent.ConcurrentTaskScheduler;
+import org.springframework.scheduling.concurrent.CustomizableThreadFactory;
 
 /**
- * A descriptor of a server that was retrieved on the last collection run.
- *
- * @param id        our id of the server.
- * @param foreignId the SimRail backend id of the server.
- * @param code      the server code.
+ * Configures everything related to scheduling.
  */
-public record SimRailServerDescriptor(
-  @Nonnull UUID id,
-  @Nonnull String foreignId,
-  @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset
-) {
+@Configuration
+@EnableScheduling
+public class SchedulerConfiguration {
 
+  @Bean(name = "train_collect_scheduler")
+  public @Nonnull TaskScheduler trainCollectionTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("train-collector-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
+
+  @Bean(name = "timetable_collect_scheduler")
+  public @Nonnull TaskScheduler timetableCollectionTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("timetable-collector-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
 }

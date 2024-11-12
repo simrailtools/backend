@@ -42,7 +42,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
-import org.springframework.data.domain.Persistable;
 
 /**
  * A single event along the route of a journey.
@@ -55,7 +54,7 @@ import org.springframework.data.domain.Persistable;
 @Table(indexes = {
   @Index(columnList = "journeyId"),
 })
-public final class JourneyEventEntity implements Persistable<UUID> {
+public final class JourneyEventEntity {
 
   /**
    * The namespace used to generate UUIDv5 ids for event entities.
@@ -153,16 +152,6 @@ public final class JourneyEventEntity implements Persistable<UUID> {
    */
   @Column
   private boolean additional;
-
-  /**
-   * {@inheritDoc}
-   */
-  @Override
-  public boolean isNew() {
-    // always indicate that this object is new - an event shouldn't be updated in
-    // the database. re-create the entity if a change occurred
-    return true;
-  }
 
   /**
    * {@inheritDoc}

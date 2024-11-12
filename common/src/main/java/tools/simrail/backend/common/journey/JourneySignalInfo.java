@@ -22,24 +22,37 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.server;
+package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
-import java.time.ZoneOffset;
-import java.util.UUID;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embeddable;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
- * A descriptor of a server that was retrieved on the last collection run.
- *
- * @param id        our id of the server.
- * @param foreignId the SimRail backend id of the server.
- * @param code      the server code.
+ * Information about a single signal along the route of a journey.
  */
-public record SimRailServerDescriptor(
-  @Nonnull UUID id,
-  @Nonnull String foreignId,
-  @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset
-) {
+@Data
+@Embeddable
+@NoArgsConstructor
+@AllArgsConstructor
+public final class JourneySignalInfo {
 
+  /**
+   * The unique name of the signal.
+   */
+  @Column(name = "signal_name")
+  public String name;
+  /**
+   * The distance of the train to the signal. Measured in steps of 10 meters.
+   */
+  @Column(name = "signal_distance")
+  public int distance;
+  /**
+   * The max speed that is displayed by the signal. Null in case the signal shows that the train can go at the maximum
+   * possible speed.
+   */
+  @Column(name = "signal_max_speed")
+  public Short maxAllowedSpeed;
 }

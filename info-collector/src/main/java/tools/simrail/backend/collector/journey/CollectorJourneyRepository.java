@@ -22,24 +22,26 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.server;
+package tools.simrail.backend.collector.journey;
 
 import jakarta.annotation.Nonnull;
-import java.time.ZoneOffset;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
+import tools.simrail.backend.common.journey.JourneyEntity;
+import tools.simrail.backend.common.journey.JourneyRepository;
 
 /**
- * A descriptor of a server that was retrieved on the last collection run.
- *
- * @param id        our id of the server.
- * @param foreignId the SimRail backend id of the server.
- * @param code      the server code.
+ * Extension of the default journey repository with collector-specific methods.
  */
-public record SimRailServerDescriptor(
-  @Nonnull UUID id,
-  @Nonnull String foreignId,
-  @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset
-) {
+interface CollectorJourneyRepository extends JourneyRepository {
 
+  @Nonnull
+  List<JourneyEntity> findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
+
+  @Nonnull
+  List<JourneyEntity> findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(@Nonnull UUID serverId);
+
+  @Nonnull
+  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, Collection<UUID> foreignRunIds);
 }

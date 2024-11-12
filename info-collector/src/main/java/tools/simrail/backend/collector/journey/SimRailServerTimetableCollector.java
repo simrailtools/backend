@@ -29,7 +29,6 @@ import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +42,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import tools.simrail.backend.collector.server.SimRailServerDescriptor;
+import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.border.MapBorderPointProvider;
+import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneyEventType;
@@ -54,8 +57,6 @@ import tools.simrail.backend.common.journey.JourneyTimeType;
 import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 import tools.simrail.backend.common.point.SimRailPointProvider;
-import tools.simrail.backend.common.server.SimRailServerEntity;
-import tools.simrail.backend.common.server.SimRailServerRepository;
 import tools.simrail.backend.common.util.RomanNumberConverter;
 import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
@@ -63,7 +64,7 @@ import tools.simrail.backend.external.sraws.model.SimRailAwsTimetableEntry;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
 
 @Component
-public final class SimRailServerTimetableCollector {
+class SimRailServerTimetableCollector {
 
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerTimetableCollector.class);
@@ -73,64 +74,68 @@ public final class SimRailServerTimetableCollector {
 
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPointProvider pointProvider;
+  private final SimRailServerService serverService;
   private final CollectorJourneyService journeyService;
-  private final SimRailServerRepository serverRepository;
   private final MapBorderPointProvider borderPointProvider;
+  private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
 
   @Autowired
   public SimRailServerTimetableCollector(
     @Nonnull SimRailPointProvider pointProvider,
+    @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
-    @Nonnull SimRailServerRepository serverRepository,
-    @Nonnull MapBorderPointProvider borderPointProvider
+    @Nonnull MapBorderPointProvider borderPointProvider,
+    @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
     this.pointProvider = pointProvider;
+    this.serverService = serverService;
     this.journeyService = journeyService;
-    this.serverRepository = serverRepository;
     this.borderPointProvider = borderPointProvider;
+    this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.awsApiClient = SimRailAwsApiClient.create();
 
     this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
     this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
   }
 
-  @Scheduled(initialDelay = 0, fixedRate = 15, timeUnit = TimeUnit.MINUTES)
+  @Transactional
+  @Scheduled(initialDelay = 1, fixedRate = 15, timeUnit = TimeUnit.MINUTES, scheduler = "timetable_collect_scheduler")
   public void collectServerTimetables() {
-    var servers = this.serverRepository.findAll();
+    var servers = this.serverService.getServers();
     for (var server : servers) {
       // get the trains running on the server and their associated run ids
       var startTime = Instant.now();
-      var trainRuns = this.awsApiClient.getTrainRuns(server.getCode());
+      var trainRuns = this.awsApiClient.getTrainRuns(server.code());
       var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
 
       // collect the scheduled journeys based on the timetable information
-      var existingJourneys = this.journeyService.findJourneysOnServerByRunIds(server.getId(), runIds)
+      var existingJourneys = this.journeyService.retrieveJourneysOfServerByRunIds(server.id(), runIds)
         .stream()
         .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
       trainRuns.forEach(trainRun -> this.collectJourney(server, trainRun, existingJourneys));
 
       // print information about the collection run
       var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-      LOGGER.info("Collected {} journeys for server {} in {}s", trainRuns.size(), server.getCode(), elapsedTime);
+      LOGGER.info("Collected {} journeys for server {} in {}s", trainRuns.size(), server.code(), elapsedTime);
     }
   }
 
   private void collectJourney(
-    @Nonnull SimRailServerEntity server,
+    @Nonnull SimRailServerDescriptor server,
     @Nonnull SimRailAwsTrainRun run,
     @Nonnull Map<UUID, JourneyEntity> existingJourneys
   ) {
     // generate the identifier for the journey & find the journey if it was already registered
     var runId = run.getRunId();
     var trainNumber = run.getTrainNumber();
-    var id = this.journeyIdFactory.create(trainNumber + runId + server.getId());
+    var id = this.journeyIdFactory.create(trainNumber + runId + server.id());
     var journey = existingJourneys.get(id);
     if (journey == null) {
       var newJourney = new JourneyEntity();
       newJourney.setId(id);
       newJourney.setForeignRunId(runId);
-      newJourney.setServerId(server.getId());
-      newJourney.setServerCode(server.getCode());
+      newJourney.setServerId(server.id());
+      newJourney.setServerCode(server.code());
       journey = this.journeyService.persistJourney(newJourney);
     } else if (journey.getFirstSeenTime() != null) {
       // don't update the timetable of a journey that is already active
@@ -193,14 +198,14 @@ public final class SimRailServerTimetableCollector {
     // update the events associated with the journey if they changed
     var journeyEvents = journey.getEvents();
     if (!events.equals(journeyEvents)) {
-      this.journeyService.updateJourneyEvents(journey, events);
+      this.journeyService.forcePersistJourneyEvents(journey, events);
     }
   }
 
   private @Nullable JourneyEventEntity registerJourneyEvent(
     @Nonnull UUID journeyId,
     @Nullable String trainLine,
-    @Nonnull SimRailServerEntity server,
+    @Nonnull SimRailServerDescriptor server,
     @Nonnull JourneyEventType eventType,
     @Nullable JourneyEventEntity previousEvent,
     @Nonnull SimRailAwsTimetableEntry timetableEntry,
@@ -228,7 +233,7 @@ public final class SimRailServerTimetableCollector {
   private @Nullable JourneyEventEntity createJourneyEvent(
     @Nonnull UUID journeyId,
     @Nullable String trainLine,
-    @Nonnull SimRailServerEntity server,
+    @Nonnull SimRailServerDescriptor server,
     @Nonnull JourneyEventType eventType,
     @Nullable OffsetDateTime previousEventTime,
     @Nonnull SimRailAwsTimetableEntry timetableEntry,
@@ -254,11 +259,8 @@ public final class SimRailServerTimetableCollector {
         var diff = Duration.between(previousTime.toLocalTime(), scheduledLocalTime.toLocalTime()).abs();
         yield previousTime.plus(diff);
       }
-      case null -> {
-        // no previous time present, use the information from the server and event
-        var serverZoneOffset = ZoneOffset.of(server.getTimezone());
-        yield OffsetDateTime.of(scheduledLocalTime, serverZoneOffset);
-      }
+      case null -> // no previous time present, use the information from the server and event
+        OffsetDateTime.of(scheduledLocalTime, server.timezoneOffset());
     };
 
     // create the event entity id and the base event entity

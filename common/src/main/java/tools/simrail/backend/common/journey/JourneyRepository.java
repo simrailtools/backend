@@ -24,57 +24,15 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
-import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
-import org.springframework.data.repository.query.Param;
 
 /**
  * A repository for journeys.
  */
 public interface JourneyRepository extends
-  CrudRepository<JourneyEntity, UUID>,
+  ListCrudRepository<JourneyEntity, UUID>,
   RevisionRepository<JourneyEntity, UUID, Long> {
 
-  /**
-   * Finds all journeys that are happening on the server with the given id and whose foreign run id is in the given
-   * collection of runs.
-   *
-   * @param serverId      the server id to filter for the journeys.
-   * @param foreignRunIds the id of the run to filter for.
-   * @return all journeys on the server with the given id and whose run id is in the given run id list.
-   */
-  @Nonnull
-  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, List<UUID> foreignRunIds);
-
-  /**
-   * Finds a single journey by the given server code and run id provided by the SimRail api.
-   *
-   * @param serverCode   the server code on which the journey is running.
-   * @param foreignRunId the run id provided by the SimRail api of the journey.
-   * @return an optional holding the journey on the given server with the given run id, if one exists.
-   */
-  @Nonnull
-  Optional<JourneyEntity> findByServerCodeAndForeignRunId(@Nonnull String serverCode, @Nonnull UUID foreignRunId);
-
-  /**
-   * Finds the single journey by the given server code and foreign id that was last marked as active.
-   *
-   * @param serverCode the server code on which the journey is running.
-   * @param foreignId  the foreign id of the journey provided by the SimRail api.
-   * @return an optional holding the journey on the given server with the given id that was last marked as active.
-   */
-  @Nonnull
-  @Query("SELECT e "
-    + "FROM sit_journey e "
-    + "WHERE e.serverCode = :serverCode AND e.foreignId = :foreignId AND e.firstSeenTime IS NOT NULL "
-    + "ORDER BY e.firstSeenTime DESC "
-    + "LIMIT 1")
-  Optional<JourneyEntity> findLastActiveTrainByServerCodeAndForeignId(
-    @Nonnull @Param("serverCode") String serverCode,
-    @Nonnull @Param("foreignId") String foreignId);
 }
