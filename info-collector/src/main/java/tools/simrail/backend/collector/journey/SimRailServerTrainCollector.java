@@ -28,13 +28,10 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
-import java.time.OffsetDateTime;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
@@ -47,6 +44,7 @@ import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
+import tools.simrail.backend.common.shared.GeoPositionEntity;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelTrain;
 
@@ -78,6 +76,13 @@ class SimRailServerTrainCollector {
   @Scheduled(initialDelay = 0, fixedDelay = 2, timeUnit = TimeUnit.SECONDS, scheduler = "train_collect_scheduler")
   public void collectActiveTrains() throws InterruptedException {
     try (var scope = this.transactionalTaskScopeFactory.get()) {
+      // get if a full train data collection should be performed this time
+      var lastFullFetch = this.lastTrainsFetch;
+      var fullCollection = lastFullFetch == null || Duration.between(lastFullFetch, Instant.now()).toSeconds() >= 7;
+      if (fullCollection) {
+        this.lastTrainsFetch = Instant.now();
+      }
+
       var servers = this.serverService.getServers();
       for (var server : servers) {
         scope.fork(() -> {
@@ -85,21 +90,36 @@ class SimRailServerTrainCollector {
           var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
 
           // keeps track of the dirty journeys without retaining duplicates
-          var dirtyJourneys = new HashMap<UUID, JourneyEntity>();
-          Consumer<JourneyEntity> journeyDirtyMarker = journey -> dirtyJourneys.putIfAbsent(journey.getId(), journey);
+          var dirtyRecorders = new HashMap<UUID, JourneyDirtyStateRecorder>();
+          Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory =
+            journey -> dirtyRecorders.computeIfAbsent(
+              journey.getId(),
+              _ -> new JourneyDirtyStateRecorder(journey, server));
 
-          // fetch all train information
-          var lastFullTrainsFetch = this.lastTrainsFetch;
-          if (lastFullTrainsFetch == null || Duration.between(lastFullTrainsFetch, Instant.now()).toSeconds() >= 7) {
-            this.lastTrainsFetch = Instant.now();
-            this.fetchFullTrainInformation(server, activeServerJourneys, journeyDirtyMarker);
+          // fetch full train details in case we're doing a full collection
+          if (fullCollection) {
+            this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
           }
 
-          // if some journeys were changed persist them now
-          if (!dirtyJourneys.isEmpty()) {
-            this.journeyService.persistJourneysAndPopulateCache(server.id(), dirtyJourneys.values());
+          // fetch and update train positions
+          this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
+
+          // check if any journeys changed and take appropriate action
+          var updatedJourneys = dirtyRecorders.values().stream().filter(JourneyDirtyStateRecorder::isDirty).toList();
+          if (!updatedJourneys.isEmpty()) {
+            // todo: notify listener about changes
+
+            // if this is a full collection run, persist the changed journeys into the database as well
+            if (fullCollection) {
+              var updatedJourneyEntities = updatedJourneys.stream()
+                .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
+                .map(JourneyDirtyStateRecorder::getOriginal)
+                .toList();
+              this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
+            }
+
             var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-            LOGGER.info("Stored updates of {} trains on {} in {}s", dirtyJourneys.size(), server.code(), elapsedTime);
+            LOGGER.info("Stored updates of {} trains on {} in {}s", updatedJourneys.size(), server.code(), elapsedTime);
           }
 
           return null;
@@ -115,7 +135,7 @@ class SimRailServerTrainCollector {
   private void fetchFullTrainInformation(
     @Nonnull SimRailServerDescriptor server,
     @Nonnull Map<UUID, JourneyEntity> activeJourneys,
-    @Nonnull Consumer<JourneyEntity> journeyDirtyMarker
+    @Nonnull Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory
   ) {
     // get the trains that are currently active on the target server, the returned
     // list can be empty if, for example, the server is currently down
@@ -130,6 +150,7 @@ class SimRailServerTrainCollector {
     var journeysByRunId = this.journeyService.resolveCachedJourneysOfServer(server.id(), activeTrainRuns)
       .stream()
       .collect(Collectors.toMap(JourneyEntity::getForeignRunId, Function.identity()));
+    LOGGER.info("Got {} trains for {} (cache size: {})", activeTrains.size(), server.code(), activeJourneys.size());
     for (var activeTrain : activeTrains) {
       // find the journey that is associated with the train run
       var journey = journeysByRunId.remove(activeTrain.getRunId());
@@ -139,45 +160,78 @@ class SimRailServerTrainCollector {
       }
 
       // set the first seen time and foreign id if this is the first encounter of the journey
-      var dirty = false;
-      if (journey.getFirstSeenTime() == null) {
-        dirty = true;
-        journey.setForeignId(activeTrain.getId());
-        journey.setFirstSeenTime(OffsetDateTime.now(server.timezoneOffset()));
-      }
+      var dirtyRecorder = dirtyRecorderFactory.apply(journey);
+      dirtyRecorder.updateForeignId(activeTrain.getId());
 
       // update the driver steam id
-      var storedDriverId = journey.getDriverSteamId();
       var currentDriverId = activeTrain.getDetailData().getDriverSteamId();
-      if (!Objects.equals(storedDriverId, currentDriverId)) {
-        dirty = true;
-        journey.setDriverSteamId(currentDriverId);
-      }
+      dirtyRecorder.updateDriverSteamId(currentDriverId);
 
       // update the information about the next signal of the train
-      var storedNextSignal = journey.getNextSignal();
       var currentNextSignal = this.constructNextSignal(activeTrain.getDetailData());
-      if (!Objects.equals(storedNextSignal, currentNextSignal)) {
-        dirty = true;
-        journey.setNextSignal(currentNextSignal);
-      }
+      dirtyRecorder.updateNextSignal(currentNextSignal);
 
-      // if the journey was marked as dirty add it to the dirty journey collection
-      if (dirty) {
-        journeyDirtyMarker.accept(journey);
-      }
+      // update the speed which the train currently has
+      var currentSpeed = Math.max(0, (int) Math.round(activeTrain.getDetailData().getCurrentSpeed()));
+      dirtyRecorder.updateSpeed(currentSpeed);
+
+      // update the position where the journey currently is
+      var currentPositionLat = activeTrain.getDetailData().getPositionLatitude();
+      var currentPositionLng = activeTrain.getDetailData().getPositionLongitude();
+      var currentPosition = currentPositionLat == null || currentPositionLng == null
+        ? null
+        : new GeoPositionEntity(currentPositionLat, currentPositionLng);
+      dirtyRecorder.updatePosition(currentPosition);
     }
 
     // all journeys that are remaining in the map were active before but are no
     // longer on the server (were removed) - update that state
     for (var journey : journeysByRunId.values()) {
-      journey.setSpeed(null);
-      journey.setPosition(null);
-      journey.setNextSignal(null);
-      journey.setDriverSteamId(null);
-      journey.setLastSeenTime(OffsetDateTime.now(server.timezoneOffset()));
-      journeyDirtyMarker.accept(journey);
+      var dirtyRecorder = dirtyRecorderFactory.apply(journey);
+      dirtyRecorder.markRemoved();
       activeJourneys.remove(journey.getId()); // also updates the cache
+    }
+  }
+
+  private void fetchTrainPositionInformation(
+    @Nonnull SimRailServerDescriptor server,
+    @Nonnull Map<UUID, JourneyEntity> activeJourneys,
+    @Nonnull Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory
+  ) {
+    // get the trains that are currently active on the target server, the returned
+    // list can be empty if, for example, the server is currently down
+    var response = this.panelApiClient.getTrainPositions(server.code());
+    var trainPositions = response.getEntries();
+    if (!response.isSuccess() || trainPositions == null || trainPositions.isEmpty()) {
+      LOGGER.warn("SimRail api returned no train positions for server {}", server.code());
+      return;
+    }
+
+    //
+    var journeysByForeignId = activeJourneys.values()
+      .stream()
+      .filter(journey -> journey.getForeignId() != null)
+      .collect(Collectors.toMap(JourneyEntity::getForeignId, Function.identity()));
+    for (var trainPosition : trainPositions) {
+      // get the journey associated with the train position
+      var journey = journeysByForeignId.get(trainPosition.getId());
+      if (journey == null) {
+        LOGGER.debug("Position data {} has no associated active journey", trainPosition.getId());
+        continue;
+      }
+
+      // update the speed which the train currently has
+      var dirtyRecorder = dirtyRecorderFactory.apply(journey);
+      var currentSpeed = Math.max(0, (int) Math.round(trainPosition.getCurrentSpeed()));
+      dirtyRecorder.updateSpeed(currentSpeed);
+
+      // update the position where the journey currently is
+      var currentPositionLat = trainPosition.getPositionLatitude();
+      var currentPositionLng = trainPosition.getPositionLongitude();
+      var currentPosition = currentPositionLat == null || currentPositionLng == null
+        ? null
+        : new GeoPositionEntity(currentPositionLat, currentPositionLng);
+      dirtyRecorder.updatePosition(currentPosition);
     }
   }
 

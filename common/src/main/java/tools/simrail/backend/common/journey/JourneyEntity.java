@@ -142,7 +142,7 @@ public final class JourneyEntity {
    */
   @Column
   @Audited
-  private Double speed;
+  private Integer speed;
   /**
    * The current position of the train, null if the train is currently not active.
    */
