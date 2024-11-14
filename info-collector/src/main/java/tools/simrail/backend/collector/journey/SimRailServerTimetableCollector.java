@@ -30,6 +30,7 @@ import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -42,11 +43,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.border.MapBorderPointProvider;
-import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneyEventType;
@@ -77,29 +76,30 @@ class SimRailServerTimetableCollector {
   private final SimRailServerService serverService;
   private final CollectorJourneyService journeyService;
   private final MapBorderPointProvider borderPointProvider;
-  private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
 
   @Autowired
   public SimRailServerTimetableCollector(
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
-    @Nonnull MapBorderPointProvider borderPointProvider,
-    @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
+    @Nonnull MapBorderPointProvider borderPointProvider
   ) {
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.journeyService = journeyService;
     this.borderPointProvider = borderPointProvider;
-    this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.awsApiClient = SimRailAwsApiClient.create();
 
     this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
     this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
   }
 
-  @Transactional
-  @Scheduled(initialDelay = 1, fixedRate = 15, timeUnit = TimeUnit.MINUTES, scheduler = "timetable_collect_scheduler")
+  @Scheduled(
+    initialDelay = 15,
+    fixedRate = 15 * 60,
+    timeUnit = TimeUnit.SECONDS,
+    scheduler = "timetable_collect_scheduler"
+  )
   public void collectServerTimetables() {
     var servers = this.serverService.getServers();
     for (var server : servers) {
@@ -112,7 +112,16 @@ class SimRailServerTimetableCollector {
       var existingJourneys = this.journeyService.retrieveJourneysOfServerByRunIds(server.id(), runIds)
         .stream()
         .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
-      trainRuns.forEach(trainRun -> this.collectJourney(server, trainRun, existingJourneys));
+      var existingEvents = this.journeyService.retrieveInactiveJourneyEventsOfServerByRunIds(server.id(), runIds)
+        .stream()
+        .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
+          Collectors.toList(),
+          events -> {
+            events.sort(Comparator.comparingInt(JourneyEventEntity::getEventIndex));
+            return events;
+          }
+        )));
+      trainRuns.forEach(run -> this.collectJourney(server, run, existingJourneys, existingEvents));
 
       // print information about the collection run
       var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
@@ -123,20 +132,21 @@ class SimRailServerTimetableCollector {
   private void collectJourney(
     @Nonnull SimRailServerDescriptor server,
     @Nonnull SimRailAwsTrainRun run,
-    @Nonnull Map<UUID, JourneyEntity> existingJourneys
+    @Nonnull Map<UUID, JourneyEntity> existingJourneys,
+    @Nonnull Map<UUID, List<JourneyEventEntity>> existingJourneyEvents
   ) {
     // generate the identifier for the journey & find the journey if it was already registered
     var runId = run.getRunId();
     var trainNumber = run.getTrainNumber();
-    var id = this.journeyIdFactory.create(trainNumber + runId + server.id());
-    var journey = existingJourneys.get(id);
+    var journeyId = this.journeyIdFactory.create(trainNumber + runId + server.id());
+    var journey = existingJourneys.get(journeyId);
     if (journey == null) {
-      var newJourney = new JourneyEntity();
-      newJourney.setId(id);
-      newJourney.setForeignRunId(runId);
-      newJourney.setServerId(server.id());
-      newJourney.setServerCode(server.code());
-      journey = this.journeyService.persistJourney(newJourney);
+      journey = new JourneyEntity();
+      journey.setNew(true);
+      journey.setId(journeyId);
+      journey.setForeignRunId(runId);
+      journey.setServerId(server.id());
+      this.journeyService.persistJourney(journey);
     } else if (journey.getFirstSeenTime() != null) {
       // don't update the timetable of a journey that is already active
       return;
@@ -171,7 +181,7 @@ class SimRailServerTimetableCollector {
       // construct the arrival event for the entry, if the event is not the first along the route
       if (index != 0) {
         previousEvent = this.registerJourneyEvent(
-          id,
+          journeyId,
           trainLine,
           server,
           JourneyEventType.ARRIVAL,
@@ -184,7 +194,7 @@ class SimRailServerTimetableCollector {
       // construct the departure event for the entry, if the event is not the last along the route
       if (index != lastTimetableIndex) {
         previousEvent = this.registerJourneyEvent(
-          id,
+          journeyId,
           trainLine,
           server,
           JourneyEventType.DEPARTURE,
@@ -196,9 +206,9 @@ class SimRailServerTimetableCollector {
     }
 
     // update the events associated with the journey if they changed
-    var journeyEvents = journey.getEvents();
-    if (!events.equals(journeyEvents)) {
-      this.journeyService.forcePersistJourneyEvents(journey, events);
+    var existingEvents = existingJourneyEvents.get(journeyId);
+    if (!events.equals(existingEvents)) {
+      this.journeyService.forcePersistJourneyEvents(server.id(), journeyId, events);
     }
   }
 

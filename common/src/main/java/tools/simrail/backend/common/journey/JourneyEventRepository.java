@@ -25,8 +25,12 @@
 package tools.simrail.backend.common.journey;
 
 import jakarta.annotation.Nonnull;
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 /**
  * A repository for journey events.
@@ -39,4 +43,22 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
    * @param journeyId the journey id to delete the associated events of.
    */
   void deleteAllByJourneyId(@Nonnull UUID journeyId);
+
+  /**
+   * Retrieves all journey events that are associated with a journey on the given server and with one of the run ids.
+   *
+   * @param serverId the id of the server where the journeys are running on.
+   * @param runIds   the ids of the runs to get the associated journey events of.
+   * @return the journey events associated with a journey on the given server and with one of the run ids.
+   */
+  @Nonnull
+  @Query("SELECT e FROM sit_journey_event e WHERE e.journeyId IN ("
+    + "  SELECT j.id FROM sit_journey j"
+    + "  WHERE j.serverId = :serverId"
+    + "  AND j.foreignRunId IN :runIds"
+    + "  AND j.firstSeenTime IS NULL"
+    + ")")
+  List<JourneyEventEntity> findAllInactiveByServerIdAndRunId(
+    @Nonnull @Param("serverId") UUID serverId,
+    @Nonnull @Param("runIds") Collection<UUID> runIds);
 }

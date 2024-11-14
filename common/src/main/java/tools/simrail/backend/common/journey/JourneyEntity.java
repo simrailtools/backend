@@ -38,6 +38,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -49,6 +50,7 @@ import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.envers.Audited;
+import org.springframework.data.domain.Persistable;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
@@ -63,7 +65,7 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
   @Index(columnList = "firstSeenTime, lastSeenTime"),
   @Index(columnList = "serverId, firstSeenTime, lastSeenTime"),
 })
-public final class JourneyEntity {
+public final class JourneyEntity implements Persistable<UUID> {
 
   /**
    * The namespace used to generate UUIDv5 ids for journey entities.
@@ -93,15 +95,10 @@ public final class JourneyEntity {
   private long version;
 
   /**
-   * The internal id of the server.
+   * The internal id of the server on which the associated journey is happening.
    */
   @Column(nullable = false)
   private UUID serverId;
-  /**
-   * The code of the server where the journey will happen.
-   */
-  @Column(nullable = false)
-  private String serverCode;
 
   /**
    * The last time when this journey was last updated.
@@ -133,7 +130,7 @@ public final class JourneyEntity {
    */
   @BatchSize(size = 100)
   @OrderBy("eventIndex")
-  @OneToMany(fetch = FetchType.EAGER)
+  @OneToMany(fetch = FetchType.LAZY)
   @JoinColumn(name = "journeyId", insertable = false, updatable = false)
   private List<JourneyEventEntity> events;
 
@@ -157,9 +154,9 @@ public final class JourneyEntity {
   @Audited
   @Embedded
   @AttributeOverrides({
-    @AttributeOverride(name = "signal_name", column = @Column(name = "next_signal_name")),
-    @AttributeOverride(name = "signal_distance", column = @Column(name = "next_signal_distance")),
-    @AttributeOverride(name = "signal_max_speed", column = @Column(name = "next_signal_max_speed")),
+    @AttributeOverride(name = "name", column = @Column(name = "next_signal_name")),
+    @AttributeOverride(name = "distance", column = @Column(name = "next_signal_distance")),
+    @AttributeOverride(name = "maxAllowedSpeed", column = @Column(name = "next_signal_max_speed")),
   })
   private JourneySignalInfo nextSignal;
   /**
@@ -169,6 +166,12 @@ public final class JourneyEntity {
   @Audited
   @Column(length = 20)
   private String driverSteamId;
+
+  /**
+   * Indicates if this entity is now or already persisted in the database.
+   */
+  @Transient
+  private boolean isNew;
 
   /**
    * {@inheritDoc}

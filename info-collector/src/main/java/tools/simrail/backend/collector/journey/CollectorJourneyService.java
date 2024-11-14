@@ -86,16 +86,31 @@ class CollectorJourneyService {
   }
 
   /**
-   * Retrieves all inactive journeys that are running on the given server and use one of the given run ids directly from
-   * the database without using the cache.
+   * Retrieves all journeys that are running on the given server and use one of the given run ids directly from the
+   * database without using the cache.
    *
-   * @param serverId the id of the server where the inactive journeys are
+   * @param serverId the id of the server where the journeys are.
    * @param runIds   the ids of the runs to get the associated journey of.
    * @return the journeys on the given server and one of the given run ids.
    */
   @Nonnull
   public List<JourneyEntity> retrieveJourneysOfServerByRunIds(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
     return this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds);
+  }
+
+  /**
+   * Retrieves all journey events that are associated with a journey on the given server and with one of the run ids.
+   *
+   * @param serverId the id of the server where the journeys are running on.
+   * @param runIds   the ids of the runs to get the associated journey events of.
+   * @return the journey events associated with a journey on the given server and with one of the run ids.
+   */
+  @Nonnull
+  public List<JourneyEventEntity> retrieveInactiveJourneyEventsOfServerByRunIds(
+    @Nonnull UUID serverId,
+    @Nonnull List<UUID> runIds
+  ) {
+    return this.journeyEventRepository.findAllInactiveByServerIdAndRunId(serverId, runIds);
   }
 
   /**
@@ -183,17 +198,26 @@ class CollectorJourneyService {
   /**
    * Persists all given journey events in one batch, cleaning all previous known events of the journey.
    *
-   * @param journey the journey to which the given events are related.
-   * @param events  the events that are associated with the given journey that should be persisted.
+   * @param serverId  the id of the server where the associated journey events are happening.
+   * @param journeyId the id of the journey to which the given events are related.
+   * @param events    the events that are associated with the given journey that should be persisted.
    */
   @Transactional
-  public void forcePersistJourneyEvents(@Nonnull JourneyEntity journey, @Nonnull List<JourneyEventEntity> events) {
-    // pre-delete all entities that are associated with the journey
-    this.journeyEventRepository.deleteAllByJourneyId(journey.getId());
+  public void forcePersistJourneyEvents(
+    @Nonnull UUID serverId,
+    @Nonnull UUID journeyId,
+    @Nonnull List<JourneyEventEntity> events
+  ) {
+    // check if the associated journey became active concurrent to the timetable collection operation
+    // this check is not 100% perfect as there still might be a race, but it should be good enough
+    var cachedJourneys = this.activeJourneysByServer.get(serverId);
+    if (cachedJourneys == null || !cachedJourneys.containsKey(journeyId)) {
+      // pre-delete all entities that are associated with the journey
+      this.journeyEventRepository.deleteAllByJourneyId(journeyId);
 
-    // persist all events (insert) and execute the persistence after, in a single bulk operation
-    events.forEach(this.entityManager::persist);
-    this.entityManager.flush();
-    this.entityManager.clear();
+      // persist all events (insert) and execute the persistence after, in a single bulk operation
+      events.forEach(this.entityManager::persist);
+      this.entityManager.flush();
+    }
   }
 }
