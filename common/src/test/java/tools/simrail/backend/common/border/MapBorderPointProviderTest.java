@@ -35,13 +35,17 @@ import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
 import tools.simrail.backend.common.TimetableHolder;
+import tools.simrail.backend.common.point.SimRailPointProvider;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
+  SimRailPointProvider.class,
   MapBorderPointProvider.class,
   JacksonAutoConfiguration.class,
 })
 public final class MapBorderPointProviderTest {
 
+  @Autowired
+  private SimRailPointProvider pointProvider;
   @Autowired
   private MapBorderPointProvider borderPointProvider;
   @Value("classpath:data/border_points.json")
@@ -50,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(17, borderPoints.size());
+    Assertions.assertEquals(22, borderPoints.size());
   }
 
   @Test
@@ -60,11 +64,26 @@ public final class MapBorderPointProviderTest {
     try (var stream = this.borderPointsResource.getInputStream()) {
       var borderPoints = jsonMapper.readTree(stream);
       for (var borderPoint : borderPoints) {
-        var pointId = borderPoint.get("ext_point_id").asText();
-        if (!seenPointIds.add(pointId)) {
-          Assertions.fail("Duplicate border point id: " + pointId);
+        var pointIds = borderPoint.get("ext_point_ids");
+        for (var pointIdNode : pointIds) {
+          var pointId = pointIdNode.asText();
+          if (!seenPointIds.add(pointId)) {
+            Assertions.fail("Duplicate border point id: " + pointId);
+          }
         }
       }
+    }
+  }
+
+  @Test
+  void testAllBorderPointsAreMappedUniquely() {
+    var borderPoints = this.borderPointProvider.mapBorderPointIds;
+    for (var borderPoint : borderPoints) {
+      this.pointProvider.findPointByPointId(borderPoint).ifPresent(point -> {
+        for (String pointId : point.getSimRailPointIds()) {
+          Assertions.assertTrue(this.borderPointProvider.isMapBorderPoint(pointId), pointId);
+        }
+      });
     }
   }
 

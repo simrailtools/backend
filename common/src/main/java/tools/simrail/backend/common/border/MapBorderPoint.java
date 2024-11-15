@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.border;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -43,8 +44,8 @@ public final class MapBorderPoint {
   @JsonProperty("name")
   private String name;
   /**
-   * The external (SimRail) point id.
+   * The external (SimRail) point ids.
    */
-  @JsonProperty("ext_point_id")
-  private String simRailPointId;
+  @JsonProperty("ext_point_ids")
+  private List<String> simRailPointIds;
 }

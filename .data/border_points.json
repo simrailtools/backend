@@ -1,70 +1,109 @@
 [
   {
     "name": "Katowice Muchowiec Staszic",
-    "ext_point_id": "1637"
+    "ext_point_ids": [
+      "1637"
+    ]
   },
   {
     "name": "Staszic",
-    "ext_point_id": "4096"
+    "ext_point_ids": [
+      "4096"
+    ]
   },
   {
     "name": "Brynów",
-    "ext_point_id": "333"
+    "ext_point_ids": [
+      "333"
+    ]
   },
   {
     "name": "Katowice Tow. KTC",
-    "ext_point_id": "1653"
+    "ext_point_ids": [
+      "1653"
+    ]
   },
   {
     "name": "Szabelnia",
-    "ext_point_id": "4236"
+    "ext_point_ids": [
+      "4236"
+    ]
   },
   {
     "name": "Sosnowiec Maczki",
-    "ext_point_id": "4006"
+    "ext_point_ids": [
+      "4006"
+    ]
   },
   {
     "name": "Dąbrowa Górnicza Towarowa",
-    "ext_point_id": "728"
+    "ext_point_ids": [
+      "728"
+    ]
   },
   {
     "name": "Myszków",
-    "ext_point_id": "2777"
+    "ext_point_ids": [
+      "2777",
+      "2778"
+    ]
   },
   {
     "name": "Tunel",
-    "ext_point_id": "4595"
+    "ext_point_ids": [
+      "4595"
+    ]
   },
   {
     "name": "Sędziszów",
-    "ext_point_id": "3795"
+    "ext_point_ids": [
+      "3795"
+    ]
   },
   {
     "name": "Żelisławice",
-    "ext_point_id": "5392"
+    "ext_point_ids": [
+      "5392",
+      "5393"
+    ]
   },
   {
     "name": "Czarnca",
-    "ext_point_id": "613"
+    "ext_point_ids": [
+      "613",
+      "614",
+      "5461"
+    ]
   },
   {
     "name": "Radzice",
-    "ext_point_id": "3519"
+    "ext_point_ids": [
+      "3519"
+    ]
   },
   {
     "name": "Radzice PZS R31",
-    "ext_point_id": "3520"
+    "ext_point_ids": [
+      "3520"
+    ]
   },
   {
     "name": "Żyrardów",
-    "ext_point_id": "5431"
+    "ext_point_ids": [
+      "5431"
+    ]
   },
   {
-    "name": "Warszawa Gł.Tow.Sr18",
-    "ext_point_id": "4723"
+    "name": "Warszawa Główna",
+    "ext_point_ids": [
+      "4718",
+      "4723"
+    ]
   },
   {
     "name": "Warszawa Grochów",
-    "ext_point_id": "4732"
+    "ext_point_ids": [
+      "4732"
+    ]
   }
 ]

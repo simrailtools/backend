@@ -53,7 +53,9 @@ public final class MapBorderPointProvider {
     var borderPointsType = objectMapper.getTypeFactory().constructCollectionType(List.class, MapBorderPoint.class);
     try (var inputStream = borderPointsResource.getInputStream()) {
       List<MapBorderPoint> points = objectMapper.readValue(inputStream, borderPointsType);
-      this.mapBorderPointIds = points.stream().map(MapBorderPoint::getSimRailPointId).collect(Collectors.toSet());
+      this.mapBorderPointIds = points.stream()
+        .flatMap(point -> point.getSimRailPointIds().stream())
+        .collect(Collectors.toSet());
     }
   }
 
