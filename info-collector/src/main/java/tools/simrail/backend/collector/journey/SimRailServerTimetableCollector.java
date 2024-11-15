@@ -207,7 +207,7 @@ class SimRailServerTimetableCollector {
 
     // update the events associated with the journey if they changed
     var existingEvents = existingJourneyEvents.get(journeyId);
-    if (!events.equals(existingEvents)) {
+    if (this.eventsNeedUpdate(existingEvents, events)) {
       this.journeyService.forcePersistJourneyEvents(server.id(), journeyId, events);
     }
   }
@@ -328,8 +328,13 @@ class SimRailServerTimetableCollector {
   }
 
   private @Nonnull List<SimRailAwsTimetableEntry> fixupTimetable(@Nonnull List<SimRailAwsTimetableEntry> timetable) {
+    // fixing the events starts from the second event, to facilitate it which means
+    // that the first event must always be in the list of events as the loop never touches it
+    var firstEvent = timetable.getFirst();
     var fixedEvents = new ArrayList<SimRailAwsTimetableEntry>();
-    var currentEvent = timetable.getFirst();
+    fixedEvents.add(firstEvent);
+
+    var currentEvent = firstEvent;
     for (var index = 1; index < timetable.size(); index++) {
       // check if the point of the event is known if not just add it as fixed
       // as the event will be sorted out later anyway
@@ -367,5 +372,24 @@ class SimRailServerTimetableCollector {
     }
 
     return fixedEvents;
+  }
+
+  private boolean eventsNeedUpdate(@Nullable List<JourneyEventEntity> orig, @Nonnull List<JourneyEventEntity> compare) {
+    // if the original has no events or the size changed we need to update
+    if (orig == null || orig.size() != compare.size()) {
+      return true;
+    }
+
+    // check if one element in the collection does not deep equal its new version
+    for (var index = 0; index < orig.size(); index++) {
+      var originalEntity = orig.get(index);
+      var compareEntity = compare.get(index);
+      if (!originalEntity.scheduledDataEquals(compareEntity)) {
+        return true;
+      }
+    }
+
+    // all entries match
+    return false;
   }
 }
