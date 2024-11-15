@@ -94,7 +94,7 @@ final class JourneyEventRealtimeUpdater {
 
   private void updateEventTimesDueToArrivalAtPoint(@Nonnull SimRailPoint currentPoint) {
     // journey is currently at a point along the route, find the point
-    var eventsOfPoint = journeyEvents.stream()
+    var eventsOfPoint = this.journeyEvents.stream()
       .filter(event -> event.getStopDescriptor().getId().equals(currentPoint.getId()))
       .collect(Collectors.toMap(JourneyEventEntity::getEventType, Function.identity()));
     if (eventsOfPoint.isEmpty()) {

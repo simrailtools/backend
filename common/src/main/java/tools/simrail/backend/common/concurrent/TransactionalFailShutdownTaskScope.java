@@ -77,7 +77,7 @@ public final class TransactionalFailShutdownTaskScope extends StructuredTaskScop
   @Override
   protected void handleComplete(@Nonnull Subtask<?> subtask) {
     if (subtask.state() == Subtask.State.FAILED
-      && firstException == null
+      && this.firstException == null
       && FIRST_EXCEPTION_VAR_HANDLE.compareAndSet(this, null, subtask.exception())) {
       super.shutdown();
     }
