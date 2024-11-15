@@ -279,10 +279,21 @@ class SimRailServerTimetableCollector {
     eventEntity.setId(id);
     eventEntity.setJourneyId(journeyId);
     eventEntity.setEventType(eventType);
-    eventEntity.setEventIndex(eventIndex * 50);
     eventEntity.setScheduledTime(scheduledOffsetTime);
     eventEntity.setRealtimeTime(scheduledOffsetTime);
     eventEntity.setRealtimeTimeType(JourneyTimeType.SCHEDULE);
+
+    if (eventIndex == 0) {
+      // first event should use the index 0
+      eventEntity.setEventIndex(0);
+    } else if (eventIndex % 2 == 0) {
+      // departure events should use the same index as the arrival event plus 1
+      var arrivalEventIndex = (eventIndex - 1) * 100;
+      eventEntity.setEventIndex(arrivalEventIndex + 1);
+    } else {
+      // arrival event just use the actual index * 100 to leave space for additional events
+      eventEntity.setEventIndex(eventIndex * 100);
+    }
 
     // add information about the stop where the event is happening
     var stopDescriptorEntity = new JourneyStopDescriptor();
