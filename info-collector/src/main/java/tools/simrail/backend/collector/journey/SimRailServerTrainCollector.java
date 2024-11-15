@@ -28,7 +28,10 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
+import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -43,6 +46,8 @@ import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
+import tools.simrail.backend.common.journey.JourneyEventEntity;
+import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
@@ -56,6 +61,8 @@ class SimRailServerTrainCollector {
   private final SimRailServerService serverService;
   private final SimRailPanelApiClient panelApiClient;
   private final CollectorJourneyService journeyService;
+  private final JourneyEventRepository journeyEventRepository;
+  private final JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory;
   private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
 
   // last time when the full train information was fetched
@@ -65,11 +72,15 @@ class SimRailServerTrainCollector {
   public SimRailServerTrainCollector(
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
+    @Nonnull JourneyEventRepository journeyEventRepository,
+    @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
     @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
     this.serverService = serverService;
     this.journeyService = journeyService;
+    this.journeyEventRepository = journeyEventRepository;
     this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
+    this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
     this.panelApiClient = SimRailPanelApiClient.create();
   }
 
@@ -96,26 +107,43 @@ class SimRailServerTrainCollector {
               journey.getId(),
               _ -> new JourneyDirtyStateRecorder(journey, server));
 
-          // fetch full train details in case we're doing a full collection
           if (fullCollection) {
+            // fetch full train details in case we're doing a full collection
             this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
+          } else {
+            // fetch and update train positions
+            this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
           }
-
-          // fetch and update train positions
-          this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
 
           // check if any journeys changed and take appropriate action
           var updatedJourneys = dirtyRecorders.values().stream().filter(JourneyDirtyStateRecorder::isDirty).toList();
           if (!updatedJourneys.isEmpty()) {
             // todo: notify listener about changes
 
-            // if this is a full collection run, persist the changed journeys into the database as well
             if (fullCollection) {
+              // if this is a full collection run, persist the changed journeys into the database as well
               var updatedJourneyEntities = updatedJourneys.stream()
                 .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
                 .map(JourneyDirtyStateRecorder::getOriginal)
                 .toList();
               this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
+
+              // update journey events that are associated with journeys that got relevant updates
+              var relevantJourneys = updatedJourneys.stream()
+                .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved() || journey.wasFirstSeen())
+                .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
+              if (!relevantJourneys.isEmpty()) {
+                var eventsByJourneyId = this.journeyEventRepository.findAllByJourneyIdIn(relevantJourneys.keySet())
+                  .stream()
+                  .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
+                    Collectors.toList(),
+                    events -> {
+                      events.sort(Comparator.comparingInt(JourneyEventEntity::getEventIndex));
+                      return events;
+                    }
+                  )));
+                this.updateJourneyEvents(server, relevantJourneys.values(), eventsByJourneyId);
+              }
             }
 
             var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
@@ -233,6 +261,29 @@ class SimRailServerTrainCollector {
         : new GeoPositionEntity(currentPositionLat, currentPositionLng);
       dirtyRecorder.updatePosition(currentPosition);
     }
+  }
+
+  private void updateJourneyEvents(
+    @Nonnull SimRailServerDescriptor server,
+    @Nonnull Collection<JourneyDirtyStateRecorder> journeys,
+    @Nonnull Map<UUID, List<JourneyEventEntity>> eventsByJourney
+  ) {
+    var updatedJourneys = journeys.stream()
+      .filter(recorder -> eventsByJourney.containsKey(recorder.getOriginal().getId()))
+      .flatMap(recorder -> {
+        var journey = recorder.getOriginal();
+        var events = eventsByJourney.get(journey.getId());
+        var updater = this.journeyEventRealtimeUpdaterFactory.create(recorder.wasFirstSeen(), journey, server, events);
+        if (recorder.wasRemoved()) {
+          updater.updateEventsDueToRemoval();
+        } else {
+          updater.updateEventsDueToPositionChange();
+        }
+
+        return updater.getUpdatedJourneyEvents().stream();
+      })
+      .toList();
+    this.journeyEventRepository.saveAll(updatedJourneys);
   }
 
   private @Nullable JourneySignalInfo constructNextSignal(@Nonnull SimRailPanelTrain.DetailData detailData) {

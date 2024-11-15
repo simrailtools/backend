@@ -45,6 +45,15 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
   void deleteAllByJourneyId(@Nonnull UUID journeyId);
 
   /**
+   * Finds all event entities that are associated with one of the given journey ids.
+   *
+   * @param journeyIds the journey ids to get the events of.
+   * @return all journey entities that are associated with one of the given journey ids.
+   */
+  @Nonnull
+  List<JourneyEventEntity> findAllByJourneyIdIn(@Nonnull Collection<UUID> journeyIds);
+
+  /**
    * Retrieves all journey events that are associated with a journey on the given server and with one of the run ids.
    *
    * @param serverId the id of the server where the journeys are running on.

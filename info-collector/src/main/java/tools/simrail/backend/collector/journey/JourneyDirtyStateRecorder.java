@@ -60,13 +60,23 @@ final class JourneyDirtyStateRecorder {
   private ValueHolder<GeoPositionEntity> position;
   private ValueHolder<JourneySignalInfo> nextSignal;
 
-  public void updateForeignId(@Nullable final String foreignId) {
+  /**
+   * Sets the foreign id in this recorder in case the foreign id of the original journey is not yet defined.
+   *
+   * @param foreignId the foreign id to set.
+   */
+  public void updateForeignId(@Nullable String foreignId) {
     var currentForeignId = this.original.getForeignId();
     if (currentForeignId == null) {
       this.foreignId = new ValueHolder<>(foreignId);
     }
   }
 
+  /**
+   * Sets the speed of the journey in this recorder in case it differs from the original journey.
+   *
+   * @param newSpeed the new speed to set.
+   */
   public void updateSpeed(@Nullable Integer newSpeed) {
     var currentSpeed = this.original.getSpeed();
     if (!Objects.equals(currentSpeed, newSpeed)) {
@@ -74,6 +84,11 @@ final class JourneyDirtyStateRecorder {
     }
   }
 
+  /**
+   * Sets the steam id of the driver in this recorder in case it differs from the original journey.
+   *
+   * @param newDriverSteamId the steam id of the driver to set.
+   */
   public void updateDriverSteamId(@Nullable String newDriverSteamId) {
     var currentDriverSteamId = this.original.getDriverSteamId();
     if (!Objects.equals(currentDriverSteamId, newDriverSteamId)) {
@@ -81,6 +96,11 @@ final class JourneyDirtyStateRecorder {
     }
   }
 
+  /**
+   * Sets the position of the journey in this recorder in case it differs from the original journey.
+   *
+   * @param newPosition the position of the journey to set.
+   */
   public void updatePosition(@Nullable GeoPositionEntity newPosition) {
     var currentPosition = this.original.getPosition();
     if (!Objects.equals(currentPosition, newPosition)) {
@@ -88,6 +108,11 @@ final class JourneyDirtyStateRecorder {
     }
   }
 
+  /**
+   * Sets the information about the next signal in this recorder in case it differs from the original journey.
+   *
+   * @param newNextSignal the info about the next signal to set.
+   */
   public void updateNextSignal(@Nullable JourneySignalInfo newNextSignal) {
     var currentNextSignal = this.original.getNextSignal();
     if (!Objects.equals(currentNextSignal, newNextSignal)) {
@@ -95,10 +120,41 @@ final class JourneyDirtyStateRecorder {
     }
   }
 
+  /**
+   * Marks this journey as removed. This will override all properties in this recorder and the original journey if
+   * applied.
+   */
   public void markRemoved() {
     if (this.original.getLastSeenTime() == null) {
       this.removed = true;
     }
+  }
+
+  /**
+   * Get if the position of the journey was updated.
+   *
+   * @return true if the position of the journey was updated, false otherwise.
+   */
+  public boolean hasPositionChanged() {
+    return this.position != null;
+  }
+
+  /**
+   * Get if the journey was removed.
+   *
+   * @return true if the journey was removed, false otherwise.
+   */
+  public boolean wasRemoved() {
+    return this.removed;
+  }
+
+  /**
+   * Get if the journey was first seen.
+   *
+   * @return true if the journey was first seen, false otherwise.
+   */
+  public boolean wasFirstSeen() {
+    return this.foreignId != null;
   }
 
   /**
