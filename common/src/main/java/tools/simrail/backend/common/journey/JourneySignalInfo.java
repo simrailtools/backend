@@ -42,17 +42,17 @@ public final class JourneySignalInfo {
   /**
    * The unique name of the signal.
    */
-  @Column(name = "signal_name")
+  @Column
   public String name;
   /**
    * The distance of the train to the signal. Measured in steps of 10 meters.
    */
-  @Column(name = "signal_distance")
+  @Column
   public int distance;
   /**
    * The max speed that is displayed by the signal. Null in case the signal shows that the train can go at the maximum
    * possible speed.
    */
-  @Column(name = "signal_max_speed")
+  @Column
   public Short maxAllowedSpeed;
 }

@@ -26,7 +26,6 @@ package tools.simrail.backend.common.journey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
-import jakarta.persistence.Id;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -44,7 +43,7 @@ public final class JourneyStopDescriptor {
   /**
    * The id of the point represented by this descriptor.
    */
-  @Id
+  @Column(nullable = false)
   private UUID id;
   /**
    * The name of the station represented by this descriptor.

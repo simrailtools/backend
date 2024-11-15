@@ -90,6 +90,12 @@ public final class JourneyEventEntity {
    * The descriptor of the stop where the event is scheduled to happen.
    */
   @Embedded
+  @Column(nullable = false)
+  @AttributeOverrides({
+    @AttributeOverride(name = "id", column = @Column(name = "point_id", nullable = false)),
+    @AttributeOverride(name = "name", column = @Column(name = "point_name", nullable = false)),
+    @AttributeOverride(name = "playable", column = @Column(name = "point_playable", nullable = false)),
+  })
   private JourneyStopDescriptor stopDescriptor;
 
   /**
@@ -121,7 +127,7 @@ public final class JourneyEventEntity {
   @Embedded
   @AttributeOverrides({
     @AttributeOverride(name = "track", column = @Column(name = "scheduled_track")),
-    @AttributeOverride(name = "platform", column = @Column(name = "scheduled_platform"))
+    @AttributeOverride(name = "platform", column = @Column(name = "scheduled_platform")),
   })
   private JourneyPassengerStopInfo scheduledPassengerStopInfo;
   /**
@@ -132,14 +138,22 @@ public final class JourneyEventEntity {
   @Embedded
   @AttributeOverrides({
     @AttributeOverride(name = "track", column = @Column(name = "realtime_track")),
-    @AttributeOverride(name = "platform", column = @Column(name = "realtime_platform"))
+    @AttributeOverride(name = "platform", column = @Column(name = "realtime_platform")),
   })
   private JourneyPassengerStopInfo realtimePassengerStopInfo;
 
   /**
    * Get the transport that is used for the journey at this event.
    */
+  @Column
   @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "line", column = @Column(name = "transport_line")),
+    @AttributeOverride(name = "type", column = @Column(name = "transport_type")),
+    @AttributeOverride(name = "number", column = @Column(name = "transport_number")),
+    @AttributeOverride(name = "category", column = @Column(name = "transport_category")),
+    @AttributeOverride(name = "maxSpeed", column = @Column(name = "transport_max_speed")),
+  })
   private JourneyTransport transport;
 
   /**
@@ -152,6 +166,24 @@ public final class JourneyEventEntity {
    */
   @Column
   private boolean additional;
+
+  /**
+   * Checks if one of the scheduled data fields differs from the given other entity.
+   *
+   * @param other the other entity to compare against.
+   * @return true if the scheduled data of this and the other entity is equal, false otherwise.
+   */
+  public boolean scheduledDataEquals(@Nonnull JourneyEventEntity other) {
+    return this.eventIndex == other.eventIndex
+      && this.stopType == other.stopType
+      && this.eventType == other.eventType
+      && Objects.equals(this.id, other.id)
+      && Objects.equals(this.journeyId, other.journeyId)
+      && Objects.equals(this.stopDescriptor, other.stopDescriptor)
+      && Objects.equals(this.scheduledTime, other.scheduledTime)
+      && Objects.equals(this.scheduledPassengerStopInfo, other.scheduledPassengerStopInfo)
+      && Objects.equals(this.transport, other.transport);
+  }
 
   /**
    * {@inheritDoc}
