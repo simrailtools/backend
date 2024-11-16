@@ -67,8 +67,6 @@ public final class SimRailAwsApiClientTest {
     Assertions.assertFalse(de1TrainRuns.isEmpty());
 
     for (var trainRun : de1TrainRuns) {
-      System.out.println(trainRun.getTrainNumber()); // for debug if this test fails
-
       Assertions.assertNotNull(trainRun.getRunId());
       Assertions.assertNotNull(trainRun.getTrainDisplayName());
       Assertions.assertFalse(trainRun.getTrainDisplayName().isEmpty());
