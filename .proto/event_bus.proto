@@ -1,0 +1,76 @@
+syntax = "proto3";
+package tools.simrail.backend;
+
+option java_multiple_files = true;
+option java_outer_classname = "EventBusProto";
+option java_package = "tools.simrail.backend.common.grpc";
+
+import "google/protobuf/empty.proto";
+
+// The types of updates that can be sent out.
+enum UpdateType {
+  // The monitored object was added.
+  ADD = 0;
+  // The monitored object was removed.
+  REMOVE = 1;
+  // The monitored object was updated.
+  UPDATE = 2;
+}
+
+// A geo position.
+message GeoPosition {
+  // The latitude of the geo position.
+  double latitude = 1;
+  // The longitude of the geo position.
+  double longitude = 2;
+}
+
+// Information about the next signal of a journey.
+message SignalInfo {
+  // The name (id) of the signal.
+  string name = 1;
+  // The distance (in meters) of the journey to the signal.
+  uint32 distance = 2;
+  // The maximum allowed speed shown by the signal, null if the signal does not indicate a speed reduction.
+  optional uint32 max_speed = 3;
+}
+
+// A wrapper to indicate if the driver steam id of a journey was changed, and if that is the case to which new value.
+message SteamIdWrapper {
+  // Indicates if the steam id was updated.
+  bool updated = 1;
+  // The new steam id, only present if updated is true. Can be null to indicate that no player is driving.
+  optional string steam_id = 2;
+}
+
+// A wrapper to indicate if the next signal of a journey was changed and to which new value.
+message SignalInfoWrapper {
+  // Indicates if the signal info was updated.
+  bool updated = 1;
+  // The new signal info if updated is true. Can be null in case the signal is too far away (>5 km).
+  optional SignalInfo signal_info = 2;
+}
+
+// A single update frame for a single journey holding all fields that can be updated.
+message JourneyUpdateFrame {
+  // The id of the journey that is being updated.
+  string journey_id = 1;
+  // Indicates if the journey was added and is now active.
+  UpdateType update_type = 2;
+
+  // A wrapper to indicate if the driver of a journey changed.
+  SteamIdWrapper driver = 3;
+  // A wrapper to indicate if the next signal of a journey changed.
+  SignalInfoWrapper next_signal = 4;
+
+  // The speed that the journey is travelling at, not present if the speed didn't change.
+  optional double speed = 5;
+  // The current position of the journey, not present if the position didn't change.
+  optional GeoPosition position = 6;
+}
+
+// An event bus which streams updates of objects to a client.
+service EventBus {
+  // Subscribes the client to all journey updates that are available to the server.
+  rpc SubscribeToJourneys(google.protobuf.Empty) returns (stream JourneyUpdateFrame);
+}
