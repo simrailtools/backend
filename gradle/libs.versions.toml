@@ -1,7 +1,8 @@
 [versions]
 # plugins
-spotless = "7.0.0.BETA4"
+protobuf = "0.9.4"
 springBoot = "3.3.5"
+spotless = "7.0.0.BETA4"
 checkstyleTools = "10.20.1"
 springDependencyManagement = "1.1.6"
 
@@ -13,6 +14,7 @@ jackson = "2.18.1"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
 postgreSqlDriver = "42.7.4"
+springGrpc = "0.2.0-SNAPSHOT"
 
 # testing
 junit = "5.11.3"
@@ -54,8 +56,10 @@ testContainersJunit = { group = "org.testcontainers", name = "junit-jupiter", ve
 
 # dummy versions, just here for renovate to detect that there is something to update
 checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
+springGrpcDependencies = { group = "org.springframework.grpc", name = "spring-grpc-dependencies", version.ref = "springGrpc" }
 
 [plugins]
+protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }
 spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
 springBoot = { id = "org.springframework.boot", version.ref = "springBoot" }
 springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }

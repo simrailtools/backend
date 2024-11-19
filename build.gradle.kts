@@ -54,6 +54,10 @@ subprojects {
       name = "Spring Milestones"
       url = uri("https://repo.spring.io/milestone")
     }
+    maven {
+      name = "Spring Snapshots"
+      url = uri("https://repo.spring.io/snapshot")
+    }
   }
 
   dependencies {
