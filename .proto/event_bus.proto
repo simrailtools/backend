@@ -3,7 +3,7 @@ package tools.simrail.backend;
 
 option java_multiple_files = true;
 option java_outer_classname = "EventBusProto";
-option java_package = "tools.simrail.backend.common.grpc";
+option java_package = "tools.simrail.backend.common.rpc";
 
 import "google/protobuf/empty.proto";
 
@@ -55,7 +55,7 @@ message SignalInfoWrapper {
 message JourneyUpdateFrame {
   // The id of the journey that is being updated.
   string journey_id = 1;
-  // Indicates if the journey was added and is now active.
+  // The type of update that is signalled by this frame.
   UpdateType update_type = 2;
 
   // A wrapper to indicate if the driver of a journey changed.
@@ -69,8 +69,38 @@ message JourneyUpdateFrame {
   optional GeoPosition position = 6;
 }
 
+// A single update frame for a single server holding all fields that can be updated.
+message ServerUpdateFrame {
+  // The id of the server that is being updated.
+  string server_id = 1;
+  // The type of update that is signalled by this frame.
+  UpdateType update_type = 2;
+
+  // Indicates if the server is online or offline, not given in case the online state didn't update.
+  optional bool online = 3;
+  // The timezone offset of the server, not given in case the timezone didn't change.
+  optional string zone_offset = 5;
+}
+
+// A single update frame for a single dispatch post holding all fields that can be updated.
+message DispatchPostUpdateFrame {
+  // The id of the dispatch post that is being updated.
+  string post_id = 1;
+  // The type of update that is signalled by this frame.
+  UpdateType update_type = 2;
+
+  // The steam ids of the dispatcher at the post, empty if the dispatchers did not change.
+  repeated string dispatcher_steam_ids = 3;
+}
+
 // An event bus which streams updates of objects to a client.
 service EventBus {
   // Subscribes the client to all journey updates that are available to the server.
   rpc SubscribeToJourneys(google.protobuf.Empty) returns (stream JourneyUpdateFrame);
+
+  // Subscribes the client to all server updates that are available to the server.
+  rpc SubscribeToServers(google.protobuf.Empty) returns (stream ServerUpdateFrame);
+
+  // Subscribes the client to all dispatch post updates that are available to the server.
+  rpc SubscribeToDispatchPosts(google.protobuf.Empty) returns (stream DispatchPostUpdateFrame);
 }
