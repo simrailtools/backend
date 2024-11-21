@@ -23,8 +23,11 @@
  */
 
 import com.diffplug.gradle.spotless.SpotlessExtension
+import com.diffplug.spotless.LineEnding
+import org.apache.tools.ant.filters.ReplaceTokens
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.tasks.run.BootRun
+import java.nio.charset.StandardCharsets
 
 plugins {
   alias(libs.plugins.spotless)
@@ -114,7 +117,10 @@ subprojects {
 
   extensions.configure<SpotlessExtension> {
     java {
+      lineEndings = LineEnding.UNIX
+      encoding = StandardCharsets.UTF_8
       licenseHeaderFile(rootProject.file("license_header.txt"))
+      targetExclude("**/backend/common/rpc/**")
     }
   }
 

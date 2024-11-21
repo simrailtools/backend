@@ -1,9 +1,7 @@
 /*
- * This file is part of simrail-tools-backend, licensed under the MIT License,
-.
+ * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright,
-2024 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
