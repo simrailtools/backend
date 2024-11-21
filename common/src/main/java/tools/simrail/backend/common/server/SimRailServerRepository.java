@@ -30,7 +30,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.Param;
 
@@ -38,7 +38,7 @@ import org.springframework.data.repository.query.Param;
  * A repository for SimRail server information.
  */
 public interface SimRailServerRepository extends
-  CrudRepository<SimRailServerEntity, UUID>,
+  ListCrudRepository<SimRailServerEntity, UUID>,
   RevisionRepository<SimRailServerEntity, UUID, Long> {
 
   /**

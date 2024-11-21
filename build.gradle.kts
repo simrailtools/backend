@@ -89,6 +89,13 @@ subprojects {
     options.compilerArgs.add("--enable-preview")
   }
 
+  tasks.withType<ProcessResources> {
+    val tokens = mapOf(
+      "project.version" to project.version,
+    )
+    filter(ReplaceTokens::class, mapOf("tokens" to tokens))
+  }
+
   tasks.withType<Test> {
     useJUnitPlatform()
     testLogging {

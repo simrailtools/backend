@@ -28,14 +28,14 @@ import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import org.springframework.data.repository.CrudRepository;
+import org.springframework.data.repository.ListCrudRepository;
 import org.springframework.data.repository.history.RevisionRepository;
 
 /**
  * A repository for SimRail dispatch post information.
  */
 public interface SimRailDispatchPostRepository extends
-  CrudRepository<SimRailDispatchPostEntity, UUID>,
+  ListCrudRepository<SimRailDispatchPostEntity, UUID>,
   RevisionRepository<SimRailDispatchPostEntity, UUID, Long> {
 
   /**

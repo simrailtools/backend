@@ -176,6 +176,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
       var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
       for (var missingServer : missingServers) {
+        missingServer.setOnline(false);
         missingServer.setDeleted(true);
         this.serverRepository.save(missingServer);
         this.serverUpdateHandler.handleServerRemove(missingServer);
