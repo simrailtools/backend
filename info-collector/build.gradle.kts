@@ -43,6 +43,7 @@ dependencies {
 
   implementation(libs.postgreSqlDriver)
   implementation("io.grpc:grpc-services")
+  implementation("io.grpc:grpc-servlet-jakarta")
 
   implementation("org.springframework.data:spring-data-envers")
   implementation("org.springframework.boot:spring-boot-starter-web")

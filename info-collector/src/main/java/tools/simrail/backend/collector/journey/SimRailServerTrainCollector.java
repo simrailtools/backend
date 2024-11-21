@@ -61,6 +61,7 @@ class SimRailServerTrainCollector {
   private final SimRailServerService serverService;
   private final SimRailPanelApiClient panelApiClient;
   private final CollectorJourneyService journeyService;
+  private final JourneyUpdateHandler journeyUpdateHandler;
   private final JourneyEventRepository journeyEventRepository;
   private final JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory;
   private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
@@ -72,12 +73,14 @@ class SimRailServerTrainCollector {
   public SimRailServerTrainCollector(
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
+    @Nonnull JourneyUpdateHandler journeyUpdateHandler,
     @Nonnull JourneyEventRepository journeyEventRepository,
     @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
     @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
     this.serverService = serverService;
     this.journeyService = journeyService;
+    this.journeyUpdateHandler = journeyUpdateHandler;
     this.journeyEventRepository = journeyEventRepository;
     this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
@@ -118,8 +121,6 @@ class SimRailServerTrainCollector {
           // check if any journeys changed and take appropriate action
           var updatedJourneys = dirtyRecorders.values().stream().filter(JourneyDirtyStateRecorder::isDirty).toList();
           if (!updatedJourneys.isEmpty()) {
-            // todo: notify listener about changes
-
             if (fullCollection) {
               // if this is a full collection run, persist the changed journeys into the database as well
               var updatedJourneyEntities = updatedJourneys.stream()
@@ -146,8 +147,11 @@ class SimRailServerTrainCollector {
               }
             }
 
-            var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-            LOGGER.info("Stored updates of {} trains on {} in {}s", updatedJourneys.size(), server.code(), elapsedTime);
+            // publish the updated journey information to listeners
+            this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
+
+            var elapsedTime = Duration.between(startTime, Instant.now()).toMillis();
+            LOGGER.info("Updated {} trains on {} in {}ms", updatedJourneys.size(), server.code(), elapsedTime);
           }
 
           return null;
@@ -178,7 +182,7 @@ class SimRailServerTrainCollector {
     var journeysByRunId = this.journeyService.resolveCachedJourneysOfServer(server.id(), activeTrainRuns)
       .stream()
       .collect(Collectors.toMap(JourneyEntity::getForeignRunId, Function.identity()));
-    LOGGER.info("Got {} trains for {} (cache size: {})", activeTrains.size(), server.code(), activeJourneys.size());
+    LOGGER.debug("Got {} trains for {} (cache size: {})", activeTrains.size(), server.code(), activeJourneys.size());
     for (var activeTrain : activeTrains) {
       // find the journey that is associated with the train run
       var journey = journeysByRunId.remove(activeTrain.getRunId());

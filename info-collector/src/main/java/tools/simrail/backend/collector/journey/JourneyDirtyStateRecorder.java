@@ -33,6 +33,12 @@ import lombok.RequiredArgsConstructor;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
+import tools.simrail.backend.common.rpc.GeoPosition;
+import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
+import tools.simrail.backend.common.rpc.SignalInfo;
+import tools.simrail.backend.common.rpc.SignalInfoWrapper;
+import tools.simrail.backend.common.rpc.SteamIdWrapper;
+import tools.simrail.backend.common.rpc.UpdateType;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
@@ -208,6 +214,77 @@ final class JourneyDirtyStateRecorder {
     }
 
     return this;
+  }
+
+  /**
+   * Builds an update frame for the server based on the recoded changed fields. Also handles the add and remove of the
+   * journeys.
+   *
+   * @return an update frame for the associated journey based on the recorded changed fields.
+   */
+  @SuppressWarnings("DataFlowIssue") // no, the journey id is not null
+  public @Nonnull JourneyUpdateFrame buildUpdateFrame() {
+    if (this.foreignId != null || this.removed) {
+      // journey was seen for the first time or last time,
+      var updateType = this.removed ? UpdateType.REMOVE : UpdateType.ADD;
+      return JourneyUpdateFrame.newBuilder()
+        .setUpdateType(updateType)
+        .setJourneyId(this.original.getId().toString())
+        .setDriver(SteamIdWrapper.getDefaultInstance())
+        .setNextSignal(SignalInfoWrapper.getDefaultInstance())
+        .build();
+    }
+
+    // default information for the update frame
+    var updateFrameBuilder = JourneyUpdateFrame.newBuilder()
+      .setUpdateType(UpdateType.UPDATE)
+      .setJourneyId(this.original.getId().toString());
+
+    // insert information if the driver steam id changed
+    if (this.driverSteamId != null) {
+      var driverSteamId = this.driverSteamId.value();
+      var steamIdWrapper = SteamIdWrapper.newBuilder().setUpdated(true);
+      if (driverSteamId != null) {
+        steamIdWrapper.setSteamId(driverSteamId);
+      }
+      updateFrameBuilder.setDriver(steamIdWrapper);
+    } else {
+      updateFrameBuilder.setDriver(SteamIdWrapper.getDefaultInstance());
+    }
+
+    // insert information if the next signal of the journey changed
+    if (this.nextSignal != null) {
+      var nextSignal = this.nextSignal.value();
+      var nextSignalWrapper = SignalInfoWrapper.newBuilder().setUpdated(true);
+      if (nextSignal != null) {
+        var maxAllowedSpeed = nextSignal.getMaxAllowedSpeed();
+        var signalInfo = SignalInfo.newBuilder()
+          .setName(nextSignal.getName())
+          .setDistance(nextSignal.getDistance());
+        if (maxAllowedSpeed != null) {
+          signalInfo.setMaxSpeed(maxAllowedSpeed);
+        }
+      }
+      updateFrameBuilder.setNextSignal(nextSignalWrapper);
+    } else {
+      updateFrameBuilder.setNextSignal(SignalInfoWrapper.getDefaultInstance());
+    }
+
+    // insert information about the new speed of the journey
+    if (this.speed != null) {
+      updateFrameBuilder.setSpeed(this.speed.value());
+    }
+
+    // insert information about the new position of the journey
+    if (this.position != null) {
+      var position = this.position.value();
+      var updatedPosition = GeoPosition.newBuilder()
+        .setLatitude(position.getLatitude())
+        .setLongitude(position.getLongitude());
+      updateFrameBuilder.setPosition(updatedPosition);
+    }
+
+    return updateFrameBuilder.build();
   }
 
   /**

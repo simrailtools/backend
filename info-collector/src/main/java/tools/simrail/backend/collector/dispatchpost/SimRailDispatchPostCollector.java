@@ -46,7 +46,7 @@ import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
 
 @Component
-public final class SimRailDispatchPostCollector {
+final class SimRailDispatchPostCollector {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailDispatchPostCollector.class);
 
@@ -54,17 +54,20 @@ public final class SimRailDispatchPostCollector {
   private final SimRailServerService serverService;
   private final UuidV5Factory dispatchPostIdFactory;
   private final SimRailPanelApiClient panelApiClient;
+  private final DispatchPostUpdateHandler dispatchPostUpdateHandler;
   private final SimRailDispatchPostRepository dispatchPostRepository;
 
   @Autowired
   public SimRailDispatchPostCollector(
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
+    @Nonnull DispatchPostUpdateHandler dispatchPostUpdateHandler,
     @Nonnull SimRailDispatchPostRepository dispatchPostRepository
   ) {
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.dispatchPostRepository = dispatchPostRepository;
+    this.dispatchPostUpdateHandler = dispatchPostUpdateHandler;
     this.panelApiClient = SimRailPanelApiClient.create();
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
   }
@@ -89,6 +92,7 @@ public final class SimRailDispatchPostCollector {
         if (postEntity == null) {
           // dispatch post is not yet registered, create a new entity for it
           postEntity = new SimRailDispatchPostEntity();
+          postEntity.setNew(true);
           postEntity.setServerCode(server.code());
           postEntity.setForeignId(dispatchPost.getId());
 
@@ -130,16 +134,26 @@ public final class SimRailDispatchPostCollector {
         var currentDispatcherSteamIds = postEntity.getDispatcherSteamIds();
         if (!newDispatcherSteamIds.equals(currentDispatcherSteamIds)) {
           postEntity.setDispatcherSteamIds(newDispatcherSteamIds);
+          if (!postEntity.isNew()) {
+            // if the post entity is new we will send out an update separately
+            this.dispatchPostUpdateHandler.handleDispatchPostUpdate(postEntity);
+          }
         }
 
-        // save the updated server entity
-        this.dispatchPostRepository.save(postEntity);
+        // save the updated post entity, send out and info if the post is newly registered
+        var savedEntity = this.dispatchPostRepository.save(postEntity);
+        if (postEntity.isNew()) {
+          this.dispatchPostUpdateHandler.handleDispatchPostAdd(savedEntity);
+        }
       }
 
       // mark all dispatch posts that weren't removed in the collection cycle as deleted
       var remainingRegisteredPosts = registeredDispatchPostsByForeignId.values();
       if (!remainingRegisteredPosts.isEmpty()) {
-        remainingRegisteredPosts.forEach(post -> post.setDeleted(true));
+        remainingRegisteredPosts.forEach(post -> {
+          post.setDeleted(true);
+          this.dispatchPostUpdateHandler.handleDispatchPostRemove(post);
+        });
         this.dispatchPostRepository.saveAll(remainingRegisteredPosts);
       }
     }

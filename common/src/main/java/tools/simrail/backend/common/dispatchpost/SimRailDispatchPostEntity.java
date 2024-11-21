@@ -35,6 +35,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.Objects;
@@ -153,6 +154,12 @@ public final class SimRailDispatchPostEntity {
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   private Set<String> dispatcherSteamIds;
+
+  /**
+   * Internal marker to indicate if the post entity was newly created when being collected.
+   */
+  @Transient
+  private boolean isNew;
 
   /**
    * {@inheritDoc}

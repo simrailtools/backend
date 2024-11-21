@@ -33,6 +33,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
@@ -142,6 +143,12 @@ public final class SimRailServerEntity {
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   private List<String> tags;
+
+  /**
+   * Internal marker to indicate if the server entity was newly created when being collected.
+   */
+  @Transient
+  private boolean isNew;
 
   /**
    * {@inheritDoc}

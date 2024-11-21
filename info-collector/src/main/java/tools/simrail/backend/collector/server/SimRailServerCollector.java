@@ -57,14 +57,19 @@ public final class SimRailServerCollector implements SimRailServerService {
   private final UuidV5Factory serverIdFactory;
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPanelApiClient panelApiClient;
+  private final ServerUpdateHandler serverUpdateHandler;
   private final SimRailServerRepository serverRepository;
 
   private long collectionRuns = 0;
   private volatile List<SimRailServerDescriptor> collectedServers = List.of();
 
   @Autowired
-  public SimRailServerCollector(SimRailServerRepository serverRepository) {
+  SimRailServerCollector(
+    @Nonnull SimRailServerRepository serverRepository,
+    @Nonnull ServerUpdateHandler serverUpdateHandler
+  ) {
     this.serverRepository = serverRepository;
+    this.serverUpdateHandler = serverUpdateHandler;
     this.awsApiClient = SimRailAwsApiClient.create();
     this.panelApiClient = SimRailPanelApiClient.create();
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
@@ -88,14 +93,19 @@ public final class SimRailServerCollector implements SimRailServerService {
 
     var foundServers = new ArrayList<SimRailServerDescriptor>();
     for (var server : servers) {
-      // get or create the server entity & update the base information
+      // get or create the server entity, store the original variable information
       var serverEntity = this.serverRepository.findByForeignId(server.getId()).orElseGet(() -> {
         var newServer = new SimRailServerEntity();
+        newServer.setNew(true);
         newServer.setForeignId(server.getId());
         newServer.setTimezone(ZoneOffset.UTC.getId());
         newServer.setId(this.serverIdFactory.create(server.getCode() + server.getId()));
         return newServer;
       });
+      var originalOnline = serverEntity.isOnline();
+      var originalTimezoneId = serverEntity.getTimezone();
+
+      // update the base information
       serverEntity.setCode(server.getCode());
       serverEntity.setOnline(server.isOnline());
 
@@ -152,6 +162,13 @@ public final class SimRailServerCollector implements SimRailServerService {
           serverZoneOffset);
         foundServers.add(serverDescriptor);
       }
+
+      // publish a possible change to all listeners
+      if (serverEntity.isNew()) {
+        this.serverUpdateHandler.handleServerAdd(savedEntity);
+      } else {
+        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalTimezoneId, savedEntity);
+      }
     }
 
     if (fullCollection) {
@@ -161,6 +178,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       for (var missingServer : missingServers) {
         missingServer.setDeleted(true);
         this.serverRepository.save(missingServer);
+        this.serverUpdateHandler.handleServerRemove(missingServer);
       }
 
       // update the found servers during the run to make them available to readers

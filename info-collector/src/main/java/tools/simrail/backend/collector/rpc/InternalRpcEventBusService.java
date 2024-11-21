@@ -55,7 +55,8 @@ public final class InternalRpcEventBusService extends EventBusGrpc.EventBusImplB
   }
 
   /**
-   * Sends out the given journey update frame to all registered journey update listeners.
+   * Sends out the given journey update frame to all registered journey update listeners. Note that the call to this
+   * method must be synchronized externally if this method is called concurrently.
    *
    * @param updateFrame the journey update frame to publish.
    */
@@ -64,7 +65,8 @@ public final class InternalRpcEventBusService extends EventBusGrpc.EventBusImplB
   }
 
   /**
-   * Sends out the given server update frame to all registered server update listeners.
+   * Sends out the given server update frame to all registered server update listeners. Note that the call to this
+   * method must be synchronized externally if this method is called concurrently.
    *
    * @param updateFrame the server update frame to publish.
    */
@@ -73,7 +75,8 @@ public final class InternalRpcEventBusService extends EventBusGrpc.EventBusImplB
   }
 
   /**
-   * Sends out the given dispatch post update frame to all registered dispatch post update listeners.
+   * Sends out the given dispatch post update frame to all registered dispatch post update listeners. Note that the call
+   * to this method must be synchronized externally if this method is called concurrently.
    *
    * @param updateFrame the dispatch post update frame to publish.
    */
