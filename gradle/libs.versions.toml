@@ -1,7 +1,7 @@
 [versions]
 # plugins
 protobuf = "0.9.4"
-springBoot = "3.3.5"
+springBoot = "3.3.6"
 spotless = "7.0.0.BETA4"
 checkstyleTools = "10.20.1"
 springDependencyManagement = "1.1.6"
@@ -20,7 +20,7 @@ springGrpc = "0.2.0-SNAPSHOT"
 junit = "5.11.3"
 mockito = "5.14.2"
 junitLauncher = "1.11.3"
-testcontainers = "1.20.3"
+testcontainers = "1.20.4"
 
 [libraries]
 # jackson
