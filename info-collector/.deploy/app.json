@@ -1,0 +1,37 @@
+{
+  "name": "info-collector",
+  "description": "Info Collector for SIT",
+  "repository": "https://github.com/simrailtools/backend",
+  "addons": [],
+  "healthchecks": {
+    "web": [
+      {
+        "wait": 5,
+        "initialDelay": 3,
+        "type": "readiness",
+        "path": "/admin/health",
+        "name": "container readiness check"
+      },
+      {
+        "wait": 5,
+        "type": "liveness",
+        "path": "/admin/health",
+        "name": "container liveness check"
+      }
+    ]
+  },
+  "env": {
+    "SPRING_DATASOURCE_URL": {
+      "required": true,
+      "description": "The datasource url"
+    },
+    "SPRING_DATASOURCE_USERNAME": {
+      "required": true,
+      "description": "The datasource username"
+    },
+    "SPRING_DATASOURCE_PASSWORD": {
+      "required": true,
+      "description": "The datasource password"
+    }
+  }
+}

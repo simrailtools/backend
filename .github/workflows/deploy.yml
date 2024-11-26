@@ -1,0 +1,52 @@
+name: Deploy Release
+on:
+  workflow_dispatch:
+    inputs:
+      api:
+        type: boolean
+        description: API
+      collector:
+        type: boolean
+        description: Data-Collector
+
+concurrency:
+  cancel-in-progress: true
+  group: deploy-${{ github.ref }}
+
+permissions:
+  contents: read
+
+jobs:
+  deploy_api:
+    runs-on: ubuntu-latest
+    name: Deploy Rest API
+    if: ${{ github.event.inputs.api == 'true' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Push to Dokku
+        uses: dokku/github-action@master
+        with:
+          branch: main
+          git_push_flags: --force
+          ssh_private_key: ${{ secrets.DOKKU_PRIVATE_KEY }}
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/sit-api'
+
+  deploy_datacollect:
+    runs-on: ubuntu-latest
+    name: Deploy Data Collector
+    if: ${{ github.event.inputs.collector == 'true' }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Push to Dokku
+        uses: dokku/github-action@master
+        with:
+          branch: main
+          git_push_flags: --force
+          ssh_private_key: ${{ secrets.DOKKU_PRIVATE_KEY }}
+          git_remote_url: 'ssh://dokku@${{ secrets.DOKKU_HOST }}:22/sit-collector'
