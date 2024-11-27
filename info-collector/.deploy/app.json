@@ -7,13 +7,6 @@
     "web": [
       {
         "wait": 5,
-        "initialDelay": 3,
-        "type": "readiness",
-        "path": "/admin/health",
-        "name": "container readiness check"
-      },
-      {
-        "wait": 5,
         "type": "liveness",
         "path": "/admin/health",
         "name": "container liveness check"
