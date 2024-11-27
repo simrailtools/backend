@@ -8,4 +8,4 @@ FROM azul/zulu-openjdk-alpine:23-jre-headless
 WORKDIR /app
 
 COPY --from=builder /build/info-collector/build/libs/docker/info-collector.jar ./
-CMD ["java", "-Duser.timezone=Europe/Berlin", "-Dspring.profiles.active=prd", "-jar", "--enable-preview", "/app/info-collector.jar"]
+CMD ["java", "-Duser.timezone=Europe/Berlin", "-Dspring.profiles.active=common,prd", "-jar", "--enable-preview", "/app/info-collector.jar"]
