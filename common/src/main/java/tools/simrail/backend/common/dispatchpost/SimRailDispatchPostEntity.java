@@ -36,7 +36,6 @@ import jakarta.persistence.Index;
 import jakarta.persistence.OrderColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.Set;
@@ -78,12 +77,6 @@ public final class SimRailDispatchPostEntity {
   @Nonnull
   @Column(nullable = false)
   private UUID pointId;
-  /**
-   * The revision version of this entity.
-   */
-  @Version
-  @Column(nullable = false)
-  private long version;
   /**
    * The foreign (mongo identifier) of the dispatch post provided by the SimRail api.
    */

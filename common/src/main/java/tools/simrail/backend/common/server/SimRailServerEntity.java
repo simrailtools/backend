@@ -34,7 +34,6 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -69,12 +68,6 @@ public final class SimRailServerEntity {
   @Id
   @Nonnull
   private UUID id;
-  /**
-   * The revision version of this entity.
-   */
-  @Version
-  @Column
-  private long version;
   /**
    * The foreign (mongo identifier) of the server provided by the SimRail api.
    */

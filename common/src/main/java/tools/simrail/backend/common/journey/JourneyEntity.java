@@ -39,7 +39,6 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
 import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import jakarta.persistence.Version;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
@@ -87,12 +86,6 @@ public final class JourneyEntity implements Persistable<UUID> {
    */
   @Column(nullable = false, unique = true)
   private UUID foreignRunId;
-  /**
-   * The revision version of this entity.
-   */
-  @Column
-  @Version
-  private long version;
 
   /**
    * The internal id of the server on which the associated journey is happening.
