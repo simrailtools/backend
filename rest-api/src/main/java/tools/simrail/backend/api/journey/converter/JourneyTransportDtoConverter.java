@@ -42,6 +42,7 @@ public final class JourneyTransportDtoConverter implements Function<JourneyTrans
       transport.getCategory(),
       transport.getNumber(),
       transport.getLine(),
-      transport.getType());
+      transport.getType(),
+      transport.getMaxSpeed());
   }
 }

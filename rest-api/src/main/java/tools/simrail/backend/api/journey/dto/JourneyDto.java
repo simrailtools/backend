@@ -22,22 +22,34 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.converter;
+package tools.simrail.backend.api.journey.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
+import jakarta.annotation.Nullable;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
 
 /**
- * Converter for journey stop descriptors to a stop place DTO.
+ * DTO for information about a journey.
  */
-@Component
-public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopDescriptor, JourneyStopPlaceDto> {
+public record JourneyDto(
+  @Schema(description = "The identifier of the journey")
+  @Nonnull UUID journeyId,
+  @Schema(description = "The identifier of the server where the journey takes place")
+  @Nonnull UUID serverId,
+  @Schema(description = "The time when the journey was first seen, null if the journey wasn't active yet")
+  @Nullable OffsetDateTime firstSeenTime,
+  @Schema(description = "The time when the journey was last seen, null if the journey is still active or wasn't active")
+  @Nullable OffsetDateTime lastSeenTime,
+  @Schema(description = "Indicates if the journey was cancelled")
+  boolean journeyCancelled,
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Nullable JourneyLiveDataDto liveData,
+  @Schema(description = "The events along the route of the journey")
+  @Nonnull List<JourneyEventDto> events
+) {
 
-  @Override
-  public @Nonnull JourneyStopPlaceDto apply(@Nonnull JourneyStopDescriptor stop) {
-    return new JourneyStopPlaceDto(stop.getId(), stop.getName(), stop.isPlayable());
-  }
 }

@@ -26,21 +26,21 @@ package tools.simrail.backend.api.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.api.journey.converter.JourneyDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneySummaryDtoConverter;
 import tools.simrail.backend.api.journey.data.ApiJourneyEventRepository;
 import tools.simrail.backend.api.journey.data.ApiJourneyRepository;
 import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
 import tools.simrail.backend.api.journey.data.JourneySummaryProjection;
+import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 
@@ -50,17 +50,25 @@ class JourneyService {
   private final ApiJourneyRepository journeyRepository;
   private final ApiJourneyEventRepository journeyEventRepository;
 
+  private final JourneyDtoConverter journeyDtoConverter;
   private final JourneySummaryDtoConverter journeySummaryDtoConverter;
 
   @Autowired
   public JourneyService(
     @Nonnull ApiJourneyRepository journeyRepository,
     @Nonnull ApiJourneyEventRepository journeyEventRepository,
+    @Nonnull JourneyDtoConverter journeyDtoConverter,
     @Nonnull JourneySummaryDtoConverter journeySummaryDtoConverter
   ) {
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
+    this.journeyDtoConverter = journeyDtoConverter;
     this.journeySummaryDtoConverter = journeySummaryDtoConverter;
+  }
+
+//  @Cacheable(cacheNames = "journey", key = "'by_id_' + #journeyId")
+  public @Nonnull Optional<JourneyDto> findById(@Nonnull UUID journeyId) {
+    return this.journeyRepository.findWithEventsById(journeyId).map(this.journeyDtoConverter);
   }
 
   /**
@@ -78,7 +86,6 @@ class JourneyService {
    * @param endStationId
    * @return
    */
-  static  Logger l = LoggerFactory.getLogger(JourneyService.class);
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByRelation(
     @Nullable Integer page,
     @Nullable Integer limit,
@@ -96,7 +103,6 @@ class JourneyService {
     int offset = requestedLimit * indexedPage;
 
     //
-    var start = Instant.now();
     var queriedItems = this.journeyRepository.findMatchingJourneySummaries(
       serverId,
       startTime,
@@ -109,10 +115,8 @@ class JourneyService {
       offset);
     var morePagesAvailable = queriedItems.size() > requestedLimit;
     var returnedItemCount = morePagesAvailable ? requestedLimit : queriedItems.size();
-    l.info("1: {}", Duration.between(start, Instant.now()).toMillis());
 
     //
-    start = Instant.now();
     var queriesJourneyIds = queriedItems.stream()
       .limit(returnedItemCount)
       .map(JourneySummaryProjection::getId)
@@ -120,10 +124,8 @@ class JourneyService {
     var eventsByJourneyId = this.journeyEventRepository.findFirstAndLastEventOfJourneys(queriesJourneyIds)
       .stream()
       .collect(Collectors.groupingBy(JourneyEventSummaryProjection::getJourneyId));
-    l.info("2: {}", Duration.between(start, Instant.now()).toMillis());
 
     //
-    start = Instant.now();
     var returnedItems = queriedItems.stream()
       .limit(returnedItemCount)
       .map(journey -> {
@@ -138,7 +140,6 @@ class JourneyService {
         }
       })
       .toList();
-    l.info("3: {}", Duration.between(start, Instant.now()).toMillis());
     return new PaginatedResponseDto<>(returnedItems, morePagesAvailable);
   }
 }

@@ -22,22 +22,21 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.converter;
+package tools.simrail.backend.api.journey.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
+import java.util.UUID;
 
-/**
- * Converter for journey stop descriptors to a stop place DTO.
- */
-@Component
-public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopDescriptor, JourneyStopPlaceDto> {
+public record JourneyStopPlaceWithPosDto(
+  @Schema(description = "The id of the stop place")
+  @Nonnull UUID id,
+  @Schema(description = "The name of the stop place")
+  @Nonnull String name,
+  @Schema(description = "The position where the stop place is located")
+  @Nonnull JourneyGeoPositionDto position,
+  @Schema(description = "If the stop place is within the playable border of the map")
+  boolean inPlayableBorder
+) {
 
-  @Override
-  public @Nonnull JourneyStopPlaceDto apply(@Nonnull JourneyStopDescriptor stop) {
-    return new JourneyStopPlaceDto(stop.getId(), stop.getName(), stop.isPlayable());
-  }
 }

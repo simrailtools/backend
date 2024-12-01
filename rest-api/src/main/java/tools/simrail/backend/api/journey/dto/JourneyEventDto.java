@@ -22,22 +22,39 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.converter;
+package tools.simrail.backend.api.journey.dto;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
+import jakarta.annotation.Nullable;
+import java.time.OffsetDateTime;
+import java.util.UUID;
+import tools.simrail.backend.common.journey.JourneyEventType;
+import tools.simrail.backend.common.journey.JourneyStopType;
+import tools.simrail.backend.common.journey.JourneyTimeType;
 
 /**
- * Converter for journey stop descriptors to a stop place DTO.
+ *
  */
-@Component
-public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopDescriptor, JourneyStopPlaceDto> {
+public record JourneyEventDto(
+  @Nonnull UUID id,
+  @Nonnull JourneyEventType type,
+  boolean cancelled,
+  boolean additional,
+  @Schema(description = "")
+  @Nonnull JourneyStopPlaceWithPosDto stopPlace,
+  @Nonnull OffsetDateTime scheduledTime,
+  @Nonnull OffsetDateTime realtimeTime,
+  @Nonnull JourneyTimeType realtimeTimeType,
+  @Nonnull JourneyStopType stopType,
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(description = "")
+  @Nullable JourneyStopInfoDto scheduledPassengerStop,
+  @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(description = "")
+  @Nullable JourneyStopInfoDto realtimePassengerStop,
+  @Nonnull JourneyTransportDto transport
+) {
 
-  @Override
-  public @Nonnull JourneyStopPlaceDto apply(@Nonnull JourneyStopDescriptor stop) {
-    return new JourneyStopPlaceDto(stop.getId(), stop.getName(), stop.isPlayable());
-  }
 }

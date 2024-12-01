@@ -40,7 +40,9 @@ public record JourneyTransportDto(
   @Schema(description = "The line of the transport, null in case no line is associated with the transport")
   @Nullable String line,
   @Schema(description = "The higher-level category of the transport")
-  @Nonnull JourneyTransportType type
+  @Nonnull JourneyTransportType type,
+  @Schema(description = "The maximum speed of the journey is allowed to drive at the associated point")
+  int maxSpeed
 ) {
 
 }

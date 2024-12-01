@@ -27,17 +27,17 @@ package tools.simrail.backend.api.journey.converter;
 import jakarta.annotation.Nonnull;
 import java.util.function.Function;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
+import tools.simrail.backend.api.journey.dto.JourneyStopInfoDto;
+import tools.simrail.backend.common.journey.JourneyPassengerStopInfo;
 
 /**
- * Converter for journey stop descriptors to a stop place DTO.
+ * Converter for journey passenger stop infos to DTOs.
  */
 @Component
-public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopDescriptor, JourneyStopPlaceDto> {
+public final class JourneyStopInfoDtoConverter implements Function<JourneyPassengerStopInfo, JourneyStopInfoDto> {
 
   @Override
-  public @Nonnull JourneyStopPlaceDto apply(@Nonnull JourneyStopDescriptor stop) {
-    return new JourneyStopPlaceDto(stop.getId(), stop.getName(), stop.isPlayable());
+  public @Nonnull JourneyStopInfoDto apply(@Nonnull JourneyPassengerStopInfo stopInfo) {
+    return new JourneyStopInfoDto(stopInfo.getPlatform(), stopInfo.getTrack());
   }
 }

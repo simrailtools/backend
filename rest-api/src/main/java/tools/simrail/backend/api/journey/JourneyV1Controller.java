@@ -35,15 +35,18 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
+import java.util.Optional;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 
@@ -56,6 +59,39 @@ class JourneyV1Controller {
 
   @Autowired
   private JourneyService journeyService;
+
+  /**
+   *
+   */
+  @GetMapping("/by-id/{id}")
+  @Operation(
+    summary = "Returns a single journey by the given id",
+    parameters = {
+      @Parameter(name = "id", description = "The id of the journey to return"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        useReturnTypeSchema = true,
+        description = "The journeys were successfully resolved based on the given filter parameters",
+        content = @Content(mediaType = "application/json")),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "404",
+        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull Optional<JourneyDto> byId(@PathVariable("id") @UUID(version = 5, allowNil = false) String id) {
+    return this.journeyService.findById(java.util.UUID.fromString(id));
+  }
 
   /**
    *

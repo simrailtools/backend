@@ -26,12 +26,23 @@ package tools.simrail.backend.api.journey.data;
 
 import java.time.OffsetDateTime;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyRepository;
 
 public interface ApiJourneyRepository extends JourneyRepository {
+
+  /**
+   *
+   * @param uuid
+   * @return
+   */
+  @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
+  Optional<JourneyEntity> findWithEventsById(UUID uuid);
 
   @Query(value = """
     WITH first_events AS (

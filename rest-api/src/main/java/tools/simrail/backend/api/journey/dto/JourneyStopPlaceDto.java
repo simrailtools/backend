@@ -35,7 +35,9 @@ public record JourneyStopPlaceDto(
   @Schema(description = "The id of the stop place")
   @Nonnull UUID id,
   @Schema(description = "The name of the stop place")
-  @Nonnull String name
+  @Nonnull String name,
+  @Schema(description = "If the stop place is within the playable border of the map")
+  boolean inPlayableBorder
 ) {
 
 }
