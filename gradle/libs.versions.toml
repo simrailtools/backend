@@ -3,19 +3,19 @@
 protobuf = "0.9.4"
 springBoot = "3.3.6"
 spotless = "7.0.0.BETA4"
-checkstyleTools = "10.20.1"
+checkstyleTools = "10.20.2"
 springDependencyManagement = "1.1.6"
 
 # direct dependencies
 jts = "1.20.0"
 feign = "13.5"
 lombok = "1.18.36"
-jackson = "2.18.1"
+jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
 springDocOpenApi = "2.6.0"
 postgreSqlDriver = "42.7.4"
-springGrpc = "0.2.0-SNAPSHOT"
+springGrpc = "0.2.0"
 
 # testing
 junit = "5.11.3"
