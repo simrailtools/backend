@@ -40,13 +40,16 @@ public record JourneyDto(
   @Nonnull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey takes place")
   @Nonnull UUID serverId,
-  @Schema(description = "The time when the journey was first seen, null if the journey wasn't active yet")
+  @Schema(description = "The time (ISO-8601 with offset) when the journey data was last updated")
+  @Nonnull OffsetDateTime lastUpdated,
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet")
   @Nullable OffsetDateTime firstSeenTime,
-  @Schema(description = "The time when the journey was last seen, null if the journey is still active or wasn't active")
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still active or wasn't active")
   @Nullable OffsetDateTime lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
   boolean journeyCancelled,
   @JsonInclude(JsonInclude.Include.NON_NULL)
+  @Schema(description = "Current live information about the journey, omitted from the response if the journey is not active")
   @Nullable JourneyLiveDataDto liveData,
   @Schema(description = "The events along the route of the journey")
   @Nonnull List<JourneyEventDto> events

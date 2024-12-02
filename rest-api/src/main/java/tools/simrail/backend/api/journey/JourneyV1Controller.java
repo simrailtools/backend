@@ -35,9 +35,9 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import java.time.OffsetDateTime;
-import java.util.Optional;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -72,16 +72,15 @@ class JourneyV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The journeys were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The journey with the given id was successfully resolved",
+        content = @Content(mediaType = "application/json", schema = @Schema(implementation = JourneyDto.class))),
       @ApiResponse(
         responseCode = "400",
-        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        description = "The given id or one of the filter parameters did not match the requirements",
         content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "404",
-        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        description = "No journey can be found with the given journey id",
         content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "500",
@@ -89,8 +88,13 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<JourneyDto> byId(@PathVariable("id") @UUID(version = 5, allowNil = false) String id) {
-    return this.journeyService.findById(java.util.UUID.fromString(id));
+  public @Nonnull ResponseEntity<JourneyDto> byId(@PathVariable("id") @UUID(version = 5, allowNil = false) String id) {
+    return this.journeyService.findById(java.util.UUID.fromString(id))
+      .map(journey -> ResponseEntity.ok()
+        .cacheControl(CacheControl.noStore())
+        .lastModified(journey.lastUpdated().toInstant())
+        .body(journey))
+      .orElseGet(() -> ResponseEntity.notFound().build());
   }
 
   /**

@@ -66,7 +66,7 @@ class JourneyService {
     this.journeySummaryDtoConverter = journeySummaryDtoConverter;
   }
 
-//  @Cacheable(cacheNames = "journey", key = "'by_id_' + #journeyId")
+  @Cacheable(cacheNames = "journey_cache", key = "'by_id_' + #journeyId")
   public @Nonnull Optional<JourneyDto> findById(@Nonnull UUID journeyId) {
     return this.journeyRepository.findWithEventsById(journeyId).map(this.journeyDtoConverter);
   }

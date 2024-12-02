@@ -56,6 +56,7 @@ public final class JourneyDtoConverter implements Function<JourneyEntity, Journe
     return new JourneyDto(
       journey.getId(),
       journey.getServerId(),
+      journey.getUpdateTime(),
       journey.getFirstSeenTime(),
       journey.getLastSeenTime(),
       journey.isCancelled(),

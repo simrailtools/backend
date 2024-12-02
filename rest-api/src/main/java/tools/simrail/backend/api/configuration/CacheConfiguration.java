@@ -27,9 +27,9 @@ package tools.simrail.backend.api.configuration;
 import com.github.benmanes.caffeine.cache.Caffeine;
 import jakarta.annotation.Nonnull;
 import java.util.concurrent.TimeUnit;
-import org.springframework.cache.CacheManager;
+import org.springframework.cache.Cache;
 import org.springframework.cache.annotation.EnableCaching;
-import org.springframework.cache.caffeine.CaffeineCacheManager;
+import org.springframework.cache.caffeine.CaffeineCache;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,13 +38,26 @@ import org.springframework.context.annotation.Configuration;
 public class CacheConfiguration {
 
   /**
-   * Configures the cache manager for server caches.
+   * Cache for server data (data expires after 10 seconds in the cache).
    */
   @Bean
-  public @Nonnull CacheManager serverCacheManager() {
-    var manager = new CaffeineCacheManager("server_cache");
-    manager.setAllowNullValues(true);
-    manager.setCaffeine(Caffeine.newBuilder().expireAfterWrite(10, TimeUnit.SECONDS));
-    return manager;
+  public @Nonnull Cache serverCache() {
+    return new CaffeineCache(
+      "server_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(10, TimeUnit.SECONDS)
+        .build());
+  }
+
+  /**
+   * Cache for journey data (data expires after 5 seconds in the cache).
+   */
+  @Bean
+  public @Nonnull Cache journeyCache() {
+    return new CaffeineCache(
+      "journey_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(5, TimeUnit.SECONDS)
+        .build());
   }
 }

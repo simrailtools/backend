@@ -48,9 +48,9 @@ record SimRailServerDto(
   @Nonnull List<String> tags,
   @Schema(description = "The language spoken on the server, null if the server is international and not specialised")
   @Nullable String spokenLanguage,
-  @Schema(description = "The time and date when the data of the server was last updated")
+  @Schema(description = "The time (ISO-8601 with offset) when the data of the server was last updated")
   @Nonnull OffsetDateTime lastUpdated,
-  @Schema(description = "The time when the server was initially registered in the SimRail backend")
+  @Schema(description = "The time (ISO-8601 with offset) when the server was initially registered in the SimRail backend")
   @Nonnull OffsetDateTime registeredSince,
   @Schema(description = "If the server was online during the last collection")
   boolean online,

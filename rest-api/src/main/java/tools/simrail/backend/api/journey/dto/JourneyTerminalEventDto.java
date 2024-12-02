@@ -34,7 +34,7 @@ import java.time.OffsetDateTime;
 public record JourneyTerminalEventDto(
   @Schema(description = "The stop place associated with the event")
   @Nonnull JourneyStopPlaceDto stopPlace,
-  @Schema(description = "The scheduled time of the event")
+  @Schema(description = "The scheduled time (ISO-8601 with offset) of the event")
   @Nonnull OffsetDateTime scheduledTime,
   @Schema(description = "The transport used at the event")
   @Nonnull JourneyTransportDto transport,
