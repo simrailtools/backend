@@ -38,16 +38,16 @@ import tools.simrail.backend.api.journey.dto.JourneyTerminalEventDto;
 @Component
 public final class JourneySummaryDtoConverter {
 
-  private final JourneyTransportDtoConverter transportDtoConverter;
-  private final JourneyStopPlaceDtoConverter stopPlaceDtoConverter;
+  private final JourneyStopPlaceSummaryDtoConverter stopPlaceDtoConverter;
+  private final JourneyTransportSummaryDtoConverter transportDtoConverter;
 
   @Autowired
   public JourneySummaryDtoConverter(
-    @Nonnull JourneyTransportDtoConverter transportDtoConverter,
-    @Nonnull JourneyStopPlaceDtoConverter stopPlaceDtoConverter
+    @Nonnull JourneyStopPlaceSummaryDtoConverter stopPlaceDtoConverter,
+    @Nonnull JourneyTransportSummaryDtoConverter transportDtoConverter
   ) {
-    this.transportDtoConverter = transportDtoConverter;
     this.stopPlaceDtoConverter = stopPlaceDtoConverter;
+    this.transportDtoConverter = transportDtoConverter;
   }
 
   /**

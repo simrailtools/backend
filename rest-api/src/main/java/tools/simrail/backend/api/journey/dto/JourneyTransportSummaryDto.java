@@ -26,20 +26,21 @@ package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import jakarta.annotation.Nullable;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
- * DTO for journey summaries describing the first and last event.
+ * DTO for journey transport information, without speed information.
  */
-public record JourneyTerminalEventDto(
-  @Schema(description = "The stop place associated with the event")
-  @Nonnull JourneyStopPlaceSummaryDto stopPlace,
-  @Schema(description = "The scheduled time (ISO-8601 with offset) of the event")
-  @Nonnull OffsetDateTime scheduledTime,
-  @Schema(description = "The transport used at the event")
-  @Nonnull JourneyTransportSummaryDto transport,
-  @Schema(description = "Indicates if the event was cancelled")
-  boolean cancelled
+public record JourneyTransportSummaryDto(
+  @Schema(description = "The external category of the transport")
+  @Nonnull String category,
+  @Schema(description = "The number of the transport")
+  @Nonnull String number,
+  @Schema(description = "The line of the transport, null in case no line is associated with the transport")
+  @Nullable String line,
+  @Schema(description = "The higher-level category of the transport")
+  @Nonnull JourneyTransportType type
 ) {
 
 }

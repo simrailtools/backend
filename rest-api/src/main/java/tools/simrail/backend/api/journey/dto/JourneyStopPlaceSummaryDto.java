@@ -28,13 +28,14 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
 import java.util.UUID;
 
-public record JourneyStopPlaceWithPosDto(
+/**
+ * DTO for a stop place along the journey route.
+ */
+public record JourneyStopPlaceSummaryDto(
   @Schema(description = "The id of the stop place")
   @Nonnull UUID id,
   @Schema(description = "The name of the stop place")
   @Nonnull String name,
-  @Schema(description = "The position where the stop place is located")
-  @Nonnull JourneyGeoPositionDto position,
   @Schema(description = "If the stop place is within the playable border of the map")
   boolean inPlayableBorder
 ) {

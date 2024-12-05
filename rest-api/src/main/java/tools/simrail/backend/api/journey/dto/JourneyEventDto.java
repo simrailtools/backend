@@ -47,7 +47,7 @@ public record JourneyEventDto(
   @Schema(description = "Indicates if the event is additional (not part of the scheduled route)")
   boolean additional,
   @Schema(description = "Information about the stop place where the event takes place")
-  @Nonnull JourneyStopPlaceWithPosDto stopPlace,
+  @Nonnull JourneyStopPlaceDto stopPlace,
   @Schema(description = "Scheduled time of the event (ISO-8601 with offset)")
   @Nonnull OffsetDateTime scheduledTime,
   @Schema(description = "Best known time of the event (ISO-8601 with offset), precision is described by the time type field")

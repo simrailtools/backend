@@ -25,19 +25,39 @@
 package tools.simrail.backend.api.journey.converter;
 
 import jakarta.annotation.Nonnull;
+import java.util.NoSuchElementException;
 import java.util.function.Function;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 import tools.simrail.backend.common.journey.JourneyStopDescriptor;
+import tools.simrail.backend.common.point.SimRailPointProvider;
 
 /**
- * Converter for journey stop descriptors to a stop place DTO.
+ * Converter for stop descriptors to DTOs with position information.
  */
 @Component
 public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopDescriptor, JourneyStopPlaceDto> {
 
+  private final SimRailPointProvider pointProvider;
+
+  @Autowired
+  public JourneyStopPlaceDtoConverter(@Nonnull SimRailPointProvider pointProvider) {
+    this.pointProvider = pointProvider;
+  }
+
   @Override
   public @Nonnull JourneyStopPlaceDto apply(@Nonnull JourneyStopDescriptor stop) {
-    return new JourneyStopPlaceDto(stop.getId(), stop.getName(), stop.isPlayable());
+    var point = this.pointProvider
+      .findPointByIntId(stop.getId())
+      .orElseThrow(() -> new NoSuchElementException("missing point for stop " + stop.getId()));
+    var pointPosition = point.getPosition();
+    var stopPosition = new JourneyGeoPositionDto(pointPosition.getLatitude(), pointPosition.getLongitude());
+    return new JourneyStopPlaceDto(
+      stop.getId(),
+      stop.getName(),
+      stopPosition,
+      stop.isPlayable());
   }
 }

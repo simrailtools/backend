@@ -42,13 +42,13 @@ public final class JourneyEventDtoConverter implements Function<JourneyEventEnti
 
   private final JourneyStopInfoDtoConverter stopInfoDtoConverter;
   private final JourneyTransportDtoConverter transportDtoConverter;
-  private final JourneyStopPlaceWithPosDtoConverter stopPlaceDtoConverter;
+  private final JourneyStopPlaceDtoConverter stopPlaceDtoConverter;
 
   @Autowired
   public JourneyEventDtoConverter(
     @Nonnull JourneyStopInfoDtoConverter stopInfoDtoConverter,
     @Nonnull JourneyTransportDtoConverter transportDtoConverter,
-    @Nonnull JourneyStopPlaceWithPosDtoConverter stopPlaceDtoConverter
+    @Nonnull JourneyStopPlaceDtoConverter stopPlaceDtoConverter
   ) {
     this.stopInfoDtoConverter = stopInfoDtoConverter;
     this.transportDtoConverter = transportDtoConverter;

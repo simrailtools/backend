@@ -25,40 +25,24 @@
 package tools.simrail.backend.api.journey.converter;
 
 import jakarta.annotation.Nonnull;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
-import tools.simrail.backend.api.journey.dto.JourneyStopPlaceWithPosDto;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
-import tools.simrail.backend.common.point.SimRailPointProvider;
+import tools.simrail.backend.api.journey.dto.JourneyTransportSummaryDto;
+import tools.simrail.backend.common.journey.JourneyTransport;
 
 /**
- * Converter for stop descriptors to DTOs with position information.
+ * Converter for journey transports to a summary DTO.
  */
 @Component
-public final class JourneyStopPlaceWithPosDtoConverter
-  implements Function<JourneyStopDescriptor, JourneyStopPlaceWithPosDto> {
-
-  private final SimRailPointProvider pointProvider;
-
-  @Autowired
-  public JourneyStopPlaceWithPosDtoConverter(@Nonnull SimRailPointProvider pointProvider) {
-    this.pointProvider = pointProvider;
-  }
+public final class JourneyTransportSummaryDtoConverter
+  implements Function<JourneyTransport, JourneyTransportSummaryDto> {
 
   @Override
-  public @Nonnull JourneyStopPlaceWithPosDto apply(@Nonnull JourneyStopDescriptor stop) {
-    var point = this.pointProvider
-      .findPointByIntId(stop.getId())
-      .orElseThrow(() -> new NoSuchElementException("missing point for stop " + stop.getId()));
-    var pointPosition = point.getPosition();
-    var stopPosition = new JourneyGeoPositionDto(pointPosition.getLatitude(), pointPosition.getLongitude());
-    return new JourneyStopPlaceWithPosDto(
-      stop.getId(),
-      stop.getName(),
-      stopPosition,
-      stop.isPlayable());
+  public @Nonnull JourneyTransportSummaryDto apply(@Nonnull JourneyTransport transport) {
+    return new JourneyTransportSummaryDto(
+      transport.getCategory(),
+      transport.getNumber(),
+      transport.getLine(),
+      transport.getType());
   }
 }

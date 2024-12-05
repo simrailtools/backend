@@ -22,24 +22,23 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.dto;
+package tools.simrail.backend.api.journey.converter;
 
-import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import java.util.function.Function;
+import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.journey.dto.JourneyStopPlaceSummaryDto;
+import tools.simrail.backend.common.journey.JourneyStopDescriptor;
 
 /**
- * DTO for journey summaries describing the first and last event.
+ * Converter for journey stop descriptors to a stop place DTO.
  */
-public record JourneyTerminalEventDto(
-  @Schema(description = "The stop place associated with the event")
-  @Nonnull JourneyStopPlaceSummaryDto stopPlace,
-  @Schema(description = "The scheduled time (ISO-8601 with offset) of the event")
-  @Nonnull OffsetDateTime scheduledTime,
-  @Schema(description = "The transport used at the event")
-  @Nonnull JourneyTransportSummaryDto transport,
-  @Schema(description = "Indicates if the event was cancelled")
-  boolean cancelled
-) {
+@Component
+public final class JourneyStopPlaceSummaryDtoConverter
+  implements Function<JourneyStopDescriptor, JourneyStopPlaceSummaryDto> {
 
+  @Override
+  public @Nonnull JourneyStopPlaceSummaryDto apply(@Nonnull JourneyStopDescriptor stop) {
+    return new JourneyStopPlaceSummaryDto(stop.getId(), stop.getName(), stop.isPlayable());
+  }
 }
