@@ -60,4 +60,16 @@ public class CacheConfiguration {
         .expireAfterWrite(5, TimeUnit.SECONDS)
         .build());
   }
+
+  /**
+   * Cache for journey search data (data expires after 5 minutes in the cache).
+   */
+  @Bean
+  public @Nonnull Cache journeySearchCache() {
+    return new CaffeineCache(
+      "journey_search_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(5, TimeUnit.MINUTES)
+        .build());
+  }
 }

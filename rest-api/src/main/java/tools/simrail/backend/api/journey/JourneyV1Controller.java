@@ -34,7 +34,11 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.EnumSet;
+import java.util.List;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
@@ -49,6 +53,7 @@ import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @Validated
 @CrossOrigin
@@ -57,11 +62,19 @@ import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 @Tag(name = "journeys-v1", description = "SimRail Journey Data APIs (Version 1)")
 class JourneyV1Controller {
 
+  // all transport types in a list
+  private static final List<JourneyTransportType> ALL_TRANSPORT_TYPES =
+    List.copyOf(EnumSet.allOf(JourneyTransportType.class));
+
+  private final JourneyService journeyService;
+
   @Autowired
-  private JourneyService journeyService;
+  public JourneyV1Controller(@Nonnull JourneyService journeyService) {
+    this.journeyService = journeyService;
+  }
 
   /**
-   *
+   * Returns the details of a single journey by its id.
    */
   @GetMapping("/by-id/{id}")
   @Operation(
@@ -98,12 +111,15 @@ class JourneyV1Controller {
   }
 
   /**
-   *
+   * Finds journeys based on their tail events.
    */
-  @GetMapping("/by-relation")
+  @GetMapping("/by-tail")
   @Operation(
-    summary = "Find journeys based on its journey relation",
+    summary = "Find journeys based on its tails",
     description = """
+      Filters journeys based on its start and end events, where the start event data is required for filtering and the
+      end event data can optionally be supplied for further narrowing. Additionally the server id can be given to limit
+      results to a single server rather than selecting journeys from all servers.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
@@ -132,21 +148,21 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<PaginatedResponseDto<JourneySummaryDto>> byRelation(
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byTail(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
-    @RequestParam(name = "startTime", required = false) OffsetDateTime startTime,
-    @RequestParam(name = "startStationId", required = false) @UUID(version = 4, allowNil = false) String startStationId,
-    @RequestParam(name = "startJourneyNumber", required = false) @Pattern(regexp = ".+") String startJourneyNumber,
-    @RequestParam(name = "startJourneyCategory", required = false) @Pattern(regexp = "[A-Z]+") String startJourneyCategory,
+    @RequestParam(name = "startTime") OffsetDateTime startTime,
+    @RequestParam(name = "startStationId") @UUID(version = 4, allowNil = false) String startStationId,
+    @RequestParam(name = "startJourneyNumber") @Pattern(regexp = ".+") String startJourneyNumber,
+    @RequestParam(name = "startJourneyCategory") @Pattern(regexp = "[A-Z]+") String startJourneyCategory,
     @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
     @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
   ) {
+    var stationStationIdFilter = java.util.UUID.fromString(startStationId);
     var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
-    var stationStationIdFilter = startStationId == null ? null : java.util.UUID.fromString(startStationId);
     var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
-    var response = this.journeyService.findByRelation(
+    return this.journeyService.findByTail(
       page,
       limit,
       serverIdFilter,
@@ -156,6 +172,84 @@ class JourneyV1Controller {
       startJourneyCategory,
       endTime,
       endStationIdFilter);
+  }
+
+  /**
+   * Finds journeys based on one event along its route matching the given search criteria.
+   */
+  @GetMapping("/by-event")
+  @Operation(
+    summary = "Find journeys based on one journey event matching the given search criteria",
+    description = """
+      Find journeys based on one journey event matching the given search criteria, for example:
+      - Searching for journey number '40180' will return 'EIP 40180', 'ROJ 40180' etc.
+      - Searching for 'PWJ 146051' will also return 'ROJ 19369' that starts as 'ROJ' but switches to 'PWJ' along its route
+      - Searching for 'RE1' at '2024-12-06' will also return journeys that start at '2024-12-05' and continue on '2024-12-06'
+      
+      Multiple filter parameter can be provided and are linked in a logical AND chain. Ensure that at least the
+      journey number or journey line is provided.
+      """,
+    parameters = {
+      @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
+      @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "line", description = "The line at an event, at least journeyNumber or line must be provided"),
+      @Parameter(name = "journeyNumber", description = "The number at an event, at least journeyNumber or line must be provided"),
+      @Parameter(name = "journeyCategory", description = "The category at an event"),
+      @Parameter(name = "transportTypes", description = "The transport types that are returned, defaults to all types if omitted"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        useReturnTypeSchema = true,
+        description = "The journeys were successfully resolved based on the given filter parameters",
+        content = @Content(mediaType = "application/json")),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull ResponseEntity<PaginatedResponseDto<JourneySummaryDto>> byEvent(
+    @RequestParam(name = "page", required = false) @Min(1) Integer page,
+    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
+    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "date", required = false) LocalDate date,
+    @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
+    @RequestParam(name = "journeyNumber", required = false) @Pattern(regexp = ".+") String journeyNumber,
+    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
+    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
+  ) {
+    // at least the journey number or line has to be given
+    if (journeyNumber == null && line == null) {
+      // todo: better problem handling
+      return ResponseEntity.badRequest().build();
+    }
+
+    if (date == null) {
+      // default the requested date to the current date
+      date = LocalDate.now(ZoneOffset.UTC);
+    }
+    if (transportTypes == null || transportTypes.isEmpty()) {
+      // default the transport types to all if not given
+      transportTypes = ALL_TRANSPORT_TYPES;
+    }
+
+    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
+    var response = this.journeyService.findByEvent(
+      page,
+      limit,
+      serverIdFilter,
+      date,
+      line,
+      journeyNumber,
+      journeyCategory,
+      transportTypes);
     return ResponseEntity.ok(response);
   }
 }
