@@ -93,7 +93,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       AND (:startJourneyCategory IS NULL OR fe.journey_category = :startJourneyCategory)
       AND (TRUE = :#{#endTime == null} OR le.time = :endTime)
       AND (:endStationId IS NULL OR le.station_id = :endStationId)
-    ORDER BY fe.time
+    ORDER BY j.id, fe.time
     LIMIT :limit
     OFFSET :offset
     """, nativeQuery = true)
@@ -123,7 +123,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
    * @return a summary projection of the journeys matching the given filter parameters.
    */
   @Query(value = """
-    SELECT DISTINCT(j.id), j.server_id, j.first_seen_time, j.last_seen_time, j.cancelled, je.scheduled_time
+    SELECT DISTINCT ON (j.id)
+      j.id, j.server_id, j.first_seen_time, j.last_seen_time, j.cancelled, je.scheduled_time
     FROM sit_journey j
     JOIN sit_journey_event je ON je.journey_id = j.id
     WHERE
@@ -134,7 +135,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       AND (:journeyNumber IS NULL OR je.transport_number = :journeyNumber)
       AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
       AND (je.transport_type IN :transportTypes)
-    ORDER BY je.scheduled_time
+    ORDER BY j.id, je.scheduled_time
     LIMIT :limit
     OFFSET :offset
     """, nativeQuery = true)
