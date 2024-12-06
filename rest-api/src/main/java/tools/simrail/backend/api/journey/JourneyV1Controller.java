@@ -50,6 +50,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.simrail.backend.api.exception.IllegalRequestParameterException;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
@@ -227,8 +228,7 @@ class JourneyV1Controller {
   ) {
     // at least the journey number or line has to be given
     if (journeyNumber == null && line == null) {
-      // todo: better problem handling
-      return ResponseEntity.badRequest().build();
+      throw new IllegalRequestParameterException("Either journey number or line must be provided");
     }
 
     if (date == null) {
