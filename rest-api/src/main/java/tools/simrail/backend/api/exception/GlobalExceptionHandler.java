@@ -37,6 +37,7 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
+import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -180,6 +181,20 @@ public final class GlobalExceptionHandler {
     return this.configureBadRequest(request, problemDetail -> {
       problemDetail.setType(BAD_PARAMETER_TYPE);
       problemDetail.setDetail(exception.getMessage());
+    });
+  }
+
+  /**
+   *
+   */
+  @ExceptionHandler(MissingServletRequestParameterException.class)
+  public @Nonnull ProblemDetail handleMissingServletRequestParameterException(
+    @Nonnull MissingServletRequestParameterException exception,
+    @Nonnull HttpServletRequest request
+  ) {
+    return this.configureBadRequest(request, problemDetail -> {
+      problemDetail.setType(BAD_PARAMETER_TYPE);
+      problemDetail.setDetail("The request parameter " + exception.getParameterName() + " is missing but required");
     });
   }
 }
