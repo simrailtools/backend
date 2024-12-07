@@ -79,6 +79,11 @@ public final class SimRailPoint {
   @JsonProperty("max_speed")
   private int maxSpeed;
   /**
+   * The ISO 3166-1 alpha-3 country code where the point is located.
+   */
+  @JsonProperty("country")
+  private String country;
+  /**
    * The OSM node id of the point.
    */
   @JsonProperty("osm_id")
