@@ -22,18 +22,18 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.util;
+package tools.simrail.backend.api.point.dto;
 
-import org.locationtech.jts.geom.GeometryFactory;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-public final class GeometryConstants {
+/**
+ * DTO for platform information at a point.
+ */
+public record PointPlatformInfoDto(
+  @Schema(description = "The track where the platform is located", minimum = "1")
+  int track,
+  @Schema(description = "The number of the platform", minimum = "1")
+  int platform
+) {
 
-  /**
-   * The JVM-static geometry factory to use for all geometry operations.
-   */
-  public static final GeometryFactory GEOMETRY_FACTORY = new GeometryFactory();
-
-  private GeometryConstants() {
-    throw new UnsupportedOperationException();
-  }
 }

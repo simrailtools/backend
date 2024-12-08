@@ -36,7 +36,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import tools.simrail.backend.common.TimetableHolder;
-import tools.simrail.backend.common.util.GeometryConstants;
+import tools.simrail.backend.common.util.GeoUtil;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
   SimRailPointProvider.class,
@@ -144,7 +144,7 @@ public final class SimRailPointProviderTest {
       if (!allowedPoints.contains(point.getName())) {
         var pointPosition = point.getPosition();
         var pointCoordinate = new Coordinate(pointPosition.getLongitude(), pointPosition.getLatitude());
-        var geoPoint = GeometryConstants.GEOMETRY_FACTORY.createPoint(pointCoordinate);
+        var geoPoint = GeoUtil.GEOMETRY_FACTORY.createPoint(pointCoordinate);
         var pointInBB = point.getBoundingBox().contains(geoPoint);
         Assertions.assertTrue(pointInBB, "pos of point not in bb: " + point.getName());
       }

@@ -39,6 +39,7 @@ dependencies {
   protobuf(rootProject.files(".proto"))
 
   implementation(projects.common)
+  implementation(libs.fuzzywuzzy)
   implementation(libs.springDocOpenApi)
   implementation("io.grpc:grpc-services")
   implementation("org.postgresql:postgresql")

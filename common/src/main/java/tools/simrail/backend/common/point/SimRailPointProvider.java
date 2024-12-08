@@ -30,16 +30,18 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import lombok.Getter;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.common.util.GeometryConstants;
+import tools.simrail.backend.common.util.GeoUtil;
 
 /**
  * A service that provides information about points based on the bundles data/points.json file.
  */
+@Getter
 @Service
 public final class SimRailPointProvider {
 
@@ -97,7 +99,7 @@ public final class SimRailPointProvider {
    */
   public @Nonnull Optional<SimRailPoint> findPointWherePosInBounds(double longitude, double latitude) {
     var pointCoordinate = new Coordinate(longitude, latitude);
-    var geoPoint = GeometryConstants.GEOMETRY_FACTORY.createPoint(pointCoordinate);
+    var geoPoint = GeoUtil.GEOMETRY_FACTORY.createPoint(pointCoordinate);
     return this.points.stream().filter(point -> point.getBoundingBox().contains(geoPoint)).findFirst();
   }
 }

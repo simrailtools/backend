@@ -27,6 +27,7 @@ package tools.simrail.backend.common.signal;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nonnull;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -76,5 +77,16 @@ public final class PlatformSignalProvider {
     return Optional
       .ofNullable(this.signalsByPointAndId.get(pointId))
       .map(signalIdToSignalMapping -> signalIdToSignalMapping.get(signalId));
+  }
+
+  /**
+   * Get all platform signals for the given point id, returns an empty list if no signals are known for the point.
+   *
+   * @param pointId the id of the point to get the signals of.
+   * @return the signals that are located at the point, an empty list if there are none.
+   */
+  public @Nonnull Collection<PlatformSignal> findSignalsByPoint(@Nonnull UUID pointId) {
+    var signalsByPoint = this.signalsByPointAndId.get(pointId);
+    return signalsByPoint == null ? List.of() : signalsByPoint.values();
   }
 }

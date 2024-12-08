@@ -33,7 +33,7 @@ import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import org.locationtech.jts.geom.Coordinate;
 import org.locationtech.jts.geom.Polygon;
-import tools.simrail.backend.common.util.GeometryConstants;
+import tools.simrail.backend.common.util.GeoUtil;
 
 /**
  * Deserializes a polygon from a list of points (in format Double[][]).
@@ -55,7 +55,7 @@ public final class SimRailPointBBDeserializer extends JsonDeserializer<Polygon> 
       polyCoordinates[index] = new Coordinate(longitudeNode.doubleValue(), latitudeNode.doubleValue());
     }
 
-    var linearRing = GeometryConstants.GEOMETRY_FACTORY.createLinearRing(polyCoordinates);
-    return GeometryConstants.GEOMETRY_FACTORY.createPolygon(linearRing);
+    var linearRing = GeoUtil.GEOMETRY_FACTORY.createLinearRing(polyCoordinates);
+    return GeoUtil.GEOMETRY_FACTORY.createPolygon(linearRing);
   }
 }
