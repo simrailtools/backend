@@ -14,7 +14,6 @@ jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
 springDocOpenApi = "2.6.0"
-postgreSqlDriver = "42.7.4"
 springGrpc = "0.3.0-SNAPSHOT"
 
 # testing
@@ -40,7 +39,6 @@ jts = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
-postgreSqlDriver = { group = "org.postgresql", name = "postgresql", version.ref = "postgreSqlDriver" }
 springDocOpenApi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "springDocOpenApi" }
 
 # junit

@@ -40,12 +40,11 @@ dependencies {
 
   implementation(projects.common)
   implementation(libs.springDocOpenApi)
-  implementation(libs.postgreSqlDriver)
   implementation("io.grpc:grpc-services")
+  implementation("org.postgresql:postgresql")
   implementation("io.grpc:grpc-servlet-jakarta")
   implementation("com.github.ben-manes.caffeine:caffeine")
 
-  implementation(libs.postgreSqlDriver)
   implementation("org.springframework.data:spring-data-envers")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-cache")
