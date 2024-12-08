@@ -37,6 +37,7 @@ import java.util.UUID;
 import me.xdrop.fuzzywuzzy.Applicable;
 import me.xdrop.fuzzywuzzy.algorithms.WeightedRatio;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 import tools.simrail.backend.api.point.dto.PointInfoDto;
@@ -85,7 +86,7 @@ class SimRailPointService {
    * @param id
    * @return
    */
-  // @Cacheable
+  @Cacheable(cacheNames = "point_cache", key = "'by_id_' + #id")
   public @Nonnull Optional<PointInfoDto> findPointById(@Nonnull UUID id) {
     return this.pointProvider.findPointByIntId(id).map(point -> {
       var platformSignals = this.platformSignalProvider.findSignalsByPoint(point.getId());
@@ -97,6 +98,7 @@ class SimRailPointService {
    * @param id
    * @return
    */
+  @Cacheable(cacheNames = "point_cache", key = "'by_point_id' + #id")
   public @Nonnull Optional<PointInfoDto> findPointByPointId(@Nonnull String id) {
     return this.pointProvider.findPointByPointId(id).map(point -> {
       var platformSignals = this.platformSignalProvider.findSignalsByPoint(point.getId());
@@ -110,6 +112,7 @@ class SimRailPointService {
    * @param limit
    * @return
    */
+  @Cacheable(cacheNames = "point_cache", key = "'list_' + #countries + #page + #limit")
   public @Nonnull PaginatedResponseDto<PointInfoDto> findPointsByCountry(
     @Nullable List<String> countries,
     @Nullable Integer page,
@@ -149,6 +152,7 @@ class SimRailPointService {
    * @param limit
    * @return
    */
+  @Cacheable(cacheNames = "point_cache", key = "'by_name' + #searchQuery + #countries + #limit")
   public @Nonnull List<PointInfoDto> findPointsByName(
     @Nonnull String searchQuery,
     @Nullable List<String> countries,
@@ -181,6 +185,7 @@ class SimRailPointService {
    * @param limit
    * @return
    */
+  @Cacheable(cacheNames = "point_cache", key = "'by_pos_' + #latitude + #longitude + #radiusInMeters + #countries + #limit")
   public @Nonnull List<PointInfoDto> findPointsAroundPosition(
     double latitude,
     double longitude,

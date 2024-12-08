@@ -72,4 +72,17 @@ public class CacheConfiguration {
         .expireAfterWrite(5, TimeUnit.MINUTES)
         .build());
   }
+
+  /**
+   * Cache for points, once resolved they can reside in the cache longer as the point data can only update with an
+   * application restart which clears the cache.
+   */
+  @Bean
+  public @Nonnull Cache pointCache() {
+    return new CaffeineCache(
+      "point_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(5, TimeUnit.MINUTES)
+        .build());
+  }
 }
