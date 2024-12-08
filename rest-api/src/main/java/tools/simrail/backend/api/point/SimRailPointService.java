@@ -26,6 +26,7 @@ package tools.simrail.backend.api.point;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Locale;
@@ -52,8 +53,10 @@ class SimRailPointService {
   private static final Applicable WEIGHTED_RATIO = new WeightedRatio().noProcessor();
   private static final Comparator<SimRailPoint> POINT_BY_ID_COMPARATOR =
     Comparator.comparing(SimRailPoint::getId);
-  private static final Comparator<Map.Entry<SimRailPoint, Integer>> SEARCH_RESULT_COMPARATOR =
+  private static final Comparator<Map.Entry<SimRailPoint, Integer>> SEARCH_RESULT_COMPARATOR_ASC =
     Comparator.comparingInt(Map.Entry::getValue);
+  private static final Comparator<Map.Entry<SimRailPoint, Integer>> SEARCH_RESULT_COMPARATOR_DESC =
+    Collections.reverseOrder(SEARCH_RESULT_COMPARATOR_ASC);
 
   private final SimRailPointProvider pointProvider;
   private final PointInfoDtoConverter pointInfoConverter;
@@ -160,7 +163,7 @@ class SimRailPointService {
         return Map.entry(point, similarityScore);
       })
       .filter(entry -> entry.getValue() > 50)
-      .sorted(SEARCH_RESULT_COMPARATOR)
+      .sorted(SEARCH_RESULT_COMPARATOR_DESC)
       .limit(limit)
       .map(Map.Entry::getKey)
       .map(point -> {
@@ -198,7 +201,7 @@ class SimRailPointService {
         return Map.entry(point, (int) Math.round(distanceMaxed));
       })
       .filter(entry -> entry.getValue() <= radiusInMeters)
-      .sorted(SEARCH_RESULT_COMPARATOR)
+      .sorted(SEARCH_RESULT_COMPARATOR_ASC)
       .limit(limit)
       .map(Map.Entry::getKey)
       .map(point -> {
