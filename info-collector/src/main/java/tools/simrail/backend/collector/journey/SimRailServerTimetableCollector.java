@@ -154,8 +154,16 @@ class SimRailServerTimetableCollector {
 
     // extract the line information from the display name of the train
     var cleanedTrainName = WHITESPACE_PATTERN.matcher(run.getTrainDisplayName()).replaceAll("");
-    var trainNameParts = cleanedTrainName.split("-");
-    var trainLine = trainNameParts.length > 1 ? trainNameParts[1] : null;
+    var trainNameParts = List.of(cleanedTrainName.split("-"));
+    var trainLine = trainNameParts.stream()
+      .filter(part -> !part.startsWith("\""))
+      .findFirst()
+      .orElse(null);
+    var trainLabel = trainNameParts.stream()
+      .filter(part -> part.startsWith("\"") && part.endsWith("\""))
+      .findFirst()
+      .map(label -> label.substring(1, label.length() - 1))
+      .orElse(null);
 
     // create events for all timetable entries
     var inBorder = false; // keeps track if the journey is within the playable border
@@ -183,6 +191,7 @@ class SimRailServerTimetableCollector {
         previousEvent = this.registerJourneyEvent(
           journeyId,
           trainLine,
+          trainLabel,
           server,
           JourneyEventType.ARRIVAL,
           previousEvent,
@@ -196,6 +205,7 @@ class SimRailServerTimetableCollector {
         previousEvent = this.registerJourneyEvent(
           journeyId,
           trainLine,
+          trainLabel,
           server,
           JourneyEventType.DEPARTURE,
           previousEvent,
@@ -215,6 +225,7 @@ class SimRailServerTimetableCollector {
   private @Nullable JourneyEventEntity registerJourneyEvent(
     @Nonnull UUID journeyId,
     @Nullable String trainLine,
+    @Nullable String trainLabel,
     @Nonnull SimRailServerDescriptor server,
     @Nonnull JourneyEventType eventType,
     @Nullable JourneyEventEntity previousEvent,
@@ -226,6 +237,7 @@ class SimRailServerTimetableCollector {
     var event = this.createJourneyEvent(
       journeyId,
       trainLine,
+      trainLabel,
       server,
       eventType,
       previousTime,
@@ -243,6 +255,7 @@ class SimRailServerTimetableCollector {
   private @Nullable JourneyEventEntity createJourneyEvent(
     @Nonnull UUID journeyId,
     @Nullable String trainLine,
+    @Nullable String trainLabel,
     @Nonnull SimRailServerDescriptor server,
     @Nonnull JourneyEventType eventType,
     @Nullable OffsetDateTime previousEventTime,
@@ -327,6 +340,7 @@ class SimRailServerTimetableCollector {
     transportEntity.setCategory(category);
     transportEntity.setNumber(number);
     transportEntity.setType(transportType);
+    transportEntity.setLabel(trainLabel);
     transportEntity.setMaxSpeed(maxSpeed);
     if (transportType == JourneyTransportType.REGIONAL_TRAIN
       || transportType == JourneyTransportType.REGIONAL_FAST_TRAIN) {

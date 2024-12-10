@@ -60,6 +60,11 @@ public final class JourneyTransport {
   @Column
   private String line;
   /**
+   * Marketing name or product name of the transport.
+   */
+  @Column
+  private String label;
+  /**
    * The maximum speed that this transport is allowed to drive at the associated point.
    */
   @Column

@@ -39,6 +39,8 @@ public record JourneyTransportSummaryDto(
   @Nonnull String number,
   @Schema(description = "The line of the transport, null in case no line is associated with the transport")
   @Nullable String line,
+  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport")
+  @Nullable String label,
   @Schema(description = "The higher-level category of the transport")
   @Nonnull JourneyTransportType type
 ) {

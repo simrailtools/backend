@@ -43,6 +43,7 @@ public final class JourneyTransportSummaryDtoConverter
       transport.getCategory(),
       transport.getNumber(),
       transport.getLine(),
+      transport.getLabel(),
       transport.getType());
   }
 }

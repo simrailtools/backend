@@ -353,6 +353,7 @@ final class JourneyEventRealtimeUpdater {
       previousTransport.getNumber(),
       previousTransport.getType(),
       previousTransport.getLine(),
+      previousTransport.getLabel(),
       maxSpeedAtCurrentPoint);
 
     // create the jit arrival and departure event
