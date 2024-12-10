@@ -85,4 +85,16 @@ public class CacheConfiguration {
         .expireAfterWrite(5, TimeUnit.MINUTES)
         .build());
   }
+
+  /**
+   * Cache for dispatch post information (expires after 5 seconds to always provide realtime information).
+   */
+  @Bean
+  public @Nonnull Cache dispatchPostCache() {
+    return new CaffeineCache(
+      "dispatch_post_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(5, TimeUnit.SECONDS)
+        .build());
+  }
 }

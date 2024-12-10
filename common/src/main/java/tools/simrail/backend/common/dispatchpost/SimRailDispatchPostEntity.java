@@ -57,6 +57,7 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Table(indexes = {
   @Index(columnList = "pointId"),
   @Index(columnList = "foreignId"),
+  @Index(columnList = "serverId, difficultyLevel, pointId, deleted, registeredSince, id"),
 })
 public final class SimRailDispatchPostEntity {
 
