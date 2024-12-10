@@ -109,7 +109,7 @@ public final class SimRailDispatchPostEntity {
    */
   @Nonnull
   @Column(nullable = false, updatable = false)
-  private String serverCode;
+  private UUID serverId;
   /**
    * If the dispatch post is no longer registered in the SimRail backend.
    */

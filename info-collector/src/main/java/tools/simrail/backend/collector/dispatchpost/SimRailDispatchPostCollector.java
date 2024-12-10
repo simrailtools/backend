@@ -93,7 +93,7 @@ final class SimRailDispatchPostCollector {
           // dispatch post is not yet registered, create a new entity for it
           postEntity = new SimRailDispatchPostEntity();
           postEntity.setNew(true);
-          postEntity.setServerCode(server.code());
+          postEntity.setServerId(server.id());
           postEntity.setForeignId(dispatchPost.getId());
 
           var idName = server.code() + dispatchPost.getStationName() + dispatchPost.getId();
