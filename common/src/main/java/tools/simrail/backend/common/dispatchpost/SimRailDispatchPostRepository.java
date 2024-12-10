@@ -50,19 +50,19 @@ public interface SimRailDispatchPostRepository extends
   /**
    * Finds a single dispatch post by the given foreign id.
    *
-   * @param id         the foreign id of the dispatch post to get.
-   * @param serverCode the server code of the server to get the dispatch post on.
+   * @param id       the foreign id of the dispatch post to get.
+   * @param serverId the server id of the server to get the dispatch post on.
    * @return an optional holding the dispatch post entity if an entity with the given foreign id exists.
    */
   @Nonnull
-  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerCode(@Nonnull String id, @Nonnull String serverCode);
+  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerId(@Nonnull String id, @Nonnull UUID serverId);
 
   /**
    * Finds all dispatch post entities for the given server code.
    *
-   * @param serverCode the code of the server to get the dispatch posts of.
+   * @param serverId the id of the server to get the dispatch posts of.
    * @return all dispatch posts that are registered for the given server code.
    */
   @Nonnull
-  List<SimRailDispatchPostEntity> findAllByServerCode(@Nonnull String serverCode);
+  List<SimRailDispatchPostEntity> findAllByServerId(@Nonnull UUID serverId);
 }

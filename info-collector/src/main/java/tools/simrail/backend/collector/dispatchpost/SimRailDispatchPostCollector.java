@@ -84,7 +84,7 @@ final class SimRailDispatchPostCollector {
       }
 
       //
-      var registeredDispatchPostsByForeignId = this.dispatchPostRepository.findAllByServerCode(server.code())
+      var registeredDispatchPostsByForeignId = this.dispatchPostRepository.findAllByServerId(server.id())
         .stream()
         .collect(Collectors.toMap(SimRailDispatchPostEntity::getForeignId, Function.identity()));
       for (var dispatchPost : dispatchPosts) {
