@@ -75,16 +75,20 @@ class SimRailPointService {
   }
 
   /**
-   * @param input
-   * @return
+   * Normalizes the given input string for search processing.
+   *
+   * @param input the string to normalize.
+   * @return the normalized version of the given input string.
    */
   private static @Nonnull String normalizeInputForSearch(@Nonnull String input) {
     return input.replace(" ", "").toLowerCase(Locale.ROOT);
   }
 
   /**
-   * @param id
-   * @return
+   * Finds the point with the given id, either by looking it up or from cache.
+   *
+   * @param id the id of the point to get.
+   * @return an optional holding the point with the given id, if one exists.
    */
   @Cacheable(cacheNames = "point_cache", key = "'by_id_' + #id")
   public @Nonnull Optional<PointInfoDto> findPointById(@Nonnull UUID id) {
@@ -95,8 +99,10 @@ class SimRailPointService {
   }
 
   /**
-   * @param id
-   * @return
+   * Finds the point with the given SimRail id, either by looking it up or from cache.
+   *
+   * @param id the SimRail id of the point to get.
+   * @return an optional holding the point with the given id, if one exists.
    */
   @Cacheable(cacheNames = "point_cache", key = "'by_point_id' + #id")
   public @Nonnull Optional<PointInfoDto> findPointByPointId(@Nonnull String id) {
@@ -107,10 +113,12 @@ class SimRailPointService {
   }
 
   /**
-   * @param countries
-   * @param page
-   * @param limit
-   * @return
+   * Lists all points that are registered according to the given filter and paging parameters.
+   *
+   * @param countries the countries in which the points to return may be located.
+   * @param page      the page of elements to return, defaults to 1.
+   * @param limit     the maximum elements to return per page, defaults to 20.
+   * @return a paginated response containing the points that are matching the given filter and paging parameters.
    */
   @Cacheable(cacheNames = "point_cache", key = "'list_' + #countries + #page + #limit")
   public @Nonnull PaginatedResponseDto<PointInfoDto> findPointsByCountry(
@@ -147,10 +155,12 @@ class SimRailPointService {
   }
 
   /**
-   * @param searchQuery
-   * @param countries
-   * @param limit
-   * @return
+   * Finds points by their name using a distance ratio. The result is ordered DESC (highest match first).
+   *
+   * @param searchQuery the search query to search for in the point name.
+   * @param countries   the countries in which the points to return may be located.
+   * @param limit       the maximum results to return.
+   * @return the points whose name is matching the given input search query, in descending order.
    */
   @Cacheable(cacheNames = "point_cache", key = "'by_name' + #searchQuery + #countries + #limit")
   public @Nonnull List<PointInfoDto> findPointsByName(
@@ -178,12 +188,15 @@ class SimRailPointService {
   }
 
   /**
-   * @param latitude
-   * @param longitude
-   * @param radiusInMeters
-   * @param countries
-   * @param limit
-   * @return
+   * Finds points that are located in the given radius around the given geographical position. The result is ordered ASC
+   * (closest points first).
+   *
+   * @param latitude       the latitude from which to search in the given search radius.
+   * @param longitude      the longitude from which to search in the given search radius.
+   * @param radiusInMeters the radius around the given geo position to search.
+   * @param countries      the countries in which the points to return may be located.
+   * @param limit          the maximum results to return.
+   * @return the points that are located in the given radius around the given geo position, in ascending order.
    */
   @Cacheable(cacheNames = "point_cache", key = "'by_pos_' + #latitude + #longitude + #radiusInMeters + #countries + #limit")
   public @Nonnull List<PointInfoDto> findPointsAroundPosition(
