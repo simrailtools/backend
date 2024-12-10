@@ -40,6 +40,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
  * Contains the global handlers for exceptions.
@@ -48,6 +49,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 public final class GlobalExceptionHandler {
 
   // different types of problems that are returned
+  private static final URI NOT_FOUND = URI.create("not-found");
   private static final URI BAD_PARAMETER_TYPE = URI.create("bad-parameter");
   private static final URI INTERNAL_ERROR_TYPE = URI.create("internal-error");
   private static final URI CONSTRAINT_VIOLATION_TYPE = URI.create("constraint-violation");
@@ -148,6 +150,21 @@ public final class GlobalExceptionHandler {
   }
 
   /**
+   * Handles the case when a requested resource does not exist and resolves it to a 404 response.
+   */
+  @ExceptionHandler(NoResourceFoundException.class)
+  public @Nonnull ProblemDetail handleUnknownResource(@Nonnull HttpServletRequest request) {
+    var problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
+    problemDetail.setType(NOT_FOUND);
+    problemDetail.setTitle("Resource not found");
+    problemDetail.setInstance(this.problemInstance);
+    problemDetail.setProperty("timestamp", OffsetDateTime.now());
+    problemDetail.setProperty("request-uri", formatRequestUri(request));
+    problemDetail.setDetail("The requested resource does not exist");
+    return problemDetail;
+  }
+
+  /**
    * Handler for constraint violations of requests.
    */
   @ExceptionHandler(ConstraintViolationException.class)
@@ -185,7 +202,7 @@ public final class GlobalExceptionHandler {
   }
 
   /**
-   *
+   * Handles the case where a required request parameter is not provided.
    */
   @ExceptionHandler(MissingServletRequestParameterException.class)
   public @Nonnull ProblemDetail handleMissingServletRequestParameterException(
