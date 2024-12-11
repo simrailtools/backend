@@ -26,6 +26,7 @@ package tools.simrail.backend.api.server;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -103,6 +104,11 @@ class SimRailServerV1Controller {
     summary = "Get detail data about a single server by ID",
     parameters = {
       @Parameter(name = "id", description = "The id of the server to get"),
+      @Parameter(
+        name = "If-Modified-Since",
+        in = ParameterIn.HEADER,
+        description = "If provided the response body is empty in case the data didn't change since the given date"
+      ),
     },
     responses = {
       @ApiResponse(
@@ -111,6 +117,10 @@ class SimRailServerV1Controller {
           mediaType = "application/json",
           schema = @Schema(implementation = SimRailServerDto.class)
         )),
+      @ApiResponse(
+        responseCode = "304",
+        description = "The request was successful but the content was not modified since the last request",
+        content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "400",
         description = "The given server ID is invalid",
@@ -144,6 +154,11 @@ class SimRailServerV1Controller {
     summary = "Get detail data about a single server by code",
     parameters = {
       @Parameter(name = "code", description = "The code of the server to get"),
+      @Parameter(
+        name = "If-Modified-Since",
+        in = ParameterIn.HEADER,
+        description = "If provided the response body is empty in case the data didn't change since the given date"
+      ),
     },
     responses = {
       @ApiResponse(
@@ -152,6 +167,10 @@ class SimRailServerV1Controller {
           mediaType = "application/json",
           schema = @Schema(implementation = SimRailServerDto.class)
         )),
+      @ApiResponse(
+        responseCode = "304",
+        description = "The request was successful but the content was not modified since the last request",
+        content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "400",
         description = "The given server code is invalid",
