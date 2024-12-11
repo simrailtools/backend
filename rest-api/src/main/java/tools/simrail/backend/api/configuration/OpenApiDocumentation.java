@@ -60,9 +60,6 @@ public class OpenApiDocumentation {
         .description("""
           Test
           1234
-          """)
-        .termsOfService("""
-          
           """))
       .servers(List.of(new Server()
         .description("Default Backend")
