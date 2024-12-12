@@ -22,51 +22,13 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.common.transport;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import org.springframework.data.repository.ListCrudRepository;
 
 /**
- * Information about the transport used for a journey.
+ * Repository for journey vehicles.
  */
-@Data
-@Embeddable
-@NoArgsConstructor
-@AllArgsConstructor
-public final class JourneyTransport {
+public interface JourneyVehicleRepository extends ListCrudRepository<JourneyVehicle, Long> {
 
-  /**
-   * Category of the transport used for the journey.
-   */
-  @Column(nullable = false)
-  private String category;
-  /**
-   * Number of the transport used for the journey.
-   */
-  @Column(nullable = false)
-  private String number;
-  /**
-   * A higher-level category of the transport.
-   */
-  @Column(nullable = false)
-  private JourneyTransportType type;
-  /**
-   * Line information for repeating transports, null if no line is associated with the transport.
-   */
-  @Column
-  private String line;
-  /**
-   * Marketing name or product name of the transport.
-   */
-  @Column
-  private String label;
-  /**
-   * The maximum speed that this transport is allowed to drive at the associated point.
-   */
-  @Column
-  private int maxSpeed;
 }

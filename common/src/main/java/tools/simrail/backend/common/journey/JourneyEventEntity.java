@@ -154,6 +154,7 @@ public final class JourneyEventEntity {
   @AttributeOverrides({
     @AttributeOverride(name = "line", column = @Column(name = "transport_line")),
     @AttributeOverride(name = "type", column = @Column(name = "transport_type")),
+    @AttributeOverride(name = "label", column = @Column(name = "transport_label")),
     @AttributeOverride(name = "number", column = @Column(name = "transport_number")),
     @AttributeOverride(name = "category", column = @Column(name = "transport_category")),
     @AttributeOverride(name = "maxSpeed", column = @Column(name = "transport_max_speed")),

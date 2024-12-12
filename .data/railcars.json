@@ -1,7 +1,8 @@
 [
   {
-    "id": "E186-134",
+    "id": "ec838564-b3db-4bc2-84c2-1759ea2e7e0f",
     "api_name": "Traxx/E186-134",
+    "display_name": "E186-134",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "F140MS",
@@ -14,8 +15,9 @@
     "max_speed": 140
   },
   {
-    "id": "E186-929",
+    "id": "ba01660d-5d72-40fa-a10b-a2f8224173f0",
     "api_name": "Traxx/E186-929",
+    "display_name": "E186-929",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "F140MS",
@@ -28,8 +30,9 @@
     "max_speed": 140
   },
   {
-    "id": "E6ACTa-014",
+    "id": "30fe608a-d454-44e8-97fa-bd24f181468a",
     "api_name": "Dragon2/E6ACTa-014",
+    "display_name": "E6ACTa-014",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "E6ACTa",
@@ -42,8 +45,9 @@
     "max_speed": 120
   },
   {
-    "id": "E6ACTa-016",
+    "id": "b9b2096b-e936-4de5-9e2a-a30c7cf596cb",
     "api_name": "Dragon2/E6ACTa-016",
+    "display_name": "E6ACTa-016",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "E6ACTa",
@@ -56,8 +60,9 @@
     "max_speed": 120
   },
   {
-    "id": "E6ACTadb-027",
+    "id": "c5e80660-3e1e-4694-9677-1e7957a5ceca",
     "api_name": "Dragon2/E6ACTadb-027",
+    "display_name": "E6ACTadb-027",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "E6ACTadb",
@@ -70,8 +75,9 @@
     "max_speed": 120
   },
   {
-    "id": "ET25-002",
+    "id": "c9d460a9-52b9-4a44-b558-f75dd513436b",
     "api_name": "Dragon2/ET25-002",
+    "display_name": "ET25-002",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "E6ACTa",
@@ -84,8 +90,9 @@
     "max_speed": 120
   },
   {
-    "id": "ED250-018",
+    "id": "3f406999-1e0b-41dc-ad62-2e557501225f",
     "api_name": "Pendolino/ED250-018 Variant",
+    "display_name": "ED250-018",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "EMU250",
@@ -98,8 +105,9 @@
     "max_speed": 250
   },
   {
-    "id": "EN57-009",
+    "id": "9b05f968-40cf-4c4d-a1c3-674feea982dc",
     "api_name": "EN57/EN57-009",
+    "display_name": "EN57-009",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -112,8 +120,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-047",
+    "id": "5ca89e3e-1ea4-4253-b7bd-a18f30a04951",
     "api_name": "EN57/EN57-047",
+    "display_name": "EN57-047",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -126,8 +135,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1000",
+    "id": "616bf6d4-b8bd-4b77-b242-4ad9c1410a7c",
     "api_name": "EN57/EN57-1000",
+    "display_name": "EN57-1000",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -140,8 +150,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1003",
+    "id": "0eae09d0-d13b-4f4e-a39a-28e507fd6a7f",
     "api_name": "EN57/EN57-1003",
+    "display_name": "EN57-1003",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -154,8 +165,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1051",
+    "id": "9222aa83-3c9f-420e-85a9-aea4228b1fc0",
     "api_name": "EN57/EN57-1051",
+    "display_name": "EN57-1051",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -168,8 +180,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1219",
+    "id": "b25df6bd-7aaf-43d2-bf39-3185a64f9a0f",
     "api_name": "EN57/EN57-1219",
+    "display_name": "EN57-1219",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -182,8 +195,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1316",
+    "id": "b8a92acf-294a-40b1-9aa8-18baa91ccc58",
     "api_name": "EN57/EN57-1316",
+    "display_name": "EN57-1316",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -196,8 +210,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1458",
+    "id": "9f574c57-47da-427d-931f-b4a061c7731f",
     "api_name": "EN57/EN57-1458",
+    "display_name": "EN57-1458",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -210,8 +225,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1567",
+    "id": "a7de1bf2-5e21-45f8-bfbb-43e07fd3cbc7",
     "api_name": "EN57/EN57-1567",
+    "display_name": "EN57-1567",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -224,8 +240,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1571",
+    "id": "1f7cae60-5afa-4b5b-9415-48207fb46b53",
     "api_name": "EN57/EN57-1571",
+    "display_name": "EN57-1571",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -238,8 +255,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1752",
+    "id": "802c3ecf-e3f2-4088-875c-0d84a67b35d8",
     "api_name": "EN57/EN57-1752",
+    "display_name": "EN57-1752",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -252,8 +270,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1755",
+    "id": "b844f49f-3848-4376-b711-306fc513d54f",
     "api_name": "EN57/EN57-1755",
+    "display_name": "EN57-1755",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -266,8 +285,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1796",
+    "id": "69f90eb1-537f-42c0-a25d-94ffea19d528",
     "api_name": "EN57/EN57-1796",
+    "display_name": "EN57-1796",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -280,8 +300,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-1821",
+    "id": "7ca4706a-2565-4013-8916-ad79eda21806",
     "api_name": "EN57/EN57-1821",
+    "display_name": "EN57-1821",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -294,8 +315,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN57-614",
+    "id": "bdfdd094-8dab-4a43-98c8-2ddc49ca250f",
     "api_name": "EN57/EN57-614",
+    "display_name": "EN57-614",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+5B",
@@ -308,8 +330,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN71-005",
+    "id": "ff002588-a86f-47b8-a8a4-13972430d69c",
     "api_name": "EN57/EN71-005",
+    "display_name": "EN71-005",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+6B+5B",
@@ -322,8 +345,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN71-011",
+    "id": "8ebaa4a7-1806-44fc-8687-cdd30e0216b3",
     "api_name": "EN57/EN71-011",
+    "display_name": "EN71-011",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "5B+6B+6B+5B",
@@ -336,8 +360,9 @@
     "max_speed": 110
   },
   {
-    "id": "EN76-006",
+    "id": "69e45009-e54c-451f-a44d-c77b9958f742",
     "api_name": "Elf/EN76-006",
+    "display_name": "EN76-006",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "22WE",
@@ -350,8 +375,9 @@
     "max_speed": 160
   },
   {
-    "id": "EN76-022",
+    "id": "9332def3-987d-4125-8f0c-279143eac933",
     "api_name": "Elf/EN76-022",
+    "display_name": "EN76-022",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "22WEe",
@@ -364,8 +390,9 @@
     "max_speed": 160
   },
   {
-    "id": "EN96-001",
+    "id": "8cab4093-e5c1-4239-a234-93d084e3a981",
     "api_name": "Elf/EN96-001",
+    "display_name": "EN96-001",
     "required_dlc_id": null,
     "type": "ELECTRIC_MULTIPLE_UNIT",
     "type_id": "34WE",
@@ -378,8 +405,9 @@
     "max_speed": 160
   },
   {
-    "id": "EP07-135",
+    "id": "1ac8fe06-1436-4fb9-83ca-4a6bfc4daca1",
     "api_name": "4E/EP07-135",
+    "display_name": "EP07-135",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -392,8 +420,9 @@
     "max_speed": 125
   },
   {
-    "id": "EP07-174",
+    "id": "fd04a5f0-f2b0-48f2-9a1a-c58ce734d291",
     "api_name": "4E/EP07-174",
+    "display_name": "EP07-174",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -406,8 +435,9 @@
     "max_speed": 125
   },
   {
-    "id": "EP08-001",
+    "id": "1401261a-6513-4fab-82a2-0d51cc865c98",
     "api_name": "4E/EP08-001",
+    "display_name": "EP08-001",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "102E",
@@ -420,8 +450,9 @@
     "max_speed": 140
   },
   {
-    "id": "EP08-013",
+    "id": "7c877a80-e685-4cd5-95bc-f61c7a8b83af",
     "api_name": "4E/EP08-013",
+    "display_name": "EP08-013",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "102E",
@@ -434,8 +465,9 @@
     "max_speed": 140
   },
   {
-    "id": "EU07-005",
+    "id": "6602a08b-a7dc-4fcc-b7ff-ecdee61e7856",
     "api_name": "4E/EU07-005",
+    "display_name": "EU07-005",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -448,8 +480,9 @@
     "max_speed": 125
   },
   {
-    "id": "EU07-068",
+    "id": "e1347203-dcb4-4698-93e6-c53469989f98",
     "api_name": "4E/EU07-068",
+    "display_name": "EU07-068",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -462,8 +495,9 @@
     "max_speed": 125
   },
   {
-    "id": "EU07-085",
+    "id": "f0898a48-819c-4739-879f-2f26c8fd5d87",
     "api_name": "4E/EU07-085",
+    "display_name": "EU07-085",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -476,8 +510,9 @@
     "max_speed": 125
   },
   {
-    "id": "EU07-092",
+    "id": "dcf10216-9fff-4834-883e-80d292976624",
     "api_name": "4E/EU07-092",
+    "display_name": "EU07-092",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -490,8 +525,9 @@
     "max_speed": 125
   },
   {
-    "id": "EU07-096",
+    "id": "8dbfb4e3-6a78-4eb0-8e6e-c012dc752728",
     "api_name": "4E/EU07-096",
+    "display_name": "EU07-096",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -504,8 +540,9 @@
     "max_speed": 125
   },
   {
-    "id": "EU07-241",
+    "id": "5f01204e-31e5-4e15-8499-3f06a7a4f2f8",
     "api_name": "4E/EU07-241",
+    "display_name": "EU07-241",
     "required_dlc_id": null,
     "type": "LOCOMOTIVE",
     "type_id": "4E",
@@ -518,8 +555,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-1163",
+    "id": "772186e8-50ef-4997-b597-b58d8389caaa",
     "api_name": "201E/ET22-1163",
+    "display_name": "ET22-1163",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -532,8 +570,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-243",
+    "id": "91cf3ab5-e307-4c67-afce-37541692762c",
     "api_name": "201E/ET22-243",
+    "display_name": "ET22-243",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -546,8 +585,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-256",
+    "id": "e219f560-537f-46af-a35f-5aaad672a56b",
     "api_name": "201E/ET22-256",
+    "display_name": "ET22-256",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -560,8 +600,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-644",
+    "id": "c9b150da-f2c0-46d2-b47d-0571a57ea261",
     "api_name": "201E/ET22-644",
+    "display_name": "ET22-644",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -574,8 +615,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-836",
+    "id": "849693a5-a3ff-4b1f-bbf9-515b7cf79219",
     "api_name": "201E/ET22-836",
+    "display_name": "ET22-836",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -588,8 +630,9 @@
     "max_speed": 125
   },
   {
-    "id": "ET22-911",
+    "id": "29f07e09-9f77-4eb7-85eb-e26e05a06278",
     "api_name": "201E/ET22-911",
+    "display_name": "ET22-911",
     "required_dlc_id": "2868050",
     "type": "LOCOMOTIVE",
     "type_id": "201E",
@@ -602,8 +645,9 @@
     "max_speed": 125
   },
   {
-    "id": "a9emnouz-61511970214-5",
+    "id": "7fea9423-d8c3-47a9-be47-9327a472aea7",
     "api_name": "Z2/a9emnouz_61511970214-5",
+    "display_name": "a9emnouz-61511970214-5",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "B91",
@@ -616,8 +660,9 @@
     "max_speed": 160
   },
   {
-    "id": "a9mnouz-61511970234-3",
+    "id": "fe0d0979-54d5-4723-b3b7-be2a92b092e1",
     "api_name": "Z2/a9mnouz_61511970234-3",
+    "display_name": "a9mnouz-61511970234-3",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "B91",
@@ -630,8 +675,9 @@
     "max_speed": 160
   },
   {
-    "id": "112A-50-51-19-08-136-0",
+    "id": "ac623463-a72d-4427-bd02-c87edb96bcf7",
     "api_name": "11xa/112A_50 51 19-08 136-0 Variant",
+    "display_name": "112A-50-51-19-08-136-0",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "112Ag",
@@ -644,8 +690,9 @@
     "max_speed": 120
   },
   {
-    "id": "112A-51-51-19-70-003-4",
+    "id": "5d5adde4-d347-4f31-9495-7391d694089e",
     "api_name": "11xa/112A_51 51 19-70 003-4 Variant",
+    "display_name": "112A-51-51-19-70-003-4",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "112Ag",
@@ -658,8 +705,9 @@
     "max_speed": 160
   },
   {
-    "id": "112A-50-51-19-00-189-7",
+    "id": "ebc21006-ea30-4e72-870f-c66dcac40aea",
     "api_name": "11xa/112A_50 51 19-00 189-7 Variant",
+    "display_name": "112A-50-51-19-00-189-7",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "112Ag",
@@ -672,8 +720,9 @@
     "max_speed": 120
   },
   {
-    "id": "112A-50-51-19-08-095-8",
+    "id": "0dc2290c-8939-4e83-9ca6-6baf6f9dce67",
     "api_name": "11xa/112A_50 51 19-08 095-8 Variant",
+    "display_name": "112A-50-51-19-08-095-8",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "112Am",
@@ -686,8 +735,9 @@
     "max_speed": 160
   },
   {
-    "id": "b10bmnouz-61512071105-1",
+    "id": "f84c12af-bed4-4cdb-9865-e9a5903defcf",
     "api_name": "Z2/b10bmnouz_61512071105_1",
+    "display_name": "b10bmnouz-61512071105-1",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "156A",
@@ -700,8 +750,9 @@
     "max_speed": 160
   },
   {
-    "id": "111A-50-51-20-08-607-7",
+    "id": "af71499a-d6f1-47e4-b612-5e88d1a622bd",
     "api_name": "11xa/111A_50 51 20-08 607-7 Variant",
+    "display_name": "111A-50-51-20-08-607-7",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "111Aw",
@@ -714,8 +765,9 @@
     "max_speed": 120
   },
   {
-    "id": "111A-51-51-20-71-102-0",
+    "id": "9198fa46-55fa-4f41-9247-8ae5ed9bdec9",
     "api_name": "11xa/111A_51 51 20-71 102-0 Variant",
+    "display_name": "111A-51-51-20-71-102-0",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "111Au",
@@ -728,8 +780,9 @@
     "max_speed": 160
   },
   {
-    "id": "111A-50-51-20-00-608-3",
+    "id": "a4efbf9e-4913-489b-9e60-045867120e21",
     "api_name": "11xa/111A_50 51 20-00 608-3 Variant",
+    "display_name": "111A-50-51-20-00-608-3",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "111Ah",
@@ -742,8 +795,9 @@
     "max_speed": 120
   },
   {
-    "id": "111A-51-51-20-70-829-9",
+    "id": "59e79b53-c53f-449b-94be-256130bf9532",
     "api_name": "11xa/111A_51 51 20-70 829-9 Variant",
+    "display_name": "111A-51-51-20-70-829-9",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "111Ah",
@@ -756,8 +810,9 @@
     "max_speed": 160
   },
   {
-    "id": "b11mnouz-61512170064-0",
+    "id": "6b0a4cde-a234-4eda-8b82-8edfc1ac92a8",
     "api_name": "Z2/b11mnouz_61512170064-0",
+    "display_name": "b11mnouz-61512170064-0",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "G90",
@@ -770,8 +825,9 @@
     "max_speed": 160
   },
   {
-    "id": "b11mnouz-61512170098-8",
+    "id": "7a6ac0ad-6911-4f61-9a8a-af23eb2a7efb",
     "api_name": "Z2/b11mnouz_61512170098-8",
+    "display_name": "b11mnouz-61512170098-8",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "G90",
@@ -784,8 +840,9 @@
     "max_speed": 160
   },
   {
-    "id": "b11gmnouz-61512170107-7",
+    "id": "d85058f5-ebde-4e92-882d-141bc772b36c",
     "api_name": "Z2/b11gmnouz_61512170107-7",
+    "display_name": "b11gmnouz-61512170107-7",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "B91",
@@ -798,8 +855,9 @@
     "max_speed": 160
   },
   {
-    "id": "wrmnouz-61518870191-1",
+    "id": "6169d8c5-3d18-441c-a4be-a132188de780",
     "api_name": "Z2/wrmnouz_61518870191_1",
+    "display_name": "wrmnouz-61518870191-1",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "406A",
@@ -812,8 +870,9 @@
     "max_speed": 160
   },
   {
-    "id": "441V-31516635283-3",
+    "id": "827cd7e1-cc3a-41c9-b953-0773a96de449",
     "api_name": "441V/441V_31516635283-3",
+    "display_name": "441V-31516635283-3",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "441V",
@@ -826,8 +885,9 @@
     "max_speed": 120
   },
   {
-    "id": "441V-31516635512-5",
+    "id": "c00ea3bc-7591-4304-a0e4-15521eac69d8",
     "api_name": "441V/441V_31516635512-5",
+    "display_name": "441V-31516635512-5",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "441V",
@@ -840,8 +900,9 @@
     "max_speed": 120
   },
   {
-    "id": "412W-v4-364-9",
+    "id": "6c50618a-cc8f-4be7-b53c-e7dfd0f5484e",
     "api_name": "412W/412W_v4_364-9 Variant",
+    "display_name": "412W-v4-364-9",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "412W",
@@ -854,8 +915,9 @@
     "max_speed": 100
   },
   {
-    "id": "412W-v4-364-9-b",
+    "id": "cf3871cb-def1-41cd-9092-84b8afcb192c",
     "api_name": "412W/412W_v4_364-9_b Variant",
+    "display_name": "412W-v4-364-9-b",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "412W",
@@ -868,8 +930,9 @@
     "max_speed": 100
   },
   {
-    "id": "412W-33515356394-5",
+    "id": "fa086030-f5fe-4197-ac76-4c6eb7ece67f",
     "api_name": "412W/412W_33515356394-5",
+    "display_name": "412W-33515356394-5",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "412W",
@@ -882,8 +945,9 @@
     "max_speed": 100
   },
   {
-    "id": "412W-33565300118-0",
+    "id": "268c2a4c-8b99-48fd-b08a-0112b76f8cc8",
     "api_name": "412W/412W_33565300118-0",
+    "display_name": "412W-33565300118-0",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "412W",
@@ -896,8 +960,9 @@
     "max_speed": 100
   },
   {
-    "id": "412W-33565300177-6",
+    "id": "be153855-51f3-4214-88c9-3a3027acee5d",
     "api_name": "412W/412W_33565300177-6",
+    "display_name": "412W-33565300177-6",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "412W",
@@ -910,8 +975,9 @@
     "max_speed": 100
   },
   {
-    "id": "424Z",
+    "id": "0864ea9a-152b-460b-af2a-c9e43b2e63c8",
     "api_name": "424Z/424Z",
+    "display_name": "424Z",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "424Z",
@@ -924,8 +990,9 @@
     "max_speed": 120
   },
   {
-    "id": "424Z-b",
+    "id": "67775b5e-d10e-4ae4-a009-7221570674d7",
     "api_name": "424Z/424Z_brazowy",
+    "display_name": "424Z-b",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "424Z",
@@ -938,8 +1005,9 @@
     "max_speed": 120
   },
   {
-    "id": "408S",
+    "id": "1b633417-4737-499f-afc5-fa6e6284ec86",
     "api_name": "408S/408S",
+    "display_name": "408S",
     "required_dlc_id": null,
     "type": "WAGON",
     "type_id": "408S",
@@ -952,8 +1020,9 @@
     "max_speed": 120
   },
   {
-    "id": "406Ra-33510079375-1",
+    "id": "fba5dc0e-190c-4c9d-80bd-f09a1c2987f3",
     "api_name": "406Ra/406Ra_33510079375-1",
+    "display_name": "406Ra-33510079375-1",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Ra",
@@ -966,8 +1035,9 @@
     "max_speed": 100
   },
   {
-    "id": "406Ra-33517881520-5",
+    "id": "a4fc47a8-0f41-469f-b64d-b98ae12bbe61",
     "api_name": "406Ra/406Ra_33517881520-5",
+    "display_name": "406Ra-33517881520-5",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Ra",
@@ -980,8 +1050,9 @@
     "max_speed": 100
   },
   {
-    "id": "406Ra-33517980031-3",
+    "id": "289e0431-7a23-468d-ad19-84686884ab74",
     "api_name": "406Ra/406Ra_33517980031-3",
+    "display_name": "406Ra-33517980031-3",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Ra",
@@ -994,8 +1065,9 @@
     "max_speed": 100
   },
   {
-    "id": "406Ra-33517982861-1",
+    "id": "76e28181-24f5-493d-8071-b10ceacef180",
     "api_name": "406Ra/406Ra_33517982861-1",
+    "display_name": "406Ra-33517982861-1",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Ra",
@@ -1008,8 +1080,9 @@
     "max_speed": 100
   },
   {
-    "id": "406Ra-34517981215-0",
+    "id": "e4f0b355-627a-4e2a-a647-d0ddb832ca62",
     "api_name": "406Ra/406Ra_34517981215-0",
+    "display_name": "406Ra-34517981215-0",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Ra",
@@ -1022,8 +1095,9 @@
     "max_speed": 100
   },
   {
-    "id": "406Rb-84517862699-8",
+    "id": "9c3728b3-31f9-455e-8b0e-f8ef6b48dd99",
     "api_name": "406Ra/406Rb_84517862699-8",
+    "display_name": "406Rb-84517862699-8",
     "required_dlc_id": "2868050",
     "type": "WAGON",
     "type_id": "406Rb",

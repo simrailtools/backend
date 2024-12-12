@@ -25,7 +25,6 @@
 package tools.simrail.backend.collector.dispatchpost;
 
 import jakarta.annotation.Nonnull;
-import java.util.NoSuchElementException;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
@@ -112,9 +111,11 @@ final class SimRailDispatchPostCollector {
         postEntity.setRegisteredSince(registeredSince);
 
         // update the associated point id
-        var point = this.pointProvider
-          .findPointByName(dispatchPost.getStationName())
-          .orElseThrow(() -> new NoSuchElementException("Missing point for " + dispatchPost.getStationName()));
+        var point = this.pointProvider.findPointByName(dispatchPost.getStationName()).orElse(null);
+        if (point == null) {
+          LOGGER.warn("Found dispatch post {} with no associated point", dispatchPost.getStationName());
+          continue;
+        }
         postEntity.setPointId(point.getId());
 
         // update the image urls of the post (in case they changed)

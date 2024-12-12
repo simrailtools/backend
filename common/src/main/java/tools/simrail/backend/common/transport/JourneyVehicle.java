@@ -22,51 +22,60 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.common.transport;
 
 import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
-import lombok.AllArgsConstructor;
-import lombok.Data;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Index;
+import jakarta.persistence.Table;
+import java.util.UUID;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 /**
- * Information about the transport used for a journey.
+ * A transport entry (one wagon or locomotive for journey).
  */
-@Data
-@Embeddable
+@Getter
+@Setter
 @NoArgsConstructor
-@AllArgsConstructor
-public final class JourneyTransport {
+@Entity(name = "sit_vehicle")
+@Table(indexes = {
+  @Index(columnList = "journeyId, indexInGroup"),
+})
+public final class JourneyVehicle {
 
   /**
-   * Category of the transport used for the journey.
+   * The id of the specific vehicle.
+   */
+  @Id
+  private long id;
+
+  /**
+   * The id of the journey to which this vehicle entry belongs.
    */
   @Column(nullable = false)
-  private String category;
+  private UUID journeyId;
   /**
-   * Number of the transport used for the journey.
+   * The index where this vehicle is loaded in the vehicle group.
+   */
+  @Column
+  private int indexInGroup;
+
+  /**
+   * The id of the used railcar in the group.
    */
   @Column(nullable = false)
-  private String number;
+  private UUID railcarId;
   /**
-   * A higher-level category of the transport.
-   */
-  @Column(nullable = false)
-  private JourneyTransportType type;
-  /**
-   * Line information for repeating transports, null if no line is associated with the transport.
+   * The weight of the load, null if no load is provided for the vehicle.
    */
   @Column
-  private String line;
+  private Integer loadWeight;
   /**
-   * Marketing name or product name of the transport.
+   * The load of the vehicle, null if no load is provided for the vehicle.
    */
   @Column
-  private String label;
-  /**
-   * The maximum speed that this transport is allowed to drive at the associated point.
-   */
-  @Column
-  private int maxSpeed;
+  private JourneyVehicleLoad load;
 }
