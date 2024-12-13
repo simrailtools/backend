@@ -29,6 +29,7 @@ import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
@@ -61,7 +62,7 @@ public final class RailcarProvider {
    * @param id the internal id of the railcar.
    * @return an optional holding the railcar with the given internal id, if one exists.
    */
-  public @Nonnull Optional<Railcar> findRailcarById(@Nonnull String id) {
+  public @Nonnull Optional<Railcar> findRailcarById(@Nonnull UUID id) {
     return this.railcars.stream().filter(railcar -> railcar.getId().equals(id)).findFirst();
   }
 

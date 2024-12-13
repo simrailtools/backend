@@ -70,6 +70,11 @@ public final class Railcar {
   @JsonProperty("designation")
   private String designation;
   /**
+   * The producer of the railcar.
+   */
+  @JsonProperty("producer")
+  private String producer;
+  /**
    * The years in which this railcar was produced. This can either be a single year (in the form yyyy) or a range of
    * years, delimited by {@code -}. In case of a range the first part is the start year of production (in form yyyy) and
    * the second part is either the end year (in form yyyy) or {@code Present} if the railcar is still produced.
