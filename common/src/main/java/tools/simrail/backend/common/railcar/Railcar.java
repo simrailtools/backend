@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.railcar;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -41,12 +42,17 @@ public final class Railcar {
    * The id of the railcar, usually its unique type descriptor.
    */
   @JsonProperty("id")
-  private String id;
+  private UUID id;
   /**
    * The id of the railcar used by the SimRail api.
    */
   @JsonProperty("api_name")
   private String apiId;
+  /**
+   * The display name of the rail car.
+   */
+  @JsonProperty("display_name")
+  private String displayName;
   /**
    * The Steam id of the DLC that is required to get access to this railcar in SimRail, null if no DLC is needed.
    */

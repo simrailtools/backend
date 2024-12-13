@@ -22,60 +22,23 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.transport;
-
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import java.util.UUID;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+package tools.simrail.backend.common.vehicle;
 
 /**
- * A transport entry (one wagon or locomotive for journey).
+ * The status of the vehicle composition stored in the database.
  */
-@Getter
-@Setter
-@NoArgsConstructor
-@Entity(name = "sit_vehicle")
-@Table(indexes = {
-  @Index(columnList = "journeyId, indexInGroup"),
-})
-public final class JourneyVehicle {
+public enum JourneyVehicleStatus {
 
   /**
-   * The id of the specific vehicle.
+   * The journey really uses the vehicle composition that is returned.
    */
-  @Id
-  private long id;
-
+  REAL,
   /**
-   * The id of the journey to which this vehicle entry belongs.
+   * The vehicle composition of the journey is predicated based on data from previous journeys.
    */
-  @Column(nullable = false)
-  private UUID journeyId;
+  PREDICTION,
   /**
-   * The index where this vehicle is loaded in the vehicle group.
+   * The vehicle composition cannot be predicated and is not yet confirmed.
    */
-  @Column
-  private int indexInGroup;
-
-  /**
-   * The id of the used railcar in the group.
-   */
-  @Column(nullable = false)
-  private UUID railcarId;
-  /**
-   * The weight of the load, null if no load is provided for the vehicle.
-   */
-  @Column
-  private Integer loadWeight;
-  /**
-   * The load of the vehicle, null if no load is provided for the vehicle.
-   */
-  @Column
-  private JourneyVehicleLoad load;
+  UNKNOWN,
 }
