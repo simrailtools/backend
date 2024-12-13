@@ -32,10 +32,12 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import java.time.OffsetDateTime;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.UpdateTimestamp;
 
 /**
  * A vehicle entry (one wagon or locomotive for journey).
@@ -57,6 +59,11 @@ public final class JourneyVehicle {
   @Id
   @GeneratedValue
   private Long id;
+  /**
+   * The time and date when this vehicle information was last updated.
+   */
+  @UpdateTimestamp
+  private OffsetDateTime updateTime;
 
   /**
    * The id of the journey to which this vehicle entry belongs.
