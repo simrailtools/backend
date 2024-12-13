@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.transport;
+package tools.simrail.backend.common.vehicle;
 
 import org.springframework.data.repository.ListCrudRepository;
 

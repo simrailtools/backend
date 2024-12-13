@@ -22,10 +22,13 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.transport;
+package tools.simrail.backend.common.vehicle;
 
 import jakarta.annotation.Nonnull;
 
+/**
+ * An enumeration of the different loads that can be transported by a vehicle.
+ */
 public enum JourneyVehicleLoad {
 
   TIE,

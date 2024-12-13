@@ -86,8 +86,7 @@ class JourneyV1Controller {
       @Parameter(
         name = "If-Modified-Since",
         in = ParameterIn.HEADER,
-        description = "If provided the response body is empty in case the data didn't change since the given date"
-      ),
+        description = "If provided the response body is empty in case the data didn't change since the given date"),
     },
     responses = {
       @ApiResponse(
@@ -226,7 +225,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<PaginatedResponseDto<JourneySummaryDto>> byEvent(
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byEvent(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
@@ -251,7 +250,7 @@ class JourneyV1Controller {
     }
 
     var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
-    var response = this.journeyService.findByEvent(
+    return this.journeyService.findByEvent(
       page,
       limit,
       serverIdFilter,
@@ -260,6 +259,56 @@ class JourneyV1Controller {
       journeyNumber,
       journeyCategory,
       transportTypes);
-    return ResponseEntity.ok(response);
+  }
+
+  /**
+   * Finds journeys that have the given railcar in their vehicle composition.
+   */
+  @GetMapping("/by-vehicle")
+  @Operation(
+    summary = "Finds journeys that are using the given railcar in their vehicle composition",
+    description = """
+      Finds journeys that use the given railcar in their vehicle composition on the given date. The result can
+      optionally be filtered for a specific server id. The results might be incomplete or incorrect for journeys that
+      were not active yet, as the result data will be based on predictions and not the real composition of the journey.
+      """,
+    parameters = {
+      @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
+      @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "railcar", description = "The id of the railcar that must be included in the vehicle composition of the journey"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        useReturnTypeSchema = true,
+        description = "The journeys were successfully resolved based on the given filter parameters",
+        content = @Content(mediaType = "application/json")),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byRailcar(
+    @RequestParam(name = "page", required = false) @Min(1) Integer page,
+    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
+    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "date", required = false) LocalDate date,
+    @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
+  ) {
+    if (date == null) {
+      // default the requested date to the current date
+      date = LocalDate.now(ZoneOffset.UTC);
+    }
+
+    var railcarIdFilter = java.util.UUID.fromString(railcarId);
+    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
+    return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
   }
 }

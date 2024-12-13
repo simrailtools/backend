@@ -171,6 +171,39 @@ class JourneyService {
   }
 
   /**
+   * Finds all journeys that have the given railcar in their vehicle composition on the given date.
+   *
+   * @param page      the page of results to return, defaults to 1.
+   * @param limit     the maximum amount of journeys to return, defaults to 20.
+   * @param serverId  the id of the server to return journeys on.
+   * @param date      the date to filter the journeys on.
+   * @param railcarId the railcar that must be included in the vehicle composition of the journey.
+   * @return a paginated response holding all journeys that use the given railcar on the given date.
+   */
+  @Cacheable(cacheNames = "journey_search_cache", sync = true)
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByRailcar(
+    @Nullable Integer page,
+    @Nullable Integer limit,
+    @Nullable UUID serverId,
+    @Nonnull LocalDate date,
+    @Nonnull UUID railcarId
+  ) {
+    // build the pagination parameter
+    int indexedPage = Objects.requireNonNullElse(page, 1) - 1;
+    int requestedLimit = Objects.requireNonNullElse(limit, 20);
+    int offset = requestedLimit * indexedPage;
+
+    // query and map the results
+    var queriedItems = this.journeyRepository.findJourneySummariesByRailcar(
+      serverId,
+      date,
+      railcarId,
+      requestedLimit + 1, // request one more to check if more elements are available
+      offset);
+    return this.filterJourneys(requestedLimit, queriedItems);
+  }
+
+  /**
    * Filters the journey summary query results and maps them according to the request parameters into a paginated
    * response DTO.
    *

@@ -153,4 +153,41 @@ public interface ApiJourneyRepository extends JourneyRepository {
     @Param("limit") int limit,
     @Param("offset") int offset
   );
+
+  /**
+   * Finds journeys that use the given railcar in their vehicle composition on the given date.
+   *
+   * @param serverId  the id of the server to return journeys on.
+   * @param date      the date of one of the events of the journey to return journeys of.
+   * @param railcarId the id of the railcar that must be included in the vehicle composition of a journey.
+   * @param limit     the maximum amount of journeys to return.
+   * @param offset    the offset to start returning item from.
+   * @return a summary projection of the journeys matching the given filter parameters.
+   */
+  @Query(value = """
+    WITH distinct_journeys AS (
+      SELECT DISTINCT ON (j.id)
+        j.id, j.server_id, j.first_seen_time, j.last_seen_time, j.cancelled, je.scheduled_time
+      FROM sit_journey j
+      JOIN sit_journey_event je ON j.id = je.journey_id
+      JOIN sit_vehicle v ON j.id = v.journey_id
+      WHERE
+        (:serverId IS NULL OR j.server_id = :serverId)
+        AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
+             je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
+        AND v.railcar_id = :railcarId
+    )
+    SELECT *
+    FROM distinct_journeys
+    ORDER BY scheduled_time
+    LIMIT :limit
+    OFFSET :offset
+    """, nativeQuery = true)
+  List<JourneySummaryProjection> findJourneySummariesByRailcar(
+    @Param("serverId") UUID serverId,
+    @Param("date") LocalDate date,
+    @Param("railcarId") UUID railcarId,
+    @Param("limit") int limit,
+    @Param("offset") int offset
+  );
 }
