@@ -73,8 +73,7 @@ class DispatchPostV1Controller {
       @Parameter(
         name = "If-Modified-Since",
         in = ParameterIn.HEADER,
-        description = "If provided the response body is empty in case the data didn't change since the given date"
-      ),
+        description = "If provided the response body is empty in case the data didn't change since the given date"),
     },
     responses = {
       @ApiResponse(
