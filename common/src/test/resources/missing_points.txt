@@ -13,7 +13,6 @@ Ostojow
 Idzikowice Roz.18
 Kamień
 Piaski koło Kielc
-Raciborowice
 Warszawa Praga WPT C
 Wisła
 Starzyny R5
@@ -33,7 +32,6 @@ Knapówka R2
 Dąbrowa Górnicza Huta Katowice R7
 Szobiszowice
 Iława Główna PZS R1-R2
-Kraków Przedmieście
 Wieprz
 Wrocław Brochów PODG
 Wrocław Świebodzki
