@@ -49,12 +49,6 @@
     ]
   },
   {
-    "name": "Tunel",
-    "ext_point_ids": [
-      "4595"
-    ]
-  },
-  {
     "name": "Sędziszów",
     "ext_point_ids": [
       "3795"
@@ -73,6 +67,12 @@
       "613",
       "614",
       "5461"
+    ]
+  },
+  {
+    "name": "Koniecpol",
+    "ext_point_ids": [
+      "1828"
     ]
   },
   {
@@ -121,9 +121,28 @@
     ]
   },
   {
-    "name": "Warszawa Podskarbińska",
+    "name": "Warszawa Rembertów",
     "ext_point_ids": [
-      "4758"
+      "4795"
+    ]
+  },
+  {
+    "name": "Dłubnia",
+    "ext_point_ids": [
+      "783",
+      "784"
+    ]
+  },
+  {
+    "name": "Kraków Płaszów",
+    "ext_point_ids": [
+      "2003"
+    ]
+  },
+  {
+    "name": "Kraków Olsza",
+    "ext_point_ids": [
+      "1998"
     ]
   }
 ]
