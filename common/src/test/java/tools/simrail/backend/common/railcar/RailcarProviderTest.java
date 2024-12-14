@@ -49,7 +49,7 @@ public final class RailcarProviderTest {
   @Test
   void testAllRailcarsWereLoaded() {
     var railcars = this.railcarProvider.railcars;
-    Assertions.assertEquals(74, railcars.size());
+    Assertions.assertEquals(95, railcars.size());
   }
 
   @Test
@@ -72,6 +72,18 @@ public final class RailcarProviderTest {
       var railcardApiId = railcar.getApiId();
       if (!seenRailcarApiIds.add(railcardApiId)) {
         Assertions.fail("Found duplicate railcard api id: " + railcardApiId);
+      }
+    }
+  }
+
+  @Test
+  void testAllRailcarDisplayNamesAreUnique() {
+    var railcars = this.railcarProvider.railcars;
+    var seenRailcarApiIds = new HashSet<>();
+    for (var railcar : railcars) {
+      var railcardDisplayName = railcar.getDisplayName();
+      if (!seenRailcarApiIds.add(railcardDisplayName)) {
+        Assertions.fail("Found duplicate railcard display name id: " + railcardDisplayName);
       }
     }
   }
