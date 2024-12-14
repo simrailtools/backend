@@ -95,6 +95,8 @@ public final class RailcarProviderTest {
     for (var railcar : railcars) {
       Assertions.assertNotNull(railcar.getId());
       Assertions.assertNotNull(railcar.getApiId());
+      Assertions.assertNotNull(railcar.getProducer());
+      Assertions.assertNotNull(railcar.getDisplayName());
       Assertions.assertNotNull(railcar.getTypeGroupId());
       Assertions.assertNotNull(railcar.getDesignation());
       Assertions.assertNotNull(railcar.getRailcarType());
