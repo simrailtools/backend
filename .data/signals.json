@@ -1142,13 +1142,13 @@
   {
     "id": "L448_5",
     "point_id": "dfd1c6a1-5b06-4369-907d-0700e998ea87",
-    "track": 2,
+    "track": 3,
     "platform": 1
   },
   {
     "id": "L448_6",
     "point_id": "dfd1c6a1-5b06-4369-907d-0700e998ea87",
-    "track": 1,
+    "track": 4,
     "platform": 1
   },
   {
@@ -1250,50 +1250,50 @@
   {
     "id": "L448_23",
     "point_id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
-    "track": 1,
+    "track": 3,
     "platform": 1
   },
   {
     "id": "L448_19N",
     "point_id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
-    "track": 1,
+    "track": 3,
     "platform": 1
   },
   {
     "id": "L448_22",
     "point_id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
-    "track": 2,
+    "track": 4,
     "platform": 2
   },
   {
     "id": "L448_26N",
     "point_id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
-    "track": 2,
+    "track": 4,
     "platform": 2
   },
   {
     "id": "WSD_D",
     "point_id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
-    "track": 2,
-    "platform": 2
+    "track": 3,
+    "platform": 1
   },
   {
     "id": "L448_27N",
     "point_id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
-    "track": 2,
-    "platform": 2
+    "track": 3,
+    "platform": 1
   },
   {
     "id": "L448_28",
     "point_id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
-    "track": 1,
-    "platform": 1
+    "track": 4,
+    "platform": 2
   },
   {
     "id": "WSD_C",
     "point_id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
-    "track": 1,
-    "platform": 1
+    "track": 4,
+    "platform": 2
   },
   {
     "id": "WSD_J12",
@@ -2348,13 +2348,13 @@
   {
     "id": "L8_3043",
     "point_id": "68205f43-0800-4a92-8d5f-9acf7ecfd035",
-    "track": 2,
+    "track": 1,
     "platform": 1
   },
   {
     "id": "L8_3031N",
     "point_id": "68205f43-0800-4a92-8d5f-9acf7ecfd035",
-    "track": 2,
+    "track": 1,
     "platform": 1
   },
   {
@@ -2397,25 +2397,25 @@
     "id": "1937_BT_O",
     "point_id": "e9854497-7dee-4951-a23b-587a72ccdc61",
     "track": 1,
-    "platform": 1
+    "platform": 2
   },
   {
     "id": "1937_Bt_F",
     "point_id": "e9854497-7dee-4951-a23b-587a72ccdc61",
     "track": 1,
-    "platform": 1
+    "platform": 2
   },
   {
     "id": "1937_Bt_D",
     "point_id": "e9854497-7dee-4951-a23b-587a72ccdc61",
     "track": 2,
-    "platform": 1
+    "platform": 2
   },
   {
     "id": "1937_BT_R1",
     "point_id": "e9854497-7dee-4951-a23b-587a72ccdc61",
     "track": 2,
-    "platform": 1
+    "platform": 2
   },
   {
     "id": "1952_KG_U11",

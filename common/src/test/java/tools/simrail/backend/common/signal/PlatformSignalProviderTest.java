@@ -29,10 +29,10 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Stream;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -106,8 +106,17 @@ public class PlatformSignalProviderTest {
   }
 
   @Test
-  @Disabled("The new timetable has some contradictory platform info, so this test does nothing")
   void testAllScheduledPlatformsHaveASignalMapping() {
+    var pointsWithWrongPlatformMapping = Set.of(
+      "Olkusz", // wrong platform mapping
+      "Sławków", // platform empty, track 0
+      "Sędziszów", // wrong platform mapping
+      "Dąbrowa Górnicza", // wrong platform mapping
+      "Opoczno Południe", // wrong platform mapping
+      "Dąbrowa Górnicza Gołonóg", // wrong platform mapping
+      "Dąbrowa Górnicza Ząbkowice" // wrong platform mapping
+    );
+
     var missingPoints = new HashSet<String>();
     var trainRuns = TimetableHolder.getDefaultServerTimetable();
     for (var trainRun : trainRuns) {
@@ -116,7 +125,10 @@ public class PlatformSignalProviderTest {
         var stopType = timetableEntry.get("stopType").asText();
         var pointName = timetableEntry.get("nameOfPoint").asText();
         var platformString = timetableEntry.get("platform").asText();
-        if (stopType.equals("CommercialStop") && !platformString.equals("null") && !missingPoints.contains(pointName)) {
+        if (stopType.equals("CommercialStop")
+          && !platformString.equals("null")
+          && !missingPoints.contains(pointName)
+          && !pointsWithWrongPlatformMapping.contains(pointName)) {
           // get the point associated with the stop
           var pointId = timetableEntry.get("pointId").asText();
           var point = this.pointProvider.findPointByPointId(pointId);
@@ -140,7 +152,7 @@ public class PlatformSignalProviderTest {
       }
     }
 
-    Assertions.assertEquals(91, missingPoints.size(), () -> {
+    Assertions.assertEquals(93, missingPoints.size(), () -> {
       var joinedStationNames = String.join(", ", missingPoints);
       return "Found unexpected count of stations without platform signal info: " + joinedStationNames;
     });
