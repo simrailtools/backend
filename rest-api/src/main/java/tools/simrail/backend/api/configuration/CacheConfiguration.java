@@ -97,4 +97,16 @@ public class CacheConfiguration {
         .expireAfterWrite(5, TimeUnit.SECONDS)
         .build());
   }
+
+  /**
+   * Cache for vehicle sequences (expires after 2 minutes).
+   */
+  @Bean
+  public @Nonnull Cache vehicleSequenceCache() {
+    return new CaffeineCache(
+      "vehicle_sequence_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(2, TimeUnit.MINUTES)
+        .build());
+  }
 }
