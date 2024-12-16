@@ -1,7 +1,7 @@
 [versions]
 # plugins
 protobuf = "0.9.4"
-springBoot = "3.3.6"
+springBoot = "3.4.0"
 spotless = "7.0.0.BETA4"
 checkstyleTools = "10.21.0"
 springDependencyManagement = "1.1.6"
@@ -13,7 +13,7 @@ lombok = "1.18.36"
 jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
-springDocOpenApi = "2.6.0"
+springDocOpenApi = "2.7.0"
 springGrpc = "0.3.0-SNAPSHOT"
 
 # testing
