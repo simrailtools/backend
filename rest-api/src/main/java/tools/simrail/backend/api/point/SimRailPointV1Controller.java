@@ -81,9 +81,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The points were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The points were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",
@@ -114,9 +112,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The point with the given id was successfully resolved",
-        content = @Content(mediaType = "application/json")),
+        description = "The point with the given id was successfully resolved"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",
@@ -153,9 +149,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The points that were successfully resolved based on the given input ids",
-        content = @Content(mediaType = "application/json")),
+        description = "The points that were successfully resolved based on the given input ids"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",
@@ -194,9 +188,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The point with the given id was successfully resolved",
-        content = @Content(mediaType = "application/json")),
+        description = "The point with the given id was successfully resolved"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",
@@ -236,9 +228,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The search was successfully executed based on the given search query",
-        content = @Content(mediaType = "application/json")),
+        description = "The search was successfully executed based on the given search query"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",
@@ -278,9 +268,7 @@ class SimRailPointV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The search was successfully executed based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The search was successfully executed based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid",

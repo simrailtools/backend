@@ -75,9 +75,7 @@ class VehicleV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The vehicle sequence for the journey with the given id was successfully resolved",
-        content = @Content(mediaType = "application/json")),
+        description = "The vehicle sequence for the journey with the given id was successfully resolved"),
       @ApiResponse(
         responseCode = "304",
         description = "The request was successful but the content was not modified since the last request",

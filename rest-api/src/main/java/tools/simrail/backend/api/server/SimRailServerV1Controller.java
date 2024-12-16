@@ -27,7 +27,6 @@ package tools.simrail.backend.api.server;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.enums.ParameterIn;
-import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -75,10 +74,7 @@ class SimRailServerV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        content = @Content(
-          mediaType = "application/json",
-          array = @ArraySchema(schema = @Schema(implementation = SimRailServerDto.class))
-        )),
+        description = "The servers were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the given filter parameters is invalid",
@@ -113,10 +109,7 @@ class SimRailServerV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        content = @Content(
-          mediaType = "application/json",
-          schema = @Schema(implementation = SimRailServerDto.class)
-        )),
+        description = "The server was successfully resolved based on the given id"),
       @ApiResponse(
         responseCode = "304",
         description = "The request was successful but the content was not modified since the last request",
@@ -163,10 +156,7 @@ class SimRailServerV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        content = @Content(
-          mediaType = "application/json",
-          schema = @Schema(implementation = SimRailServerDto.class)
-        )),
+        description = "The server was successfully resolved based on the given server code"),
       @ApiResponse(
         responseCode = "304",
         description = "The request was successful but the content was not modified since the last request",

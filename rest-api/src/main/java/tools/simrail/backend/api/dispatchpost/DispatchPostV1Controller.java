@@ -79,9 +79,7 @@ class DispatchPostV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The dispatch post was successfully resolved based on the given id",
-        content = @Content(mediaType = "application/json")),
+        description = "The dispatch post was successfully resolved based on the given id"),
       @ApiResponse(
         responseCode = "304",
         description = "The request was successful but the content was not modified since the last request",
@@ -134,9 +132,7 @@ class DispatchPostV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The dispatch posts were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The dispatch posts were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One or multiple of the given filter parameters were invalid",

@@ -92,8 +92,7 @@ class JourneyV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        description = "The journey with the given id was successfully resolved",
-        content = @Content(mediaType = "application/json", schema = @Schema(implementation = JourneyDto.class))),
+        description = "The journey with the given id was successfully resolved"),
       @ApiResponse(
         responseCode = "304",
         description = "The request was successful but the content was not modified since the last request",
@@ -146,9 +145,7 @@ class JourneyV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The journeys were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The journeys were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
@@ -213,9 +210,7 @@ class JourneyV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The journeys were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The journeys were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
@@ -283,9 +278,7 @@ class JourneyV1Controller {
     responses = {
       @ApiResponse(
         responseCode = "200",
-        useReturnTypeSchema = true,
-        description = "The journeys were successfully resolved based on the given filter parameters",
-        content = @Content(mediaType = "application/json")),
+        description = "The journeys were successfully resolved based on the given filter parameters"),
       @ApiResponse(
         responseCode = "400",
         description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
