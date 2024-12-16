@@ -73,7 +73,8 @@ class DispatchPostV1Controller {
       @Parameter(
         name = "If-Modified-Since",
         in = ParameterIn.HEADER,
-        description = "If provided the response body is empty in case the data didn't change since the given date"),
+        description = "If provided the response body is empty in case the data didn't change since the given date",
+        schema = @Schema(type = "string", format = "date-time", example = "Wed, 21 Oct 2015 07:28:00 GMT")),
     },
     responses = {
       @ApiResponse(
@@ -88,6 +89,10 @@ class DispatchPostV1Controller {
       @ApiResponse(
         responseCode = "400",
         description = "The given dispatch post id is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "404",
+        description = "No dispatch post with the given id exists",
         content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "500",
