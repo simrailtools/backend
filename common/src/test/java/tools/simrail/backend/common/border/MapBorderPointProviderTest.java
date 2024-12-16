@@ -54,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(22, borderPoints.size());
+    Assertions.assertEquals(31, borderPoints.size());
   }
 
   @Test

@@ -49,7 +49,7 @@ public final class RailcarProviderTest {
   @Test
   void testAllRailcarsWereLoaded() {
     var railcars = this.railcarProvider.railcars;
-    Assertions.assertEquals(74, railcars.size());
+    Assertions.assertEquals(95, railcars.size());
   }
 
   @Test
@@ -77,12 +77,26 @@ public final class RailcarProviderTest {
   }
 
   @Test
+  void testAllRailcarDisplayNamesAreUnique() {
+    var railcars = this.railcarProvider.railcars;
+    var seenRailcarApiIds = new HashSet<>();
+    for (var railcar : railcars) {
+      var railcardDisplayName = railcar.getDisplayName();
+      if (!seenRailcarApiIds.add(railcardDisplayName)) {
+        Assertions.fail("Found duplicate railcard display name id: " + railcardDisplayName);
+      }
+    }
+  }
+
+  @Test
   void testAllRailcardModelsAreValid() {
     var year1900 = Year.of(1900);
     var railcars = this.railcarProvider.railcars;
     for (var railcar : railcars) {
       Assertions.assertNotNull(railcar.getId());
       Assertions.assertNotNull(railcar.getApiId());
+      Assertions.assertNotNull(railcar.getProducer());
+      Assertions.assertNotNull(railcar.getDisplayName());
       Assertions.assertNotNull(railcar.getTypeGroupId());
       Assertions.assertNotNull(railcar.getDesignation());
       Assertions.assertNotNull(railcar.getRailcarType());

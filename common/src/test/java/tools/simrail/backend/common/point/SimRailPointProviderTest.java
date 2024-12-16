@@ -25,6 +25,9 @@
 package tools.simrail.backend.common.point;
 
 import com.fasterxml.jackson.databind.node.ArrayNode;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
@@ -50,7 +53,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(404, points.size());
+    Assertions.assertEquals(536, points.size());
   }
 
   @Test
@@ -180,7 +183,7 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
-  void testAllTimetableEntriesHaveAPointMapping() {
+  void testAllTimetableEntriesHaveAPointMapping() throws IOException {
     var missingPoints = new HashSet<String>();
     var trainRuns = TimetableHolder.getDefaultServerTimetable();
     for (var trainRun : trainRuns) {
@@ -195,7 +198,10 @@ public final class SimRailPointProviderTest {
       }
     }
 
-    Assertions.assertEquals(111, missingPoints.size(), () -> {
+    // remove all missing points that are known to be missing
+    var knownMissingPoints = Files.readAllLines(Path.of("src/test/resources/missing_points.txt"));
+    knownMissingPoints.forEach(missingPoints::remove);
+    Assertions.assertTrue(missingPoints.isEmpty(), () -> {
       var allMissingPointNames = String.join(", ", missingPoints);
       return "Found unexpected count of missing points: " + allMissingPointNames;
     });

@@ -25,7 +25,8 @@
 package tools.simrail.backend.collector.dispatchpost;
 
 import jakarta.annotation.Nonnull;
-import java.util.Set;
+import java.util.HashSet;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -119,10 +120,11 @@ final class SimRailDispatchPostCollector {
         postEntity.setPointId(point.getId());
 
         // update the image urls of the post (in case they changed)
-        var newImageUrls = Set.of(
+        var allImages = List.of(
           dispatchPost.getImage1Url(),
           dispatchPost.getImage2Url(),
           dispatchPost.getImage3Url());
+        var newImageUrls = new HashSet<>(allImages);
         var currentImageUrls = postEntity.getImageUrls();
         if (!newImageUrls.equals(currentImageUrls)) {
           postEntity.setImageUrls(newImageUrls);
