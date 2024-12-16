@@ -78,8 +78,9 @@ public final class SimRailAwsApiClientTest {
       Assertions.assertTrue(trainRun.getContinuationTrainNumber().isEmpty());
       Assertions.assertTrue(trainRun.getLength() > 0);
       Assertions.assertTrue(trainRun.getWeight() > 0);
-      Assertions.assertNotNull(trainRun.getTractionUnitName());
-      Assertions.assertFalse(trainRun.getTractionUnitName().isEmpty());
+      // todo: re-enable when SimRail fixed this in their timetable
+      // Assertions.assertNotNull(trainRun.getTractionUnitName());
+      // Assertions.assertFalse(trainRun.getTractionUnitName().isEmpty());
 
       var timetable = trainRun.getTimetable();
       Assertions.assertNotNull(timetable);
