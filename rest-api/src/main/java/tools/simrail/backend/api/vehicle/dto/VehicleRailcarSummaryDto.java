@@ -26,21 +26,25 @@ package tools.simrail.backend.api.vehicle.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
+import java.util.UUID;
+import tools.simrail.backend.common.railcar.RailcarType;
 
 /**
- * DTO for a single vehicle in a vehicle composition.
+ * Summary information about a railcar.
  */
-public record VehicleDto(
-  @Schema(description = "The index (0 based) where the vehicle is located in the composition")
-  int indexInGroup,
-  @Schema(description = "The load weight of the vehicle, can be null in case nothing is loaded")
-  @Nullable Integer loadWeight,
-  @Schema(description = "The load of the vehicle, can be null in case nothing is loaded")
-  @Nullable JourneyVehicleLoad load,
-  @Schema(description = "Summary information about the railcar used for this vehicle")
-  @Nonnull VehicleRailcarSummaryDto railcar
+public record VehicleRailcarSummaryDto(
+  @Schema(description = "The unique identifier of the railcar")
+  @Nonnull UUID id,
+  @Schema(description = "The display name of the railcar")
+  @Nonnull String name,
+  @Schema(description = "The grouping type of the railcar")
+  @Nonnull RailcarType type,
+  @Schema(description = "The weight of the railcar in tons")
+  double weight,
+  @Schema(description = "The width of the railcar in meters")
+  double width,
+  @Schema(description = "The length of the railcar in meters")
+  double length
 ) {
 
 }

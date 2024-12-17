@@ -64,19 +64,13 @@ public final class VehicleCompositionDtoConverter implements Function<List<Journ
     var mappedVehicles = vehicles.stream()
       .map(vehicle -> {
         var railcar = this.railcarProvider.findRailcarById(vehicle.getRailcarId()).orElseThrow();
-        var railcarDto = new RailcarDto(
+        var railcarDto = new VehicleRailcarSummaryDto(
           railcar.getId(),
           railcar.getDisplayName(),
           railcar.getRailcarType(),
-          railcar.getTypeGroupId(),
-          railcar.getRequiredDlcId(),
-          railcar.getDesignation(),
-          railcar.getProducer(),
-          railcar.getProductionYears(),
           railcar.getWeight(),
           railcar.getWidth(),
-          railcar.getLength(),
-          railcar.getMaximumSpeed());
+          railcar.getLength());
         return new VehicleDto(vehicle.getIndexInGroup(), vehicle.getLoadWeight(), vehicle.getLoad(), railcarDto);
       })
       .sorted(VEHICLE_INDEX_COMPARATOR)
