@@ -40,6 +40,7 @@ import org.springframework.http.ProblemDetail;
 import org.springframework.web.bind.MissingServletRequestParameterException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.servlet.NoHandlerFoundException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
 
 /**
@@ -152,7 +153,7 @@ public final class GlobalExceptionHandler {
   /**
    * Handles the case when a requested resource does not exist and resolves it to a 404 response.
    */
-  @ExceptionHandler(NoResourceFoundException.class)
+  @ExceptionHandler({NoResourceFoundException.class, NoHandlerFoundException.class})
   public @Nonnull ProblemDetail handleUnknownResource(@Nonnull HttpServletRequest request) {
     var problemDetail = ProblemDetail.forStatus(HttpStatus.NOT_FOUND);
     problemDetail.setType(NOT_FOUND);
