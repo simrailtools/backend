@@ -1,5 +1,3 @@
-import com.google.protobuf.gradle.id
-
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
@@ -24,8 +22,11 @@ import com.google.protobuf.gradle.id
  * SOFTWARE.
  */
 
+import com.google.protobuf.gradle.id
+
 plugins {
   alias(libs.plugins.protobuf)
+  alias(libs.plugins.downloadTask)
 }
 
 dependencyManagement {
@@ -74,6 +75,19 @@ protobuf {
           option("jakarta_omit")
         }
       }
+    }
+  }
+}
+
+// downloads rapidoc for displaying the rest api documentation
+tasks.withType<ProcessResources> {
+  doLast {
+    download.run {
+      overwrite(true)
+      onlyIfModified(true)
+      useETag("strongOnly")
+      src("https://unpkg.com/rapidoc/dist/rapidoc-min.js")
+      dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
     }
   }
 }

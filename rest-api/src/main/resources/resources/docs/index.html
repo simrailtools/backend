@@ -1,0 +1,64 @@
+<!--
+  ~ This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
+  ~
+  ~ Copyright (c) 2024 Pasqual Koschmieder and contributors
+  ~
+  ~ Permission is hereby granted, free of charge, to any person obtaining a copy
+  ~ of this software and associated documentation files (the "Software"), to deal
+  ~ in the Software without restriction, including without limitation the rights
+  ~ to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+  ~ copies of the Software, and to permit persons to whom the Software is
+  ~ furnished to do so, subject to the following conditions:
+  ~
+  ~ The above copyright notice and this permission notice shall be included in all
+  ~ copies or substantial portions of the Software.
+  ~
+  ~ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+  ~ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+  ~ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+  ~ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+  ~ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+  ~ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+  ~ SOFTWARE.
+  -->
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="robots" content="nofollow, notranslate">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=2.0">
+  <meta name="keywords" content="simrail, sit, rest api, swagger ui, api documentation">
+  <meta name="description" content="SIT rest api documentation">
+  <link rel="icon" type="image/png" href="favicon.png">
+  <title>SIT API Docs</title>
+  <script type="module" src="rapidoc-min.js"></script>
+</head>
+<body>
+<rapi-doc
+  id="docs"
+  theme="dark"
+  spec-url="openapi"
+  bg-color="#14191f"
+  text-color="#aec2e0"
+  primary-color="#00ACE5"
+  render-style="read"
+  load-fonts="false"
+  show-header="false"
+  show-curl-before-try="true"
+  allow-spec-url-load="false"
+  allow-spec-file-load="false"
+  allow-spec-file-download="true"
+  allow-server-selection="false"
+  show-method-in-nav-bar="as-colored-block"
+>
+  <div slot="nav-logo" style="display: flex; align-items: center; justify-content: center;">
+    <img
+      src="favicon.png"
+      alt="SIT logo"
+      style="width:30px; height:30px; margin-right: 7px;"/>
+    <span style="color:#fff; text-align: center"><b>SimRail Information Tools</b></span>
+  </div>
+</rapi-doc>
+</body>
+</html>

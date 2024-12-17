@@ -90,10 +90,12 @@ subprojects {
   }
 
   tasks.withType<ProcessResources> {
-    val tokens = mapOf(
-      "project.version" to project.version,
-    )
-    filter(ReplaceTokens::class, mapOf("tokens" to tokens))
+    filesMatching("*.properties") {
+      val tokens = mapOf(
+        "project.version" to project.version,
+      )
+      filter(ReplaceTokens::class, mapOf("tokens" to tokens))
+    }
   }
 
   tasks.withType<Test> {
