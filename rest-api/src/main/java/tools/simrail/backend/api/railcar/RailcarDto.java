@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.vehicle.dto;
+package tools.simrail.backend.api.railcar;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
@@ -33,7 +33,7 @@ import tools.simrail.backend.common.railcar.RailcarType;
 /**
  * DTO for information about a railcar.
  */
-public record RailcarDto(
+record RailcarDto(
   @Schema(description = "The unique identifier of the railcar")
   @Nonnull UUID id,
   @Schema(description = "The display name of the railcar")
