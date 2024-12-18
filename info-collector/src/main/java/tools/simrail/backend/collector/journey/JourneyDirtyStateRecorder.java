@@ -238,6 +238,7 @@ final class JourneyDirtyStateRecorder {
     // default information for the update frame
     var updateFrameBuilder = JourneyUpdateFrame.newBuilder()
       .setUpdateType(UpdateType.UPDATE)
+      .setServerId(this.server.id().toString())
       .setJourneyId(this.original.getId().toString());
 
     // insert information if the driver steam id changed

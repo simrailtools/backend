@@ -54,6 +54,7 @@ final class DispatchPostUpdateHandler {
     var updateFrame = DispatchPostUpdateFrame.newBuilder()
       .setUpdateType(UpdateType.UPDATE)
       .setPostId(post.getId().toString())
+      .setServerId(post.getServerId().toString())
       .addAllDispatcherSteamIds(post.getDispatcherSteamIds())
       .build();
     this.internalRpcEventBusService.publishDispatchPostUpdate(updateFrame);
@@ -68,6 +69,7 @@ final class DispatchPostUpdateHandler {
     var updateFrame = DispatchPostUpdateFrame.newBuilder()
       .setUpdateType(UpdateType.ADD)
       .setPostId(post.getId().toString())
+      .setServerId(post.getServerId().toString())
       .build();
     this.internalRpcEventBusService.publishDispatchPostUpdate(updateFrame);
   }
@@ -81,6 +83,7 @@ final class DispatchPostUpdateHandler {
     var updateFrame = DispatchPostUpdateFrame.newBuilder()
       .setUpdateType(UpdateType.REMOVE)
       .setPostId(post.getId().toString())
+      .setServerId(post.getServerId().toString())
       .build();
     this.internalRpcEventBusService.publishDispatchPostUpdate(updateFrame);
   }
