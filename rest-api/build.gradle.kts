@@ -52,6 +52,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-cache")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
+  implementation("org.springframework.boot:spring-boot-starter-websocket")
   implementation("org.springframework.boot:spring-boot-starter-validation")
   implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
 
@@ -61,11 +62,11 @@ dependencies {
 
 protobuf {
   protoc {
-    artifact = "com.google.protobuf:protoc:${dependencyManagement.importedProperties["protobuf-java.version"]}"
+    artifact = "com.google.protobuf:protoc"
   }
   plugins {
     id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java:${dependencyManagement.importedProperties["grpc.version"]}"
+      artifact = "io.grpc:protoc-gen-grpc-java"
     }
   }
   generateProtoTasks {
@@ -73,6 +74,7 @@ protobuf {
       it.plugins {
         id("grpc") {
           option("jakarta_omit")
+          option("@generated=omit")
         }
       }
     }

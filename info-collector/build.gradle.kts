@@ -57,11 +57,11 @@ dependencies {
 
 protobuf {
   protoc {
-    artifact = "com.google.protobuf:protoc:${dependencyManagement.importedProperties["protobuf-java.version"]}"
+    artifact = "com.google.protobuf:protoc"
   }
   plugins {
     id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java:${dependencyManagement.importedProperties["grpc.version"]}"
+      artifact = "io.grpc:protoc-gen-grpc-java"
     }
   }
   generateProtoTasks {
@@ -69,6 +69,7 @@ protobuf {
       it.plugins {
         id("grpc") {
           option("jakarta_omit")
+          option("@generated=omit")
         }
       }
     }
