@@ -1,11 +1,11 @@
 [versions]
 # plugins
 protobuf = "0.9.4"
-springBoot = "3.4.0"
+springBoot = "3.4.1"
 downloadTask = "5.6.0"
 spotless = "7.0.0.BETA4"
 checkstyleTools = "10.21.0"
-springDependencyManagement = "1.1.6"
+springDependencyManagement = "1.1.7"
 
 # direct dependencies
 jts = "1.20.0"
