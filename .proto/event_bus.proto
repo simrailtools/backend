@@ -66,7 +66,7 @@ message JourneyUpdateFrame {
   SignalInfoWrapper next_signal = 5;
 
   // The speed that the journey is travelling at, not present if the speed didn't change.
-  optional double speed = 6;
+  optional uint32 speed = 6;
   // The current position of the journey, not present if the position didn't change.
   optional GeoPosition position = 7;
 }
