@@ -30,13 +30,13 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
+import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
 import tools.simrail.backend.api.event.dto.EventFrameType;
 import tools.simrail.backend.api.event.session.EventSessionManager;
-import tools.simrail.backend.api.event.session.EventWebsocketSession;
 
 /**
  * Handler for a single fully upgraded websocket session, executing the event listening and message handling.
@@ -66,12 +66,21 @@ final class EventWebsocketHandler implements WebSocketHandler {
 
   @Override
   public void handleMessage(@Nonnull WebSocketSession session, @Nonnull WebSocketMessage<?> message) throws Exception {
-    if (message instanceof PongMessage) {
+    var eventSession = this.sessionManager.findSessionById(session.getId()).orElse(null);
+    if (eventSession == null) {
+      // open session that sends messages which is not registered on the server...
+      // this should usually not happen, but protect against it by closing the connection
+      session.close(CloseStatus.SERVER_ERROR);
+      return;
+    }
+
+    switch (message) {
+      // client send a ping (to check if the server is still active), respond with a pong
+      case PingMessage _ -> eventSession.sendPong();
       // received pong from the client, mark the client as alive
-      this.sessionManager.findSessionById(session.getId()).ifPresent(EventWebsocketSession::handlePongReceive);
-    } else {
-      // any other message aside pong is not acceptable, terminate the connection
-      session.close(CloseStatus.NOT_ACCEPTABLE);
+      case PongMessage _ -> eventSession.handlePongReceive();
+      // reject all other type of websocket messages being sent by the client
+      default -> session.close(CloseStatus.NOT_ACCEPTABLE);
     }
   }
 

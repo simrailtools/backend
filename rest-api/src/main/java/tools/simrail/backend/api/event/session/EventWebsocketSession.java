@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PingMessage;
+import org.springframework.web.socket.PongMessage;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
 import tools.simrail.backend.api.event.dto.EventFrameType;
@@ -75,6 +76,13 @@ public final class EventWebsocketSession {
    */
   public void sendPing() throws IOException {
     this.webSocketSession.sendMessage(new PingMessage());
+  }
+
+  /**
+   * Sends out a pong message to the client.
+   */
+  public void sendPong() throws IOException {
+    this.webSocketSession.sendMessage(new PongMessage());
   }
 
   /**
