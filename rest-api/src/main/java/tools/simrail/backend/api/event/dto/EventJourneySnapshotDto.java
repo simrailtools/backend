@@ -70,10 +70,10 @@ public final class EventJourneySnapshotDto {
     @Nonnull UUID journeyId,
     @Nonnull UUID serverId,
     @Nonnull JourneyTransport transport,
-    @Nonnull Integer speed,
+    @Nullable Integer speed,
     @Nullable String driverSteamId,
     @Nullable JourneySignalInfo nextSignal,
-    @Nonnull GeoPositionEntity position
+    @Nullable GeoPositionEntity position
   ) {
     this.journeyId = journeyId;
     this.serverId = serverId;
@@ -86,8 +86,10 @@ public final class EventJourneySnapshotDto {
     this.speed = speed;
     this.driverSteamId = driverSteamId;
 
-    this.positionLat = position.getLatitude();
-    this.positionLng = position.getLongitude();
+    if (position != null) {
+      this.positionLat = position.getLatitude();
+      this.positionLng = position.getLongitude();
+    }
 
     if (nextSignal != null) {
       this.nextSignalId = nextSignal.getName();
