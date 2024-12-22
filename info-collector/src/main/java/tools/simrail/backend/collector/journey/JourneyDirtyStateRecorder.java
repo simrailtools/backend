@@ -224,11 +224,9 @@ final class JourneyDirtyStateRecorder {
    */
   @SuppressWarnings("DataFlowIssue") // no, the journey id is not null
   public @Nonnull JourneyUpdateFrame buildUpdateFrame() {
-    if (this.foreignId != null || this.removed) {
-      // journey was seen for the first time or last time,
-      var updateType = this.removed ? UpdateType.REMOVE : UpdateType.ADD;
+    if (this.removed) {
       return JourneyUpdateFrame.newBuilder()
-        .setUpdateType(updateType)
+        .setUpdateType(UpdateType.REMOVE)
         .setServerId(this.server.id().toString())
         .setJourneyId(this.original.getId().toString())
         .setDriver(SteamIdWrapper.getDefaultInstance())
@@ -237,8 +235,9 @@ final class JourneyDirtyStateRecorder {
     }
 
     // default information for the update frame
+    var updateType = this.foreignId != null ? UpdateType.ADD : UpdateType.UPDATE;
     var updateFrameBuilder = JourneyUpdateFrame.newBuilder()
-      .setUpdateType(UpdateType.UPDATE)
+      .setUpdateType(updateType)
       .setServerId(this.server.id().toString())
       .setJourneyId(this.original.getId().toString());
 
@@ -266,6 +265,7 @@ final class JourneyDirtyStateRecorder {
         if (maxAllowedSpeed != null) {
           signalInfo.setMaxSpeed(maxAllowedSpeed);
         }
+        nextSignalWrapper.setSignalInfo(signalInfo);
       }
       updateFrameBuilder.setNextSignal(nextSignalWrapper);
     } else {
