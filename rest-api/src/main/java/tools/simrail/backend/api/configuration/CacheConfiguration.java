@@ -35,7 +35,7 @@ import org.springframework.context.annotation.Configuration;
 
 @Configuration
 @EnableCaching
-public class CacheConfiguration {
+class CacheConfiguration {
 
   /**
    * Cache for server data (data expires after 10 seconds in the cache).
