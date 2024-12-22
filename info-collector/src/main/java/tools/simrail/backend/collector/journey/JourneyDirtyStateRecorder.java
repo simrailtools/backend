@@ -229,6 +229,7 @@ final class JourneyDirtyStateRecorder {
       var updateType = this.removed ? UpdateType.REMOVE : UpdateType.ADD;
       return JourneyUpdateFrame.newBuilder()
         .setUpdateType(updateType)
+        .setServerId(this.server.id().toString())
         .setJourneyId(this.original.getId().toString())
         .setDriver(SteamIdWrapper.getDefaultInstance())
         .setNextSignal(SignalInfoWrapper.getDefaultInstance())
