@@ -41,16 +41,16 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.unit.DataSize;
 import org.springframework.web.socket.WebSocketSession;
 import org.springframework.web.socket.handler.ConcurrentWebSocketSessionDecorator;
-import tools.simrail.backend.api.event.cache.EventSnapshotCache;
-import tools.simrail.backend.api.event.dto.EventDispatchPostSnapshotDto;
 import tools.simrail.backend.api.event.dto.EventDispatchPostUpdateDto;
 import tools.simrail.backend.api.event.dto.EventFrameDto;
 import tools.simrail.backend.api.event.dto.EventFrameType;
 import tools.simrail.backend.api.event.dto.EventFrameUpdateType;
-import tools.simrail.backend.api.event.dto.EventJourneySnapshotDto;
 import tools.simrail.backend.api.event.dto.EventJourneyUpdateDto;
-import tools.simrail.backend.api.event.dto.EventServerSnapshotDto;
 import tools.simrail.backend.api.event.dto.EventServerUpdateDto;
+import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
+import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 import tools.simrail.backend.common.rpc.DispatchPostUpdateFrame;
 import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
 import tools.simrail.backend.common.rpc.ServerUpdateFrame;
@@ -66,11 +66,11 @@ public class EventSessionManager {
   private static final int SEND_BUFFER_SIZE_LIMIT = (int) DataSize.ofMegabytes(5).toBytes();
 
   private final ObjectMapper objectMapper;
-  private final EventSnapshotCache snapshotCache;
+  private final SitSnapshotCache snapshotCache;
   private final Map<String, EventWebsocketSession> sessions = new ConcurrentHashMap<>();
 
   @Autowired
-  public EventSessionManager(@Nonnull ObjectMapper objectMapper, @Nonnull EventSnapshotCache snapshotCache) {
+  public EventSessionManager(@Nonnull ObjectMapper objectMapper, @Nonnull SitSnapshotCache snapshotCache) {
     this.objectMapper = objectMapper;
     this.snapshotCache = snapshotCache;
   }
@@ -116,7 +116,7 @@ public class EventSessionManager {
    * @param frame    the update frame received from the collector.
    * @param snapshot the locally cached server snapshot that was updated.
    */
-  public void handleServerUpdate(@Nonnull ServerUpdateFrame frame, @Nonnull EventServerSnapshotDto snapshot) {
+  public void handleServerUpdate(@Nonnull ServerUpdateFrame frame, @Nonnull EventbusServerSnapshotDto snapshot) {
     // sends out the server update frame to all subscribed clients, the serialized frame is
     // eagerly initialized when one session is detected that wants that handle the frame
     String serializedFrame = null;
@@ -142,7 +142,7 @@ public class EventSessionManager {
    */
   private @Nonnull String serializeServerFrame(
     @Nonnull ServerUpdateFrame frame,
-    @Nonnull EventServerSnapshotDto snapshot
+    @Nonnull EventbusServerSnapshotDto snapshot
   ) {
     try {
       var updateType = EventFrameUpdateType.fromInternalType(frame.getUpdateType());
@@ -162,7 +162,7 @@ public class EventSessionManager {
    * @param frame    the update frame received from the collector.
    * @param snapshot the locally cached journey snapshot that was updated.
    */
-  public void handleJourneyUpdate(@Nonnull JourneyUpdateFrame frame, @Nonnull EventJourneySnapshotDto snapshot) {
+  public void handleJourneyUpdate(@Nonnull JourneyUpdateFrame frame, @Nonnull EventbusJourneySnapshotDto snapshot) {
     // sends out the journey update frame to all subscribed clients, the serialized frame is
     // eagerly initialized when one session is detected that wants that handle the frame
     String serializedFrame = null;
@@ -188,7 +188,7 @@ public class EventSessionManager {
    */
   private @Nonnull String serializeJourneyFrame(
     @Nonnull JourneyUpdateFrame frame,
-    @Nonnull EventJourneySnapshotDto snapshot
+    @Nonnull EventbusJourneySnapshotDto snapshot
   ) {
     try {
       var updateType = EventFrameUpdateType.fromInternalType(frame.getUpdateType());
@@ -210,7 +210,7 @@ public class EventSessionManager {
    */
   public void handleDispatchPostUpdate(
     @Nonnull DispatchPostUpdateFrame frame,
-    @Nonnull EventDispatchPostSnapshotDto snapshot
+    @Nonnull EventbusDispatchPostSnapshotDto snapshot
   ) {
     // sends out the dispatch post update frame to all subscribed clients, the serialized frame is
     // eagerly initialized when one session is detected that wants that handle the frame
@@ -237,7 +237,7 @@ public class EventSessionManager {
    */
   private @Nonnull String serializeDispatchPostFrame(
     @Nonnull DispatchPostUpdateFrame frame,
-    @Nonnull EventDispatchPostSnapshotDto snapshot
+    @Nonnull EventbusDispatchPostSnapshotDto snapshot
   ) {
     try {
       var updateType = EventFrameUpdateType.fromInternalType(frame.getUpdateType());

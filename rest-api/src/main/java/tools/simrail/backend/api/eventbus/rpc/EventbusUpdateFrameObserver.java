@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.rpc;
+package tools.simrail.backend.api.eventbus.rpc;
 
 import io.grpc.stub.StreamObserver;
 import jakarta.annotation.Nonnull;
@@ -36,7 +36,7 @@ import tools.simrail.backend.common.rpc.EventBusGrpc;
 /**
  * Observer for update frames to the backend which reconnects once the connection to the backend is lost.
  */
-record EventUpdateFrameObserver<T>(
+record EventbusUpdateFrameObserver<T>(
   @Nonnull Consumer<T> frameHandler,
   @Nonnull EventBusGrpc.EventBusStub eventBusStub,
   @Nonnull BiConsumer<EventBusGrpc.EventBusStub, StreamObserver<T>> connector,
@@ -44,7 +44,7 @@ record EventUpdateFrameObserver<T>(
 ) implements StreamObserver<T> {
 
   private static final int RECONNECT_DELAY_MS = 5000; // 5 seconds
-  private static final Logger LOGGER = LoggerFactory.getLogger(EventUpdateFrameObserver.class);
+  private static final Logger LOGGER = LoggerFactory.getLogger(EventbusUpdateFrameObserver.class);
 
   @Override
   public void onNext(@Nonnull T value) {

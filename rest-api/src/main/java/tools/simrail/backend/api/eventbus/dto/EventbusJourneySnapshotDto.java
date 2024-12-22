@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.dto;
+package tools.simrail.backend.api.eventbus.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;
@@ -37,14 +37,13 @@ import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
- * DTO with changing fields for journey updates. This is a full snapshot of a server being sent out on the initial
- * connect of a client.
+ * DTO with changing fields for journey updates.
  */
 @Data
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class EventJourneySnapshotDto {
+public final class EventbusJourneySnapshotDto {
 
   // static fields
   private final UUID journeyId;
@@ -66,7 +65,7 @@ public final class EventJourneySnapshotDto {
   private Double positionLat;
   private Double positionLng;
 
-  public EventJourneySnapshotDto(
+  public EventbusJourneySnapshotDto(
     @Nonnull UUID journeyId,
     @Nonnull UUID serverId,
     @Nonnull JourneyTransport transport,

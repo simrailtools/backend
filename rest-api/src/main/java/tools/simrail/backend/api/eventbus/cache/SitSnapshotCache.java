@@ -22,45 +22,46 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.cache;
+package tools.simrail.backend.api.eventbus.cache;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.Collection;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.event.dto.EventDispatchPostSnapshotDto;
-import tools.simrail.backend.api.event.dto.EventJourneySnapshotDto;
-import tools.simrail.backend.api.event.dto.EventServerSnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 import tools.simrail.backend.common.rpc.DispatchPostUpdateFrame;
 import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
 import tools.simrail.backend.common.rpc.ServerUpdateFrame;
 import tools.simrail.backend.common.rpc.UpdateType;
 
 /**
- * Cache for snapshot data used for sending out on initial connects.
+ * Cache for snapshot data being updated from the internal event bus.
  */
 @Component
-public final class EventSnapshotCache {
+public final class SitSnapshotCache {
 
-  private final EventServerRepository serverRepository;
-  private final EventJourneyRepository journeyRepository;
-  private final EventDispatchPostRepository dispatchPostRepository;
+  private final EventbusServerRepository serverRepository;
+  private final EventbusJourneyRepository journeyRepository;
+  private final EventbusDispatchPostRepository dispatchPostRepository;
 
-  private final Map<String, EventServerSnapshotDto> serverSnapshots;
-  private final Map<String, EventJourneySnapshotDto> journeySnapshots;
-  private final Map<String, EventDispatchPostSnapshotDto> dispatchPostSnapshots;
+  private final Map<String, EventbusServerSnapshotDto> serverSnapshots;
+  private final Map<String, EventbusJourneySnapshotDto> journeySnapshots;
+  private final Map<String, EventbusDispatchPostSnapshotDto> dispatchPostSnapshots;
 
   @Autowired
-  EventSnapshotCache(
-    @Nonnull EventServerRepository serverRepository,
-    @Nonnull EventJourneyRepository journeyRepository,
-    @Nonnull EventDispatchPostRepository dispatchPostRepository
+  SitSnapshotCache(
+    @Nonnull EventbusServerRepository serverRepository,
+    @Nonnull EventbusJourneyRepository journeyRepository,
+    @Nonnull EventbusDispatchPostRepository dispatchPostRepository
   ) {
     this.serverRepository = serverRepository;
     this.journeyRepository = journeyRepository;
@@ -97,9 +98,10 @@ public final class EventSnapshotCache {
    * @param frame the update frame to apply to a server.
    * @return the locally cached snapshot of the server that was updated.
    */
-  public @Nullable EventServerSnapshotDto handleServerUpdateFrame(@Nonnull ServerUpdateFrame frame) {
+  public @Nullable EventbusServerSnapshotDto handleServerUpdateFrame(@Nonnull ServerUpdateFrame frame) {
     // handle the remove of a server
-    if (frame.getUpdateType() == UpdateType.REMOVE) {
+    var updateType = frame.getUpdateType();
+    if (updateType == UpdateType.REMOVE) {
       return this.serverSnapshots.remove(frame.getServerId());
     }
 
@@ -109,7 +111,7 @@ public final class EventSnapshotCache {
       var serverId = UUID.fromString(frame.getServerId());
       return this.serverRepository.findServerSnapshotById(serverId).orElse(null);
     });
-    if (serverToUpdate != null && frame.getUpdateType() == UpdateType.UPDATE) {
+    if (serverToUpdate != null) {
       serverToUpdate.applyUpdateFrame(frame);
     }
 
@@ -122,7 +124,7 @@ public final class EventSnapshotCache {
    * @param frame the update frame to apply to a journey.
    * @return the locally cached snapshot of the journey that was updated.
    */
-  public @Nullable EventJourneySnapshotDto handleJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
+  public @Nullable EventbusJourneySnapshotDto handleJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
     // handle the remove of a journey
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
@@ -135,7 +137,7 @@ public final class EventSnapshotCache {
       var journeyId = UUID.fromString(frame.getJourneyId());
       return this.journeyRepository.findJourneySnapshotById(journeyId).orElse(null);
     });
-    if (journeyToUpdate != null && updateType == UpdateType.UPDATE) {
+    if (journeyToUpdate != null) {
       journeyToUpdate.applyUpdateFrame(frame);
     }
 
@@ -148,7 +150,9 @@ public final class EventSnapshotCache {
    * @param frame the update frame to apply to a dispatch post.
    * @return the locally cached snapshot of the dispatch post that was updated.
    */
-  public @Nullable EventDispatchPostSnapshotDto handleDispatchPostUpdateFrame(@Nonnull DispatchPostUpdateFrame frame) {
+  public @Nullable EventbusDispatchPostSnapshotDto handleDispatchPostUpdateFrame(
+    @Nonnull DispatchPostUpdateFrame frame
+  ) {
     // handle the remove of a dispatch post
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
@@ -161,7 +165,7 @@ public final class EventSnapshotCache {
       var postId = UUID.fromString(frame.getPostId());
       return this.dispatchPostRepository.findDispatchPostSnapshotById(postId).orElse(null);
     });
-    if (postToUpdate != null && updateType == UpdateType.UPDATE) {
+    if (postToUpdate != null) {
       postToUpdate.applyUpdateFrame(frame);
     }
 
@@ -169,23 +173,59 @@ public final class EventSnapshotCache {
   }
 
   /**
-   * @return
+   * Get the cached server snapshot by the given id, if one is cached locally.
+   *
+   * @param id the id of the server to get.
+   * @return an optional holding the cached server snapshot, if one exists.
    */
-  public @Nonnull Collection<EventServerSnapshotDto> getCachedServerSnapshots() {
+  public @Nonnull Optional<EventbusServerSnapshotDto> findCachedServer(@Nonnull String id) {
+    return Optional.ofNullable(this.serverSnapshots.get(id));
+  }
+
+  /**
+   * Get the cached journey snapshot by the given id, if one is cached locally.
+   *
+   * @param id the id of the journey to get.
+   * @return an optional holding the cached journey snapshot, if one exists.
+   */
+  public @Nonnull Optional<EventbusJourneySnapshotDto> findCachedJourney(@Nonnull String id) {
+    return Optional.ofNullable(this.journeySnapshots.get(id));
+  }
+
+  /**
+   * Get the cached dispatch post snapshot by the given id, if one is cached locally.
+   *
+   * @param id the id of the dispatch post to get.
+   * @return an optional holding the cached dispatch post snapshot, if one exists.
+   */
+  public @Nonnull Optional<EventbusDispatchPostSnapshotDto> findCachedDispatchPost(@Nonnull String id) {
+    return Optional.ofNullable(this.dispatchPostSnapshots.get(id));
+  }
+
+  /**
+   * Get the server snapshots that are cached locally.
+   *
+   * @return the server snapshots that are cached locally.
+   */
+  public @Nonnull Collection<EventbusServerSnapshotDto> getCachedServerSnapshots() {
     return this.serverSnapshots.values();
   }
 
   /**
-   * @return
+   * Get the journey snapshots that are cached locally.
+   *
+   * @return the journey snapshots that are cached locally.
    */
-  public @Nonnull Collection<EventJourneySnapshotDto> getCachedJourneySnapshots() {
+  public @Nonnull Collection<EventbusJourneySnapshotDto> getCachedJourneySnapshots() {
     return this.journeySnapshots.values();
   }
 
   /**
-   * @return
+   * Get the dispatch post snapshots that are cached locally.
+   *
+   * @return the dispatch post snapshots that are cached locally.
    */
-  public @Nonnull Collection<EventDispatchPostSnapshotDto> getCachedDispatchPostSnapshots() {
+  public @Nonnull Collection<EventbusDispatchPostSnapshotDto> getCachedDispatchPostSnapshots() {
     return this.dispatchPostSnapshots.values();
   }
 }

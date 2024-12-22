@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.rpc;
+package tools.simrail.backend.api.eventbus.rpc;
 
 import com.google.protobuf.Empty;
 import jakarta.annotation.Nonnull;
@@ -39,15 +39,15 @@ import tools.simrail.backend.common.rpc.EventBusGrpc;
  * Listener that connects to the backend to listen for update frames once the application reports as ready.
  */
 @Component
-class EventRpcClientListener {
+class EventbusRpcClientListener {
 
   private final GrpcChannelFactory channelFactory;
-  private final EventRpcStreamFrameHandler rpcHandler;
+  private final EventbusRpcStreamFrameHandler rpcHandler;
 
   @Autowired
-  public EventRpcClientListener(
+  public EventbusRpcClientListener(
     @Nonnull GrpcChannelFactory channelFactory,
-    @Nonnull EventRpcStreamFrameHandler rpcHandler
+    @Nonnull EventbusRpcStreamFrameHandler rpcHandler
   ) {
     this.channelFactory = channelFactory;
     this.rpcHandler = rpcHandler;
@@ -61,17 +61,17 @@ class EventRpcClientListener {
 
     // establish one stream per possible update frame
     var updateFrameObservers = List.of(
-      new EventUpdateFrameObserver<>(
+      new EventbusUpdateFrameObserver<>(
         this.rpcHandler::handleServerUpdate,
         eventBusStub,
         (stub, observer) -> stub.subscribeToServers(Empty.getDefaultInstance(), observer),
         event.getApplicationContext()),
-      new EventUpdateFrameObserver<>(
+      new EventbusUpdateFrameObserver<>(
         this.rpcHandler::handleJourneyUpdate,
         eventBusStub,
         (stub, observer) -> stub.subscribeToJourneys(Empty.getDefaultInstance(), observer),
         event.getApplicationContext()),
-      new EventUpdateFrameObserver<>(
+      new EventbusUpdateFrameObserver<>(
         this.rpcHandler::handleDispatchPostUpdate,
         eventBusStub,
         (stub, observer) -> stub.subscribeToDispatchPosts(Empty.getDefaultInstance(), observer),

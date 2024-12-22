@@ -22,13 +22,14 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.rpc;
+package tools.simrail.backend.api.eventbus.rpc;
 
 import jakarta.annotation.Nonnull;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.event.cache.EventSnapshotCache;
-import tools.simrail.backend.api.event.session.EventSessionManager;
+import tools.simrail.backend.api.eventbus.SitEventbusListener;
+import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
 import tools.simrail.backend.common.rpc.DispatchPostUpdateFrame;
 import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
 import tools.simrail.backend.common.rpc.ServerUpdateFrame;
@@ -40,18 +41,18 @@ import tools.simrail.backend.common.rpc.ServerUpdateFrame;
  * session manager which sends out and update frame to subscribed clients.
  */
 @Component
-public final class EventRpcStreamFrameHandler {
+public final class EventbusRpcStreamFrameHandler {
 
-  private final EventSnapshotCache snapshotCache;
-  private final EventSessionManager clientSessionManager;
+  private final SitSnapshotCache snapshotCache;
+  private final List<SitEventbusListener> eventBusListeners;
 
   @Autowired
-  public EventRpcStreamFrameHandler(
-    @Nonnull EventSnapshotCache snapshotCache,
-    @Nonnull EventSessionManager clientSessionManager
+  public EventbusRpcStreamFrameHandler(
+    @Nonnull SitSnapshotCache snapshotCache,
+    @Nonnull List<SitEventbusListener> eventBusListeners
   ) {
     this.snapshotCache = snapshotCache;
-    this.clientSessionManager = clientSessionManager;
+    this.eventBusListeners = eventBusListeners;
   }
 
   /**
@@ -62,7 +63,7 @@ public final class EventRpcStreamFrameHandler {
   public void handleServerUpdate(@Nonnull ServerUpdateFrame frame) {
     var serverSnapshot = this.snapshotCache.handleServerUpdateFrame(frame);
     if (serverSnapshot != null) {
-      this.clientSessionManager.handleServerUpdate(frame, serverSnapshot);
+      this.eventBusListeners.forEach(listener -> listener.handleServerUpdate(frame, serverSnapshot));
     }
   }
 
@@ -74,7 +75,7 @@ public final class EventRpcStreamFrameHandler {
   public void handleJourneyUpdate(@Nonnull JourneyUpdateFrame frame) {
     var journeySnapshot = this.snapshotCache.handleJourneyUpdateFrame(frame);
     if (journeySnapshot != null) {
-      this.clientSessionManager.handleJourneyUpdate(frame, journeySnapshot);
+      this.eventBusListeners.forEach(listener -> listener.handleJourneyUpdate(frame, journeySnapshot));
     }
   }
 
@@ -86,7 +87,7 @@ public final class EventRpcStreamFrameHandler {
   public void handleDispatchPostUpdate(@Nonnull DispatchPostUpdateFrame frame) {
     var dispatchPostSnapshot = this.snapshotCache.handleDispatchPostUpdateFrame(frame);
     if (dispatchPostSnapshot != null) {
-      this.clientSessionManager.handleDispatchPostUpdate(frame, dispatchPostSnapshot);
+      this.eventBusListeners.forEach(listener -> listener.handleDispatchPostUpdate(frame, dispatchPostSnapshot));
     }
   }
 }

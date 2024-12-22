@@ -22,7 +22,7 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.dto;
+package tools.simrail.backend.api.eventbus.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;
@@ -31,53 +31,51 @@ import java.util.UUID;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.ToString;
-import tools.simrail.backend.common.rpc.ServerUpdateFrame;
-import tools.simrail.backend.common.server.SimRailServerEntity;
-import tools.simrail.backend.common.server.SimRailServerRegion;
+import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
+import tools.simrail.backend.common.rpc.DispatchPostUpdateFrame;
 
 /**
- * DTO with changing field for server updates. This is a full snapshot of a server being sent out on the initial connect
- * of a client.
+ * DTO with changing field for dispatch post updates.
  */
 @Data
 @ToString
 @EqualsAndHashCode
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public final class EventServerSnapshotDto {
+public final class EventbusDispatchPostSnapshotDto {
 
   // static fields
   private final UUID id;
-  private final String code;
-  private final List<String> tags;
-  private final String spokenLanguage;
-  private final SimRailServerRegion region;
+  private final UUID pointId;
+  private final UUID serverId;
+
+  private final String name;
+  private final int difficultyLevel;
+
+  private double latitude;
+  private double longitude;
 
   // changing fields
-  private boolean online;
-  private String zoneOffset;
+  private List<String> dispatcherSteamIds;
 
-  public EventServerSnapshotDto(@Nonnull SimRailServerEntity entity) {
+  public EventbusDispatchPostSnapshotDto(@Nonnull SimRailDispatchPostEntity entity) {
     this.id = entity.getId();
-    this.code = entity.getCode();
-    this.tags = entity.getTags();
-    this.spokenLanguage = entity.getSpokenLanguage();
-    this.region = entity.getRegion();
-    this.online = entity.isOnline();
-    this.zoneOffset = entity.getTimezone();
+    this.pointId = entity.getPointId();
+    this.serverId = entity.getServerId();
+    this.name = entity.getName();
+    this.difficultyLevel = entity.getDifficultyLevel();
+    this.dispatcherSteamIds = List.copyOf(entity.getDispatcherSteamIds());
+
+    var position = entity.getPosition();
+    this.latitude = position.getLatitude();
+    this.longitude = position.getLongitude();
   }
 
   /**
-   * Applies the given server update frame to this snapshot.
+   * Applies the given dispatch post update frame to this snapshot.
    *
-   * @param frame the update frame of the server to apply.
+   * @param frame the update frame of the dispatch post to apply.
    */
-  public synchronized void applyUpdateFrame(@Nonnull ServerUpdateFrame frame) {
-    if (frame.hasOnline()) {
-      this.online = frame.getOnline();
-    }
-
-    if (frame.hasZoneOffset()) {
-      this.zoneOffset = frame.getZoneOffset();
-    }
+  public synchronized void applyUpdateFrame(@Nonnull DispatchPostUpdateFrame frame) {
+    this.dispatcherSteamIds = frame.getDispatcherSteamIdsList();
   }
 }

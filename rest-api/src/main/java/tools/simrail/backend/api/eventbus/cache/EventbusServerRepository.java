@@ -22,40 +22,40 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.cache;
+package tools.simrail.backend.api.eventbus.cache;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.api.event.dto.EventDispatchPostSnapshotDto;
-import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostRepository;
+import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
+import tools.simrail.backend.common.server.SimRailServerRepository;
 
-interface EventDispatchPostRepository extends SimRailDispatchPostRepository {
-
-  /**
-   * Get the snapshots of all active dispatch posts on all servers.
-   *
-   * @return a list of snapshots for each active dispatch post on all servers.
-   */
-  @Query(value = """
-    SELECT new tools.simrail.backend.api.event.dto.EventDispatchPostSnapshotDto(d)
-    FROM sr_dispatch_post d
-    WHERE d.deleted IS FALSE
-    """)
-  List<EventDispatchPostSnapshotDto> findSnapshotsOfAllActiveDispatchPosts();
+interface EventbusServerRepository extends SimRailServerRepository {
 
   /**
-   * Get a snapshot of the dispatch post associated with the given id, if one exists.
+   * Get the snapshots of all active servers.
    *
-   * @param postId the id of the dispatch post to get the snapshot of.
-   * @return an optional holding a snapshot of the dispatch post with the given id, if one exists.
+   * @return a list of snapshots for each active servers.
    */
   @Query(value = """
-    SELECT new tools.simrail.backend.api.event.dto.EventDispatchPostSnapshotDto(d)
-    FROM sr_dispatch_post d
-    WHERE d.id = :postId
+    SELECT new tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto(s)
+    FROM sr_server s
+    WHERE s.deleted IS FALSE
     """)
-  Optional<EventDispatchPostSnapshotDto> findDispatchPostSnapshotById(@Param("postId") UUID postId);
+  List<EventbusServerSnapshotDto> findSnapshotsOfAllActiveServers();
+
+  /**
+   * Get a snapshot of the server associated with the given id, if one exists.
+   *
+   * @param serverId the id of the server to get the snapshot of.
+   * @return an optional holding a snapshot of the server with the given id, if one exists.
+   */
+  @Query(value = """
+    SELECT new tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto(s)
+    FROM sr_server s
+    WHERE s.id = :serverId
+    """)
+  Optional<EventbusServerSnapshotDto> findServerSnapshotById(@Param("serverId") UUID serverId);
 }

@@ -22,17 +22,17 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.cache;
+package tools.simrail.backend.api.eventbus.cache;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.api.event.dto.EventJourneySnapshotDto;
+import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
 import tools.simrail.backend.common.journey.JourneyRepository;
 
-interface EventJourneyRepository extends JourneyRepository {
+interface EventbusJourneyRepository extends JourneyRepository {
 
   /**
    * Get the snapshots of all active journeys on all servers.
@@ -40,14 +40,14 @@ interface EventJourneyRepository extends JourneyRepository {
    * @return a list of snapshots for each active journeys on all servers.
    */
   @Query(value = """
-    SELECT new tools.simrail.backend.api.event.dto.EventJourneySnapshotDto(
+    SELECT new tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto(
       j.id, j.serverId, je.transport, j.speed, j.driverSteamId, j.nextSignal, j.position
     )
     FROM sit_journey j
     RIGHT JOIN sit_journey_event je ON je.journeyId = j.id AND je.eventIndex = 0
     WHERE j.firstSeenTime IS NOT NULL AND j.lastSeenTime IS NULL
     """)
-  List<EventJourneySnapshotDto> findSnapshotsOfAllActiveJourneys();
+  List<EventbusJourneySnapshotDto> findSnapshotsOfAllActiveJourneys();
 
   /**
    * Get a snapshot of the journey associated with the given id, if one exists.
@@ -56,12 +56,12 @@ interface EventJourneyRepository extends JourneyRepository {
    * @return an optional holding a snapshot of the journey with the given id, if one exists.
    */
   @Query(value = """
-    SELECT new tools.simrail.backend.api.event.dto.EventJourneySnapshotDto(
+    SELECT new tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto(
       j.id, j.serverId, je.transport, j.speed, j.driverSteamId, j.nextSignal, j.position
     )
     FROM sit_journey j
     RIGHT JOIN sit_journey_event je ON je.journeyId = j.id AND je.eventIndex = 0
     WHERE j.id = :journeyId
     """)
-  Optional<EventJourneySnapshotDto> findJourneySnapshotById(@Param("journeyId") UUID journeyId);
+  Optional<EventbusJourneySnapshotDto> findJourneySnapshotById(@Param("journeyId") UUID journeyId);
 }
