@@ -25,7 +25,6 @@
 package tools.simrail.backend.external.steam.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import java.time.Instant;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -51,6 +50,17 @@ public final class SteamUserSummary {
   private String displayName;
 
   /**
+   * The country code where the player lives.
+   */
+  @JsonProperty("loccountrycode")
+  private String countryCode;
+  /**
+   * The state code where the player lives.
+   */
+  @JsonProperty("locstatecode")
+  private String stateCode;
+
+  /**
    * Url to the player steeam community profile page.
    */
   @JsonProperty("profileurl")
@@ -64,6 +74,11 @@ public final class SteamUserSummary {
    */
   private boolean communityProfileVisible;
 
+  /**
+   * The hash of the avatar used by the profile.
+   */
+  @JsonProperty("avatarhash")
+  private String avatarHash;
   /**
    * Url to the player avatar image in 32x32 ratio.
    */
@@ -79,12 +94,6 @@ public final class SteamUserSummary {
    */
   @JsonProperty("avatarfull")
   private String avatarFullUrl;
-
-  /**
-   * The last time when the user went offline.
-   */
-  @JsonProperty("lastlogoff")
-  private Instant lastLogoffTime;
 
   /**
    * Deserializes the profile state value returned from the api. For internal use only.
