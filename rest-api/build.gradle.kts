@@ -40,6 +40,8 @@ dependencies {
   protobuf(rootProject.files(".proto"))
 
   implementation(projects.common)
+  implementation(projects.externalApiClient)
+
   implementation(libs.fuzzywuzzy)
   implementation(libs.springDocOpenApi)
   implementation("io.grpc:grpc-services")

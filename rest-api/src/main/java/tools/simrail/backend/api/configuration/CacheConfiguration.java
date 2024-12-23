@@ -109,4 +109,16 @@ class CacheConfiguration {
         .expireAfterWrite(2, TimeUnit.MINUTES)
         .build());
   }
+
+  /**
+   * Cache for user information (expires after 1.5 hours).
+   */
+  @Bean
+  public @Nonnull Cache userCache() {
+    return new CaffeineCache(
+      "user_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(90, TimeUnit.MINUTES)
+        .build());
+  }
 }

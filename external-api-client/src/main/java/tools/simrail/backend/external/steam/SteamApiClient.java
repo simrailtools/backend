@@ -24,6 +24,7 @@
 
 package tools.simrail.backend.external.steam;
 
+import feign.CollectionFormat;
 import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
@@ -54,7 +55,7 @@ public interface SteamApiClient {
    * @return detailed information about the players with the given steam ids.
    */
   @NotNull
-  @RequestLine("GET /ISteamUser/GetPlayerSummaries/v0002?steamids={steamIds}")
+  @RequestLine(value = "GET /ISteamUser/GetPlayerSummaries/v0002?steamids={steamIds}", collectionFormat = CollectionFormat.CSV)
   SteamUserSummaryWrapper.Root getPlayerSummaries(@Param("steamIds") List<String> steamIds);
 
   /**
