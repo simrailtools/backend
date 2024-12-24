@@ -46,6 +46,7 @@ public final class PointInfoDtoConverter implements BiFunction<SimRailPoint, Col
     // convert and sort the platforms at the point
     var convertedPlatforms = platformSignals.stream()
       .map(signal -> new PointPlatformInfoDto(signal.getTrack(), signal.getPlatform()))
+      .distinct()
       .sorted(PLATFORM_COMPARATOR)
       .toList();
 
