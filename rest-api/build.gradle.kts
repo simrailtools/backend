@@ -95,3 +95,12 @@ tasks.withType<ProcessResources> {
     }
   }
 }
+
+// From StackOverflow: https://stackoverflow.com/a/53087407
+tasks.register<Copy>("buildForDocker") {
+  from(tasks.getByName("bootJar"))
+  into("build/libs/docker")
+  rename { fileName ->
+    fileName.replace("-$version", "")
+  }
+}

@@ -1,0 +1,11 @@
+FROM --platform=$BUILDPLATFORM azul/zulu-openjdk:23 AS builder
+WORKDIR /build
+
+COPY ./ ./
+RUN ./gradlew clean buildForDocker -x test -x checkstyleMain -x checkstyleTest --no-daemon
+
+FROM azul/zulu-openjdk-alpine:23-jre-headless
+WORKDIR /app
+
+COPY --from=builder /build/rest-api/build/libs/docker/rest-api.jar ./
+CMD ["java", "-Duser.timezone=Europe/Berlin", "-Dspring.profiles.active=common,prd", "-jar", "--enable-preview", "/app/rest-api.jar"]

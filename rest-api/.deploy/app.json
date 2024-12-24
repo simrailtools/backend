@@ -1,0 +1,38 @@
+{
+  "name": "api",
+  "description": "Public API for SIT",
+  "repository": "https://github.com/simrailtools/backend",
+  "addons": [],
+  "healthchecks": {
+    "web": [
+      {
+        "wait": 5,
+        "type": "liveness",
+        "path": "/admin/health",
+        "name": "container liveness check"
+      }
+    ]
+  },
+  "env": {
+    "SPRING_DATASOURCE_URL": {
+      "required": true,
+      "description": "The datasource url"
+    },
+    "SPRING_DATASOURCE_USERNAME": {
+      "required": true,
+      "description": "The datasource username"
+    },
+    "SPRING_DATASOURCE_PASSWORD": {
+      "required": true,
+      "description": "The datasource password"
+    },
+    "SPRING_GRPC_CLIENT_CHANNELS_COLLECTOR_ADDRESS": {
+      "required": true,
+      "description": "The host of the internal GRPC server for data update events"
+    },
+    "STEAM_API_KEY": {
+      "required": true,
+      "description": "API key for the Steam rest api"
+    }
+  }
+}
