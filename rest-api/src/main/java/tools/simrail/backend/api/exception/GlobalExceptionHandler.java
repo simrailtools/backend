@@ -34,6 +34,7 @@ import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
+import org.springframework.beans.TypeMismatchException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ProblemDetail;
@@ -213,6 +214,22 @@ public final class GlobalExceptionHandler {
     return this.configureBadRequest(request, problemDetail -> {
       problemDetail.setType(BAD_PARAMETER_TYPE);
       problemDetail.setDetail("The request parameter " + exception.getParameterName() + " is missing but required");
+    });
+  }
+
+  /**
+   * Handles the case where a type cannot be deserialized from a given input.
+   */
+  @ExceptionHandler(TypeMismatchException.class)
+  public @Nonnull ProblemDetail handleTypeMismatchException(
+    @Nonnull TypeMismatchException exception,
+    @Nonnull HttpServletRequest request
+  ) {
+    return this.configureBadRequest(request, problemDetail -> {
+      var prop = exception.getPropertyName();
+      var detail = (prop != null ? prop + ": " : "") + "cannot convert from input '" + exception.getValue() + "'";
+      problemDetail.setDetail(detail);
+      problemDetail.setType(BAD_PARAMETER_TYPE);
     });
   }
 }
