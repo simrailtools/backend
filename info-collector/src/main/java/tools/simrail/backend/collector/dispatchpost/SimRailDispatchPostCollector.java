@@ -61,14 +61,15 @@ final class SimRailDispatchPostCollector {
   public SimRailDispatchPostCollector(
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
+    @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull DispatchPostUpdateHandler dispatchPostUpdateHandler,
     @Nonnull SimRailDispatchPostRepository dispatchPostRepository
   ) {
     this.pointProvider = pointProvider;
     this.serverService = serverService;
+    this.panelApiClient = panelApiClient;
     this.dispatchPostRepository = dispatchPostRepository;
     this.dispatchPostUpdateHandler = dispatchPostUpdateHandler;
-    this.panelApiClient = SimRailPanelApiClient.create();
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
   }
 

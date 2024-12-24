@@ -65,13 +65,15 @@ public final class SimRailServerCollector implements SimRailServerService {
 
   @Autowired
   SimRailServerCollector(
+    @Nonnull SimRailAwsApiClient awsApiClient,
+    @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull SimRailServerRepository serverRepository,
     @Nonnull ServerUpdateHandler serverUpdateHandler
   ) {
+    this.awsApiClient = awsApiClient;
+    this.panelApiClient = panelApiClient;
     this.serverRepository = serverRepository;
     this.serverUpdateHandler = serverUpdateHandler;
-    this.awsApiClient = SimRailAwsApiClient.create();
-    this.panelApiClient = SimRailPanelApiClient.create();
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
   }
 

@@ -79,16 +79,17 @@ class SimRailServerTimetableCollector {
 
   @Autowired
   public SimRailServerTimetableCollector(
+    @Nonnull SimRailAwsApiClient awsApiClient,
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
     @Nonnull MapBorderPointProvider borderPointProvider
   ) {
+    this.awsApiClient = awsApiClient;
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.journeyService = journeyService;
     this.borderPointProvider = borderPointProvider;
-    this.awsApiClient = SimRailAwsApiClient.create();
 
     this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
     this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);

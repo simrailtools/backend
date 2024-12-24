@@ -66,18 +66,19 @@ class JourneyVehicleCollector {
 
   @Autowired
   public JourneyVehicleCollector(
+    @Nonnull SimRailAwsApiClient awsApiClient,
+    @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull RailcarProvider railcarProvider,
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorVehicleRepository vehicleRepository,
     @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
+    this.awsApiClient = awsApiClient;
+    this.panelApiClient = panelApiClient;
     this.railcarProvider = railcarProvider;
     this.serverService = serverService;
     this.vehicleRepository = vehicleRepository;
     this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
-
-    this.awsApiClient = SimRailAwsApiClient.create();
-    this.panelApiClient = SimRailPanelApiClient.create();
   }
 
   @Transactional

@@ -72,6 +72,7 @@ class SimRailServerTrainCollector {
   @Autowired
   public SimRailServerTrainCollector(
     @Nonnull SimRailServerService serverService,
+    @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull CollectorJourneyService journeyService,
     @Nonnull JourneyUpdateHandler journeyUpdateHandler,
     @Nonnull JourneyEventRepository journeyEventRepository,
@@ -79,12 +80,12 @@ class SimRailServerTrainCollector {
     @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
     this.serverService = serverService;
+    this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
     this.journeyUpdateHandler = journeyUpdateHandler;
     this.journeyEventRepository = journeyEventRepository;
     this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
-    this.panelApiClient = SimRailPanelApiClient.create();
   }
 
   @Scheduled(initialDelay = 0, fixedDelay = 2, timeUnit = TimeUnit.SECONDS, scheduler = "train_collect_scheduler")
