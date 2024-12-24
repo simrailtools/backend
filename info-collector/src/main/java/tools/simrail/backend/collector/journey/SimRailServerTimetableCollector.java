@@ -156,10 +156,12 @@ class SimRailServerTimetableCollector {
     var cleanedTrainName = WHITESPACE_PATTERN.matcher(run.getTrainDisplayName()).replaceAll("");
     var trainNameParts = List.of(cleanedTrainName.split("-"));
     var trainLine = trainNameParts.stream()
+      .skip(1) // skip the first entry as it is always the train category
       .filter(part -> !part.startsWith("\""))
       .findFirst()
       .orElse(null);
     var trainLabel = trainNameParts.stream()
+      .skip(1) // skip the first entry as it is always the train category
       .filter(part -> part.startsWith("\"") && part.endsWith("\""))
       .findFirst()
       .map(label -> label.substring(1, label.length() - 1))
