@@ -11,6 +11,11 @@ concurrency:
   cancel-in-progress: true
   group: ci-${{ github.event.pull_request.number || github.ref }}
 
+permissions:
+  checks: write
+  contents: read
+  pull-requests: write
+
 jobs:
   build:
     runs-on: ubuntu-latest

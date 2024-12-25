@@ -12,6 +12,10 @@ concurrency:
   cancel-in-progress: true
   group: cq-${{ github.event.pull_request.number || github.job }}
 
+permissions:
+  contents: read
+  security-events: write
+
 jobs:
   analyze:
     name: Analyze
