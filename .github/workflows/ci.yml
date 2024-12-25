@@ -1,0 +1,44 @@
+name: "CI"
+
+on:
+  push:
+    branches: [ "**" ]
+    tags-ignore: [ "**" ]
+  pull_request:
+  workflow_dispatch:
+
+concurrency:
+  cancel-in-progress: true
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    name: Build and publish
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup java
+        uses: actions/setup-java@v4
+        with:
+          java-version: 23
+          check-latest: true
+          distribution: "zulu"
+
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@v4
+        with:
+          add-job-summary: always
+          cache-cleanup: on-success
+          cache-read-only: ${{ github.ref != 'refs/heads/main' }}
+
+      - name: Execute build and tests
+        run: ./gradlew build --stacktrace
+
+      - name: Publish test summary
+        if: ${{ github.event_name == 'push' }}
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        with:
+          junit_files: "**/build/test-results/test/TEST-*.xml"
