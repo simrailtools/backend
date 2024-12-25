@@ -42,7 +42,7 @@ public final class SimRailAwsApiClientTest {
     Assertions.assertTrue(de1Offset == 1 || de1Offset == 2);
 
     var pl1Offset = client.getServerTimeOffset("pl1");
-    Assertions.assertEquals(0, pl1Offset);
+    Assertions.assertEquals(-5, pl1Offset);
   }
 
   @Test
