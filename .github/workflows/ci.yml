@@ -6,6 +6,8 @@ on:
     tags-ignore: [ "**" ]
   pull_request:
   workflow_dispatch:
+  schedule: # scheduled to run tests regularly to be notified about changing SimRail backend data
+    - cron: '00 2 * * *'
 
 concurrency:
   cancel-in-progress: true
