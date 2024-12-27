@@ -69,11 +69,6 @@ public final class SimRailPoint {
   @JsonProperty("prefix")
   private String prefix;
   /**
-   * The mileage along the tracks where the point is located.
-   */
-  @JsonProperty("mileage")
-  private double mileage;
-  /**
    * The maximum speed of trains at this point.
    */
   @JsonProperty("max_speed")

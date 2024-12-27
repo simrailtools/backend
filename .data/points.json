@@ -2,7 +2,6 @@
   {
     "name": "Częstochowa",
     "id": "e3e67982-9b50-492e-8738-45670ea59346",
-    "mileage": 229.745,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -41,7 +40,6 @@
   {
     "name": "Częstochowa Towarowa",
     "id": "77f486c9-538c-4c61-9452-f39973202ca5",
-    "mileage": 232.02,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -80,7 +78,6 @@
   {
     "name": "Częstochowa Raków",
     "id": "a80b76ca-581a-44d4-87dc-e424fe3ebd09",
-    "mileage": 233.379,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -119,7 +116,6 @@
   {
     "name": "Poraj",
     "id": "ed01bc62-66fd-4b6b-8b14-43285d0df5ca",
-    "mileage": 246.95,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -159,7 +155,6 @@
   {
     "name": "Żarki-Letnisko",
     "id": "f927bb8f-6830-4500-804b-de58ce2e0b25",
-    "mileage": 254.088,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -198,7 +193,6 @@
   {
     "name": "Myszków",
     "id": "20221233-1a4c-433e-a220-8c2a5fedfbfa",
-    "mileage": 261.016,
     "prefix": "My",
     "max_speed": 120,
     "ids": [
@@ -238,7 +232,6 @@
   {
     "name": "Zawiercie",
     "id": "6840caa1-ef46-4cc4-93fb-0f26abf7c7d9",
-    "mileage": 274.227,
     "prefix": "Zw",
     "max_speed": 120,
     "ids": [
@@ -277,7 +270,6 @@
   {
     "name": "Łazy Ła",
     "id": "3a06ec18-c106-4ab7-8ad8-84f4918cab93",
-    "mileage": 277.23,
     "prefix": "LA",
     "max_speed": 120,
     "ids": [
@@ -316,7 +308,6 @@
   {
     "name": "Łazy",
     "id": "9c537b6b-f8e9-4b3f-ae3c-fe3e9bfe8105",
-    "mileage": 280.654,
     "prefix": "LB",
     "max_speed": 120,
     "ids": [
@@ -355,7 +346,6 @@
   {
     "name": "Przemiarki",
     "id": "e7be0efb-91d9-467b-a6f7-0f4e8be18ae0",
-    "mileage": 7.717,
     "prefix": "Pmi",
     "max_speed": 60,
     "ids": [
@@ -394,7 +384,6 @@
   {
     "name": "Łazy Łc",
     "id": "691d668c-15f3-4653-b61b-b3737f18ab0f",
-    "mileage": 283.34,
     "prefix": "LC",
     "max_speed": 120,
     "ids": [
@@ -433,7 +422,6 @@
   {
     "name": "Dąbrowa Górnicza Ząbkowice",
     "id": "e6747dd6-5520-4157-adf0-6b17d1bfdbb3",
-    "mileage": 292.896,
     "prefix": "DZ",
     "max_speed": 120,
     "ids": [
@@ -472,7 +460,6 @@
   {
     "name": "Dąbrowa Górnicza Gołonóg",
     "id": "373d031f-7207-4c1d-b4c5-16e7b7529d77",
-    "mileage": 296.726,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -511,7 +498,6 @@
   {
     "name": "Dąbrowa Górnicza",
     "id": "a0f057b4-3a29-4bde-a868-b80c5eeb3abb",
-    "mileage": 300.125,
     "prefix": "DG",
     "max_speed": 100,
     "ids": [
@@ -550,7 +536,6 @@
   {
     "name": "Będzin Ksawera",
     "id": "f0fe3f96-8a93-41a3-9d98-a160712be4bb",
-    "mileage": 302.077,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -589,7 +574,6 @@
   {
     "name": "Będzin Miasto",
     "id": "f360bcf6-29d7-4b65-bf42-1fec530f18d2",
-    "mileage": 304.385,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -628,7 +612,6 @@
   {
     "name": "Będzin",
     "id": "3e6641a5-73a0-4842-800a-314fd9dcebce",
-    "mileage": 305.524,
     "prefix": "B",
     "max_speed": 110,
     "ids": [
@@ -667,7 +650,6 @@
   {
     "name": "Sosnowiec Główny",
     "id": "a50dcebe-76b0-43d4-840e-6a8475c9756d",
-    "mileage": 309.544,
     "prefix": "SG",
     "max_speed": 100,
     "ids": [
@@ -706,7 +688,6 @@
   {
     "name": "Katowice Szopienice Południowe",
     "id": "ea1ae5b5-5340-4e28-855a-dbb821ee7d38",
-    "mileage": 312.91,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -745,7 +726,6 @@
   {
     "name": "Katowice Zawodzie",
     "id": "d543b681-7dbf-40cd-9088-baf83f3a867b",
-    "mileage": 315.653,
     "prefix": "KZ",
     "max_speed": 100,
     "ids": [
@@ -784,7 +764,6 @@
   {
     "name": "Katowice",
     "id": "9474d33a-1f42-4e1e-8bf8-84258e4e3dfa",
-    "mileage": 0.381,
     "prefix": "KO",
     "max_speed": 90,
     "ids": [
@@ -823,7 +802,6 @@
   {
     "name": "Katowice Brynów",
     "id": "84cf0d7b-d5c0-49c4-a0f6-87676073c631",
-    "mileage": 3.77,
     "prefix": "l139_bry",
     "max_speed": 80,
     "ids": [
@@ -862,7 +840,6 @@
   {
     "name": "Katowice Ligota",
     "id": "038622c4-eec6-483b-b91c-ac9e3b386f59",
-    "mileage": 6.08,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -901,7 +878,6 @@
   {
     "name": "Katowice Piotrowice",
     "id": "9100ecf3-e5f6-4aee-a39f-98aedcf7f247",
-    "mileage": 7.753,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -940,7 +916,6 @@
   {
     "name": "Katowice Podlesie",
     "id": "2491df95-99fc-489d-858a-5ceac21cb37f",
-    "mileage": 11.483,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -979,7 +954,6 @@
   {
     "name": "Tychy",
     "id": "dba5c3f6-3d74-49ef-9a2d-55ea1b335a98",
-    "mileage": 16.97,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -1018,7 +992,6 @@
   {
     "name": "Tychy Zachodnie",
     "id": "1ef0b971-a0b0-4bd0-b874-5a0c2eb12a8b",
-    "mileage": 2.348,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -1057,7 +1030,6 @@
   {
     "name": "Tychy Aleja Bielska",
     "id": "93a1f208-60b7-4b32-8669-3122f05eb7d9",
-    "mileage": 2.853,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -1096,7 +1068,6 @@
   {
     "name": "Tychy Grota Roweckiego",
     "id": "44e469db-2fda-4d3b-9927-f2d2bee692dd",
-    "mileage": 3.282,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -1135,7 +1106,6 @@
   {
     "name": "Tychy Miasto",
     "id": "730cb3dd-e7ca-42d2-afc3-5b7ff91e3b97",
-    "mileage": 3.73,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -1174,7 +1144,6 @@
   {
     "name": "Tychy Lodowisko",
     "id": "9e90de97-2a2b-4b16-a271-ea1ef6928710",
-    "mileage": 0.336,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -1213,7 +1182,6 @@
   {
     "name": "Warszawa Grochów",
     "id": "5e969d1b-9ab5-4d5c-ab17-44166c6b146c",
-    "mileage": 3.333,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -1252,7 +1220,6 @@
   {
     "name": "Warszawa Wschodnia",
     "id": "8c58048c-e3f9-4faf-8f1f-5ecf3e978e54",
-    "mileage": 4.254,
     "prefix": "WSD",
     "max_speed": 60,
     "ids": [
@@ -1291,7 +1258,6 @@
   {
     "name": "Warszawa Centralna",
     "id": "889e2e4c-c306-47ca-8fd6-31e145090be3",
-    "mileage": 0.0,
     "prefix": "WDC",
     "max_speed": 60,
     "ids": [
@@ -1330,7 +1296,6 @@
   {
     "name": "Warszawa Zachodnia",
     "id": "95723311-1790-4898-b09c-c15e622a9c28",
-    "mileage": 3.082,
     "prefix": "WZD",
     "max_speed": 90,
     "ids": [
@@ -1370,7 +1335,6 @@
   {
     "name": "Warszawa Włochy",
     "id": "7432ab4c-dc4b-4659-a227-0291048ee8d6",
-    "mileage": 6.804,
     "prefix": "Wl",
     "max_speed": 120,
     "ids": [
@@ -1409,7 +1373,6 @@
   {
     "name": "Warszawa Główna",
     "id": "732cada3-6be7-4413-9f8a-c39a5389ee0a",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -1449,7 +1412,6 @@
   {
     "name": "Pruszków",
     "id": "683eed80-fc16-4055-b8b8-36b02d885c94",
-    "mileage": 15.891,
     "prefix": "Pr",
     "max_speed": 160,
     "ids": [
@@ -1488,7 +1450,6 @@
   {
     "name": "Grodzisk Mazowiecki",
     "id": "7a2878c5-3b02-47b0-b313-19fbe4f813ee",
-    "mileage": 29.548,
     "prefix": "Gr",
     "max_speed": 160,
     "ids": [
@@ -1527,7 +1488,6 @@
   {
     "name": "Korytów",
     "id": "62513fbf-ebd5-4429-91da-ce96b16c2335",
-    "mileage": 14.574,
     "prefix": "Kr",
     "max_speed": 200,
     "ids": [
@@ -1566,7 +1526,6 @@
   {
     "name": "Szeligi",
     "id": "dd9be8a0-dcbd-4cae-a540-062339edf96d",
-    "mileage": 23.542,
     "prefix": "Se",
     "max_speed": 200,
     "ids": [
@@ -1605,7 +1564,6 @@
   {
     "name": "Biała Rawska",
     "id": "54480c30-fb6c-414e-a3c2-674a97719008",
-    "mileage": 40.122,
     "prefix": "BR",
     "max_speed": 200,
     "ids": [
@@ -1644,7 +1602,6 @@
   {
     "name": "Strzałki",
     "id": "098471ef-b533-459b-b421-916d0b1b47f1",
-    "mileage": 57.381,
     "prefix": "St",
     "max_speed": 200,
     "ids": [
@@ -1683,7 +1640,6 @@
   {
     "name": "Idzikowice",
     "id": "e9f19394-e106-42e4-af46-2a1186a2c0c2",
-    "mileage": 80.608,
     "prefix": "Id",
     "max_speed": 160,
     "ids": [
@@ -1722,7 +1678,6 @@
   {
     "name": "Opoczno Południe",
     "id": "51ab4c25-7379-4456-a07b-2630bd305765",
-    "mileage": 92.142,
     "prefix": "Op",
     "max_speed": 160,
     "ids": [
@@ -1761,7 +1716,6 @@
   {
     "name": "Pilichowice",
     "id": "8fab5c80-1282-45ce-83c5-f1de91dd16d2",
-    "mileage": 106.588,
     "prefix": "Pi",
     "max_speed": 160,
     "ids": [
@@ -1800,7 +1754,6 @@
   {
     "name": "Olszamowice",
     "id": "4877ee6f-63f7-478a-88a8-98331aecdfbf",
-    "mileage": 124.808,
     "prefix": "Ol",
     "max_speed": 160,
     "ids": [
@@ -1839,7 +1792,6 @@
   {
     "name": "Włoszczowa Północ",
     "id": "66153017-fd8f-4ef4-9ead-540fb0d79aae",
-    "mileage": 154.39,
     "prefix": "WP",
     "max_speed": 160,
     "ids": [
@@ -1878,7 +1830,6 @@
   {
     "name": "Knapówka",
     "id": "b21ff406-1997-4f24-8802-9698963713f8",
-    "mileage": 160.588,
     "prefix": "Kn",
     "max_speed": 200,
     "ids": [
@@ -1917,7 +1868,6 @@
   {
     "name": "Psary",
     "id": "b32528f4-7c11-41ea-8102-3951902e4f1f",
-    "mileage": 170.479,
     "prefix": "Ps",
     "max_speed": 200,
     "ids": [
@@ -1956,7 +1906,6 @@
   {
     "name": "Starzyny",
     "id": "a4cb9d4f-d3ae-4e11-b627-503524fc6a4e",
-    "mileage": 2.932,
     "prefix": "Str",
     "max_speed": 100,
     "ids": [
@@ -1995,7 +1944,6 @@
   {
     "name": "Sprowa",
     "id": "dea13a88-8174-406c-aceb-4f7a4b8c86fb",
-    "mileage": 17.675,
     "prefix": "Sp",
     "max_speed": 160,
     "ids": [
@@ -2034,7 +1982,6 @@
   {
     "name": "Kozłów",
     "id": "27f5db2c-07a1-4c23-aaa5-dff759f687ba",
-    "mileage": 262.098,
     "prefix": "Kz",
     "max_speed": 120,
     "ids": [
@@ -2073,7 +2020,6 @@
   {
     "name": "Tunel",
     "id": "acf6a575-e477-4ecd-b898-9c11adb607ee",
-    "mileage": 267.778,
     "prefix": "Tl",
     "max_speed": 110,
     "ids": [
@@ -2112,7 +2058,6 @@
   {
     "name": "Miechów",
     "id": "721496c3-7508-483b-8229-726592bb1a7d",
-    "mileage": 277.343,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -2151,7 +2096,6 @@
   {
     "name": "Słomniki",
     "id": "847b1117-e6af-4011-95d2-77c7cb6a18dc",
-    "mileage": 290.541,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -2190,7 +2134,6 @@
   {
     "name": "Niedźwiedź",
     "id": "9d1848be-00ca-44d1-98fc-4ac8ac5379b9",
-    "mileage": 295.782,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -2229,7 +2172,6 @@
   {
     "name": "Zastów",
     "id": "e7115dbb-eb7e-4491-a5dc-a70d0bba2e78",
-    "mileage": 307.946,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -2268,7 +2210,6 @@
   {
     "name": "Kraków Batowice",
     "id": "e9854497-7dee-4951-a23b-587a72ccdc61",
-    "mileage": 313.275,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -2307,7 +2248,6 @@
   {
     "name": "Kraków Główny",
     "id": "44af7a07-1f5b-4700-b140-576d9d48e0ef",
-    "mileage": 319.44,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -2346,7 +2286,6 @@
   {
     "name": "Góra Włodowska",
     "id": "a301a1fe-bcad-4efb-a962-41bede7e4f85",
-    "mileage": 206.688,
     "prefix": "GW",
     "max_speed": 200,
     "ids": [
@@ -2385,7 +2324,6 @@
   {
     "name": "Chorzów Batory",
     "id": "bd63a004-01e0-4672-a798-a45635ea63f1",
-    "mileage": 6.166,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2424,7 +2362,6 @@
   {
     "name": "Ruda Chebzie",
     "id": "d5636795-9083-47a8-879e-ffa4bf3f16da",
-    "mileage": 11.74,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2463,7 +2400,6 @@
   {
     "name": "Zabrze",
     "id": "52238119-4463-4169-8ca1-aa7ac7585a42",
-    "mileage": 18.926,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2502,7 +2438,6 @@
   {
     "name": "Gliwice",
     "id": "2168c889-d17b-471a-8b26-8730d5ce1f7a",
-    "mileage": 27.1,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2541,7 +2476,6 @@
   {
     "name": "Ruda Kochłowice",
     "id": "e917c6fc-2104-48f8-93f9-afa09bcd0f37",
-    "mileage": 6.925,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -2580,7 +2514,6 @@
   {
     "name": "Ruda Bielszowice",
     "id": "ba7bd9d9-980e-45fd-aa31-f975c061b28e",
-    "mileage": 13.396,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -2619,7 +2552,6 @@
   {
     "name": "Zabrze Makoszowy",
     "id": "ba634fd2-eade-4e8d-a1ce-55d9882bad7d",
-    "mileage": 16.681,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -2658,7 +2590,6 @@
   {
     "name": "Knurów",
     "id": "07f0d8de-9c1a-4065-96d0-d633134209fb",
-    "mileage": 11.872,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -2697,7 +2628,6 @@
   {
     "name": "Leszczyny",
     "id": "09f1e4ed-7de9-4508-ac82-377999b9ae7a",
-    "mileage": 31.776,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2736,7 +2666,6 @@
   {
     "name": "Rybnik",
     "id": "44e96b43-85d7-4b4b-9d01-d9be447d6b2f",
-    "mileage": 39.702,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -2775,7 +2704,6 @@
   {
     "name": "Rybnik Towarowy",
     "id": "2b8e5143-ccc0-45cc-ba41-78a16ebec93e",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -2814,7 +2742,6 @@
   {
     "name": "Radlin Obszary",
     "id": "ac48393e-1605-440f-9ebf-069c640d8473",
-    "mileage": 3.147,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -2853,7 +2780,6 @@
   {
     "name": "Wodzisław Śląski",
     "id": "7ca48bd0-98ae-49a9-9f37-80c90a27f629",
-    "mileage": 7.828,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -2892,7 +2818,6 @@
   {
     "name": "Olza",
     "id": "bd0078f7-ccbd-469b-a88b-69a3b6b19d9f",
-    "mileage": 20.514,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -2931,7 +2856,6 @@
   {
     "name": "Chałupki",
     "id": "05aef413-ee22-476d-9459-ffae73458f91",
-    "mileage": 52.568,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -2970,7 +2894,6 @@
   {
     "name": "Żelisławice",
     "id": "34d976aa-86bc-4325-941c-cfe77fce8843",
-    "mileage": 59.037,
     "prefix": "Zes",
     "max_speed": 120,
     "ids": [
@@ -3010,7 +2933,6 @@
   {
     "name": "Koniecpol",
     "id": "e963d23e-9f33-4de1-bdf2-bd6581468c98",
-    "mileage": 71.478,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3049,7 +2971,6 @@
   {
     "name": "Podlesie",
     "id": "a571f78b-331d-4b5b-a1d4-1385b0a619ea",
-    "mileage": 78.508,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3088,7 +3009,6 @@
   {
     "name": "Julianka",
     "id": "5094bd93-b714-441c-bf58-18f703a9fb34",
-    "mileage": 87.888,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3127,7 +3047,6 @@
   {
     "name": "Lusławice",
     "id": "dd26df5a-edc2-467b-bedd-9775e58e4d87",
-    "mileage": 93.962,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3166,7 +3085,6 @@
   {
     "name": "Turów",
     "id": "45b0111c-3ea2-4249-9c27-d0c132388a8d",
-    "mileage": 99.679,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -3205,7 +3123,6 @@
   {
     "name": "Częstochowa Stradom",
     "id": "f41f1552-8b17-4542-bf52-97266f319f52",
-    "mileage": 117.223,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3244,7 +3161,6 @@
   {
     "name": "Częstochowa Gnaszyn",
     "id": "61d219a3-44d3-4ee5-a117-fe27c154852e",
-    "mileage": 122.963,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3283,7 +3199,6 @@
   {
     "name": "Blachownia",
     "id": "244ea423-80ad-4f37-ab7e-c20701232b97",
-    "mileage": 127.777,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3322,7 +3237,6 @@
   {
     "name": "Herby Stare",
     "id": "70643020-f02e-4e71-9fd8-acb9007f9e7d",
-    "mileage": 134.666,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3361,7 +3275,6 @@
   {
     "name": "Lisów",
     "id": "b6631ff6-3dc9-499c-93b2-9817a727fbbe",
-    "mileage": 141.799,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3400,7 +3313,6 @@
   {
     "name": "Kochanowice",
     "id": "847bed80-3c71-4f55-bffe-ba6879e9bb00",
-    "mileage": 145.837,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3439,7 +3351,6 @@
   {
     "name": "Lubliniec",
     "id": "9b2506bb-afc9-4e3e-9ea5-f92460cd38ff",
-    "mileage": 152.231,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3478,7 +3389,6 @@
   {
     "name": "Pawonków",
     "id": "2a7631d3-4897-41c5-a780-6aeff594614d",
-    "mileage": 161.223,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -3517,7 +3427,6 @@
   {
     "name": "Pludry",
     "id": "9c23956a-590e-410f-af69-9713df3d14f2",
-    "mileage": 168.443,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -3556,7 +3465,6 @@
   {
     "name": "Fosowskie",
     "id": "db609dbb-f2c7-4e60-97af-8bbd218d6be3",
-    "mileage": 44.474,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -3595,7 +3503,6 @@
   {
     "name": "Ozimek",
     "id": "5fbbab81-2841-4539-abd4-34c7433a2041",
-    "mileage": 55.357,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -3634,7 +3541,6 @@
   {
     "name": "Chrząstowice",
     "id": "bc87f421-743c-47ed-bd26-98e3d98a550b",
-    "mileage": 65.432,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -3673,7 +3579,6 @@
   {
     "name": "Opole Główne",
     "id": "40643041-fac7-47f4-85c4-6fce4fd2ac80",
-    "mileage": 4.154,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -3712,7 +3617,6 @@
   {
     "name": "Opole Zachodnie",
     "id": "86d51af6-ed4b-4afe-8593-956b6e921d73",
-    "mileage": 102.085,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -3751,7 +3655,6 @@
   {
     "name": "Dąbrowa Niemodlińska",
     "id": "e18844e5-ccaf-4891-9ce5-48cbfeb82065",
-    "mileage": 112.385,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -3790,7 +3693,6 @@
   {
     "name": "Lewin Brzeski",
     "id": "3b11d220-7677-400b-8b10-025a21991df4",
-    "mileage": 124.715,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -3829,7 +3731,6 @@
   {
     "name": "Brzeg",
     "id": "1c738595-1c8b-42a6-9d6b-72f19766177d",
-    "mileage": 139.447,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -3868,7 +3769,6 @@
   {
     "name": "Oława",
     "id": "0d9489a7-6aae-45b4-80a3-9b78409d25ca",
-    "mileage": 154.513,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -3907,7 +3807,6 @@
   {
     "name": "Święta Katarzyna",
     "id": "3cb68847-91c5-4ac2-bd2b-dee5aa37cb81",
-    "mileage": 170.974,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -3946,7 +3845,6 @@
   {
     "name": "Wrocław Główny",
     "id": "f8882d8f-f6e1-46bc-bf06-2244c14f68ec",
-    "mileage": 181.041,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -3985,7 +3883,6 @@
   {
     "name": "Kielce",
     "id": "ab23fcad-c53b-49fc-8e0f-fe821ae059f4",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -4024,7 +3921,6 @@
   {
     "name": "Kielce Herbskie",
     "id": "a93045e7-8d86-4eb5-ad31-2c9f0fd58f8b",
-    "mileage": 2.254,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -4063,7 +3959,6 @@
   {
     "name": "Górki Szczukowskie",
     "id": "ee8c48dc-e681-400f-96dd-a24f5c37383e",
-    "mileage": 8.336,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4102,7 +3997,6 @@
   {
     "name": "Rykoszyn",
     "id": "3b328d43-d2db-442f-85f0-b0b2f77841f1",
-    "mileage": 19.017,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -4141,7 +4035,6 @@
   {
     "name": "Małogoszcz",
     "id": "3e9b7009-25d5-4663-b568-e72ab2d4e490",
-    "mileage": 27.306,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -4181,7 +4074,6 @@
   {
     "name": "Ludynia",
     "id": "295eef3c-37c4-4149-9536-b0733b0a124c",
-    "mileage": 36.699,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -4220,7 +4112,6 @@
   {
     "name": "Włoszczowa",
     "id": "59f2bab7-dfb1-4762-b242-e7a61d569abe",
-    "mileage": 47.735,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -4259,7 +4150,6 @@
   {
     "name": "Czarnca",
     "id": "c698e0ba-040a-4181-ae74-14839b8b04f4",
-    "mileage": 53.261,
     "prefix": "Cz",
     "max_speed": 120,
     "ids": [
@@ -4300,7 +4190,6 @@
   {
     "name": "Dąbrowa Górnicza Huta Katowice",
     "id": "3b99d08e-37bf-48d1-b6e7-7f87189edb45",
-    "mileage": 3.677,
     "prefix": "DGHK",
     "max_speed": 120,
     "ids": [
@@ -4339,7 +4228,6 @@
   {
     "name": "Dąbrowa Górnicza Południowa",
     "id": "b9b35fb7-fab6-4429-970b-cfc6ab563d69",
-    "mileage": 7.537,
     "prefix": "DP",
     "max_speed": 120,
     "ids": [
@@ -4378,7 +4266,6 @@
   {
     "name": "Dorota",
     "id": "446fe4ef-6227-4f48-96f7-2488510132be",
-    "mileage": 16.224,
     "prefix": "Dra",
     "max_speed": 120,
     "ids": [
@@ -4417,7 +4304,6 @@
   {
     "name": "Juliusz",
     "id": "86d1cd48-6bac-49e4-8012-37465ccf9977",
-    "mileage": 20.746,
     "prefix": "Ju",
     "max_speed": 70,
     "ids": [
@@ -4456,7 +4342,6 @@
   {
     "name": "Sosnowiec Dańdówka",
     "id": "0fe1b05f-8af4-48df-ba5c-2e2b4da69a6a",
-    "mileage": 78.93,
     "prefix": "SDn",
     "max_speed": 80,
     "ids": [
@@ -4495,7 +4380,6 @@
   {
     "name": "Sosnowiec Południowy",
     "id": "15522d10-cc7d-4d08-ba98-0d15034a8ca3",
-    "mileage": 0.0,
     "prefix": "Spł1",
     "max_speed": 60,
     "ids": [
@@ -4534,7 +4418,6 @@
   {
     "name": "Kielce Białogon",
     "id": "34299eb7-d6c8-4724-8b56-b82156202f55",
-    "mileage": 191.87,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4573,7 +4456,6 @@
   {
     "name": "Kielce Słowik",
     "id": "f233abf9-df8e-4f60-9562-9a45f4fbc284",
-    "mileage": 195.368,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4612,7 +4494,6 @@
   {
     "name": "Sitkówka Nowiny",
     "id": "093cab0a-102a-4faf-8ef7-be9794684495",
-    "mileage": 197.33,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4651,7 +4532,6 @@
   {
     "name": "Wolica",
     "id": "3899e3dc-e31f-4bc4-b27d-d2d3a6b903b3",
-    "mileage": 207.761,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4690,7 +4570,6 @@
   {
     "name": "Radkowice",
     "id": "5919818a-2804-4c27-980c-a1c5fdaf9209",
-    "mileage": 202.154,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4729,7 +4608,6 @@
   {
     "name": "Sobków",
     "id": "6bb14771-53cd-47cc-9e35-89a41fb1347d",
-    "mileage": 211.877,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4768,7 +4646,6 @@
   {
     "name": "Miąsowa",
     "id": "e3bb9a07-03fe-4a12-98c5-2f154ac63671",
-    "mileage": 219.49,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4807,7 +4684,6 @@
   {
     "name": "Jędrzejów",
     "id": "57bbcc0c-3bd8-458e-8550-2c6bfb5a69fa",
-    "mileage": 231.665,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4846,7 +4722,6 @@
   {
     "name": "Potok",
     "id": "c1421758-de8d-4e66-b670-3f7bd5ab9e6f",
-    "mileage": 238.263,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -4885,7 +4760,6 @@
   {
     "name": "Krzcięcice",
     "id": "7213c32f-5276-4e13-9c3d-75c621b46f63",
-    "mileage": 244.543,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -4924,7 +4798,6 @@
   {
     "name": "Sędziszów",
     "id": "aad22ec5-18ba-4da6-910d-87d2f2219e7a",
-    "mileage": 251.232,
     "prefix": "Sd",
     "max_speed": 100,
     "ids": [
@@ -4963,7 +4836,6 @@
   {
     "name": "Klimontów",
     "id": "65f7ea28-e101-4108-9322-5ae989d694ce",
-    "mileage": 256.243,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5002,7 +4874,6 @@
   {
     "name": "Charsznica",
     "id": "009840c6-d714-4966-85ac-753ba8c39eee",
-    "mileage": 7.793,
     "prefix": "Ch",
     "max_speed": 50,
     "ids": [
@@ -5041,7 +4912,6 @@
   {
     "name": "Gajówka",
     "id": "b1741c80-1a7e-4411-9939-b430d8c84330",
-    "mileage": 12.5,
     "prefix": "Ga",
     "max_speed": 50,
     "ids": [
@@ -5081,7 +4951,6 @@
   {
     "name": "Jeżówka",
     "id": "15958ee0-a7f7-4292-b465-be33ed6d247f",
-    "mileage": 16.894,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5120,7 +4989,6 @@
   {
     "name": "Wolbrom",
     "id": "d01697b7-503f-4951-93de-a32cafa10200",
-    "mileage": 22.296,
     "prefix": "W",
     "max_speed": 120,
     "ids": [
@@ -5159,7 +5027,6 @@
   {
     "name": "Zarzecze",
     "id": "3f8fbbf6-203f-41bf-bbcc-e8fb3a59b80f",
-    "mileage": 28.0,
     "prefix": "Za",
     "max_speed": 120,
     "ids": [
@@ -5199,7 +5066,6 @@
   {
     "name": "Chrząstowice Olkuskie",
     "id": "908be3ae-066f-4c78-8ca7-7a80fa7df1db",
-    "mileage": 30.56,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5238,7 +5104,6 @@
   {
     "name": "Jaroszowiec Olkuski",
     "id": "028e8d9c-10d9-47c7-a26c-449dd40473e6",
-    "mileage": 35.744,
     "prefix": "JO",
     "max_speed": 100,
     "ids": [
@@ -5277,7 +5142,6 @@
   {
     "name": "Olkusz",
     "id": "a7574ec3-ded5-4389-98a6-bf38e87a7f00",
-    "mileage": 45.021,
     "prefix": "O",
     "max_speed": 100,
     "ids": [
@@ -5316,7 +5180,6 @@
   {
     "name": "Bukowno",
     "id": "b04b15b7-66c0-4284-a54a-51482ac49607",
-    "mileage": 53.538,
     "prefix": "Bo",
     "max_speed": 100,
     "ids": [
@@ -5355,7 +5218,6 @@
   {
     "name": "Bukowno Przymiarki",
     "id": "19e20a2e-b086-46b5-bf1a-abf7797d9cbe",
-    "mileage": 57.338,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5394,7 +5256,6 @@
   {
     "name": "Sławków",
     "id": "44ae7bd1-b503-45c2-8a94-d68c9842c21e",
-    "mileage": 61.261,
     "prefix": "Sl",
     "max_speed": 100,
     "ids": [
@@ -5433,7 +5294,6 @@
   {
     "name": "Dąbrowa Górnicza Wschodnia",
     "id": "b6fe5ca4-1f8a-4e72-88a5-9a9fd701202f",
-    "mileage": 65.941,
     "prefix": "DW",
     "max_speed": 120,
     "ids": [
@@ -5472,7 +5332,6 @@
   {
     "name": "Dąbrowa Górnicza Strzemieszyce",
     "id": "006034c0-4829-4c10-bd47-f8c6e59851a8",
-    "mileage": 69.221,
     "prefix": "DS",
     "max_speed": 120,
     "ids": [
@@ -5511,7 +5370,6 @@
   {
     "name": "Sosnowiec Kazimierz",
     "id": "e62f1f52-e328-4139-9a0f-a85c4be4748d",
-    "mileage": 73.608,
     "prefix": "SKz",
     "max_speed": 100,
     "ids": [
@@ -5550,7 +5408,6 @@
   {
     "name": "Sosnowiec Porąbka",
     "id": "ee519693-4367-4de8-b63c-ef8cb699648f",
-    "mileage": 75.685,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -5589,7 +5446,6 @@
   {
     "name": "Ruda Śląska",
     "id": "baa03719-7675-4a4d-9b67-7aca12e732a5",
-    "mileage": 14.068,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -5628,7 +5484,6 @@
   {
     "name": "Świętochłowice",
     "id": "d9fba346-a97b-41fe-9a39-ffcf1e00727a",
-    "mileage": 8.413,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -5667,7 +5522,6 @@
   {
     "name": "Katowice Załęże",
     "id": "59219ba6-19fc-4add-bc77-bd86456d674a",
-    "mileage": 2.528,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -5706,7 +5560,6 @@
   {
     "name": "Korwinów",
     "id": "3255a8d9-278b-4ecd-9da4-4f06345998ce",
-    "mileage": 239.158,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5745,7 +5598,6 @@
   {
     "name": "Masłońskie Natalin",
     "id": "e6f3ace1-21a2-46ee-9e88-1cbb6c50fb1f",
-    "mileage": 250.787,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5784,7 +5636,6 @@
   {
     "name": "Myszków Nowa Wieś",
     "id": "22f4e368-ab75-4c3c-9b44-496a334c0bf4",
-    "mileage": 257.525,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5823,7 +5674,6 @@
   {
     "name": "Myszków Światowit",
     "id": "b21e1591-e73a-408a-bb27-7241564b3ab7",
-    "mileage": 263.442,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5862,7 +5712,6 @@
   {
     "name": "Myszków Mrzygłód",
     "id": "c6a7fbd3-10b6-4220-a88a-58a2a20b99ac",
-    "mileage": 266.37,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5901,7 +5750,6 @@
   {
     "name": "Zawiercie Borowe Pole",
     "id": "317cd7f5-28b9-4070-8131-e8f647b79240",
-    "mileage": 270.3,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5940,7 +5788,6 @@
   {
     "name": "Wiesiółka",
     "id": "11a5736f-02e8-44dc-8206-0f695d0802bc",
-    "mileage": 284.313,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -5979,7 +5826,6 @@
   {
     "name": "Chruszczobród",
     "id": "add7e66b-9bd5-4ac3-bfca-7e925a957a1a",
-    "mileage": 286.557,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6018,7 +5864,6 @@
   {
     "name": "Dąbrowa Górnicza Sikorka",
     "id": "9e06eb42-058a-4873-b266-36523a1f23fa",
-    "mileage": 289.202,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6057,7 +5902,6 @@
   {
     "name": "Dąbrowa Górnicza Pogoria",
     "id": "f18ed8c5-1011-4111-b106-eeb278a1336a",
-    "mileage": 295.398,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6096,7 +5940,6 @@
   {
     "name": "Bohumín",
     "id": "af68e512-5719-4a66-9d90-5ca13d4c42b9",
-    "mileage": 272.603,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -6136,7 +5979,6 @@
   {
     "name": "Kostomłoty",
     "id": "026804ff-1fa2-41a5-bffe-49b1dd867109",
-    "mileage": 182.06,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -6175,7 +6017,6 @@
   {
     "name": "Zagnańsk",
     "id": "9e174686-b59d-45b0-822a-43bebcb37ebe",
-    "mileage": 171.297,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -6214,7 +6055,6 @@
   {
     "name": "Łączna",
     "id": "f56bb40a-f2d2-4941-9891-b788ac296248",
-    "mileage": 160.271,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -6253,7 +6093,6 @@
   {
     "name": "Suchedniów",
     "id": "902d5355-6c1e-442a-8266-94ef0e50165d",
-    "mileage": 152.404,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -6292,7 +6131,6 @@
   {
     "name": "Suchedniów Północny",
     "id": "56dd4273-5028-4f76-8a4b-cc6980bb1f4c",
-    "mileage": 150.037,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -6331,7 +6169,6 @@
   {
     "name": "Skarżysko-Kamienna",
     "id": "6d1f7898-67f9-4208-b53d-3c89fbdd2538",
-    "mileage": 143.442,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -6370,7 +6207,6 @@
   {
     "name": "Brzeziny",
     "id": "aa92914b-2a95-431a-aebe-f936fcdca22b",
-    "mileage": 4.771,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -6409,7 +6245,6 @@
   {
     "name": "Nida",
     "id": "ae32029d-f2ff-4631-91e3-3507a54e7248",
-    "mileage": 6.822,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -6448,7 +6283,6 @@
   {
     "name": "Włoszczowice",
     "id": "99e56198-23b8-4b0e-a59d-ee5624851a5f",
-    "mileage": 19.542,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -6487,7 +6321,6 @@
   {
     "name": "Kije",
     "id": "41a42a52-8fa7-4df8-8675-d0498719cdcd",
-    "mileage": 24.74,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -6526,7 +6359,6 @@
   {
     "name": "Busko-Zdrój",
     "id": "c70e392a-2cdb-4e8c-a610-d215f32cdaa3",
-    "mileage": 43.3,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -6565,7 +6397,6 @@
   {
     "name": "Warszawa Ursus",
     "id": "0d3952ce-1888-428d-8de0-b4c2e434ee99",
-    "mileage": 9.165,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6604,7 +6435,6 @@
   {
     "name": "Warszawa Ursus Niedźwiadek",
     "id": "c34647b4-6608-4909-a8cd-61113e17e01d",
-    "mileage": 10.345,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6643,7 +6473,6 @@
   {
     "name": "Piastów",
     "id": "68ebeb49-4c90-43d5-a009-b0bdfad819e8",
-    "mileage": 12.457,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6682,7 +6511,6 @@
   {
     "name": "Parzniew",
     "id": "a86741f6-4c78-4e7d-9b4e-626f0e5f8c3b",
-    "mileage": 18.631,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6721,7 +6549,6 @@
   {
     "name": "Brwinów",
     "id": "a1f5f25f-6c8f-4024-921c-c34df7cc85f0",
-    "mileage": 22.057,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6760,7 +6587,6 @@
   {
     "name": "Milanówek",
     "id": "3bc1287e-c33f-428e-9685-be1dad28fc28",
-    "mileage": 26.005,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -6799,7 +6625,6 @@
   {
     "name": "Jaktorów",
     "id": "b77aeca6-57fd-4a14-aaa6-1ead353d76c7",
-    "mileage": 35.034,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -6838,7 +6663,6 @@
   {
     "name": "Międzyborów",
     "id": "0b76101b-cb16-46cb-9ef6-4cd048fa1a34",
-    "mileage": 40.437,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -6877,7 +6701,6 @@
   {
     "name": "Żyrardów",
     "id": "93b161a2-be98-4a52-9c4c-6ee60c288e50",
-    "mileage": 43.141,
     "prefix": "5431_Zy",
     "max_speed": 160,
     "ids": [
@@ -6916,7 +6739,6 @@
   {
     "name": "Sucha Żyrardowska",
     "id": "822bcd09-f90a-41d3-9584-638cdb516207",
-    "mileage": 50.033,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -6955,7 +6777,6 @@
   {
     "name": "Jesionka",
     "id": "595e5443-af32-4afe-b94d-840da93c1288",
-    "mileage": 51.959,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -6994,7 +6815,6 @@
   {
     "name": "Radziwiłłów Mazowiecki",
     "id": "5e957536-1246-4913-a594-bae12b5a61cd",
-    "mileage": 54.92,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -7033,7 +6853,6 @@
   {
     "name": "Skierniewice Rawka",
     "id": "20c2ff84-623c-46a8-b8e8-e7b7e3d50a26",
-    "mileage": 60.779,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -7073,7 +6892,6 @@
   {
     "name": "Skierniewice",
     "id": "61094bf5-cd95-4685-a32c-ae0fded54bed",
-    "mileage": 65.926,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -7113,7 +6931,6 @@
   {
     "name": "Katowice Muchowiec Staszic",
     "id": "84b162e7-1a2c-4331-8444-59d55960fa0f",
-    "mileage": 3.7,
     "prefix": "StA",
     "max_speed": 30,
     "ids": [
@@ -7152,7 +6969,6 @@
   {
     "name": "Radom",
     "id": "bdadeadf-e9b5-4337-8040-755e2fbffe14",
-    "mileage": 102.944,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -7191,7 +7007,6 @@
   {
     "name": "Radom Południowy",
     "id": "9225e965-0379-407d-a9f5-c3dfb7020ebf",
-    "mileage": 110.015,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7230,7 +7045,6 @@
   {
     "name": "Rożki",
     "id": "b21d33a5-e75e-4875-bee1-88d7adff3e75",
-    "mileage": 113.254,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -7269,7 +7083,6 @@
   {
     "name": "Ruda Wielka",
     "id": "7d229eda-79bc-4b6c-a1dc-2478b816a875",
-    "mileage": 117.543,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7308,7 +7121,6 @@
   {
     "name": "Wola Lipieniecka",
     "id": "abff41a3-8989-44e9-b437-792627d8d6fc",
-    "mileage": 120.7,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7347,7 +7159,6 @@
   {
     "name": "Jastrząb",
     "id": "10331165-3f72-479e-a2c8-65185db6d236",
-    "mileage": 125.123,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -7386,7 +7197,6 @@
   {
     "name": "Gąsawy Plebańskie",
     "id": "279bd019-9dcf-44c1-a7e8-d2b1c88d3d55",
-    "mileage": 128.639,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7425,7 +7235,6 @@
   {
     "name": "Szydłowiec",
     "id": "942acd33-7a1a-4439-8112-b52b5200e38b",
-    "mileage": 132.513,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -7464,7 +7273,6 @@
   {
     "name": "Lipowe Pole",
     "id": "94ef65f5-2137-48c5-80f5-b9d483ccdd72",
-    "mileage": 138.68,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7503,7 +7311,6 @@
   {
     "name": "Skarżysko-Kamienna Ska",
     "id": "74db6048-6c25-46ed-aed3-d8a6d80e1e9f",
-    "mileage": 139.114,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -7543,7 +7350,6 @@
   {
     "name": "Skarżysko Zachodnie",
     "id": "fdbb9964-c863-480d-b819-3536c88e264d",
-    "mileage": 145.85,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7582,7 +7388,6 @@
   {
     "name": "Berezów",
     "id": "79db0a61-289c-4228-af41-75668f1a3418",
-    "mileage": 155.099,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7621,7 +7426,6 @@
   {
     "name": "Tumlin",
     "id": "e36fbeb1-ced2-41ac-8e5b-eb47e5fd8103",
-    "mileage": 176.198,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7660,7 +7464,6 @@
   {
     "name": "Kielce Piaski",
     "id": "5da9059a-6793-4efe-805e-f59e3520a7a2",
-    "mileage": 186.016,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -7699,7 +7502,6 @@
   {
     "name": "Katowice Kostuchna",
     "id": "676dc7e3-87b6-4df2-a3e6-cbe9e5bc99ed",
-    "mileage": 8.344,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -7738,7 +7540,6 @@
   {
     "name": "Łódź Widzew",
     "id": "c9c9774f-a552-42c2-aff2-98dc89d9d108",
-    "mileage": 5.267,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -7777,7 +7578,6 @@
   {
     "name": "Łódź Andrzejów",
     "id": "adf58390-70da-49a6-80b8-33b46339941d",
-    "mileage": 10.847,
     "prefix": null,
     "max_speed": 150,
     "ids": [
@@ -7816,7 +7616,6 @@
   {
     "name": "Bedoń",
     "id": "21f8554e-7de8-4898-b108-29cff853e0ad",
-    "mileage": 13.05,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -7855,7 +7654,6 @@
   {
     "name": "Justynów",
     "id": "d42c403e-1257-46cf-bd71-08a926f60ddb",
-    "mileage": 15.921,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -7894,7 +7692,6 @@
   {
     "name": "Gałkówek",
     "id": "f1f2c08d-1416-473c-b88d-73d4104d41d8",
-    "mileage": 19.197,
     "prefix": null,
     "max_speed": 150,
     "ids": [
@@ -7933,7 +7730,6 @@
   {
     "name": "Żakowice",
     "id": "9ecdd67d-9a98-48fb-bc5a-223ae6191c31",
-    "mileage": 23.503,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -7972,7 +7768,6 @@
   {
     "name": "Koluszki",
     "id": "1620faed-498a-49df-bb19-6da1aa97a079",
-    "mileage": 105.194,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8013,7 +7808,6 @@
   {
     "name": "Wągry",
     "id": "f40c2348-096a-4908-ac77-ce66fb5657bd",
-    "mileage": 99.619,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8052,7 +7846,6 @@
   {
     "name": "Rogów",
     "id": "c59e34c5-bea8-4919-9f87-d0e8da65ae85",
-    "mileage": 95.723,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -8091,7 +7884,6 @@
   {
     "name": "Przyłęk Duży",
     "id": "e674b62c-c7e4-4206-83e9-2b0504aaa058",
-    "mileage": 92.345,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8130,7 +7922,6 @@
   {
     "name": "Krosnowa",
     "id": "ab212d91-3221-4f3d-9f51-f061c273fab0",
-    "mileage": 89.822,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8169,7 +7960,6 @@
   {
     "name": "Lipce Reymontowskie",
     "id": "c2ba0b99-8158-4177-9526-582dd67d95fa",
-    "mileage": 84.71,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8208,7 +7998,6 @@
   {
     "name": "Płyćwia",
     "id": "731ef571-e45b-4732-a083-deb6544927e6",
-    "mileage": 80.131,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -8247,7 +8036,6 @@
   {
     "name": "Maków",
     "id": "aacee59f-5358-41ad-bf4f-1d24d74af911",
-    "mileage": 75.372,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8286,7 +8074,6 @@
   {
     "name": "Dąbrowice Skierniewickie",
     "id": "173697ec-b722-4e40-9220-744bd77a4ac8",
-    "mileage": 71.355,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -8325,7 +8112,6 @@
   {
     "name": "Kochcice",
     "id": "f5185adc-5f79-4fd1-88f3-1f563654b1e5",
-    "mileage": 24.461,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8364,7 +8150,6 @@
   {
     "name": "Ciasna",
     "id": "6124fd16-ea34-4df3-9a16-d88e7dca8df1",
-    "mileage": 29.604,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8403,7 +8188,6 @@
   {
     "name": "Sieraków Śląski",
     "id": "7c210d0e-7a97-41f5-b847-9e6ead5b1c69",
-    "mileage": 34.996,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8442,7 +8226,6 @@
   {
     "name": "Sowczyce",
     "id": "dde4dbf6-2028-4125-a2b6-fa61394879cf",
-    "mileage": 43.459,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8481,7 +8264,6 @@
   {
     "name": "Olesno Śląskie",
     "id": "30c48d8a-b4b2-4917-aa1e-caeecfaa9b77",
-    "mileage": 50.137,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8520,7 +8302,6 @@
   {
     "name": "Stare Olesno",
     "id": "c92d751b-ddba-4179-bf0f-a8f5aba94fb0",
-    "mileage": 55.201,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8559,7 +8340,6 @@
   {
     "name": "Bąków",
     "id": "b9d3e618-964e-4c19-a78d-dbab2b08f070",
-    "mileage": 61.756,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8598,7 +8378,6 @@
   {
     "name": "Kluczbork",
     "id": "e0f6c66e-591e-45eb-9827-50c9dbf23129",
-    "mileage": 70.122,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -8637,7 +8416,6 @@
   {
     "name": "Smardy",
     "id": "b37cfde6-4002-4f07-a064-b9fc78c8262f",
-    "mileage": 74.708,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8676,7 +8454,6 @@
   {
     "name": "Wołczyn",
     "id": "e6b7074c-00f3-41a0-8114-7286b6e42714",
-    "mileage": 82.168,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8715,7 +8492,6 @@
   {
     "name": "Wierzbica Górna",
     "id": "dfb5c24c-a792-4f0d-b3a9-428b2a087f2c",
-    "mileage": 87.208,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8754,7 +8530,6 @@
   {
     "name": "Domaszowice",
     "id": "d15367c9-12be-4aae-bdca-bbf472125287",
-    "mileage": 94.271,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8793,7 +8568,6 @@
   {
     "name": "Gręboszów",
     "id": "d9b3164a-18c5-4afa-bf89-9cb9d78e03be",
-    "mileage": 100.469,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8832,7 +8606,6 @@
   {
     "name": "Namysłów",
     "id": "64ba9b29-fc05-46b0-b445-11bbbda2743b",
-    "mileage": 106.465,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8871,7 +8644,6 @@
   {
     "name": "Wilków Namysłowski",
     "id": "8bd5567c-42c4-472b-a78e-5f9305d407c1",
-    "mileage": 111.089,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -8910,7 +8682,6 @@
   {
     "name": "Bierutów",
     "id": "ce10d094-b5d7-405a-9d6c-73c8068f983e",
-    "mileage": 119.873,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -8949,7 +8720,6 @@
   {
     "name": "Solniki Wielkie",
     "id": "a339a779-6a5c-44e9-a005-d50ec65a03b1",
-    "mileage": 124.588,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -8988,7 +8758,6 @@
   {
     "name": "Oleśnica",
     "id": "de49caf5-7a28-420f-892d-3c8b1d532b25",
-    "mileage": 133.69,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9027,7 +8796,6 @@
   {
     "name": "Borowa Oleśnicka",
     "id": "02ef78bf-672c-4f24-939d-2350eae1523c",
-    "mileage": 141.717,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9066,7 +8834,6 @@
   {
     "name": "Długołęka",
     "id": "303afa84-08bb-47c8-ab9c-ae04566f4360",
-    "mileage": 147.628,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9105,7 +8872,6 @@
   {
     "name": "Wrocław Psie Pole",
     "id": "80ab65e7-ccde-471a-bc10-f1c159cd5f6e",
-    "mileage": 153.742,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9144,7 +8910,6 @@
   {
     "name": "Wrocław Sołtysowice",
     "id": "891cf738-a9f4-4145-a801-b5f84f28febb",
-    "mileage": 156.609,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9183,7 +8948,6 @@
   {
     "name": "Wrocław Nadodrze",
     "id": "994a857a-22da-4395-815d-e87515be5f32",
-    "mileage": 160.536,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -9222,7 +8986,6 @@
   {
     "name": "Tychy Fiat",
     "id": "eddab000-9c64-404b-9156-95e2fecb8aff",
-    "mileage": 4.1,
     "prefix": null,
     "max_speed": 15,
     "ids": [
@@ -9261,7 +9024,6 @@
   {
     "name": "Kłodzko Główne",
     "id": "0a206b38-7d8a-4d47-8ca2-e5b08644e2e3",
-    "mileage": 93.481,
     "prefix": null,
     "max_speed": 75,
     "ids": [
@@ -9300,7 +9062,6 @@
   {
     "name": "Ławica",
     "id": "08ecf540-ec46-4a18-ad37-45daf35438f4",
-    "mileage": 90.4,
     "prefix": null,
     "max_speed": 75,
     "ids": [
@@ -9339,7 +9100,6 @@
   {
     "name": "Bardo Śląskie",
     "id": "8b43da80-98a5-4f5e-983e-b0e25233f2c1",
-    "mileage": 84.439,
     "prefix": null,
     "max_speed": 75,
     "ids": [
@@ -9378,7 +9138,6 @@
   {
     "name": "Bardo Przyłęk",
     "id": "6d22b69b-ec0c-4b65-808d-4b7fe113d407",
-    "mileage": 82.545,
     "prefix": null,
     "max_speed": 75,
     "ids": [
@@ -9417,7 +9176,6 @@
   {
     "name": "Suszka",
     "id": "0096e70f-8acc-437f-90c8-5519e51de1a3",
-    "mileage": 77.302,
     "prefix": null,
     "max_speed": 75,
     "ids": [
@@ -9456,7 +9214,6 @@
   {
     "name": "Kamieniec Ząbkowicki",
     "id": "27568ebe-5566-4744-a555-0f4d7e99ca29",
-    "mileage": 177.22,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9495,7 +9252,6 @@
   {
     "name": "Paczków",
     "id": "98701158-135c-4718-a4ac-d7c781c062b1",
-    "mileage": 166.107,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9534,7 +9290,6 @@
   {
     "name": "Otmuchów Jezioro",
     "id": "1fdd7373-b438-4bfc-88da-e7a86a0291c0",
-    "mileage": 158.93,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9573,7 +9328,6 @@
   {
     "name": "Otmuchów",
     "id": "2e0b73d1-7f7b-47b9-af35-b9bc3e107580",
-    "mileage": 155.804,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9612,7 +9366,6 @@
   {
     "name": "Wójcice",
     "id": "4b3605c2-fc9e-4d8a-9017-3dc14e2a6999",
-    "mileage": 150.885,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9651,7 +9404,6 @@
   {
     "name": "Goświnowice",
     "id": "5b7ac0ed-1219-4a9f-9675-5897126f284a",
-    "mileage": 147.933,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9690,7 +9442,6 @@
   {
     "name": "Nysa",
     "id": "0648757b-7d01-4562-8848-270836a3f8fa",
-    "mileage": 139.075,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9729,7 +9480,6 @@
   {
     "name": "Nowy Świętów",
     "id": "dbb8b612-7f65-4df1-b9b8-c1caf7c5c0b7",
-    "mileage": 127.228,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -9768,7 +9518,6 @@
   {
     "name": "Nowy Las",
     "id": "8a4ca812-880a-489c-aec4-26bdd4eff86b",
-    "mileage": 123.6,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -9807,7 +9556,6 @@
   {
     "name": "Szybowice",
     "id": "7661e47d-193b-46d8-ad41-a17e1fec142c",
-    "mileage": 118.406,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -9846,7 +9594,6 @@
   {
     "name": "Prudnik",
     "id": "38974d78-1e9f-424e-9526-830cb2328bda",
-    "mileage": 111.204,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9885,7 +9632,6 @@
   {
     "name": "Dytmarów",
     "id": "2bb964b6-4c8b-45ed-ae3b-23bd54048256",
-    "mileage": 104.144,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9924,7 +9670,6 @@
   {
     "name": "Racławice Śląskie",
     "id": "e4167b6b-cb1b-4616-8d5f-01509b3c5738",
-    "mileage": 97.739,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -9963,7 +9708,6 @@
   {
     "name": "Głogówek",
     "id": "e4e56a3b-57bf-4632-bda4-f0f4a46b56e8",
-    "mileage": 88.597,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10002,7 +9746,6 @@
   {
     "name": "Twardawa",
     "id": "6f4783a9-911e-4c9b-a22e-4063d0a838c3",
-    "mileage": 79.619,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10041,7 +9784,6 @@
   {
     "name": "Pokrzywnica",
     "id": "82e424e2-ecf2-435a-8c25-cdf6f27d8f55",
-    "mileage": 73.772,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10080,7 +9822,6 @@
   {
     "name": "Kędzierzyn-Koźle Zachodnie",
     "id": "6406a117-969f-4fb4-8224-45055297a63d",
-    "mileage": 70.15,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10119,7 +9860,6 @@
   {
     "name": "Kędzierzyn-Koźle Przystanek",
     "id": "3065d137-83b8-4d8b-aa90-ca5888c4d1e0",
-    "mileage": 68.37,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10158,7 +9898,6 @@
   {
     "name": "Kędzierzyn-Koźle",
     "id": "b5716508-6eed-4792-ad1e-b12e7a8017b6",
-    "mileage": 64.162,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -10197,7 +9936,6 @@
   {
     "name": "Sławięcice",
     "id": "f0ffd148-566a-408b-a5f5-d1a2eede6b7c",
-    "mileage": 55.7,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -10236,7 +9974,6 @@
   {
     "name": "Rudziniec Gliwicki",
     "id": "48015aef-61be-41de-b5ef-98ea63ca1dc2",
-    "mileage": 49.056,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -10275,7 +10012,6 @@
   {
     "name": "Taciszów",
     "id": "32fad607-540b-4a53-87cd-3800b89370e8",
-    "mileage": 41.648,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10314,7 +10050,6 @@
   {
     "name": "Rzeczyce Śląskie",
     "id": "d0f63301-bc9d-49fa-8651-10fcb9e72a24",
-    "mileage": 37.4,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10353,7 +10088,6 @@
   {
     "name": "Gliwice Łabędy",
     "id": "efc79278-93ef-479d-935c-c38ff31ac8f5",
-    "mileage": 32.985,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -10392,7 +10126,6 @@
   {
     "name": "Sosnowiec Maczki",
     "id": "c28e9c1f-3458-473a-a728-96dc5ae57e68",
-    "mileage": 13.276,
     "prefix": "SMA",
     "max_speed": 60,
     "ids": [
@@ -10431,7 +10164,6 @@
   {
     "name": "Dziadówki",
     "id": "c1f7aa6d-e9cb-470a-9282-ddc72e8ae004",
-    "mileage": 272.194,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10470,7 +10202,6 @@
   {
     "name": "Kamieńczyce",
     "id": "bdf9952f-dcc1-4b8e-b8e6-04280e81ecc8",
-    "mileage": 280.724,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10509,7 +10240,6 @@
   {
     "name": "Szczepanowice",
     "id": "1b54b0a9-69fb-4f48-bb63-94ba3c57e224",
-    "mileage": 283.934,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10548,7 +10278,6 @@
   {
     "name": "Smroków",
     "id": "b2f4ce73-c066-44c0-86db-b80703139fcb",
-    "mileage": 287.322,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10587,7 +10316,6 @@
   {
     "name": "Słomniki Miasto",
     "id": "cbf1e3c1-099f-4c9f-b664-73013c62a4a1",
-    "mileage": 292.211,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10626,7 +10354,6 @@
   {
     "name": "Goszcza",
     "id": "74afd135-6d24-4782-9745-f99f65c7ff13",
-    "mileage": 298.89,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10665,7 +10392,6 @@
   {
     "name": "Łuczyce",
     "id": "61dfe881-369a-4803-a0d2-4e71ea0985fc",
-    "mileage": 301.57,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10704,7 +10430,6 @@
   {
     "name": "Baranówka",
     "id": "68205f43-0800-4a92-8d5f-9acf7ecfd035",
-    "mileage": 304.18,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -10743,7 +10468,6 @@
   {
     "name": "Kraków Nowa Huta",
     "id": "8e64173d-e9ad-484e-95fb-3932135cd942",
-    "mileage": 20.48,
     "prefix": null,
     "max_speed": 30,
     "ids": [
@@ -10783,7 +10507,6 @@
   {
     "name": "Jaworzno Szczakowa",
     "id": "d3236b53-3d7d-4321-b84e-b66db9dfebae",
-    "mileage": 15.81,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -10822,7 +10545,6 @@
   {
     "name": "Radzice",
     "id": "b87a7c3d-db78-4000-a6f2-69f9d185bb49",
-    "mileage": 28.43,
     "prefix": "Rd",
     "max_speed": 100,
     "ids": [
@@ -10861,7 +10583,6 @@
   {
     "name": "Dęba Opoczyńska",
     "id": "82b051f5-893b-4359-a673-2ddc3eb49ed7",
-    "mileage": 20.028,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -10900,7 +10621,6 @@
   {
     "name": "Antoniów",
     "id": "f88c91a8-2487-4366-b69a-efa5a1e23b3b",
-    "mileage": 15.894,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -10939,7 +10659,6 @@
   {
     "name": "Tomaszów Mazowiecki Białobrzegi",
     "id": "4382d2a0-fab0-4046-9361-e680c4d5c3b2",
-    "mileage": 3.585,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -10978,7 +10697,6 @@
   {
     "name": "Tomaszów Mazowiecki",
     "id": "59f6009f-b4ad-482d-9969-37f5162d3a9d",
-    "mileage": 55.7,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11017,7 +10735,6 @@
   {
     "name": "Skrzynki",
     "id": "e03fe8a5-ca3e-47a2-95a7-e30390f282af",
-    "mileage": 47.698,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11056,7 +10773,6 @@
   {
     "name": "Zaosie",
     "id": "6b81e456-15f8-4b40-badb-eb6f7e6afe87",
-    "mileage": 43.726,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11095,7 +10811,6 @@
   {
     "name": "Wykno",
     "id": "d7ffb970-bdb0-4d90-ba42-d9bbcaa82e21",
-    "mileage": 39.959,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11134,7 +10849,6 @@
   {
     "name": "Żakowice Południowe",
     "id": "935a61f8-d810-43fa-9f00-bcbffacf57d5",
-    "mileage": 28.453,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11173,7 +10887,6 @@
   {
     "name": "Mikołajów",
     "id": "c28d1efd-778e-4482-85da-9e5769a158b4",
-    "mileage": 33.967,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11212,7 +10925,6 @@
   {
     "name": "Łódź Olechów Wschód",
     "id": "a233cd7e-84fa-437c-823d-97cf7e39fd91",
-    "mileage": 14.783,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -11251,7 +10963,6 @@
   {
     "name": "Łódź Chojny",
     "id": "f02c98b9-56b3-4c11-bcf9-1299db8a2720",
-    "mileage": 6.926,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -11290,7 +11001,6 @@
   {
     "name": "Piława Górna",
     "id": "52fa80fc-2452-49dd-b074-97e2e588a6b2",
-    "mileage": 196.991,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11329,7 +11039,6 @@
   {
     "name": "Ząbkowice Śląskie",
     "id": "7e918d26-5010-44a0-a978-86afcfd07a71",
-    "mileage": 187.08,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11368,7 +11077,6 @@
   {
     "name": "Warszawa Gdańska",
     "id": "7ac44672-5bb7-42b5-b903-48effa7f9782",
-    "mileage": 10.534,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -11407,7 +11115,6 @@
   {
     "name": "Warszawa Powązki",
     "id": "1d7c65cd-28c2-4b34-bdb2-21462c139acd",
-    "mileage": 8.928,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -11446,7 +11153,6 @@
   {
     "name": "Warszawa Koło",
     "id": "19a045a2-f542-4bdf-820a-5c0bcbd2d011",
-    "mileage": 7.383,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -11485,7 +11191,6 @@
   {
     "name": "Warszawa Młynów",
     "id": "427ad489-c519-4d22-b239-de327ce3350a",
-    "mileage": 6.5,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -11524,7 +11229,6 @@
   {
     "name": "Warszawa Wola",
     "id": "f1684518-4413-490e-ac96-7a38bb1c7816",
-    "mileage": 5.55,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -11563,7 +11267,6 @@
   {
     "name": "Warszawa Główna Towarowa",
     "id": "60e231c2-85c3-44ab-9684-8fd8ef66561d",
-    "mileage": 1.17,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -11602,7 +11305,6 @@
   {
     "name": "Trzebinia",
     "id": "a0453219-138c-4b07-a1ac-57d8afd33af3",
-    "mileage": 31.716,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11641,7 +11343,6 @@
   {
     "name": "Balin",
     "id": "d1fd3ba0-1ec9-4fc7-963f-1c3326605831",
-    "mileage": 26.091,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11680,7 +11381,6 @@
   {
     "name": "Jaworzno Ciężkowice",
     "id": "31243441-4538-400a-9589-db10ce53f45e",
-    "mileage": 20.877,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11719,7 +11419,6 @@
   {
     "name": "Mysłowice",
     "id": "7f491ece-85a8-4288-bdc2-17a15f4e1805",
-    "mileage": 22.948,
     "prefix": "MW",
     "max_speed": 90,
     "ids": [
@@ -11758,7 +11457,6 @@
   {
     "name": "Sosnowiec Jęzor",
     "id": "93d4e9c2-eff6-48d6-8a51-dc83d7e809e7",
-    "mileage": 7.532,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -11797,7 +11495,6 @@
   {
     "name": "Dulowa",
     "id": "25faa517-01d4-482b-b06d-dd7ea31d36d3",
-    "mileage": 36.789,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11836,7 +11533,6 @@
   {
     "name": "Wola Filipowska",
     "id": "fa2968eb-f355-43c4-83ba-51111dc9a794",
-    "mileage": 41.112,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11875,7 +11571,6 @@
   {
     "name": "Krzeszowice",
     "id": "ac21c7f2-8749-456a-84bc-96ee7b482f11",
-    "mileage": 45.097,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -11915,7 +11610,6 @@
   {
     "name": "Rudawa",
     "id": "970fdce0-740b-486d-ab33-bb66f8c5ec8d",
-    "mileage": 51.634,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -11954,7 +11648,6 @@
   {
     "name": "Zabierzów",
     "id": "4ee8bc40-677b-48e0-b196-219875abc94e",
-    "mileage": 57.515,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -11993,7 +11686,6 @@
   {
     "name": "Kraków Business Park",
     "id": "d145c84f-44be-4306-9aca-36274e79dea9",
-    "mileage": 59.76,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12032,7 +11724,6 @@
   {
     "name": "Kraków Mydlniki Wapiennik",
     "id": "a1b46356-7764-4796-a574-492adcabef9e",
-    "mileage": 61.954,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12071,7 +11762,6 @@
   {
     "name": "Kraków Mydlniki",
     "id": "6a94abda-3132-44c6-a955-facae2024ded",
-    "mileage": 63.304,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12111,7 +11801,6 @@
   {
     "name": "Kraków Bronowice",
     "id": "3e9d6076-55cc-456a-8ea5-287261559508",
-    "mileage": 65.729,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12150,7 +11839,6 @@
   {
     "name": "Kraków Główny Towarowy",
     "id": "59ff86f4-bdb5-4cd3-aa00-4ceecb009a8a",
-    "mileage": 68.174,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -12190,7 +11878,6 @@
   {
     "name": "Dąbrowa Górnicza Towarowa",
     "id": "71a5408e-e81d-4d57-b27a-1bb43ec32ce3",
-    "mileage": 20.297,
     "prefix": "DTA",
     "max_speed": 40,
     "ids": [
@@ -12229,7 +11916,6 @@
   {
     "name": "Częstochowa Mirów",
     "id": "de52770d-d382-4c85-8884-f5ab6e7cc16c",
-    "mileage": 2.057,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -12268,7 +11954,6 @@
   {
     "name": "Krzywizna",
     "id": "91fece59-14ec-426a-937f-822e9e612c41",
-    "mileage": 6.339,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12307,7 +11992,6 @@
   {
     "name": "Byczyna Kluczborska",
     "id": "feda69b8-ad03-49df-82a2-1aeb6bd25aa5",
-    "mileage": 16.123,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12346,7 +12030,6 @@
   {
     "name": "Kostów",
     "id": "7a804ae0-15ee-4c88-b0eb-b85e66dff0a9",
-    "mileage": 23.258,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12385,7 +12068,6 @@
   {
     "name": "Łęka Opatowska",
     "id": "e2bbfb74-8df7-473b-9208-290aa91a8b08",
-    "mileage": 30.292,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12424,7 +12106,6 @@
   {
     "name": "Kępno",
     "id": "e2ec8a12-9eea-43ea-a57b-308032126e94",
-    "mileage": 40.917,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12463,7 +12144,6 @@
   {
     "name": "Hanulin",
     "id": "b7edc762-cef6-4fde-858a-d3640162ce80",
-    "mileage": 42.935,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -12502,7 +12182,6 @@
   {
     "name": "Domanin",
     "id": "54f65ee9-65dc-44d1-82f1-dbaa1da87b1a",
-    "mileage": 47.122,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12541,7 +12220,6 @@
   {
     "name": "Ostrzeszów",
     "id": "9ae8200c-8aae-4bab-8948-7342458f6552",
-    "mileage": 58.109,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -12580,7 +12258,6 @@
   {
     "name": "Antonin",
     "id": "5fd943fa-5bdf-4c72-b105-48a008e57096",
-    "mileage": 70.562,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12619,7 +12296,6 @@
   {
     "name": "Przygodzice",
     "id": "16276bef-f0cd-42ca-bc5f-f756a01ca92a",
-    "mileage": 77.301,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12658,7 +12334,6 @@
   {
     "name": "Ostrów Wielkopolski",
     "id": "3103fafe-98d0-454d-a289-59a7cc47c9a3",
-    "mileage": 86.254,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -12697,7 +12372,6 @@
   {
     "name": "Biniew",
     "id": "4e78209a-809a-4486-be41-54dcae28b8ba",
-    "mileage": 96.392,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12736,7 +12410,6 @@
   {
     "name": "Bronów",
     "id": "b8d13e3e-d105-4b5e-abbc-170ba941a652",
-    "mileage": 102.772,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12775,7 +12448,6 @@
   {
     "name": "Taczanów",
     "id": "ff6e1867-4e00-4118-90c6-55cb39df1a5b",
-    "mileage": 107.817,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12814,7 +12486,6 @@
   {
     "name": "Pleszew",
     "id": "168fbe8f-5665-414c-b509-3340dd291c0c",
-    "mileage": 114.042,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12853,7 +12524,6 @@
   {
     "name": "Kotlin",
     "id": "977ae90b-f043-436d-946c-129a9ae11baf",
-    "mileage": 120.389,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12892,7 +12562,6 @@
   {
     "name": "Witaszyce",
     "id": "8bfe0280-80be-4b62-8827-ba6a7f462d36",
-    "mileage": 126.991,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -12931,7 +12600,6 @@
   {
     "name": "Jarocin",
     "id": "470c2847-ba1c-4ae9-b5c9-2896ffcedae7",
-    "mileage": 133.574,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -12970,7 +12638,6 @@
   {
     "name": "Mieszków",
     "id": "8c9c3488-eafd-428a-afd8-eaca24fea08c",
-    "mileage": 140.972,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13009,7 +12676,6 @@
   {
     "name": "Chocicza",
     "id": "a3d7502b-d26a-4efa-99c1-1c123843c235",
-    "mileage": 149.318,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13048,7 +12714,6 @@
   {
     "name": "Sulęcinek",
     "id": "093008a9-8e06-4bd0-b45d-a1c9b53a23f3",
-    "mileage": 157.564,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13087,7 +12752,6 @@
   {
     "name": "Środa Wielkopolska",
     "id": "2b5f93fb-a6ad-4a23-9a62-f1463713effa",
-    "mileage": 167.035,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13126,7 +12790,6 @@
   {
     "name": "Pierzchno",
     "id": "705efcaa-7251-423c-8b71-40330a55e854",
-    "mileage": 176.471,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13165,7 +12828,6 @@
   {
     "name": "Gądki",
     "id": "2e215d67-0f30-4b08-a0e3-823ff2434a8d",
-    "mileage": 185.341,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13204,7 +12866,6 @@
   {
     "name": "Poznań Krzesiny",
     "id": "5a3c7160-6437-4ac5-8611-9a81b784caaa",
-    "mileage": 191.622,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -13243,7 +12904,6 @@
   {
     "name": "Poznań Starołęka",
     "id": "72197b38-f65d-43c7-9e2d-598e28608875",
-    "mileage": 196.001,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -13282,7 +12942,6 @@
   {
     "name": "Poznań Główny",
     "id": "6236677a-3dc7-454b-aa9c-ef736b5d2c0f",
-    "mileage": 200.903,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -13321,7 +12980,6 @@
   {
     "name": "Kuźnica Białostocka",
     "id": "943c1df7-d80c-4cd1-a151-46ba7672b07a",
-    "mileage": 234.635,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -13360,7 +13018,6 @@
   {
     "name": "Sokółka",
     "id": "c8d14b06-6c24-4346-a283-ce12887e464c",
-    "mileage": 218.527,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -13399,7 +13056,6 @@
   {
     "name": "Machnacz",
     "id": "19c53e2f-f43e-44f1-9459-99c88f0eb07c",
-    "mileage": 203.118,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13438,7 +13094,6 @@
   {
     "name": "Czarna Białostocka",
     "id": "8620dbd3-7075-43cb-903f-dc4e8e65ac02",
-    "mileage": 199.178,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13477,7 +13132,6 @@
   {
     "name": "Wasilków",
     "id": "53097809-c189-40f2-8d26-1c8e34b6b026",
-    "mileage": 185.155,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13516,7 +13170,6 @@
   {
     "name": "Białystok Gt-Ko",
     "id": "e53b8ac7-94b1-48ee-9e88-8d4c71f4d58f",
-    "mileage": 176.3,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -13555,7 +13208,6 @@
   {
     "name": "Baciuty",
     "id": "7b273047-409a-42a9-885a-1e0cd82e7d2d",
-    "mileage": 163.251,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13594,7 +13246,6 @@
   {
     "name": "Łapy",
     "id": "06e14305-2098-420c-a1f4-85c1a89ec9cc",
-    "mileage": 154.035,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13633,7 +13284,6 @@
   {
     "name": "Racibory",
     "id": "7ef25bd4-62e8-4326-95e8-8b56852eff60",
-    "mileage": 140.474,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13672,7 +13322,6 @@
   {
     "name": "Szepietowo",
     "id": "6e317792-0927-4157-988c-2e6139b9faab",
-    "mileage": 127.376,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13711,7 +13360,6 @@
   {
     "name": "Czyżew",
     "id": "0dbf9a49-59f0-4a44-b577-5f9267aa26e1",
-    "mileage": 111.848,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13750,7 +13398,6 @@
   {
     "name": "Kietlanka",
     "id": "7c01d6e5-857a-42a3-815c-e55fbbd6a1d9",
-    "mileage": 99.26,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13789,7 +13436,6 @@
   {
     "name": "Małkinia",
     "id": "6a0347ae-b102-496a-bd4c-b6b09350cce9",
-    "mileage": 87.969,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13828,7 +13474,6 @@
   {
     "name": "Łochów",
     "id": "91a4a27e-335f-4881-b1c7-3e48a52c9d07",
-    "mileage": 58.48,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13867,7 +13512,6 @@
   {
     "name": "Tłuszcz",
     "id": "38c108aa-9776-4b0a-b4fe-f77fc7708c66",
-    "mileage": 37.802,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13906,7 +13550,6 @@
   {
     "name": "Wołomin",
     "id": "11b9b531-8aa3-4fba-b16c-4aa8e0e5bd84",
-    "mileage": 21.48,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -13946,7 +13589,6 @@
   {
     "name": "Zielonka",
     "id": "ca4c59de-d323-49bf-af0e-9bb0df2b8d61",
-    "mileage": 14.763,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -13985,7 +13627,6 @@
   {
     "name": "Warszawa Rembertów",
     "id": "13baf9e2-70a2-4fb7-bc18-8d14bbf72f1e",
-    "mileage": 11.753,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -14024,7 +13665,6 @@
   {
     "name": "Warszawa Wschodnia Towarowa",
     "id": "f38d6268-f011-41e4-a2a2-ee8c44f19c77",
-    "mileage": 7.074,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -14063,7 +13703,6 @@
   {
     "name": "Warszawa Praga",
     "id": "b0d84d5d-574d-457e-9157-5ddd4d55b6ff",
-    "mileage": 1.558,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -14104,7 +13743,6 @@
   {
     "name": "Warszawa Jelonki",
     "id": "43cd0568-9a7a-4b28-bad6-c63d03d4f02d",
-    "mileage": 3.5,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -14143,7 +13781,6 @@
   {
     "name": "Rokiciny",
     "id": "d5c31e0b-d1a2-4dd5-83b4-c0ec4f98be99",
-    "mileage": 114.176,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14182,7 +13819,6 @@
   {
     "name": "Baby",
     "id": "c822c23e-1cc8-4121-8a60-4a64f91865d2",
-    "mileage": 129.944,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14221,7 +13857,6 @@
   {
     "name": "Piotrków Trybunalski",
     "id": "8d456c56-773a-4f60-9b17-687bb63d9955",
-    "mileage": 144.242,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14260,7 +13895,6 @@
   {
     "name": "Rozprza",
     "id": "41027dc6-90a0-4d48-b04f-dc63f5aa9441",
-    "mileage": 156.539,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14299,7 +13933,6 @@
   {
     "name": "Gorzkowice",
     "id": "96688945-87ef-4437-9dc3-45bb86ab535e",
-    "mileage": 166.718,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14338,7 +13971,6 @@
   {
     "name": "Gomunice",
     "id": "9ad2a53c-e60a-43b2-93a3-dbf79e4bda16",
-    "mileage": 177.694,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14377,7 +14009,6 @@
   {
     "name": "Radomsko",
     "id": "b9abdae8-e170-4577-b64c-c5a29b6a6bea",
-    "mileage": 189.133,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14416,7 +14047,6 @@
   {
     "name": "Widzów Teklinów",
     "id": "de6bc4f7-50aa-4df5-837d-1e64e1c41c4d",
-    "mileage": 200.525,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14455,7 +14085,6 @@
   {
     "name": "Kłomnice",
     "id": "dc142ec5-f630-48d1-b929-35187452a727",
-    "mileage": 208.201,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14494,7 +14123,6 @@
   {
     "name": "Rudniki koło Częstochowy",
     "id": "618fad0c-9a25-4949-876a-201033dc489d",
-    "mileage": 217.7,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14533,7 +14161,6 @@
   {
     "name": "Boronów",
     "id": "85afb2d2-2d92-4544-a0e8-c7a08a33807b",
-    "mileage": 59.678,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -14572,7 +14199,6 @@
   {
     "name": "Strzebiń",
     "id": "e1bc93e7-ab08-4909-a2b4-faac9b7fa2c3",
-    "mileage": 54.638,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -14611,7 +14237,6 @@
   {
     "name": "Kalety",
     "id": "82be8e33-1c78-457d-8e5c-6aa49d98e1f9",
-    "mileage": 47.966,
     "prefix": null,
     "max_speed": 30,
     "ids": [
@@ -14650,7 +14275,6 @@
   {
     "name": "Zwierzyniec",
     "id": "9437057b-58ec-45fc-bcba-ec5a2c1c7b6b",
-    "mileage": 44.6,
     "prefix": null,
     "max_speed": 30,
     "ids": [
@@ -14689,7 +14313,6 @@
   {
     "name": "Tarnowskie Góry",
     "id": "c87e1823-799e-4e1d-bae3-c7e75429255e",
-    "mileage": 39.9,
     "prefix": null,
     "max_speed": 30,
     "ids": [
@@ -14729,7 +14352,6 @@
   {
     "name": "Bydgoszcz Główna",
     "id": "ea9c7244-001a-4f6f-a9fe-09a84c099dd2",
-    "mileage": 160.058,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -14768,7 +14390,6 @@
   {
     "name": "Bydgoszcz Wschód Towarowa",
     "id": "45a3a791-e105-415c-8f92-3adca4a2c6d5",
-    "mileage": 153.5,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14807,7 +14428,6 @@
   {
     "name": "Bydgoszcz Wschód",
     "id": "1c971b5d-a212-493d-93cc-1968b98c1c92",
-    "mileage": 152.3,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14846,7 +14466,6 @@
   {
     "name": "Bydgoszcz Leśna",
     "id": "866c2a31-5931-4b00-a112-00fb034b0314",
-    "mileage": 156.343,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14885,7 +14504,6 @@
   {
     "name": "Bydgoszcz Łęgnowo",
     "id": "7f3a5532-53c2-4510-ba79-b4d7b0b7b463",
-    "mileage": 148.699,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14924,7 +14542,6 @@
   {
     "name": "Solec Kujawski",
     "id": "18780e83-7f91-4852-8f68-48fba03b84dd",
-    "mileage": 138.699,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -14963,7 +14580,6 @@
   {
     "name": "Przyłubie",
     "id": "ca57faf0-e46d-4e3b-9ecf-b92b3a92983d",
-    "mileage": 131.386,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15002,7 +14618,6 @@
   {
     "name": "Cierpice",
     "id": "aa84013d-7c18-48d8-9967-55e474eb60ea",
-    "mileage": 119.304,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15041,7 +14656,6 @@
   {
     "name": "Toruń Główny",
     "id": "4fd83eca-80d4-481d-af9e-e3e5347cdf15",
-    "mileage": 109.058,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -15080,7 +14694,6 @@
   {
     "name": "Otłoczyn",
     "id": "72424824-bc74-4a1c-aae6-251d09efe80c",
-    "mileage": 95.947,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15119,7 +14732,6 @@
   {
     "name": "Aleksandrów Kujawski",
     "id": "e5dcbe07-b7a4-4179-8b6e-b17ddb5a9e9b",
-    "mileage": 91.702,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15158,7 +14770,6 @@
   {
     "name": "Nieszawa Waganiec",
     "id": "123fd295-b3a3-45aa-8ee5-8682bc5c4a1a",
-    "mileage": 77.189,
     "prefix": null,
     "max_speed": 125,
     "ids": [
@@ -15197,7 +14808,6 @@
   {
     "name": "Lubanie",
     "id": "b18dcab6-bbdb-4471-8b73-8a92a1e5fc4d",
-    "mileage": 69.223,
     "prefix": null,
     "max_speed": 125,
     "ids": [
@@ -15236,7 +14846,6 @@
   {
     "name": "Włocławek Brzezie",
     "id": "1ccbd879-4908-4387-889d-4df9c60373ef",
-    "mileage": 59.956,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15275,7 +14884,6 @@
   {
     "name": "Włocławek",
     "id": "839a9115-4e92-44a1-ac36-ed58fdbf117c",
-    "mileage": 54.808,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15314,7 +14922,6 @@
   {
     "name": "Czerniewice",
     "id": "8b081eae-9651-49f1-8658-456cb2112172",
-    "mileage": 38.555,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15353,7 +14960,6 @@
   {
     "name": "Kaliska Kujawskie",
     "id": "ae0ec7c9-6e22-4346-83d1-566c43d56166",
-    "mileage": 27.287,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15392,7 +14998,6 @@
   {
     "name": "Ostrowy",
     "id": "c9ec2e7a-3aed-47dc-a136-ecd361a52586",
-    "mileage": 13.658,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15431,7 +15036,6 @@
   {
     "name": "Kutno",
     "id": "f28d8ff6-2131-4af2-b0e2-974be4f142a1",
-    "mileage": 125.903,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -15470,7 +15074,6 @@
   {
     "name": "Witonia",
     "id": "683a03be-9484-4a5a-985f-c3aa1e0ffd23",
-    "mileage": 60.574,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -15509,7 +15112,6 @@
   {
     "name": "Łęczyca",
     "id": "56971a13-60bc-42c5-8093-c65fe123c2f5",
-    "mileage": 46.405,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -15548,7 +15150,6 @@
   {
     "name": "Ozorków",
     "id": "a9f51a0d-924b-4d7b-96e5-6be948b6b1f5",
-    "mileage": 36.372,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -15587,7 +15188,6 @@
   {
     "name": "Chociszew",
     "id": "ccf51258-dcda-4945-b528-babc96abb6a9",
-    "mileage": 30.944,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -15626,7 +15226,6 @@
   {
     "name": "Zgierz Północ",
     "id": "5f116379-6670-4c00-9449-991ed1f183ac",
-    "mileage": 18.392,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -15665,7 +15264,6 @@
   {
     "name": "Zgierz",
     "id": "d99b69a3-80d2-47c8-89a9-58bd61bd6341",
-    "mileage": 13.728,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -15704,7 +15302,6 @@
   {
     "name": "Łódź Żabieniec",
     "id": "ee468ee0-2cca-4a55-bff4-881a9a202cfb",
-    "mileage": 63.822,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -15743,7 +15340,6 @@
   {
     "name": "Łódź Kaliska",
     "id": "f4f83261-97d6-4a38-ac68-5657b99097b2",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -15782,7 +15378,6 @@
   {
     "name": "Wałbrzych Miasto",
     "id": "55570b55-fa42-4698-8ed2-b5503d3c10d5",
-    "mileage": 69.806,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -15821,7 +15416,6 @@
   {
     "name": "Toszek Północ",
     "id": "6197616d-6cac-4de8-834a-00327049a1b1",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -15860,7 +15454,6 @@
   {
     "name": "Działdowo",
     "id": "2f7496f0-bedf-4d4b-b9dd-d8f77bfa1d97",
-    "mileage": 148.226,
     "prefix": null,
     "max_speed": 150,
     "ids": [
@@ -15899,7 +15492,6 @@
   {
     "name": "Pszczyna",
     "id": "37d71cb7-bdf5-45bc-b51b-a41e6ca25b00",
-    "mileage": 35.918,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -15931,14 +15523,13 @@
     "osm_id": 2473137378,
     "uic_ref": "5102920",
     "position": {
-      "lat": 49.9749840,
+      "lat": 49.974984,
       "lng": 18.9534358
     }
   },
   {
     "name": "Opole Groszowice",
     "id": "034f461b-8fdf-4359-9c37-7bacc5d72e3e",
-    "mileage": 95.769,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -15977,7 +15568,6 @@
   {
     "name": "Nowy Targ",
     "id": "20024260-7836-4eb2-826e-ef588c306cc1",
-    "mileage": 22.595,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -16016,7 +15606,6 @@
   {
     "name": "Poronin",
     "id": "5d3e6dca-34e2-4bad-bdd1-6c480e44b44c",
-    "mileage": 37.466,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -16055,7 +15644,6 @@
   {
     "name": "Nasielsk",
     "id": "00428549-3b84-4593-b5b8-08ad9f9bbc13",
-    "mileage": 60.153,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16094,7 +15682,6 @@
   {
     "name": "Gralewo",
     "id": "c7c41814-cff7-42b3-9170-1723f1f28466",
-    "mileage": 162.037,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16127,13 +15714,12 @@
     "uic_ref": "5101189",
     "position": {
       "lat": 53.3201638,
-      "lng": 20.0349080
+      "lng": 20.034908
     }
   },
   {
     "name": "Klementowice",
     "id": "6183ae21-4e81-4e88-9fa5-9b32503e2c0a",
-    "mileage": 135.9,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -16172,7 +15758,6 @@
   {
     "name": "Sucha Beskidzka Zamek",
     "id": "34708cc2-e2b0-43cd-9ec3-fa8b1ce3c6fc",
-    "mileage": 0.28,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16211,7 +15796,6 @@
   {
     "name": "Zdzieszowice",
     "id": "fb61d8f5-399d-4ed0-823c-f914477fedfe",
-    "mileage": 10.375,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16250,7 +15834,6 @@
   {
     "name": "Nałęczów",
     "id": "7fff61e4-cd34-4bb4-a2b9-3c0ad0d667d4",
-    "mileage": 145.32,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -16289,7 +15872,6 @@
   {
     "name": "Radziszów",
     "id": "4c7c3cc2-e1a5-4b4b-b2d5-44ac92679c3d",
-    "mileage": 7.213,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -16328,7 +15910,6 @@
   {
     "name": "Kraków Bonarka",
     "id": "caa07c89-b2a9-460d-949e-fb8d8e806b3c",
-    "mileage": 2.678,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16367,7 +15948,6 @@
   {
     "name": "Susz",
     "id": "57c5fee3-3a17-4583-80e6-c968a999e80a",
-    "mileage": 232.428,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16406,7 +15986,6 @@
   {
     "name": "Bielsko-Biała Główna",
     "id": "69ceb62c-3f17-42ab-a823-2c4860620fe6",
-    "mileage": 55.713,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -16445,7 +16024,6 @@
   {
     "name": "Iłowo",
     "id": "f7e06a89-162f-47ef-bf2b-717d89cec673",
-    "mileage": 136.465,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16477,14 +16055,13 @@
     "osm_id": 476211473,
     "uic_ref": "5101361",
     "position": {
-      "lat": 53.1655780,
+      "lat": 53.165578,
       "lng": 20.2938507
     }
   },
   {
     "name": "Lublin",
     "id": "c2d8ac38-cd9f-4ffd-a6ae-e7af5cb91e8c",
-    "mileage": 174.973,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -16516,14 +16093,13 @@
     "osm_id": 3457415162,
     "uic_ref": "5100037",
     "position": {
-      "lat": 51.2312920,
+      "lat": 51.231292,
       "lng": 22.5689637
     }
   },
   {
     "name": "Gdańsk Główny",
     "id": "62fd6cdc-a885-436e-9dca-0a168808ad9f",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -16562,7 +16138,6 @@
   {
     "name": "Wałbrzych Szczawienko",
     "id": "210d3b71-1dee-4d41-b870-5c623261a9dc",
-    "mileage": 65.93,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16601,7 +16176,6 @@
   {
     "name": "Czechowice-Dziedzice",
     "id": "3d4233a1-7786-430a-9eeb-34cf73b0d2c4",
-    "mileage": 44.203,
     "prefix": null,
     "max_speed": 30,
     "ids": [
@@ -16640,7 +16214,6 @@
   {
     "name": "Zajączkowo Lubawskie",
     "id": "9ed9a361-f4b3-4b9d-9b1e-25ff295280f4",
-    "mileage": 189.5,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -16679,7 +16252,6 @@
   {
     "name": "Szaflary",
     "id": "4c994de9-b6d1-4f5c-b6f9-a98d38896218",
-    "mileage": 26.53,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -16718,7 +16290,6 @@
   {
     "name": "Pionki Zachodnie",
     "id": "be217650-fa75-45e8-ba31-83c2eb44ab04",
-    "mileage": 95.702,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -16757,7 +16328,6 @@
   {
     "name": "Konopki",
     "id": "faecffa0-dd2f-429e-8ae9-3cdfd097932c",
-    "mileage": 113.859,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16790,13 +16360,12 @@
     "uic_ref": "5101706",
     "position": {
       "lat": 52.9965089,
-      "lng": 20.4598710
+      "lng": 20.459871
     }
   },
   {
     "name": "Janowice Wielkie",
     "id": "17ea5740-08b8-4757-960d-62ca72368941",
-    "mileage": 113.58,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16835,7 +16404,6 @@
   {
     "name": "Mleczewo",
     "id": "34639329-049c-477a-859a-e89211110cea",
-    "mileage": 262.468,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -16874,7 +16442,6 @@
   {
     "name": "Jelenia Góra",
     "id": "bd40d9b7-0cb5-4a08-a31c-0a23da18d13c",
-    "mileage": 125.808,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16913,7 +16480,6 @@
   {
     "name": "Górażdże",
     "id": "5e636b0d-7f30-4db8-a720-baeb636a1efb",
-    "mileage": 25.634,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -16952,7 +16518,6 @@
   {
     "name": "Jordanów",
     "id": "5a172fc3-7523-4781-a713-02d34f3947c4",
-    "mileage": 24.315,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -16991,7 +16556,6 @@
   {
     "name": "Lublin Zachodni",
     "id": "300d589c-42b3-4995-835f-b9913f9aba20",
-    "mileage": 170.337,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17024,13 +16588,12 @@
     "uic_ref": "5104673",
     "position": {
       "lat": 51.2189337,
-      "lng": 22.5089270
+      "lng": 22.508927
     }
   },
   {
     "name": "Sadurki",
     "id": "aa8c7d99-c993-4db1-86cf-b4c0780ba3d2",
-    "mileage": 151.87,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -17069,7 +16632,6 @@
   {
     "name": "Żytkowice",
     "id": "c6fe9e8f-f3e9-4c0a-88c5-782402c660b3",
-    "mileage": 87.207,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -17102,13 +16664,12 @@
     "uic_ref": "5104417",
     "position": {
       "lat": 51.4829988,
-      "lng": 21.5565450
+      "lng": 21.556545
     }
   },
   {
     "name": "Świercze",
     "id": "bce0261b-ce09-47cc-ac2e-49b148e79162",
-    "mileage": 71.428,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -17147,7 +16708,6 @@
   {
     "name": "Malbork",
     "id": "3b1aa596-886a-4f93-8b85-b8e752421704",
-    "mileage": 277.888,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17186,7 +16746,6 @@
   {
     "name": "Sopot",
     "id": "1cddc9d7-43f7-4f0a-a5ac-94f5298251e3",
-    "mileage": 11.661,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17225,7 +16784,6 @@
   {
     "name": "Zajezierze koło Dęblina",
     "id": "d46b81cf-0209-455c-820f-833155b2da95",
-    "mileage": 67.045,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17264,7 +16822,6 @@
   {
     "name": "Raba Wyżna",
     "id": "495de086-24a5-4527-9f27-e83f56ffa91f",
-    "mileage": 5.621,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -17303,7 +16860,6 @@
   {
     "name": "Biały Dunajec",
     "id": "728268cd-f100-4955-bd54-6a6d3f401ff4",
-    "mileage": 33.856,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -17342,7 +16898,6 @@
   {
     "name": "Skawina",
     "id": "a4569ea0-0490-4b17-a8c9-1f58dce54343",
-    "mileage": 0.0,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -17381,7 +16936,6 @@
   {
     "name": "Rybno Pomorskie",
     "id": "5b141d03-e681-4678-b326-395b84d36616",
-    "mileage": 173.055,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -17420,7 +16974,6 @@
   {
     "name": "Bąkowiec",
     "id": "029d9f0a-9e42-456a-a87c-0619ac5ab459",
-    "mileage": 74.952,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -17459,7 +17012,6 @@
   {
     "name": "Czechowice-Dziedzice Południowe",
     "id": "8809030f-25eb-4117-996c-131ad054f1cb",
-    "mileage": 48.749,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -17491,14 +17043,13 @@
     "osm_id": 2099869649,
     "uic_ref": "5100856",
     "position": {
-      "lat": 49.8901820,
+      "lat": 49.890182,
       "lng": 19.0243244
     }
   },
   {
     "name": "Osielec",
     "id": "b628f2c7-e503-449e-997d-8d16aeb405ff",
-    "mileage": 16.457,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -17531,13 +17082,12 @@
     "uic_ref": "5102548",
     "position": {
       "lat": 49.6749774,
-      "lng": 19.7557810
+      "lng": 19.755781
     }
   },
   {
     "name": "Sędzisław",
     "id": "560d12e8-2655-4ae8-9593-abcb4e1a7f12",
-    "mileage": 98.843,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17576,7 +17126,6 @@
   {
     "name": "Stryszów",
     "id": "4f926da5-7310-4aa6-964d-75571fa41a7d",
-    "mileage": 33.115,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -17609,13 +17158,12 @@
     "uic_ref": "5103726",
     "position": {
       "lat": 49.8255815,
-      "lng": 19.6218700
+      "lng": 19.62187
     }
   },
   {
     "name": "Boguszów-Gorce Wschód",
     "id": "e7af03fa-cd29-4c61-84ff-18655e40ef07",
-    "mileage": 83.356,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -17647,14 +17195,13 @@
     "osm_id": 520501413,
     "uic_ref": "5100428",
     "position": {
-      "lat": 50.7479240,
+      "lat": 50.747924,
       "lng": 16.2217619
     }
   },
   {
     "name": "Zarzeka",
     "id": "39b6ecbc-df60-4275-9ae6-bb5489cc779b",
-    "mileage": 107.91,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -17693,7 +17240,6 @@
   {
     "name": "Kalwaria Zebrzydowska Lanckorona",
     "id": "ed02b144-a506-46bf-a6fb-a428a76ccbe3",
-    "mileage": 22.254,
     "prefix": null,
     "max_speed": 70,
     "ids": [
@@ -17732,7 +17278,6 @@
   {
     "name": "Warszawa Gołąbki",
     "id": "b139f090-5ef3-400a-b203-1e68a4e53a24",
-    "mileage": 10.719,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -17771,7 +17316,6 @@
   {
     "name": "Wałbrzych Fabryczny",
     "id": "0535f058-d55e-4a22-acdd-6e4a9bbcb824",
-    "mileage": 74.566,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -17810,7 +17354,6 @@
   {
     "name": "Redaki",
     "id": "f83171a2-c79f-4de6-b268-f0222769cb64",
-    "mileage": 225.114,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -17849,7 +17392,6 @@
   {
     "name": "Gdynia Orłowo",
     "id": "0bc632a6-f3b3-457b-bef0-ff7456bab4bf",
-    "mileage": 15.896,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -17888,7 +17430,6 @@
   {
     "name": "Warszawa Śródmieście",
     "id": "6794acc1-7e0c-4249-9c11-1b31f582dfed",
-    "mileage": 0.3,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -17927,7 +17468,6 @@
   {
     "name": "Żarów",
     "id": "6d8f38e3-6b3f-440e-b234-75776a649392",
-    "mileage": 42.612,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -17966,7 +17506,6 @@
   {
     "name": "Puławy Miasto",
     "id": "5d5d1df2-c65d-4473-841c-60f58b075c4a",
-    "mileage": 123.966,
     "prefix": null,
     "max_speed": 125,
     "ids": [
@@ -18005,7 +17544,6 @@
   {
     "name": "Ciechanów",
     "id": "06d0cb83-f765-4c28-bf16-582c2c956865",
-    "mileage": 98.06,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -18044,7 +17582,6 @@
   {
     "name": "Mława",
     "id": "ff4306c3-3766-484d-a8a3-9d99c4d6b6d8",
-    "mileage": 130.388,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -18083,7 +17620,6 @@
   {
     "name": "Czerwionka",
     "id": "832c4dc3-ec6b-46d6-942d-d4945c2eeabe",
-    "mileage": 26.093,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -18115,14 +17651,13 @@
     "osm_id": 693464129,
     "uic_ref": "5101963",
     "position": {
-      "lat": 50.1487880,
+      "lat": 50.148788,
       "lng": 18.6851834
     }
   },
   {
     "name": "Marciszów",
     "id": "ce503e00-1f34-4c6e-9934-9b5a9131ef6a",
-    "mileage": 105.182,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -18161,7 +17696,6 @@
   {
     "name": "Lasek",
     "id": "4152f43a-18f8-49f4-92ee-f735268bb3d0",
-    "mileage": 18.098,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -18200,7 +17734,6 @@
   {
     "name": "Puławy Azoty",
     "id": "5fc7ba73-1730-486d-9e96-d890c8305648",
-    "mileage": 117.885,
     "prefix": null,
     "max_speed": 125,
     "ids": [
@@ -18239,7 +17772,6 @@
   {
     "name": "Kraków Podgórze",
     "id": "a49bac6b-b301-4d4c-bc19-de18209b7e81",
-    "mileage": 0.95,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -18278,7 +17810,6 @@
   {
     "name": "Warszawa Ochota",
     "id": "dfd1c6a1-5b06-4369-907d-0700e998ea87",
-    "mileage": -0.907,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -18333,7 +17864,6 @@
   {
     "name": "Kraków Zabłocie",
     "id": "1b819b66-77cb-4e9f-a4be-0653cc2ba459",
-    "mileage": 2.111,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -18372,7 +17902,6 @@
   {
     "name": "Boguszów-Gorce Zachód",
     "id": "054e064c-f439-432a-b684-f2adc817044d",
-    "mileage": 88.352,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -18411,7 +17940,6 @@
   {
     "name": "Sieniawa",
     "id": "860e2002-1622-4670-96c9-e08c3e184520",
-    "mileage": 10.988,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -18450,7 +17978,6 @@
   {
     "name": "Garbatka-Letnisko",
     "id": "0f41cc54-ecd3-44a5-ab1d-de1de2a222b6",
-    "mileage": 81.985,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18489,7 +18016,6 @@
   {
     "name": "Raszowa",
     "id": "99678d70-e9a3-4e7c-80ac-d25a6af2d1eb",
-    "mileage": 5.747,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -18522,13 +18048,12 @@
     "uic_ref": "5103031",
     "position": {
       "lat": 50.3884992,
-      "lng": 18.1604310
+      "lng": 18.160431
     }
   },
   {
     "name": "Prabuty",
     "id": "44b62c49-88a1-4ae0-bf40-afc2d637a39c",
-    "mileage": 242.297,
     "prefix": null,
     "max_speed": 150,
     "ids": [
@@ -18567,7 +18092,6 @@
   {
     "name": "Warszawa Ursus Północny",
     "id": "8b5d8c77-c4da-414b-9f39-444fc2d4829b",
-    "mileage": 8.993,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -18606,7 +18130,6 @@
   {
     "name": "Szymankowo",
     "id": "a24da3a5-4580-4943-9d0b-af82e7697fd2",
-    "mileage": 286.748,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -18645,7 +18168,6 @@
   {
     "name": "Gdańsk Oliwa",
     "id": "dad0bf10-0332-4841-ae9c-cc5de34b84fd",
-    "mileage": 8.008,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -18684,7 +18206,6 @@
   {
     "name": "Rakowice",
     "id": "ef2a326e-3d0a-4108-8dda-c7616eeece9c",
-    "mileage": 195.801,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -18723,7 +18244,6 @@
   {
     "name": "Smolec",
     "id": "a020f5dc-e533-4568-9331-b9df90aa497c",
-    "mileage": 10.46,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18762,7 +18282,6 @@
   {
     "name": "Ożarów Mazowiecki",
     "id": "b44999ba-9fa2-4b17-b09e-5cf0d12983ef",
-    "mileage": 15.384,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -18801,7 +18320,6 @@
   {
     "name": "Imbramowice",
     "id": "b63e3645-5844-44d4-b8ae-a090834e4514",
-    "mileage": 35.848,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18840,7 +18358,6 @@
   {
     "name": "Jedlnia-Letnisko",
     "id": "361e4b09-6f5d-4a8e-a95c-b202eb68a78e",
-    "mileage": 104.993,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18879,7 +18396,6 @@
   {
     "name": "Pionki",
     "id": "b0b2e92f-697d-4f76-b541-9aeab95c331a",
-    "mileage": 93.945,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18911,14 +18427,13 @@
     "osm_id": 3444648714,
     "uic_ref": "5102766",
     "position": {
-      "lat": 51.4797760,
-      "lng": 21.4620280
+      "lat": 51.479776,
+      "lng": 21.462028
     }
   },
   {
     "name": "Zielonka Bankowa",
     "id": "371dc4b0-19ad-4f71-9220-c78a84eb403a",
-    "mileage": 19.24,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18957,7 +18472,6 @@
   {
     "name": "Warszawa Mokry Ług",
     "id": "7b348beb-cd3d-49d3-9862-3d99067e615d",
-    "mileage": 17.178,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -18996,7 +18510,6 @@
   {
     "name": "Wałbrzych Główny",
     "id": "c361939a-1411-4f79-916f-c15ed4510753",
-    "mileage": 78.912,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -19035,7 +18548,6 @@
   {
     "name": "Tczew",
     "id": "849c20fd-1361-47f7-aad7-3ff695b2ca39",
-    "mileage": 296.249,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -19074,7 +18586,6 @@
   {
     "name": "Gdańsk Wrzeszcz",
     "id": "a985d4c1-9961-4e4e-afe5-d54371253567",
-    "mileage": 4.18,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -19113,7 +18624,6 @@
   {
     "name": "Jaworzyna Śląska",
     "id": "d24a0774-f880-4201-854f-7fe6ee93d2cd",
-    "mileage": 48.135,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -19152,7 +18662,6 @@
   {
     "name": "Gogolin",
     "id": "17beb42e-850b-4516-9fd9-c1949571bd12",
-    "mileage": 21.38,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -19184,14 +18693,13 @@
     "osm_id": 534727554,
     "uic_ref": "5101140",
     "position": {
-      "lat": 50.4931650,
+      "lat": 50.493165,
       "lng": 18.0186011
     }
   },
   {
     "name": "Warszawa Powiśle",
     "id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
-    "mileage": 1.79,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -19238,7 +18746,6 @@
   {
     "name": "Montowo",
     "id": "a15faf06-7d5a-41fd-8aed-ffecba4671fb",
-    "mileage": 183.723,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -19277,7 +18784,6 @@
   {
     "name": "Warszawa Stadion",
     "id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
-    "mileage": 3.196,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -19316,7 +18822,6 @@
   {
     "name": "Zakopane",
     "id": "d1f0c429-7b4a-4267-b868-9f46b16617e6",
-    "mileage": 43.334,
     "prefix": null,
     "max_speed": 40,
     "ids": [
@@ -19355,7 +18860,6 @@
   {
     "name": "Łaziska Średnie",
     "id": "bca7c9d1-48cb-4362-90ff-dbf373643131",
-    "mileage": 7.711,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -19394,7 +18898,6 @@
   {
     "name": "Boguszów-Gorce",
     "id": "339e7d97-1861-4cf2-ac25-cdd25946915a",
-    "mileage": 85.513,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -19433,7 +18936,6 @@
   {
     "name": "Legionowo",
     "id": "45fd17a8-f7fd-469b-8e94-e0ba4ce8b4ed",
-    "mileage": 25.19,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -19472,7 +18974,6 @@
   {
     "name": "Puławy",
     "id": "f30bae33-377a-4ba1-b477-62ed2ad1cae7",
-    "mileage": 126.777,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -19511,7 +19012,6 @@
   {
     "name": "Kobiór",
     "id": "b2f9e5fd-d617-45f1-a344-a6bf18128c4c",
-    "mileage": 25.486,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -19550,7 +19050,6 @@
   {
     "name": "Gdynia Główna",
     "id": "4c1a053c-e16a-478c-b298-9c67d50607d8",
-    "mileage": 20.992,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -19589,7 +19088,6 @@
   {
     "name": "Świebodzice",
     "id": "239d5c67-03d1-4931-b37a-8752eb9c91c1",
-    "mileage": 57.541,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -19628,7 +19126,6 @@
   {
     "name": "Motycz",
     "id": "28af8699-a2fd-4610-b4f8-3c396d34f66f",
-    "mileage": 164.17,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -19667,7 +19164,6 @@
   {
     "name": "Jasiona",
     "id": "39aa76a5-78c3-4d90-ae32-40558ccc4ac0",
-    "mileage": 15.747,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -19706,7 +19202,6 @@
   {
     "name": "Gąsocin",
     "id": "be4bc65f-05b5-4da4-9bf9-dbe18131d410",
-    "mileage": 79.669,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -19745,7 +19240,6 @@
   {
     "name": "Nowy Dwór Mazowiecki",
     "id": "cd7d694f-bd92-4a23-af0a-ab31c6dca363",
-    "mileage": 39.95,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -19784,7 +19278,6 @@
   {
     "name": "Stronie",
     "id": "ad70694f-bbf5-4665-b054-e702e048e57b",
-    "mileage": 28.994,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -19823,7 +19316,6 @@
   {
     "name": "Modlin",
     "id": "737f4608-3179-4254-b4ee-602f50fe49a7",
-    "mileage": 44.106,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -19862,7 +19354,6 @@
   {
     "name": "Wrocław Zachodni",
     "id": "5e6de5ee-9027-4c70-a0cf-8246f0714158",
-    "mileage": 5.201,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -19895,13 +19386,12 @@
     "uic_ref": "5104199",
     "position": {
       "lat": 51.0899487,
-      "lng": 16.9495040
+      "lng": 16.949504
     }
   },
   {
     "name": "Kąty Wrocławskie",
     "id": "a4968719-9690-42a2-9c67-6c8c01d62e4f",
-    "mileage": 20.365,
     "prefix": null,
     "max_speed": 130,
     "ids": [
@@ -19940,7 +19430,6 @@
   {
     "name": "Pszczółki",
     "id": "f992e64d-24fe-4fdf-8ea4-746814111aaf",
-    "mileage": 306.676,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -19979,7 +19468,6 @@
   {
     "name": "Wojanów",
     "id": "a690c0be-ced0-4912-b8e4-d7c21c35e07d",
-    "mileage": 120.753,
     "prefix": null,
     "max_speed": 90,
     "ids": [
@@ -20018,7 +19506,6 @@
   {
     "name": "Przywory Opolskie",
     "id": "c82be829-29e2-4561-97db-75cbcfc96a24",
-    "mileage": 31.404,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20057,7 +19544,6 @@
   {
     "name": "Kraków Płaszów",
     "id": "945fcbd7-9775-4473-b061-df6d069687a1",
-    "mileage": 4.091,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -20096,7 +19582,6 @@
   {
     "name": "Maków Podhalański",
     "id": "e73f5dbd-f1ab-4f20-b7ff-c975284795d8",
-    "mileage": 7.613,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20135,7 +19620,6 @@
   {
     "name": "Pruszcz Gdański",
     "id": "f076dc5a-5fd6-4e42-898d-07ab517417a7",
-    "mileage": 317.123,
     "prefix": null,
     "max_speed": 160,
     "ids": [
@@ -20174,7 +19658,6 @@
   {
     "name": "Leńcze",
     "id": "a99ccee8-f5e7-4212-b121-dba36f5ae961",
-    "mileage": 14.638,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20213,7 +19696,6 @@
   {
     "name": "Orzesze Jaśkowice",
     "id": "f1548079-7051-437f-afd3-0cbc6b0dbd5c",
-    "mileage": 17.067,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -20246,13 +19728,12 @@
     "uic_ref": "5102601",
     "position": {
       "lat": 50.1447994,
-      "lng": 18.7407530
+      "lng": 18.740753
     }
   },
   {
     "name": "Gdańsk Południowy",
     "id": "fdd87a21-5cd8-420a-a86b-351fd2b5dee2",
-    "mileage": 325.848,
     "prefix": null,
     "max_speed": 140,
     "ids": [
@@ -20291,7 +19772,6 @@
   {
     "name": "Iława Główna",
     "id": "8fdcbe95-7882-4fb9-945b-7773d4f4ba26",
-    "mileage": 208.976,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -20330,7 +19810,6 @@
   {
     "name": "Chorzew Siemkowice",
     "id": "562a549d-fb25-4c3f-95a5-5829f5dafd51",
-    "mileage": 48.392,
     "prefix": null,
     "max_speed": 50,
     "ids": [
@@ -20369,7 +19848,6 @@
   {
     "name": "Podłęże",
     "id": "b64acc84-a826-4ac5-a084-f8f5ee4fff92",
-    "mileage": 18.404,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20402,13 +19880,12 @@
     "uic_ref": "5102715",
     "position": {
       "lat": 50.0181184,
-      "lng": 20.1690600
+      "lng": 20.16906
     }
   },
   {
     "name": "Brzeźnica nad Wartą",
     "id": "9c91e793-46f0-4ad3-97db-e3e2ab725e97",
-    "mileage": 24.197,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20440,14 +19917,13 @@
     "osm_id": 3713698511,
     "uic_ref": null,
     "position": {
-      "lat": 51.0723360,
+      "lat": 51.072336,
       "lng": 19.1466518
     }
   },
   {
     "name": "Biadoliny",
     "id": "0038e231-4860-4cbf-a6be-559c3ad09193",
-    "mileage": 60.197,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20480,13 +19956,12 @@
     "uic_ref": "5100435",
     "position": {
       "lat": 50.0037878,
-      "lng": 20.7350800
+      "lng": 20.73508
     }
   },
   {
     "name": "Kraków Olsza",
     "id": "85418f4a-f92f-411a-bd78-17642643ced5",
-    "mileage": 7.536,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -20518,14 +19993,13 @@
     "osm_id": 3486081815,
     "uic_ref": null,
     "position": {
-      "lat": 50.0784320,
+      "lat": 50.078432,
       "lng": 19.9627088
     }
   },
   {
     "name": "Bochnia",
     "id": "3eed766c-67fe-4d50-9c66-da2c170d2f64",
-    "mileage": 37.996,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20564,7 +20038,6 @@
   {
     "name": "Cykarzew",
     "id": "4627e099-d07c-4a22-a428-bc23ab07de87",
-    "mileage": 13.412,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20597,13 +20070,12 @@
     "uic_ref": null,
     "position": {
       "lat": 50.9762622,
-      "lng": 19.1617370
+      "lng": 19.161737
     }
   },
   {
     "name": "Brzesko Okocim",
     "id": "305f23fa-e117-466a-836d-4b7df849ae87",
-    "mileage": 50.954,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20642,7 +20114,6 @@
   {
     "name": "Wola Rzędzińska",
     "id": "229f5692-7a80-4b41-a739-9eabe58b7dba",
-    "mileage": 85.433,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20681,7 +20152,6 @@
   {
     "name": "Bogumiłowice",
     "id": "8a771dcb-71f0-44a0-9a5b-01fb9b0aeb11",
-    "mileage": 69.93,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20720,7 +20190,6 @@
   {
     "name": "Tarnów Mościce",
     "id": "7d8ab8c2-6bcf-44b9-b918-eafb9b2587d1",
-    "mileage": 73.896,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20759,7 +20228,6 @@
   {
     "name": "Tarnów",
     "id": "9db8325e-8442-4612-afc1-df19f1b7b032",
-    "mileage": 77.432,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20798,7 +20266,6 @@
   {
     "name": "Kłaj",
     "id": "25f90f86-7f1f-4336-a388-5e409f6a0ce9",
-    "mileage": 28.131,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20837,7 +20304,6 @@
   {
     "name": "Biała Pajęczańska",
     "id": "b0178d02-e306-441c-8519-3020fc6936c1",
-    "mileage": 39.776,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -20876,7 +20342,6 @@
   {
     "name": "Kraków Przedmieście",
     "id": "7858984a-1b62-4a7d-9c57-7eeb79ca645a",
-    "mileage": 317.426,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -20915,7 +20380,6 @@
   {
     "name": "Raciborowice",
     "id": "1c0c40bc-a158-4541-a247-08f8fbdead5e",
-    "mileage": 310.832,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -20954,7 +20418,6 @@
   {
     "name": "Borszewice",
     "id": "1c57e9ce-81c1-4b21-b8de-cb90a40b0481",
-    "mileage": 36.181,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -20987,13 +20450,12 @@
     "uic_ref": "5100570",
     "position": {
       "lat": 51.6097491,
-      "lng": 19.0356640
+      "lng": 19.035664
     }
   },
   {
     "name": "Łask",
     "id": "5d03eeb0-c593-4d74-84d4-7d30feceb359",
-    "mileage": 30.849,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -21032,7 +20494,6 @@
   {
     "name": "Sędzice",
     "id": "2b27f203-637b-4f9b-88e3-0145ebe74c77",
-    "mileage": 70.614,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -21071,7 +20532,6 @@
   {
     "name": "Łódź Lublinek",
     "id": "11adda83-1648-4e07-9b1c-69275c9f7cff",
-    "mileage": 7.14,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -21110,7 +20570,6 @@
   {
     "name": "Dobroń",
     "id": "93fe2f41-111e-420c-9864-0306c771f5f5",
-    "mileage": 21.17,
     "prefix": null,
     "max_speed": 60,
     "ids": [
@@ -21149,7 +20608,6 @@
   {
     "name": "Zduńska Wola",
     "id": "db0879b2-690f-4d1a-bb90-34e38d0f83f8",
-    "mileage": 42.36,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -21188,7 +20646,6 @@
   {
     "name": "Kalisz",
     "id": "c9d47624-58be-4116-b0ed-1a7f5e9c6015",
-    "mileage": 112.133,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -21220,14 +20677,13 @@
     "osm_id": 3459064660,
     "uic_ref": "5100017",
     "position": {
-      "lat": 51.7428270,
+      "lat": 51.742827,
       "lng": 18.0713653
     }
   },
   {
     "name": "Sieradz",
     "id": "5f97cdad-2b43-411c-9b8e-d9494718eb17",
-    "mileage": 59.435,
     "prefix": null,
     "max_speed": 100,
     "ids": [
@@ -21266,7 +20722,6 @@
   {
     "name": "Pabianice",
     "id": "86fcaee2-627e-4e48-99c3-abd58e6954e8",
-    "mileage": 14.49,
     "prefix": null,
     "max_speed": 110,
     "ids": [
@@ -21305,7 +20760,6 @@
   {
     "name": "Nowe Skalmierzyce",
     "id": "93cec358-1bbe-45c2-ab5e-0451d67bacfd",
-    "mileage": 118.643,
     "prefix": null,
     "max_speed": 80,
     "ids": [
@@ -21344,7 +20798,6 @@
   {
     "name": "Radliczyce",
     "id": "6671883e-5a47-4c7d-8403-d59a875dd30f",
-    "mileage": 89.478,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -21383,7 +20836,6 @@
   {
     "name": "Błaszki",
     "id": "173b04cb-5767-468e-9f7e-dbc2b6d0cc6d",
-    "mileage": 79.272,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -21415,14 +20867,13 @@
     "osm_id": 2183653692,
     "uic_ref": "5100487",
     "position": {
-      "lat": 51.6736830,
-      "lng": 18.4710860
+      "lat": 51.673683,
+      "lng": 18.471086
     }
   },
   {
     "name": "Czekanów",
     "id": "5b333765-8a29-41e0-9c1e-dc536c0c1af9",
-    "mileage": 129.071,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -21461,7 +20912,6 @@
   {
     "name": "Męka",
     "id": "dc89bbbc-5756-47bc-8f14-b0db96fb9f96",
-    "mileage": 53.49,
     "prefix": null,
     "max_speed": 120,
     "ids": [
@@ -21500,7 +20950,6 @@
   {
     "name": "Opatówek",
     "id": "d949c538-5c17-43ba-ba60-9bc7a7cddfd3",
-    "mileage": 98.311,
     "prefix": null,
     "max_speed": 120,
     "ids": [
