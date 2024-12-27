@@ -2058,7 +2058,7 @@
   {
     "name": "Miechów",
     "id": "721496c3-7508-483b-8229-726592bb1a7d",
-    "prefix": null,
+    "prefix": "Mi",
     "max_speed": 110,
     "ids": [
       "2592"
@@ -2096,7 +2096,7 @@
   {
     "name": "Słomniki",
     "id": "847b1117-e6af-4011-95d2-77c7cb6a18dc",
-    "prefix": null,
+    "prefix": "Sm",
     "max_speed": 110,
     "ids": [
       "3923"
@@ -2134,7 +2134,7 @@
   {
     "name": "Niedźwiedź",
     "id": "9d1848be-00ca-44d1-98fc-4ac8ac5379b9",
-    "prefix": null,
+    "prefix": "Nd",
     "max_speed": 110,
     "ids": [
       "2820"
@@ -2172,7 +2172,7 @@
   {
     "name": "Zastów",
     "id": "e7115dbb-eb7e-4491-a5dc-a70d0bba2e78",
-    "prefix": null,
+    "prefix": "Zs",
     "max_speed": 110,
     "ids": [
       "5251"
@@ -2210,7 +2210,7 @@
   {
     "name": "Kraków Batowice",
     "id": "e9854497-7dee-4951-a23b-587a72ccdc61",
-    "prefix": null,
+    "prefix": "BT",
     "max_speed": 110,
     "ids": [
       "1937"
@@ -20342,7 +20342,7 @@
   {
     "name": "Kraków Przedmieście",
     "id": "7858984a-1b62-4a7d-9c57-7eeb79ca645a",
-    "prefix": null,
+    "prefix": "KPm",
     "max_speed": 110,
     "ids": [
       "2020"
@@ -20380,7 +20380,7 @@
   {
     "name": "Raciborowice",
     "id": "1c0c40bc-a158-4541-a247-08f8fbdead5e",
-    "prefix": null,
+    "prefix": "Rc",
     "max_speed": 110,
     "ids": [
       "3475"
