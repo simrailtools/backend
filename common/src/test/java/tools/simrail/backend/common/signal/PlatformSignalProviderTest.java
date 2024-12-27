@@ -109,12 +109,9 @@ public class PlatformSignalProviderTest {
   void testAllScheduledPlatformsHaveASignalMapping() {
     var pointsWithWrongPlatformMapping = Set.of(
       "Olkusz", // wrong platform mapping
-      "Sławków", // platform empty, track 0
       "Sędziszów", // wrong platform mapping
       "Dąbrowa Górnicza", // wrong platform mapping
-      "Opoczno Południe", // wrong platform mapping
-      "Dąbrowa Górnicza Gołonóg", // wrong platform mapping
-      "Dąbrowa Górnicza Ząbkowice" // wrong platform mapping
+      "Dąbrowa Górnicza Gołonóg" // wrong platform mapping
     );
 
     var missingPoints = new HashSet<String>();
@@ -152,7 +149,7 @@ public class PlatformSignalProviderTest {
       }
     }
 
-    Assertions.assertEquals(93, missingPoints.size(), () -> {
+    Assertions.assertEquals(108, missingPoints.size(), () -> {
       var joinedStationNames = String.join(", ", missingPoints);
       return "Found unexpected count of stations without platform signal info: " + joinedStationNames;
     });
