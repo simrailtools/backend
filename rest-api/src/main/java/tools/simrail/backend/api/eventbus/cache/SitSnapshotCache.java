@@ -70,7 +70,7 @@ public final class SitSnapshotCache {
     // cache active servers
     var activeServers = serverRepository.findSnapshotsOfAllActiveServers();
     this.serverSnapshots = activeServers.stream().collect(Collectors.toMap(
-      server -> server.getId().toString(),
+      server -> server.getServerId().toString(),
       Function.identity(),
       (left, _) -> left,
       ConcurrentHashMap::new));
@@ -86,7 +86,7 @@ public final class SitSnapshotCache {
     // cache active dispatch posts
     var activeDispatchPosts = dispatchPostRepository.findSnapshotsOfAllActiveDispatchPosts();
     this.dispatchPostSnapshots = activeDispatchPosts.stream().collect(Collectors.toMap(
-      post -> post.getId().toString(),
+      post -> post.getPostId().toString(),
       Function.identity(),
       (left, _) -> left,
       ConcurrentHashMap::new));

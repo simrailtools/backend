@@ -261,7 +261,7 @@ public class EventSessionManager {
     try {
       // send out server snapshots
       for (var serverSnapshot : this.snapshotCache.getCachedServerSnapshots()) {
-        if (session.requestedFrame(EventFrameType.SERVER, serverSnapshot.getId().toString())) {
+        if (session.requestedFrame(EventFrameType.SERVER, serverSnapshot.getServerId().toString())) {
           var fakeUpdateFrame = ServerUpdateFrame.newBuilder().setUpdateType(UpdateType.ADD).buildPartial();
           var serializedFrame = this.serializeServerFrame(fakeUpdateFrame, serverSnapshot);
           session.sendText(serializedFrame);

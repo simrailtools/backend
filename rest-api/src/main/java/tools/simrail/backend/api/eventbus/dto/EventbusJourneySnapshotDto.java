@@ -111,20 +111,24 @@ public final class EventbusJourneySnapshotDto {
 
     if (frame.hasDriver()) {
       var driver = frame.getDriver();
-      this.driverSteamId = driver.hasSteamId() ? driver.getSteamId() : null;
+      if (driver.getUpdated()) {
+        this.driverSteamId = driver.hasSteamId() ? driver.getSteamId() : null;
+      }
     }
 
     if (frame.hasNextSignal()) {
       var nextSignal = frame.getNextSignal();
-      if (nextSignal.hasSignalInfo()) {
-        var nextSignalInfo = nextSignal.getSignalInfo();
-        this.nextSignalId = nextSignalInfo.getName();
-        this.nextSignalDistance = nextSignalInfo.getDistance();
-        this.nextSignalMaxSpeed = nextSignalInfo.getMaxSpeed();
-      } else {
-        this.nextSignalId = null;
-        this.nextSignalDistance = null;
-        this.nextSignalMaxSpeed = null;
+      if (nextSignal.getUpdated()) {
+        if (nextSignal.hasSignalInfo()) {
+          var nextSignalInfo = nextSignal.getSignalInfo();
+          this.nextSignalId = nextSignalInfo.getName();
+          this.nextSignalDistance = nextSignalInfo.getDistance();
+          this.nextSignalMaxSpeed = nextSignalInfo.getMaxSpeed();
+        } else {
+          this.nextSignalId = null;
+          this.nextSignalDistance = null;
+          this.nextSignalMaxSpeed = null;
+        }
       }
     }
 

@@ -44,7 +44,7 @@ import tools.simrail.backend.common.rpc.DispatchPostUpdateFrame;
 public final class EventbusDispatchPostSnapshotDto {
 
   // static fields
-  private final UUID id;
+  private final UUID postId;
   private final UUID pointId;
   private final UUID serverId;
 
@@ -58,7 +58,7 @@ public final class EventbusDispatchPostSnapshotDto {
   private List<String> dispatcherSteamIds;
 
   public EventbusDispatchPostSnapshotDto(@Nonnull SimRailDispatchPostEntity entity) {
-    this.id = entity.getId();
+    this.postId = entity.getId();
     this.pointId = entity.getPointId();
     this.serverId = entity.getServerId();
     this.name = entity.getName();

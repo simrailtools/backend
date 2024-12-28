@@ -45,7 +45,7 @@ import tools.simrail.backend.common.server.SimRailServerRegion;
 public final class EventbusServerSnapshotDto {
 
   // static fields
-  private final UUID id;
+  private final UUID serverId;
   private final String code;
   private final List<String> tags;
   private final String spokenLanguage;
@@ -53,16 +53,16 @@ public final class EventbusServerSnapshotDto {
 
   // changing fields
   private boolean online;
-  private String zoneOffset;
+  private String timezoneId;
 
   public EventbusServerSnapshotDto(@Nonnull SimRailServerEntity entity) {
-    this.id = entity.getId();
+    this.serverId = entity.getId();
     this.code = entity.getCode();
     this.tags = entity.getTags();
     this.spokenLanguage = entity.getSpokenLanguage();
     this.region = entity.getRegion();
     this.online = entity.isOnline();
-    this.zoneOffset = entity.getTimezone();
+    this.timezoneId = entity.getTimezone();
   }
 
   /**
@@ -76,7 +76,7 @@ public final class EventbusServerSnapshotDto {
     }
 
     if (frame.hasZoneOffset()) {
-      this.zoneOffset = frame.getZoneOffset();
+      this.timezoneId = frame.getZoneOffset();
     }
   }
 }
