@@ -95,7 +95,7 @@ class SimRailPointV1Controller {
   public @Nonnull PaginatedResponseDto<PointInfoDto> listPoints(
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
-    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit
+    @RequestParam(name = "limit", required = false) @Min(1) Integer limit
   ) {
     return this.pointService.findPointsByCountry(countries, page, limit);
   }
