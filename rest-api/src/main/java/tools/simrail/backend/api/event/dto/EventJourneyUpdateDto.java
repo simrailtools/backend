@@ -28,22 +28,22 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
+import tools.simrail.backend.common.tristate.Tristate;
 
 /**
  * DTO for updating a journey, only contains the fields that can be updated.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public record EventJourneyUpdateDto(
   @Nonnull String journeyId,
-  @Nullable Integer speed,
-  @Nullable String driverSteamId,
+  @Nullable @JsonInclude(JsonInclude.Include.NON_NULL) Integer speed,
+  @Nonnull @JsonInclude(JsonInclude.Include.NON_EMPTY) Tristate<String> driverSteamId,
 
-  @Nullable String nextSignalId,
-  @Nullable Integer nextSignalDistance,
-  @Nullable Integer nextSignalMaxSpeed,
+  @Nonnull @JsonInclude(JsonInclude.Include.NON_EMPTY) Tristate<String> nextSignalId,
+  @Nonnull @JsonInclude(JsonInclude.Include.NON_EMPTY) Tristate<Integer> nextSignalDistance,
+  @Nonnull @JsonInclude(JsonInclude.Include.NON_EMPTY) Tristate<Integer> nextSignalMaxSpeed,
 
-  @Nullable Double positionLat,
-  @Nullable Double positionLng
+  @Nullable @JsonInclude(JsonInclude.Include.NON_NULL) Double positionLat,
+  @Nullable @JsonInclude(JsonInclude.Include.NON_NULL) Double positionLng
 ) {
 
   /**
@@ -63,21 +63,40 @@ public record EventJourneyUpdateDto(
     }
 
     // extract the driver steam id, if given
-    String driverSteamId = null;
+    Tristate<String> driverSteamId = Tristate.undefined();
     if (frame.hasDriver()) {
       var driver = frame.getDriver();
-      driverSteamId = driver.hasSteamId() ? driver.getSteamId() : null;
+      if (driver.getUpdated()) {
+        if (driver.hasSteamId()) {
+          driverSteamId = Tristate.holdingValue(driver.getSteamId());
+        } else {
+          driverSteamId = Tristate.holdingNull();
+        }
+      }
     }
 
     // extract the given information about the next signal, if present
-    String nextSignalId = null;
-    Integer nextSignalDistance = null;
-    Integer nextSignalMaxSpeed = null;
-    if (frame.hasNextSignal() && frame.getNextSignal().hasSignalInfo()) {
-      var signalInfo = frame.getNextSignal().getSignalInfo();
-      nextSignalId = signalInfo.getName();
-      nextSignalDistance = signalInfo.getDistance();
-      nextSignalMaxSpeed = signalInfo.hasMaxSpeed() ? signalInfo.getMaxSpeed() : null;
+    Tristate<String> nextSignalId = Tristate.undefined();
+    Tristate<Integer> nextSignalDistance = Tristate.undefined();
+    Tristate<Integer> nextSignalMaxSpeed = Tristate.undefined();
+    if (frame.hasNextSignal()) {
+      var nextSignal = frame.getNextSignal();
+      if (nextSignal.getUpdated()) {
+        if (nextSignal.hasSignalInfo()) {
+          var signalInfo = nextSignal.getSignalInfo();
+          nextSignalId = Tristate.holdingValue(signalInfo.getName());
+          nextSignalDistance = Tristate.holdingValue(signalInfo.getDistance());
+          if (signalInfo.hasMaxSpeed()) {
+            nextSignalMaxSpeed = Tristate.holdingValue(signalInfo.getMaxSpeed());
+          } else {
+            nextSignalMaxSpeed = Tristate.holdingNull();
+          }
+        } else {
+          nextSignalId = Tristate.holdingNull();
+          nextSignalDistance = Tristate.holdingNull();
+          nextSignalMaxSpeed = Tristate.holdingNull();
+        }
+      }
     }
 
     var speed = frame.hasSpeed() ? frame.getSpeed() : null;
