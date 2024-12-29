@@ -114,10 +114,10 @@ class SimRailServerTrainCollector {
           if (fullCollection) {
             // fetch full train details in case we're doing a full collection
             this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
-          } else {
-            // fetch and update train positions
-            this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
           }
+
+          // fetch and update train positions and speed
+          this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
 
           // check if any journeys changed and take appropriate action
           var updatedJourneys = dirtyRecorders.values().stream().filter(JourneyDirtyStateRecorder::isDirty).toList();
@@ -203,18 +203,6 @@ class SimRailServerTrainCollector {
       // update the information about the next signal of the train
       var currentNextSignal = this.constructNextSignal(activeTrain.getDetailData());
       dirtyRecorder.updateNextSignal(currentNextSignal);
-
-      // update the speed which the train currently has
-      var currentSpeed = Math.max(0, (int) Math.round(activeTrain.getDetailData().getCurrentSpeed()));
-      dirtyRecorder.updateSpeed(currentSpeed);
-
-      // update the position where the journey currently is
-      var currentPositionLat = activeTrain.getDetailData().getPositionLatitude();
-      var currentPositionLng = activeTrain.getDetailData().getPositionLongitude();
-      var currentPosition = currentPositionLat == null || currentPositionLng == null
-        ? null
-        : new GeoPositionEntity(currentPositionLat, currentPositionLng);
-      dirtyRecorder.updatePosition(currentPosition);
     }
 
     // all journeys that are remaining in the map were active before but are no
