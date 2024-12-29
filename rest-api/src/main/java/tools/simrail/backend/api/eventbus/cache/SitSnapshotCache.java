@@ -34,7 +34,10 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
+import org.springframework.util.Assert;
 import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
 import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
 import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
@@ -57,8 +60,11 @@ public final class SitSnapshotCache {
   private final Map<String, EventbusJourneySnapshotDto> journeySnapshots;
   private final Map<String, EventbusDispatchPostSnapshotDto> dispatchPostSnapshots;
 
+  private final Cache removedIdsCache;
+
   @Autowired
   SitSnapshotCache(
+    @Nonnull CacheManager cacheManager,
     @Nonnull EventbusServerRepository serverRepository,
     @Nonnull EventbusJourneyRepository journeyRepository,
     @Nonnull EventbusDispatchPostRepository dispatchPostRepository
@@ -66,6 +72,9 @@ public final class SitSnapshotCache {
     this.serverRepository = serverRepository;
     this.journeyRepository = journeyRepository;
     this.dispatchPostRepository = dispatchPostRepository;
+
+    this.removedIdsCache = cacheManager.getCache("removed_ids_cache");
+    Assert.notNull(this.removedIdsCache, "removed ids cache not registered");
 
     // cache active servers
     var activeServers = serverRepository.findSnapshotsOfAllActiveServers();
@@ -93,6 +102,25 @@ public final class SitSnapshotCache {
   }
 
   /**
+   * Marks the given id as removed for a short amount of time to prevent further updates from being applied.
+   *
+   * @param id the id to mark as removed.
+   */
+  private void markIdAsRemoved(@Nonnull String id) {
+    this.removedIdsCache.put(id, Boolean.TRUE);
+  }
+
+  /**
+   * Get if the given id has been marked as removed previously.
+   *
+   * @param id the id to check.
+   * @return true if the given id has been marked as removed, false otherwise.
+   */
+  private boolean isIdMarkedAsRemoved(@Nonnull String id) {
+    return this.removedIdsCache.get(id) != null;
+  }
+
+  /**
    * Handles the update of the server represented with the given update frame.
    *
    * @param frame the update frame to apply to a server.
@@ -102,6 +130,7 @@ public final class SitSnapshotCache {
     // handle the remove of a server
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
+      this.markIdAsRemoved(frame.getServerId());
       return this.serverSnapshots.remove(frame.getServerId());
     }
 
@@ -109,10 +138,19 @@ public final class SitSnapshotCache {
     // apply the frame as an update in case the server was updated
     var serverToUpdate = this.serverSnapshots.computeIfAbsent(frame.getServerId(), _ -> {
       var serverId = UUID.fromString(frame.getServerId());
-      return this.serverRepository.findServerSnapshotById(serverId).orElse(null);
+      return this.serverRepository.findServerSnapshotById(serverId)
+        .filter(_ -> !this.isIdMarkedAsRemoved(frame.getServerId()))
+        .orElse(null);
     });
     if (serverToUpdate != null) {
       serverToUpdate.applyUpdateFrame(frame);
+    }
+
+    // check if the id was marked as removed while the update/add was applied
+    // to prevent caching something that will never receive an update again
+    if (serverToUpdate != null && this.isIdMarkedAsRemoved(frame.getServerId())) {
+      this.serverSnapshots.remove(frame.getServerId());
+      return null;
     }
 
     return serverToUpdate;
@@ -128,6 +166,7 @@ public final class SitSnapshotCache {
     // handle the remove of a journey
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
+      this.markIdAsRemoved(frame.getJourneyId());
       return this.journeySnapshots.remove(frame.getJourneyId());
     }
 
@@ -135,10 +174,19 @@ public final class SitSnapshotCache {
     // apply the frame as an update in case the journey was updated
     var journeyToUpdate = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), _ -> {
       var journeyId = UUID.fromString(frame.getJourneyId());
-      return this.journeyRepository.findJourneySnapshotById(journeyId).orElse(null);
+      return this.journeyRepository.findJourneySnapshotById(journeyId)
+        .filter(_ -> !this.isIdMarkedAsRemoved(frame.getJourneyId()))
+        .orElse(null);
     });
     if (journeyToUpdate != null) {
       journeyToUpdate.applyUpdateFrame(frame);
+    }
+
+    // check if the id was marked as removed while the update/add was applied
+    // to prevent caching something that will never receive an update again
+    if (journeyToUpdate != null && this.isIdMarkedAsRemoved(frame.getJourneyId())) {
+      this.journeySnapshots.remove(frame.getJourneyId());
+      return null;
     }
 
     return journeyToUpdate;
@@ -156,6 +204,7 @@ public final class SitSnapshotCache {
     // handle the remove of a dispatch post
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
+      this.markIdAsRemoved(frame.getPostId());
       return this.dispatchPostSnapshots.remove(frame.getPostId());
     }
 
@@ -163,10 +212,19 @@ public final class SitSnapshotCache {
     // apply the frame as an update in case the dispatch post was updated
     var postToUpdate = this.dispatchPostSnapshots.computeIfAbsent(frame.getPostId(), _ -> {
       var postId = UUID.fromString(frame.getPostId());
-      return this.dispatchPostRepository.findDispatchPostSnapshotById(postId).orElse(null);
+      return this.dispatchPostRepository.findDispatchPostSnapshotById(postId)
+        .filter(_ -> !this.isIdMarkedAsRemoved(frame.getPostId()))
+        .orElse(null);
     });
     if (postToUpdate != null) {
       postToUpdate.applyUpdateFrame(frame);
+    }
+
+    // check if the id was marked as removed while the update/add was applied
+    // to prevent caching something that will never receive an update again
+    if (postToUpdate != null && this.isIdMarkedAsRemoved(frame.getPostId())) {
+      this.dispatchPostSnapshots.remove(frame.getPostId());
+      return null;
     }
 
     return postToUpdate;

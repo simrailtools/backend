@@ -121,4 +121,18 @@ class CacheConfiguration {
         .expireAfterWrite(90, TimeUnit.MINUTES)
         .build());
   }
+
+  /**
+   * Cache for ids from the internal event bus that were marked as removed. This cache prevents updates from being
+   * applied to snapshots while a remove frame was received previously.
+   */
+  @Bean
+  public @Nonnull Cache removedIdsCache() {
+    return new CaffeineCache(
+      "removed_ids_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(2, TimeUnit.MINUTES)
+        .build(),
+      false);
+  }
 }
