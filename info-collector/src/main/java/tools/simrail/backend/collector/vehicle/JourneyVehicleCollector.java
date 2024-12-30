@@ -85,7 +85,7 @@ class JourneyVehicleCollector {
   }
 
   @Transactional
-  @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
+  @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES, scheduler = "vehicle_collect_scheduler")
   public void collectJourneyVehicles() {
     // collect the scheduled/predicted vehicle compositions first
     var servers = this.serverService.getServers();

@@ -73,7 +73,12 @@ final class SimRailDispatchPostCollector {
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
   }
 
-  @Scheduled(initialDelay = 0, fixedRate = 7, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(
+    initialDelay = 0,
+    fixedRate = 7,
+    timeUnit = TimeUnit.SECONDS,
+    scheduler = "dispatch_post_collect_scheduler"
+  )
   public void collectDispatchPostInformation() {
     var servers = this.serverService.getServers();
     for (var server : servers) {

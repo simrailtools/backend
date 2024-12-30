@@ -53,4 +53,25 @@ public class SchedulerConfiguration {
     var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
     return new ConcurrentTaskScheduler(executor);
   }
+
+  @Bean(name = "dispatch_post_collect_scheduler")
+  public @Nonnull TaskScheduler dispatchPostCollectionTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("dispatch-post-collector-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
+
+  @Bean(name = "server_collect_scheduler")
+  public @Nonnull TaskScheduler serverCollectionTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("server-collector-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
+
+  @Bean(name = "vehicle_collect_scheduler")
+  public @Nonnull TaskScheduler vehicleCollectionTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("vehicle-collector-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
 }

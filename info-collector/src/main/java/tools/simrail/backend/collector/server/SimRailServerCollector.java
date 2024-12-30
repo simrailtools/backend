@@ -80,7 +80,7 @@ public final class SimRailServerCollector implements SimRailServerService {
   /**
    * Collects the information of all SimRail servers every 30 seconds.
    */
-  @Scheduled(initialDelay = 0, fixedRate = 30, timeUnit = TimeUnit.SECONDS)
+  @Scheduled(initialDelay = 0, fixedRate = 30, timeUnit = TimeUnit.SECONDS, scheduler = "server_collect_scheduler")
   public void collectServerInformation() {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
