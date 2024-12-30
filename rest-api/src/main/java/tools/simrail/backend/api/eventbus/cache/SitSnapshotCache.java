@@ -24,6 +24,9 @@
 
 package tools.simrail.backend.api.eventbus.cache;
 
+import com.github.benmanes.caffeine.cache.Cache;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.RemovalCause;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.Collection;
@@ -31,13 +34,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Component;
-import org.springframework.util.Assert;
 import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
 import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
 import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
@@ -60,11 +61,10 @@ public final class SitSnapshotCache {
   private final Map<String, EventbusJourneySnapshotDto> journeySnapshots;
   private final Map<String, EventbusDispatchPostSnapshotDto> dispatchPostSnapshots;
 
-  private final Cache removedIdsCache;
+  private final Cache<String, Boolean> removedIdsCache;
 
   @Autowired
   SitSnapshotCache(
-    @Nonnull CacheManager cacheManager,
     @Nonnull EventbusServerRepository serverRepository,
     @Nonnull EventbusJourneyRepository journeyRepository,
     @Nonnull EventbusDispatchPostRepository dispatchPostRepository
@@ -72,9 +72,6 @@ public final class SitSnapshotCache {
     this.serverRepository = serverRepository;
     this.journeyRepository = journeyRepository;
     this.dispatchPostRepository = dispatchPostRepository;
-
-    this.removedIdsCache = cacheManager.getCache("removed_ids_cache");
-    Assert.notNull(this.removedIdsCache, "removed ids cache not registered");
 
     // cache active servers
     var activeServers = serverRepository.findSnapshotsOfAllActiveServers();
@@ -99,6 +96,22 @@ public final class SitSnapshotCache {
       Function.identity(),
       (left, _) -> left,
       ConcurrentHashMap::new));
+
+    // construct the cache for the ids that were removed to not apply any updates anymore
+    // once a remove frame for them was received. after 2 minutes in the cache they are removed
+    // from the cache and the caching maps are cleaned up one more time to ensure that the id
+    // is actually no longer cached due to some race condition
+    this.removedIdsCache = Caffeine.newBuilder()
+      .expireAfterWrite(2, TimeUnit.MINUTES)
+      .evictionListener((key, _, cause) -> {
+        if (cause == RemovalCause.EXPIRED) {
+          var removedId = (String) key;
+          this.serverSnapshots.remove(removedId);
+          this.journeySnapshots.remove(removedId);
+          this.dispatchPostSnapshots.remove(removedId);
+        }
+      })
+      .build();
   }
 
   /**
@@ -111,13 +124,22 @@ public final class SitSnapshotCache {
   }
 
   /**
+   * Removes the marking as removed from the given id.
+   *
+   * @param id the id to no longer mark as removed.
+   */
+  private void unmarkIdAsRemoved(@Nonnull String id) {
+    this.removedIdsCache.invalidate(id);
+  }
+
+  /**
    * Get if the given id has been marked as removed previously.
    *
    * @param id the id to check.
    * @return true if the given id has been marked as removed, false otherwise.
    */
   private boolean isIdMarkedAsRemoved(@Nonnull String id) {
-    return this.removedIdsCache.get(id) != null;
+    return this.removedIdsCache.getIfPresent(id) != null;
   }
 
   /**
@@ -132,6 +154,11 @@ public final class SitSnapshotCache {
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getServerId());
       return this.serverSnapshots.remove(frame.getServerId());
+    }
+
+    // remove the removal marking for the id of the given server if the action is an add
+    if (updateType == UpdateType.ADD) {
+      this.unmarkIdAsRemoved(frame.getServerId());
     }
 
     // resolve the server with the provided server id and cache it
@@ -170,6 +197,11 @@ public final class SitSnapshotCache {
       return this.journeySnapshots.remove(frame.getJourneyId());
     }
 
+    // remove the removal marking for the id of the given journey if the action is an add
+    if (updateType == UpdateType.ADD) {
+      this.unmarkIdAsRemoved(frame.getJourneyId());
+    }
+
     // resolve the journey with the provided journey id and cache it
     // apply the frame as an update in case the journey was updated
     var journeyToUpdate = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), _ -> {
@@ -206,6 +238,11 @@ public final class SitSnapshotCache {
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getPostId());
       return this.dispatchPostSnapshots.remove(frame.getPostId());
+    }
+
+    // remove the removal marking for the id of the given dispatch post if the action is an add
+    if (updateType == UpdateType.ADD) {
+      this.unmarkIdAsRemoved(frame.getPostId());
     }
 
     // resolve the dispatch post with the provided dispatch post id and cache it
