@@ -43,16 +43,17 @@ interface CollectorVehicleRepository extends JourneyVehicleRepository {
    * @param runIds   the run ids to include in the result.
    * @return the journey ids and run ids of the journey without a stored vehicle composition.
    */
-  @Query("""
-    SELECT j.id, j.foreignRunId
+  @Query(value = """
+    SELECT DISTINCT ON (j.id)
+      j.id, j.foreign_run_id
     FROM sit_journey j
     LEFT JOIN sit_vehicle jv
-      ON jv.journeyId = j.id AND jv.indexInGroup = 0
+      ON jv.journey_id = j.id AND jv.index_in_group = 0
     WHERE
-      jv.journeyId IS NULL
-      AND j.serverId = :serverId
-      AND j.foreignRunId IN :runIds
-    """)
+      jv.journey_id IS NULL
+      AND j.server_id = :serverId
+      AND j.foreign_run_id IN :runIds
+    """, nativeQuery = true)
   List<Object[]> findJourneyRunsWithoutVehicleComposition(
     @Param("serverId") UUID serverId,
     @Param("runIds") List<UUID> runIds);
@@ -64,16 +65,17 @@ interface CollectorVehicleRepository extends JourneyVehicleRepository {
    * @param runIds   the run ids to include in the result.
    * @return the journey ids and run ids of the journey without a stored, confirmed vehicle composition.
    */
-  @Query("""
-    SELECT j.id, j.foreignRunId
+  @Query(value = """
+    SELECT DISTINCT ON (j.id)
+      j.id, j.foreign_run_id
     FROM sit_journey j
     LEFT JOIN sit_vehicle jv
-      ON jv.journeyId = j.id AND jv.indexInGroup = 0
+      ON jv.journey_id = j.id AND jv.index_in_group = 0
     WHERE
-      j.serverId = :serverId
-      AND j.foreignRunId IN :runIds
-      AND (jv.journeyId IS NULL OR jv.status != tools.simrail.backend.common.vehicle.JourneyVehicleStatus.REAL)
-    """)
+      j.server_id = :serverId
+      AND j.foreign_run_id IN :runIds
+      AND (jv.journey_id IS NULL OR jv.status != 0)
+    """, nativeQuery = true)
   List<Object[]> findJourneyRunsWithoutConfirmedVehicleComposition(
     @Param("serverId") UUID serverId,
     @Param("runIds") List<UUID> runIds);
