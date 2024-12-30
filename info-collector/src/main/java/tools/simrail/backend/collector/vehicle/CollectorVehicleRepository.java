@@ -25,12 +25,10 @@
 package tools.simrail.backend.collector.vehicle;
 
 import jakarta.annotation.Nonnull;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.common.vehicle.JourneyVehicle;
 import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
 
 /**
@@ -79,35 +77,6 @@ interface CollectorVehicleRepository extends JourneyVehicleRepository {
   List<Object[]> findJourneyRunsWithoutConfirmedVehicleComposition(
     @Param("serverId") UUID serverId,
     @Param("runIds") List<UUID> runIds);
-
-  /**
-   * Finds the journey vehicles of a journey on the given server with the given category, number and on the specified
-   * date.
-   *
-   * @param serverId      the id of the server to select the journey on.
-   * @param trainCategory the category of the journey to find.
-   * @param trainNumber   the number of the journey to find.
-   * @param date          the date on which the journey to find.
-   * @return the vehicles of the requested journey.
-   */
-  @Query(value = """
-    SELECT jv.*
-    FROM sit_vehicle jv
-    JOIN sit_journey j ON jv.journey_id = j.id
-    JOIN sit_journey_event je ON je.journey_id = j.id AND je.event_index = 0
-    WHERE
-      j.server_id = :serverId
-      AND je.transport_category = :category
-      AND je.transport_number= :number
-      AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
-        je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
-    ORDER BY jv.index_in_group
-    """, nativeQuery = true)
-  List<JourneyVehicle> findJourneyVehiclesByJourneyOnSpecificDate(
-    @Param("serverId") UUID serverId,
-    @Param("category") String trainCategory,
-    @Param("number") String trainNumber,
-    @Param("date") LocalDate date);
 
   /**
    * Deletes all vehicle entries for the journey with the given id.

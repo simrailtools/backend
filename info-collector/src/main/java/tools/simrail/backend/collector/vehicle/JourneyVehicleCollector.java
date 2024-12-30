@@ -25,11 +25,15 @@
 package tools.simrail.backend.collector.vehicle;
 
 import jakarta.annotation.Nonnull;
+import jakarta.persistence.EntityManager;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
@@ -41,7 +45,6 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
-import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.railcar.RailcarProvider;
 import tools.simrail.backend.common.vehicle.JourneyVehicle;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
@@ -59,48 +62,39 @@ class JourneyVehicleCollector {
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPanelApiClient panelApiClient;
 
+  private final EntityManager entityManager;
   private final RailcarProvider railcarProvider;
   private final SimRailServerService serverService;
   private final CollectorVehicleRepository vehicleRepository;
-  private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
 
   @Autowired
   public JourneyVehicleCollector(
     @Nonnull SimRailAwsApiClient awsApiClient,
     @Nonnull SimRailPanelApiClient panelApiClient,
+    @Nonnull EntityManager entityManager,
     @Nonnull RailcarProvider railcarProvider,
     @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorVehicleRepository vehicleRepository,
-    @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
+    @Nonnull CollectorVehicleRepository vehicleRepository
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
+    this.entityManager = entityManager;
     this.railcarProvider = railcarProvider;
     this.serverService = serverService;
     this.vehicleRepository = vehicleRepository;
-    this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
   }
 
   @Transactional
   @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES)
-  public void collectJourneyVehicles() throws InterruptedException {
+  public void collectJourneyVehicles() {
     // collect the scheduled/predicted vehicle compositions first
     var servers = this.serverService.getServers();
-    try (var scope = this.transactionalTaskScopeFactory.get()) {
-      for (var server : servers) {
-        scope.fork(() -> {
-          var startTime = Instant.now();
-          var runs = this.awsApiClient.getTrainRuns(server.code());
-          this.collectVehiclesFromTimetable(server, runs);
-          var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-          LOGGER.info("Collected predicted vehicle information for server {} in {}s", server.code(), elapsedTime);
-          return null;
-        });
-      }
-
-      // wait for all update tasks to complete, log the first exception if one occurred
-      scope.join();
-      scope.firstException().ifPresent(throwable -> LOGGER.warn("Exception collecting vehicle info", throwable));
+    for (var server : servers) {
+      var startTime = Instant.now();
+      var runs = this.awsApiClient.getTrainRuns(server.code());
+      this.collectVehiclesFromTimetable(server, runs);
+      var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
+      LOGGER.info("Collected predicted vehicle information for server {} in {}s", server.code(), elapsedTime);
     }
 
     // collect the real vehicle compositions
@@ -110,7 +104,7 @@ class JourneyVehicleCollector {
       var activeTrains = response.getEntries();
       if (!response.isSuccess() || activeTrains == null || activeTrains.isEmpty()) {
         LOGGER.warn("SimRail api returned no active trains for server {}", server.code());
-        return;
+        continue;
       }
 
       this.collectVehiclesFromLiveData(server, activeTrains);
@@ -137,7 +131,13 @@ class JourneyVehicleCollector {
     var runIdToJourneyIdMapping = journeysWithoutComposition
       .stream()
       .collect(Collectors.toMap(entry -> (UUID) entry[1], entry -> (UUID) entry[0]));
-    for (var run : trainRuns) {
+
+    // create predicated journey vehicle entry for each run without a stored composition
+    var runsWithoutComposition = trainRuns.stream()
+      .filter(run -> runIdToJourneyIdMapping.containsKey(run.getRunId()))
+      .toList();
+    var previousCompositions = this.findPreviousVehicleCompositions(server, runsWithoutComposition);
+    for (var run : runsWithoutComposition) {
       // resolve the journey id associated with the run, if the run id is not present in the
       // mapping it either means that the journey is not yet registered or a composition is already stored
       var journeyId = runIdToJourneyIdMapping.get(run.getRunId());
@@ -147,14 +147,9 @@ class JourneyVehicleCollector {
 
       // find the previous vehicles (previous day) and insert a predicted vehicle composition
       var firstEvent = run.getTimetable().getFirst();
-      var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
-      var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
-      var previousVehicles = this.vehicleRepository.findJourneyVehiclesByJourneyOnSpecificDate(
-        server.id(),
-        firstEvent.getTrainType(),
-        firstEvent.getTrainNumber(),
-        previousEventDate);
-      if (previousVehicles.isEmpty()) {
+      var previousJourneyKey = String.format("%s_%s", firstEvent.getTrainType(), firstEvent.getTrainNumber());
+      var previousVehicles = previousCompositions.get(previousJourneyKey);
+      if (previousVehicles == null || previousVehicles.isEmpty()) {
         var unknownVehicle = new JourneyVehicle();
         unknownVehicle.setIndexInGroup(0);
         unknownVehicle.setJourneyId(journeyId);
@@ -166,16 +161,88 @@ class JourneyVehicleCollector {
             var newVehicle = new JourneyVehicle();
             newVehicle.setJourneyId(journeyId);
             newVehicle.setStatus(JourneyVehicleStatus.PREDICTION);
-            newVehicle.setIndexInGroup(vehicle.getIndexInGroup());
-            newVehicle.setRailcarId(vehicle.getRailcarId());
-            newVehicle.setLoadWeight(vehicle.getLoadWeight());
-            newVehicle.setLoad(vehicle.getLoad());
+            newVehicle.setIndexInGroup(vehicle.indexInGroup());
+            newVehicle.setRailcarId(vehicle.railcarId());
+            newVehicle.setLoadWeight(vehicle.loadWeight());
+            newVehicle.setLoad(vehicle.load());
             return newVehicle;
           })
           .toList();
         this.saveJourneyVehicles(journeyId, currentEventVehicles);
       }
     }
+  }
+
+  /**
+   * Resolves the stored vehicle composition of the previous day for the given train runs. The result is a mapping
+   * between a key identifying the run (in the form of {@code [journey category]_[journey number]}) to the vehicles used
+   * for the previous run. The map does not contain an entry if no composition for the previous day is stored.
+   *
+   * @param trainRuns the runs to resolve the previous vehicle composition of.
+   * @return a mapping between a journey identifier and the previous vehicle composition, as described above.
+   */
+  @SuppressWarnings("unchecked")
+  private @Nonnull Map<String, List<CollectorJourneyVehicleProjection>> findPreviousVehicleCompositions(
+    @Nonnull SimRailServerDescriptor server,
+    @Nonnull List<SimRailAwsTrainRun> trainRuns
+  ) {
+    // if no train runs are given there is nothing to select
+    if (trainRuns.isEmpty()) {
+      return Map.of();
+    }
+
+    // the base queries being formatted for selection
+    // the 'baseQuery' is the base defining how to select the entries
+    // the 'baseCriteria' is the base filter criteria being inserted for each given train run
+    var baseQuery = """
+      SELECT jv.id,
+             jv.index_in_group,
+             jv.load,
+             jv.load_weight,
+             jv.railcar_id,
+             je.transport_category,
+             je.transport_number
+      FROM sit_vehicle jv
+      RIGHT JOIN sit_journey j ON jv.journey_id = j.id
+      RIGHT JOIN sit_journey_event je ON je.journey_id = j.id AND je.event_index = 0
+      WHERE
+        j.server_id = '%s'
+        AND jv.id IS NOT NULL
+        AND (%s)
+      """;
+    var baseCriteria = """
+      (je.transport_category = '%s'
+        AND je.transport_number = '%s'
+        AND (je.scheduled_time >= CAST('%s' AS TIMESTAMP) AND
+          je.scheduled_time < CAST('%s' AS TIMESTAMP) + INTERVAL '1 day'))
+      """;
+
+    // build a filter criteria entry for each given train run
+    var criteriaBuilder = new StringJoiner(" OR ");
+    for (var run : trainRuns) {
+      var firstEvent = run.getTimetable().getFirst();
+      var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
+      var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
+      var formattedCriteria = String.format(
+        baseCriteria,
+        firstEvent.getTrainType(), firstEvent.getTrainNumber(), previousEventDate, previousEventDate);
+      criteriaBuilder.add(formattedCriteria);
+    }
+
+    // build the full query, execute it and group the result vehicles by their journey id
+    var query = String.format(baseQuery, server.id(), criteriaBuilder);
+    var result = (List<Object[]>) this.entityManager.createNativeQuery(query).getResultList();
+
+    // map each result to a unique key for the associated journey
+    var mappedResults = new HashMap<String, List<CollectorJourneyVehicleProjection>>();
+    for (var tuple : result) {
+      var key = String.format("%s_%s", tuple[5], tuple[6]); // <journey cat>_<journey num>
+      var vehicleProjection = CollectorJourneyVehicleProjection.fromSqlTuple(tuple);
+      var targetList = mappedResults.computeIfAbsent(key, _ -> new ArrayList<>());
+      targetList.add(vehicleProjection);
+    }
+
+    return mappedResults;
   }
 
   /**
