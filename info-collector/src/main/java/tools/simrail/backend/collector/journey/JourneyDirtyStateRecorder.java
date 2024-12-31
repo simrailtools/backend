@@ -189,6 +189,7 @@ final class JourneyDirtyStateRecorder {
     if (this.removed) {
       this.original.setSpeed(null);
       this.original.setPosition(null);
+      this.original.setForeignId(null);
       this.original.setNextSignal(null);
       this.original.setDriverSteamId(null);
       this.original.setLastSeenTime(OffsetDateTime.now(this.server.timezoneOffset()));
@@ -199,6 +200,7 @@ final class JourneyDirtyStateRecorder {
     if (this.foreignId != null) {
       this.original.setForeignId(this.foreignId.value());
       this.original.setFirstSeenTime(OffsetDateTime.now(this.server.timezoneOffset()));
+      this.original.setLastSeenTime(null);
     }
     if (this.speed != null) {
       this.original.setSpeed(this.speed.value());
