@@ -14,7 +14,7 @@ lombok = "1.18.36"
 jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
-springDocOpenApi = "2.7.0"
+springDocOpenApi = "2.8.0"
 springGrpc = "0.3.0-SNAPSHOT"
 
 # testing
