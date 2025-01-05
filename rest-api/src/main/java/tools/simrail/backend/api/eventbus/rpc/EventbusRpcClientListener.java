@@ -56,7 +56,7 @@ class EventbusRpcClientListener {
   @Async
   @EventListener
   public void onApplicationReady(@Nonnull ApplicationReadyEvent event) {
-    var collectorChannel = this.channelFactory.createChannel("collector").build();
+    var collectorChannel = this.channelFactory.createChannel("collector");
     var eventBusStub = EventBusGrpc.newStub(collectorChannel);
 
     // establish one stream per possible update frame
