@@ -86,6 +86,13 @@ public final class EventWebsocketSession {
   }
 
   /**
+   * Sends out a text message with the data "pong".
+   */
+  public void sendPongText() throws IOException {
+    this.sendText("pong");
+  }
+
+  /**
    * Sends the given text as a text frame to the websocket connection.
    *
    * @param text the text data to send to the websocket connection.

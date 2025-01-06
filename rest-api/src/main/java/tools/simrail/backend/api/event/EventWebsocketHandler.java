@@ -32,6 +32,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
 import org.springframework.web.socket.PingMessage;
 import org.springframework.web.socket.PongMessage;
+import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -54,8 +55,8 @@ final class EventWebsocketHandler implements WebSocketHandler {
   @Override
   @SuppressWarnings("unchecked")
   public void afterConnectionEstablished(@Nonnull WebSocketSession session) {
-    // don't allow any data to be sent from the client
-    session.setTextMessageSizeLimit(0);
+    // don't allow any data to be sent from the client, except for ping messages
+    session.setTextMessageSizeLimit(4);
     session.setBinaryMessageSizeLimit(0);
 
     // get the frame types added by the handshake interceptor and register the session
@@ -79,6 +80,8 @@ final class EventWebsocketHandler implements WebSocketHandler {
       case PingMessage _ -> eventSession.sendPong();
       // received pong from the client, mark the client as alive
       case PongMessage _ -> eventSession.handlePongReceive();
+      // client sends a ping in form of a text message, respond with a pong text message
+      case TextMessage tm when tm.getPayload().equals("ping") -> eventSession.sendPongText();
       // reject all other type of websocket messages being sent by the client
       default -> session.close(CloseStatus.NOT_ACCEPTABLE);
     }
