@@ -30,7 +30,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.data.envers.repository.config.EnableEnversRepositories;
+import org.springframework.scheduling.annotation.EnableScheduling;
 
+@EnableScheduling
 @EntityScan(basePackages = "tools.simrail.backend")
 @ComponentScan(basePackages = "tools.simrail.backend")
 @EnableEnversRepositories(basePackages = "tools.simrail.backend")
