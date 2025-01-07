@@ -56,13 +56,6 @@ final class EventWebsocketHandshakeInterceptor implements HandshakeInterceptor {
     @Nonnull WebSocketHandler wsHandler,
     @Nonnull Map<String, Object> attributes
   ) {
-    // check that the client doesn't open too many connections
-    var remoteAddress = request.getRemoteAddress();
-    if (false) { // todo: check connection count of address
-      response.setStatusCode(HttpStatus.TOO_MANY_REQUESTS);
-      return false;
-    }
-
     // check if the requested events are present in the uri
     var requestUriComponents = UriComponentsBuilder.fromUri(request.getURI()).build();
     var requestQueryParams = requestUriComponents.getQueryParams();
