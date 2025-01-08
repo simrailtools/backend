@@ -269,7 +269,7 @@ class SimRailServerTrainCollector {
         var updater = this.journeyEventRealtimeUpdaterFactory.create(recorder.wasFirstSeen(), journey, server, events);
         if (recorder.wasRemoved()) {
           updater.updateEventsDueToRemoval();
-        } else {
+        } else if (recorder.hasPositionChanged()) {
           updater.updateEventsDueToPositionChange();
         }
 
