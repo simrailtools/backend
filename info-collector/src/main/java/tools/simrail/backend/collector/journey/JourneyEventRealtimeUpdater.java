@@ -61,7 +61,6 @@ final class JourneyEventRealtimeUpdater {
   private final PlatformSignalProvider signalProvider;
 
   // state provided externally
-  private final boolean firstActive;
   private final JourneyEntity journey;
   private final SimRailServerDescriptor server;
   private final List<JourneyEventEntity> journeyEvents;
@@ -70,7 +69,6 @@ final class JourneyEventRealtimeUpdater {
   private final Map<UUID, JourneyEventEntity> updatedJourneyEvents;
 
   private JourneyEventRealtimeUpdater(
-    boolean firstActive,
     @Nonnull JourneyEntity journey,
     @Nonnull SimRailServerDescriptor server,
     @Nonnull List<JourneyEventEntity> journeyEvents,
@@ -78,7 +76,6 @@ final class JourneyEventRealtimeUpdater {
     @Nonnull UuidV5Factory journeyEventIdFactory,
     @Nonnull PlatformSignalProvider signalProvider
   ) {
-    this.firstActive = firstActive;
     this.journey = journey;
     this.server = server;
     this.journeyEvents = journeyEvents;
@@ -186,23 +183,10 @@ final class JourneyEventRealtimeUpdater {
     }
 
     if (departureEvent == null) {
-      if (!this.firstActive) {
-        // if the journey is not active for the first time and no departure events was
-        // found we will just skip the processing and wait for the journey to arrive
-        // at some point along its route
-        return;
-      }
-
-      // if we see the journey for the first time we just assume that it just departed
-      // from the first playable (in-border) station along the route and use that as the event
-      departureEvent = this.journeyEvents.stream()
-        .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
-        .filter(event -> event.getStopDescriptor().isPlayable())
-        .findFirst()
-        .orElse(null);
-      if (departureEvent == null || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
-        return; // should usually not happen
-      }
+      // if no confirmed arrival event or unconfirmed departure event was
+      // found we will just skip the processing and wait for the journey to arrive
+      // at some point along its route
+      return;
     }
 
     // update the realtime time info of the event and
@@ -454,13 +438,11 @@ final class JourneyEventRealtimeUpdater {
     }
 
     public @Nonnull JourneyEventRealtimeUpdater create(
-      boolean firstActive,
       @Nonnull JourneyEntity journey,
       @Nonnull SimRailServerDescriptor server,
       @Nonnull List<JourneyEventEntity> journeyEvents
     ) {
       return new JourneyEventRealtimeUpdater(
-        firstActive,
         journey,
         server,
         journeyEvents,

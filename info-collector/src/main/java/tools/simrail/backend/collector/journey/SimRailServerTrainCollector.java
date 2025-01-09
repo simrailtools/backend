@@ -132,7 +132,7 @@ class SimRailServerTrainCollector {
 
               // update journey events that are associated with journeys that got relevant updates
               var relevantJourneys = updatedJourneys.stream()
-                .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved() || journey.wasFirstSeen())
+                .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved())
                 .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
               if (!relevantJourneys.isEmpty()) {
                 var eventsByJourneyId = this.journeyEventRepository.findAllByJourneyIdIn(relevantJourneys.keySet())
@@ -266,7 +266,7 @@ class SimRailServerTrainCollector {
       .flatMap(recorder -> {
         var journey = recorder.getOriginal();
         var events = eventsByJourney.get(journey.getId());
-        var updater = this.journeyEventRealtimeUpdaterFactory.create(recorder.wasFirstSeen(), journey, server, events);
+        var updater = this.journeyEventRealtimeUpdaterFactory.create(journey, server, events);
         if (recorder.wasRemoved()) {
           updater.updateEventsDueToRemoval();
         } else if (recorder.hasPositionChanged()) {
