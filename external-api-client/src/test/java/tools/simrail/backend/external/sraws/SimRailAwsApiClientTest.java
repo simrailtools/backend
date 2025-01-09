@@ -24,6 +24,7 @@
 
 package tools.simrail.backend.external.sraws;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
@@ -46,13 +47,15 @@ public final class SimRailAwsApiClientTest {
   }
 
   @Test
-  void testServerTimeMillis() {
+  void testServerTimeMillis() throws IOException {
     var client = SimRailAwsApiClient.create();
 
     var de1Offset = client.getServerTimeOffset("de1");
     var de1ZoneOffset = ZoneOffset.ofHours(de1Offset);
 
-    var de1Time = client.getServerTimeMillis("de1");
+    var de1TimeRes = client.getServerTimeMillis("de1");
+    Assertions.assertEquals(200, de1TimeRes.status());
+    var de1Time = Long.parseLong(new String(de1TimeRes.body().asInputStream().readAllBytes()));
     var instant = Instant.ofEpochMilli(de1Time);
     var convertedTime = OffsetDateTime.ofInstant(instant, ZoneOffset.UTC);
     var inTimezone = convertedTime.withOffsetSameLocal(de1ZoneOffset);
