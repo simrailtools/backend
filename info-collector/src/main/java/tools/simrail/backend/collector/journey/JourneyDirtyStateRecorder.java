@@ -26,7 +26,6 @@ package tools.simrail.backend.collector.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.time.OffsetDateTime;
 import java.util.Objects;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -192,14 +191,14 @@ final class JourneyDirtyStateRecorder {
       this.original.setForeignId(null);
       this.original.setNextSignal(null);
       this.original.setDriverSteamId(null);
-      this.original.setLastSeenTime(OffsetDateTime.now(this.server.timezoneOffset()));
+      this.original.setLastSeenTime(this.server.currentTime());
       return this;
     }
 
     // apply changes to the original model
     if (this.foreignId != null) {
       this.original.setForeignId(this.foreignId.value());
-      this.original.setFirstSeenTime(OffsetDateTime.now(this.server.timezoneOffset()));
+      this.original.setFirstSeenTime(this.server.currentTime());
       this.original.setLastSeenTime(null);
     }
     if (this.speed != null) {

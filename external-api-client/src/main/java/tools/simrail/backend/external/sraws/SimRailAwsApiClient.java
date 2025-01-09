@@ -26,6 +26,7 @@ package tools.simrail.backend.external.sraws;
 
 import feign.Param;
 import feign.RequestLine;
+import feign.Response;
 import java.util.List;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
@@ -56,7 +57,7 @@ public interface SimRailAwsApiClient {
    * @return the time of the requested server in millis since the epoch.
    */
   @RequestLine("GET /getTime?serverCode={serverCode}")
-  long getServerTimeMillis(@Param("serverCode") String serverCode);
+  Response getServerTimeMillis(@Param("serverCode") String serverCode);
 
   /**
    * Get all current and future scheduled train runs of a specific server.

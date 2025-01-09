@@ -147,11 +147,16 @@ public final class SimRailServerCollector implements SimRailServerService {
       }
 
       ZoneOffset serverZoneOffset = null;
+      Long serverZoneOffsetSeconds = null;
       if (fullCollection) {
         // collect the server timezone identifier
         var serverUtcOffset = this.awsApiClient.getServerTimeOffset(server.getCode());
         serverZoneOffset = ZoneOffset.ofHours(serverUtcOffset);
         serverEntity.setTimezone(serverZoneOffset.getId());
+
+        // collect the actual server timezone offset seconds
+        var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
+        serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
       }
 
       // save the entity and register it as discovered during the run if we did a full collection
@@ -161,7 +166,8 @@ public final class SimRailServerCollector implements SimRailServerService {
           savedEntity.getId(),
           server.getId(),
           server.getCode(),
-          serverZoneOffset);
+          serverZoneOffset,
+          serverZoneOffsetSeconds);
         foundServers.add(serverDescriptor);
       }
 

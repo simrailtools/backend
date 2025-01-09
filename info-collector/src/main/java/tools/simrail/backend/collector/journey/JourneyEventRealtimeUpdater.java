@@ -199,7 +199,7 @@ final class JourneyEventRealtimeUpdater {
   private void updateEventTimeAndMarkPreviousEventsAsCancelled(@Nonnull JourneyEventEntity event, int eventIndex) {
     // update the realtime time information of the event
     event.setRealtimeTimeType(JourneyTimeType.REAL);
-    event.setRealtimeTime(OffsetDateTime.now(this.server.timezoneOffset()));
+    event.setRealtimeTime(this.server.currentTime());
     this.markEventAsUpdated(event);
 
     // mark all previous unconfirmed events as cancelled as they can no longer happen
@@ -380,7 +380,7 @@ final class JourneyEventRealtimeUpdater {
     // get the time information for the event, as this method is used to build events
     // when a journey arrived at an unknown point, the arrival events can directly
     // use the REAL time type, while departure events will update when the journey left
-    var realtimeTime = OffsetDateTime.now(this.server.timezoneOffset());
+    var realtimeTime = this.server.currentTime();
     var normalizedScheduledTime = this.roundAndTruncatePredictedTime(realtimeTime);
     journeyEvent.setScheduledTime(normalizedScheduledTime);
     switch (type) {

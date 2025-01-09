@@ -25,21 +25,37 @@
 package tools.simrail.backend.collector.server;
 
 import jakarta.annotation.Nonnull;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 /**
  * A descriptor of a server that was retrieved on the last collection run.
  *
- * @param id        our id of the server.
- * @param foreignId the SimRail backend id of the server.
- * @param code      the server code.
+ * @param id                      our id of the server.
+ * @param foreignId               the SimRail backend id of the server.
+ * @param code                    the server code.
+ * @param timezoneOffset          the timezone offset of the server.
+ * @param serverTimeOffsetSeconds the offset seconds of the server time from UTC.
  */
 public record SimRailServerDescriptor(
   @Nonnull UUID id,
   @Nonnull String foreignId,
   @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset
+  @Nonnull ZoneOffset timezoneOffset,
+  long serverTimeOffsetSeconds
 ) {
 
+  /**
+   * Get the current date and time on this server.
+   *
+   * @return the current date and time on this server.
+   */
+  public @Nonnull OffsetDateTime currentTime() {
+    return ZonedDateTime.now(ZoneOffset.UTC)
+      .plusSeconds(this.serverTimeOffsetSeconds)
+      .withZoneSameLocal(this.timezoneOffset)
+      .toOffsetDateTime();
+  }
 }

@@ -38,6 +38,7 @@ dependencies {
   // include protobuf files from <project root>/.proto folder
   protobuf(rootProject.files(".proto"))
 
+  implementation(libs.feignCore)
   implementation(projects.common)
   implementation(projects.externalApiClient)
 
