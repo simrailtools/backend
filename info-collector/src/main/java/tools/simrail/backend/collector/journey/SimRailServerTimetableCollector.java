@@ -218,6 +218,23 @@ class SimRailServerTimetableCollector {
       }
     }
 
+    // drop the first event if it is an arrival event - journeys can only depart
+    // from the first station along their route, never arrive there
+    // this case should usually not happen (due to a previous check in the for loop),
+    // however it can happen if there is no point registered for the timetable
+    // entry, and it gets skipped leaving another event as the unexpected tail
+    var firstEvent = events.getFirst();
+    if (firstEvent.getEventType() == JourneyEventType.ARRIVAL) {
+      events.removeFirst();
+    }
+
+    // drop the last event if it is a departure event - journeys cannot depart from
+    // a station as their last event, they have to change to another train to depart.
+    var lastEvent = events.getLast();
+    if (lastEvent.getEventType() == JourneyEventType.DEPARTURE) {
+      events.removeLast();
+    }
+
     // update the events associated with the journey if they changed
     var existingEvents = existingJourneyEvents.get(journeyId);
     if (this.eventsNeedUpdate(existingEvents, events)) {
