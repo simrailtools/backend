@@ -31,6 +31,7 @@ import jakarta.validation.ElementKind;
 import jakarta.validation.Path;
 import java.net.URI;
 import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
 import java.util.Objects;
 import java.util.StringJoiner;
 import java.util.function.Consumer;
@@ -130,8 +131,8 @@ public final class GlobalExceptionHandler {
     var problemDetail = ProblemDetail.forStatus(HttpStatus.BAD_REQUEST);
     problemDetail.setTitle("Bad Request");
     problemDetail.setInstance(this.problemInstance);
-    problemDetail.setProperty("timestamp", OffsetDateTime.now());
     problemDetail.setProperty("request-uri", formatRequestUri(request));
+    problemDetail.setProperty("timestamp", OffsetDateTime.now(ZoneOffset.UTC));
     decorator.accept(problemDetail);
     return problemDetail;
   }
@@ -145,8 +146,8 @@ public final class GlobalExceptionHandler {
     problemDetail.setType(INTERNAL_ERROR_TYPE);
     problemDetail.setTitle("Internal Server Error");
     problemDetail.setInstance(this.problemInstance);
-    problemDetail.setProperty("timestamp", OffsetDateTime.now());
     problemDetail.setProperty("request-uri", formatRequestUri(request));
+    problemDetail.setProperty("timestamp", OffsetDateTime.now(ZoneOffset.UTC));
     problemDetail.setDetail("An internal error occurred while processing the request");
     return problemDetail;
   }
@@ -160,8 +161,8 @@ public final class GlobalExceptionHandler {
     problemDetail.setType(NOT_FOUND);
     problemDetail.setTitle("Resource not found");
     problemDetail.setInstance(this.problemInstance);
-    problemDetail.setProperty("timestamp", OffsetDateTime.now());
     problemDetail.setProperty("request-uri", formatRequestUri(request));
+    problemDetail.setProperty("timestamp", OffsetDateTime.now(ZoneOffset.UTC));
     problemDetail.setDetail("The requested resource does not exist");
     return problemDetail;
   }
