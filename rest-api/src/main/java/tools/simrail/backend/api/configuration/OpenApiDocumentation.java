@@ -58,8 +58,17 @@ class OpenApiDocumentation {
           .name("Creative Commons Attribution 4.0 International"))
         .title("SimRailInformationTools (SIT) API")
         .description("""
-          Test
-          1234
+           The SimRailInformationTools (SIT) API provides a comprehensive suite of endpoints designed to access detailed
+           data about various aspects of the SimRail ecosystem. This API offers functionalities to interact with vehicles,
+           railcars, journeys, users, dispatch posts, and more.
+          
+          Information capabilities:
+           - Vehicles and Railcars: Technical Specification, Journey Compositions, Usage in Journeys, etc.
+           - Journeys: Live, Historic & Future Detail Data about Journeys, Finding/Resolving of Journeys, etc.
+           - Servers: Live & Historic Information about Servers
+           - Dispatch Posts: Live & Historic Information about Dispatch Posts
+           - Points: Detail Information about Points for Journeys Timetables
+           - Events: Websocket providing Live Data Changes for Servers, Dispatch Posts and Servers
           """))
       .servers(List.of(new Server()
         .description("Default Backend")
