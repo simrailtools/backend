@@ -12,16 +12,3 @@ services:
       POSTGRES_USER: "stb"
       POSTGRES_PASSWORD: "stb_very_secu1e_passw0rd"
       POSTGRES_DB: "simrailtools"
-
-  minio:
-    image: quay.io/minio/minio:latest
-    restart: unless-stopped
-    command: server /data --console-address ":9001"
-    ports:
-      - "9000:9000"
-      - "9001:9001"
-    volumes:
-      - "./volumes/minio-data:/data"
-    environment:
-      MINIO_ROOT_USER: "stb"
-      MINIO_ROOT_PASSWORD: "stb_very_secu1e_passw0rd"
