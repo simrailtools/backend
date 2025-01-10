@@ -2,7 +2,7 @@ FROM --platform=$BUILDPLATFORM azul/zulu-openjdk:23 AS builder
 WORKDIR /build
 
 COPY ./ ./
-RUN ./gradlew clean buildForDocker -x test -x checkstyleMain -x checkstyleTest --no-daemon
+RUN ./gradlew clean buildForDocker -Pversion.release=true -x test -x checkstyleMain -x checkstyleTest --no-daemon
 
 FROM azul/zulu-openjdk-alpine:23-jre-headless
 WORKDIR /app

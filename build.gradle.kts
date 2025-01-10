@@ -28,6 +28,9 @@ import org.apache.tools.ant.filters.ReplaceTokens
 import org.springframework.boot.gradle.plugin.SpringBootPlugin
 import org.springframework.boot.gradle.tasks.run.BootRun
 import java.nio.charset.StandardCharsets
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
 
 plugins {
   alias(libs.plugins.spotless)
@@ -36,8 +39,27 @@ plugins {
 }
 
 allprojects {
-  version = "1.0.0-SNAPSHOT"
   group = "tools.simrail.backend"
+
+  // generates a HashVer version for release builds (determined by gradle property 'version.release')
+  // HashVer specification: https://miniscruff.github.io/hashver (example: 2025.01.10+940ea8986b)
+  // this specifically uses a '+' for delimiting between version and git hash to
+  // also support people that want to parse the version as a SemVer version
+  // if it is not a release build just use 'dev-SNAPSHOT' as the version
+  val releaseBuild = project.findProperty("version.release") ?: "false"
+  if (releaseBuild == "true") {
+    val revParseCmd = arrayOf("git", "rev-parse", "--short=10", "--verify", "HEAD")
+    val gitSha = Runtime.getRuntime().exec(revParseCmd, null, rootDir).let {
+      it.waitFor()
+      it.inputStream.bufferedReader().readText().trim()
+    }
+
+    val utcDate = LocalDate.now(ZoneOffset.UTC)
+    val hashVerDateFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd")
+    version = "${hashVerDateFormatter.format(utcDate)}+${gitSha}"
+  } else {
+    version = "dev-SNAPSHOT"
+  }
 }
 
 subprojects {
