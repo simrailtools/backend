@@ -216,6 +216,18 @@ class SimRailServerTimetableCollector {
           events,
           inBorder);
       }
+
+      if (events.size() > 1 && previousEvent != null && previousEvent.getEventType() == JourneyEventType.DEPARTURE) {
+        // ensure that events with a scheduled overlay (arrival time != departure time)
+        // have a technical or passenger stop scheduled - for some reason that's not directly
+        // done in the train timetables even tho the time for stopping is planned
+        var arrivalEvent = events.get(events.size() - 2);
+        var hasOverlay = !previousEvent.getScheduledTime().isEqual(arrivalEvent.getScheduledTime());
+        if (previousEvent.getStopType() == JourneyStopType.NONE && hasOverlay) {
+          arrivalEvent.setStopType(JourneyStopType.TECHNICAL);
+          previousEvent.setStopType(JourneyStopType.TECHNICAL);
+        }
+      }
     }
 
     // drop the first event if it is an arrival event - journeys can only depart
@@ -226,6 +238,11 @@ class SimRailServerTimetableCollector {
     var firstEvent = events.getFirst();
     if (firstEvent.getEventType() == JourneyEventType.ARRIVAL) {
       events.removeFirst();
+      if (firstEvent.getStopType() == JourneyStopType.TECHNICAL) {
+        // ensure that the first event never has a technical stop scheduled
+        var newFirst = events.getFirst();
+        newFirst.setStopType(JourneyStopType.NONE);
+      }
     }
 
     // drop the last event if it is a departure event - journeys cannot depart from
@@ -233,6 +250,11 @@ class SimRailServerTimetableCollector {
     var lastEvent = events.getLast();
     if (lastEvent.getEventType() == JourneyEventType.DEPARTURE) {
       events.removeLast();
+      if (lastEvent.getStopType() == JourneyStopType.TECHNICAL) {
+        // ensure that the last event never has a technical stop scheduled
+        var newLast = events.getLast();
+        newLast.setStopType(JourneyStopType.NONE);
+      }
     }
 
     // update the events associated with the journey if they changed
