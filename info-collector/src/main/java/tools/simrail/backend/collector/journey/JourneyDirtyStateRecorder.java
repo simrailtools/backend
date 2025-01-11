@@ -154,15 +154,6 @@ final class JourneyDirtyStateRecorder {
   }
 
   /**
-   * Get if the journey was first seen.
-   *
-   * @return true if the journey was first seen, false otherwise.
-   */
-  public boolean wasFirstSeen() {
-    return this.foreignId != null;
-  }
-
-  /**
    * Gets if this recorder recorded any changes compared to the given original entity.
    *
    * @return true if this recorder recorded any changes compared to the given original entity, false otherwise.

@@ -183,10 +183,24 @@ final class JourneyEventRealtimeUpdater {
     }
 
     if (departureEvent == null) {
-      // if no confirmed arrival event or unconfirmed departure event was
-      // found we will just skip the processing and wait for the journey to arrive
-      // at some point along its route
-      return;
+      // assume that the journey is at the first playable point along the route if no previous
+      // arrival event was recorded for the journey. this check however is only relevant if the
+      // first playable event is also the first event along the route, as we can record an arrival
+      // at the first point using the journey position anyway
+      departureEvent = this.journeyEvents.stream()
+        .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
+        .filter(event -> event.getStopDescriptor().isPlayable())
+        .findFirst()
+        .orElse(null);
+      if (departureEvent == null || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
+        return; // should usually not happen
+      }
+
+      // check the comment above for the check reasoning
+      var firstEvent = this.journeyEvents.getFirst();
+      if (firstEvent != departureEvent) {
+        return;
+      }
     }
 
     // update the realtime time info of the event and
