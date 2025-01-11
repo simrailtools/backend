@@ -320,8 +320,14 @@ class SimRailServerTimetableCollector {
       case OffsetDateTime previousTime -> {
         // previous time is present, add the diff between the last and current event
         // to the last time to get this event time, there are some cases in which dates
-        // of the provided time-date info are one day off
-        var diff = Duration.between(previousTime.toLocalTime(), scheduledLocalTime.toLocalTime()).abs();
+        // of the provided time-date info are one day off. note that the diff might be negative
+        // in case when the event times are at the dates border (e.g. prev: 23:55, curr: 00:05 yields PT-23H-50M)
+        // in these cases we add a full day to the duration to fixup these issues
+        var diff = Duration.between(previousTime.toLocalTime(), scheduledLocalTime.toLocalTime());
+        if (diff.isNegative()) {
+          diff = diff.plusDays(1);
+        }
+
         yield previousTime.plus(diff);
       }
       case null -> // no previous time present, use the information from the server and event
