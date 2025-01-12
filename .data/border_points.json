@@ -140,6 +140,15 @@
     "name": "Kraków Płaszów",
     "ext_point_ids": [
       "2003"
+    ],
+    "in_border_if_next": [
+      "1952"
+    ]
+  },
+  {
+    "name": "Kraków Zabłocie",
+    "ext_point_ids": [
+      "2030"
     ]
   },
   {
