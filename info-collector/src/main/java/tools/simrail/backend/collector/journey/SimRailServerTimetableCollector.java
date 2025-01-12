@@ -177,9 +177,27 @@ class SimRailServerTimetableCollector {
     for (var index = 0; index < timetable.size(); index++) {
       // update the current status if the journey is within the playable border
       var timetableEntry = timetable.get(index);
-      var isBorderPoint = this.borderPointProvider.isMapBorderPoint(timetableEntry.getPointId());
-      if (isBorderPoint) {
-        inBorder = !inBorder;
+      var wasInBorder = inBorder; // keeps track if the journey was in border before the border check
+      var borderPoint = this.borderPointProvider.findMapBorderPoint(timetableEntry.getPointId()).orElse(null);
+      if (borderPoint != null && !inBorder) {
+        // if we are currently not within the map border we need to check if the journey moved into the
+        // map border before recording the events as they should be marked as in-border at the map border
+        // points. note that the journey only moves into the border if there are no required next points or
+        // the required next points are met. example route where this is needed:
+        // Podlesie - Koniecpol - Żelisławice - Włoszczowa Północ. both Koniecpol and Żelisławice are border
+        // points, so Koniecpol must validate that the journey actually moves into the border or else Żelisławice
+        // will instantly mark the journey out-of-border again
+        var requiredNextPoints = borderPoint.getRequiredNextPoints();
+        if (requiredNextPoints != null) {
+          if (index != lastTimetableIndex) {
+            var next = timetable.get(index + 1);
+            if (requiredNextPoints.contains(next.getPointId())) {
+              inBorder = true;
+            }
+          }
+        } else {
+          inBorder = true;
+        }
       }
 
       // get the point associated with the event, if the point is not registered
@@ -227,6 +245,13 @@ class SimRailServerTimetableCollector {
           arrivalEvent.setStopType(JourneyStopType.TECHNICAL);
           previousEvent.setStopType(JourneyStopType.TECHNICAL);
         }
+      }
+
+      if (borderPoint != null && wasInBorder) {
+        // if the current event was at a border point, and we were in border before the check
+        // (so the check didn't move us into the map border) the in border state resets here
+        // to keep the current event still marked as in-border
+        inBorder = false;
       }
     }
 

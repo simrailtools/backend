@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.border;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.annotation.Nullable;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -48,4 +49,10 @@ public final class MapBorderPoint {
    */
   @JsonProperty("ext_point_ids")
   private List<String> simRailPointIds;
+  /**
+   * The points that must follow the current point to be in the border. Can be null if none are required.
+   */
+  @Nullable
+  @JsonProperty("in_border_if_next")
+  private List<String> requiredNextPoints;
 }

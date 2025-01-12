@@ -77,7 +77,7 @@ public final class MapBorderPointProviderTest {
 
   @Test
   void testAllBorderPointsAreMappedUniquely() {
-    var borderPoints = this.borderPointProvider.mapBorderPointIds;
+    var borderPoints = this.borderPointProvider.mapBorderPointIds.keySet();
     for (var borderPoint : borderPoints) {
       this.pointProvider.findPointByPointId(borderPoint).ifPresent(point -> {
         for (String pointId : point.getSimRailPointIds()) {

@@ -73,6 +73,9 @@
     "name": "Koniecpol",
     "ext_point_ids": [
       "1828"
+    ],
+    "in_border_if_next": [
+      "4092"
     ]
   },
   {
