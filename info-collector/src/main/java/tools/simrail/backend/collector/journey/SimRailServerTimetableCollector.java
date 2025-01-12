@@ -263,13 +263,9 @@ class SimRailServerTimetableCollector {
     var firstEvent = events.getFirst();
     if (firstEvent.getEventType() == JourneyEventType.ARRIVAL) {
       events.removeFirst();
-
-      // ensure that the first event uses the event index 0
-      var newFirst = events.getFirst();
-      newFirst.setEventIndex(0);
-
-      // ensure that the first event never has a technical stop scheduled
       if (firstEvent.getStopType() == JourneyStopType.TECHNICAL) {
+        // ensure that the first event never has a technical stop scheduled
+        var newFirst = events.getFirst();
         newFirst.setStopType(JourneyStopType.NONE);
       }
     }
