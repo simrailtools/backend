@@ -286,6 +286,30 @@ class SimRailServerTimetableCollector {
       }
     }
 
+    // set the event index for the recorded events. this ensures that the
+    // event ordering is always according to the events that are actually
+    // stored, especially that the first event uses the index 0
+    for (var eventIndex = 0; eventIndex < events.size(); eventIndex++) {
+      var event = events.get(eventIndex);
+      if (eventIndex == 0) {
+        // first event must use the index 0
+        event.setEventIndex(0);
+      } else {
+        switch (event.getEventType()) {
+          case ARRIVAL -> {
+            // arrival event just use the actual index * 100 to leave space for additional events
+            var index = eventIndex * 100;
+            event.setEventIndex(index);
+          }
+          case DEPARTURE -> {
+            // departure events should use the same index as the arrival event plus 1
+            var arrivalEventIndex = (eventIndex - 1) * 100;
+            event.setEventIndex(arrivalEventIndex + 1);
+          }
+        }
+      }
+    }
+
     // update the events associated with the journey if they changed
     var existingEvents = existingJourneyEvents.get(journeyId);
     if (this.eventsNeedUpdate(existingEvents, events)) {
@@ -313,7 +337,6 @@ class SimRailServerTimetableCollector {
       eventType,
       previousTime,
       timetableEntry,
-      journeyEvents.size(),
       inMapBorder);
     if (event != null) {
       journeyEvents.add(event);
@@ -331,7 +354,6 @@ class SimRailServerTimetableCollector {
     @Nonnull JourneyEventType eventType,
     @Nullable OffsetDateTime previousEventTime,
     @Nonnull SimRailAwsTimetableEntry timetableEntry,
-    int eventIndex,
     boolean inPlayableBorder
   ) {
     // get the point where the event is happening, return if the point is not registered
@@ -372,18 +394,6 @@ class SimRailServerTimetableCollector {
     eventEntity.setScheduledTime(scheduledOffsetTime);
     eventEntity.setRealtimeTime(scheduledOffsetTime);
     eventEntity.setRealtimeTimeType(JourneyTimeType.SCHEDULE);
-
-    if (eventIndex == 0) {
-      // first event should use the index 0
-      eventEntity.setEventIndex(0);
-    } else if (eventIndex % 2 == 0) {
-      // departure events should use the same index as the arrival event plus 1
-      var arrivalEventIndex = (eventIndex - 1) * 100;
-      eventEntity.setEventIndex(arrivalEventIndex + 1);
-    } else {
-      // arrival event just use the actual index * 100 to leave space for additional events
-      eventEntity.setEventIndex(eventIndex * 100);
-    }
 
     // add information about the stop where the event is happening
     var stopDescriptorEntity = new JourneyStopDescriptor();
