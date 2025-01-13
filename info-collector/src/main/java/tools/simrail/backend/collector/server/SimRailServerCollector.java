@@ -128,7 +128,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       if (matcher.matches()) {
         // get the server language, set it to null if the server is international as no specific language is spoken
         var lang = matcher.group("lang").strip();
-        var spokenLang = lang.equals("International") ? null : lang;
+        var spokenLang = lang.startsWith("International") ? null : lang;
         serverEntity.setSpokenLanguage(spokenLang);
 
         // update the tags of the server
