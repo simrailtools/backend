@@ -144,7 +144,7 @@ public class PlatformSignalProviderTest {
           var signalInfo = signalsOfPoint.values().stream()
             .filter(signal -> signal.getTrack() == track && signal.getPlatform() == platform)
             .toList();
-          Assertions.assertTrue(!signalInfo.isEmpty() && signalInfo.size() <= 4, point.get().getName());
+          Assertions.assertTrue(!signalInfo.isEmpty() && signalInfo.size() <= 2, point.get().getName());
         }
       }
     }
