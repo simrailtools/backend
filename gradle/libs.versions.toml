@@ -3,7 +3,7 @@
 protobuf = "0.9.4"
 springBoot = "3.4.1"
 downloadTask = "5.6.0"
-spotless = "7.0.1"
+spotless = "7.0.2"
 checkstyleTools = "10.21.1"
 springDependencyManagement = "1.1.7"
 
@@ -14,8 +14,8 @@ lombok = "1.18.36"
 jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.1"
-springDocOpenApi = "2.8.1"
-springGrpc = "0.3.0-SNAPSHOT"
+springDocOpenApi = "2.8.3"
+springGrpc = "0.3.0"
 
 # testing
 junit = "5.11.4"
