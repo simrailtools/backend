@@ -200,6 +200,7 @@ class JourneyVehicleCollector {
              jv.load,
              jv.load_weight,
              jv.railcar_id,
+             j.id,
              je.transport_category,
              je.transport_number
       FROM sit_vehicle jv
@@ -236,10 +237,24 @@ class JourneyVehicleCollector {
     // map each result to a unique key for the associated journey
     var mappedResults = new HashMap<String, List<CollectorJourneyVehicleProjection>>();
     for (var tuple : result) {
-      var key = String.format("%s_%s", tuple[5], tuple[6]); // <journey cat>_<journey num>
+      var key = String.format("%s_%s", tuple[6], tuple[7]); // <journey cat>_<journey num>
       var vehicleProjection = CollectorJourneyVehicleProjection.fromSqlTuple(tuple);
-      var targetList = mappedResults.computeIfAbsent(key, _ -> new ArrayList<>());
-      targetList.add(vehicleProjection);
+
+      // register the vehicle projection by the given key for the projection. check that only
+      // one journey provides the information about the vehicles which should usually be the
+      // case, but can happen in case the time of a server changes which causes two journeys
+      // to be present for the previous day of the requested journey
+      var targetList = mappedResults.get(key);
+      if (targetList == null) {
+        var newTargetList = new ArrayList<CollectorJourneyVehicleProjection>();
+        newTargetList.add(vehicleProjection);
+        mappedResults.put(key, newTargetList);
+      } else {
+        var firstEntry = targetList.getFirst();
+        if (firstEntry.associatedJourneyId().equals(vehicleProjection.associatedJourneyId())) {
+          targetList.add(vehicleProjection);
+        }
+      }
     }
 
     return mappedResults;

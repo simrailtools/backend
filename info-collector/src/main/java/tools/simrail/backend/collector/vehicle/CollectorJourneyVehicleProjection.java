@@ -36,12 +36,18 @@ record CollectorJourneyVehicleProjection(
   int indexInGroup,
   @Nullable Integer loadWeight,
   @Nullable JourneyVehicleLoad load,
-  @Nullable UUID railcarId
+  @Nullable UUID railcarId,
+  @Nonnull UUID associatedJourneyId
 ) {
 
   public static @Nonnull CollectorJourneyVehicleProjection fromSqlTuple(@Nonnull Object[] tuple) {
     // tuple input: <id>, <index_in_group>, <load>, <load_weight>, <railcar_id>, <more, irrelevant entries...>
     var load = tuple[2] != null ? JourneyVehicleLoad.valueOf(tuple[2].toString()) : null;
-    return new CollectorJourneyVehicleProjection((int) tuple[1], (Integer) tuple[3], load, (UUID) tuple[4]);
+    return new CollectorJourneyVehicleProjection(
+      (int) tuple[1],
+      (Integer) tuple[3],
+      load,
+      (UUID) tuple[4],
+      (UUID) tuple[5]);
   }
 }
