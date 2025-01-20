@@ -204,6 +204,13 @@ class SimRailServerTimetableCollector {
       // we deem it irrelevant and don't want an event for the point
       var eventPoint = this.pointProvider.findPointByPointId(timetableEntry.getPointId()).orElse(null);
       if (eventPoint == null) {
+        if (borderPoint != null && wasInBorder) {
+          // if the current event was at a border point, and we were in border before the check
+          // (so the check didn't move us into the map border) the in border state resets here
+          // to keep the current event still marked as in-border
+          inBorder = false;
+        }
+
         continue;
       }
 
