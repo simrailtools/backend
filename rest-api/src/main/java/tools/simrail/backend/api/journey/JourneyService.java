@@ -124,6 +124,49 @@ class JourneyService {
   }
 
   /**
+   * Finds a journey by the first playable event along its route. Search results are either returned from cache or from
+   * querying the database.
+   *
+   * @param page            the page of results to return, defaults to 1.
+   * @param limit           the maximum amount of journeys to return, defaults to 20.
+   * @param serverId        the id of the server to return journeys on.
+   * @param timeStart       the time range start from which journeys are returned, not null.
+   * @param timeEnd         the time range end from which journeys are returned, not null.
+   * @param line            the line that must match at one event along the journey route.
+   * @param journeyCategory the category of the journey at one event along the journey route.
+   * @param transportTypes  the accepted transport types that the journey must have along the route, not null or empty.
+   * @return a pagination wrapper around the query results based on the given filter parameters.
+   */
+  @Cacheable(cacheNames = "journey_search_cache", sync = true)
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByPlayableDeparture(
+    @Nullable Integer page,
+    @Nullable Integer limit,
+    @Nullable UUID serverId,
+    @Nonnull OffsetDateTime timeStart,
+    @Nonnull OffsetDateTime timeEnd,
+    @Nullable String line,
+    @Nullable String journeyCategory,
+    @Nonnull List<JourneyTransportType> transportTypes
+  ) {
+    // build the pagination parameter
+    int indexedPage = Objects.requireNonNullElse(page, 1) - 1;
+    int requestedLimit = Objects.requireNonNullElse(limit, 20);
+    int offset = requestedLimit * indexedPage;
+
+    // query and map the results
+    var queriedItems = this.journeyRepository.findJourneySummariesByTimeAtFirstPlayableEvent(
+      serverId,
+      line,
+      journeyCategory,
+      transportTypes,
+      timeStart,
+      timeEnd,
+      requestedLimit + 1, // request one more to check if more elements are available
+      offset);
+    return this.filterJourneys(requestedLimit, queriedItems);
+  }
+
+  /**
    * Finds details about a journey based on the tail events. The start data of the journey must be completely present,
    * the end data can be used to narrow the results.Search results are either returned from cache or from querying the
    * database.

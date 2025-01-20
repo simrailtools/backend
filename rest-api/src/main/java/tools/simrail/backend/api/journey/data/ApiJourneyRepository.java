@@ -155,6 +155,63 @@ public interface ApiJourneyRepository extends JourneyRepository {
   );
 
   /**
+   * Finds the journey summary projections whose first playable event is within the given time range.
+   *
+   * @param serverId        the id of the server to return journeys on.
+   * @param line            the line that must match at one event along the journey route.
+   * @param journeyCategory the category of the journey at one event along the journey route.
+   * @param transportTypes  the accepted transport types that the journey must have along the route.
+   * @param rangeStart      the time to start returning journeys from.
+   * @param rangeEnd        the time to end returning journeys from.
+   * @param limit           the maximum amount of journeys to return.
+   * @param offset          the offset to start returning item from.
+   * @return a summary projection of the journeys matching the given filter parameters.
+   */
+  @Query(value = """
+    WITH first_playable_events AS (
+      SELECT
+        e.journey_id,
+        e.scheduled_time,
+        e.transport_line,
+        e.transport_type,
+        e.transport_category
+      FROM sit_journey_event e
+      WHERE e.event_index = (
+        SELECT MIN(e2.event_index)
+        FROM sit_journey_event e2
+        WHERE e2.journey_id = e.journey_id AND e2.point_playable = TRUE
+      )
+    )
+    SELECT
+      j.id,
+      j.server_id,
+      j.first_seen_time,
+      j.last_seen_time,
+      j.cancelled
+    FROM sit_journey j
+    JOIN first_playable_events fe ON fe.journey_id = j.id
+    WHERE
+      (:serverId IS NULL OR j.server_id = :serverId)
+      AND (fe.scheduled_time BETWEEN :start AND :end)
+      AND (:line IS NULL OR fe.transport_line = :line)
+      AND (:journeyCategory IS NULL OR fe.transport_category = :journeyCategory)
+      AND (fe.transport_type IN :transportTypes)
+    ORDER BY fe.scheduled_time
+    LIMIT :limit
+    OFFSET :offset
+    """, nativeQuery = true)
+  List<JourneySummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
+    @Param("serverId") UUID serverId,
+    @Param("line") String line,
+    @Param("journeyCategory") String journeyCategory,
+    @Param("transportTypes") List<JourneyTransportType> transportTypes,
+    @Param("start") OffsetDateTime rangeStart,
+    @Param("end") OffsetDateTime rangeEnd,
+    @Param("limit") int limit,
+    @Param("offset") int offset
+  );
+
+  /**
    * Finds journeys that use the given railcar in their vehicle composition on the given date.
    *
    * @param serverId  the id of the server to return journeys on.

@@ -35,9 +35,11 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
 import org.hibernate.validator.constraints.UUID;
@@ -253,6 +255,87 @@ class JourneyV1Controller {
       date,
       line,
       journeyNumber,
+      journeyCategory,
+      transportTypes);
+  }
+
+  /**
+   * Finds journeys that are becoming playable in the given time range.
+   */
+  @GetMapping("/by-playable-departure")
+  @Operation(
+    summary = "Find journeys that become playable in the provided time range",
+    description = """
+      Finds journeys that become playable in the provided time range. Optionally additional filter parameters can be
+      provided to narrow down the results. The provided time range must be at least 1 minute and at most 60 minutes
+      long. If the start time is omitted it defaults to the current UTC time, if the end time is omitted it defaults to
+      the start time plus 15 minutes.
+      """,
+    parameters = {
+      @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
+      @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
+      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current time (UTC) if omitted"),
+      @Parameter(name = "timeEnd", description = "The end of the time range (ISO-8601 with offset), defaults to start plus 15 minutes if omitted"),
+      @Parameter(name = "line", description = "The line of the journey at the first playable event"),
+      @Parameter(name = "journeyCategory", description = "The category of the journey at the first playable event"),
+      @Parameter(name = "transportTypes", description = "The transport types that are returned, defaults to all types if omitted"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The journeys were successfully resolved based on the given filter parameters"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid or doesn't match the described requirements",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byPlayableDeparture(
+    @RequestParam(name = "page", required = false) @Min(1) Integer page,
+    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
+    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
+    @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
+    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
+    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
+  ) {
+    if (timeStart == null) {
+      // default the requested time start to the current UTC time if not provided
+      timeStart = OffsetDateTime.now(ZoneOffset.UTC);
+    }
+    if (timeEnd == null) {
+      // default the requested time end to 15 minutes after the requested time start if not provided
+      timeEnd = timeStart.plusMinutes(15);
+    }
+
+    // ensure that the time span is at least 1 minute and at most 60 minutes long
+    // this also validates that the given timeStart is before the given timeEnd
+    var requestedSpanMinutes = Duration.between(timeStart, timeEnd).toMinutes();
+    if (requestedSpanMinutes < 1 || requestedSpanMinutes > 60) {
+      throw new IllegalRequestParameterException("The requested time span must be between 1 and 60 minutes long");
+    }
+
+    if (transportTypes == null || transportTypes.isEmpty()) {
+      // default the transport types to all if not given
+      transportTypes = ALL_TRANSPORT_TYPES;
+    }
+
+    var truncatedStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
+    var truncatedEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
+    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
+    return this.journeyService.findByPlayableDeparture(
+      page,
+      limit,
+      serverIdFilter,
+      truncatedStart,
+      truncatedEnd,
+      line,
       journeyCategory,
       transportTypes);
   }

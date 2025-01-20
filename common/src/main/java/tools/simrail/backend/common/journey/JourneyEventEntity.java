@@ -54,7 +54,9 @@ import org.hibernate.annotations.CreationTimestamp;
 @Table(indexes = {
   @Index(columnList = "journeyId"),
   @Index(columnList = "journeyId, scheduledTime"),
+  @Index(columnList = "journeyId, eventIndex, point_playable"),
   @Index(columnList = "journeyId, eventIndex, point_id, scheduledTime"),
+  @Index(columnList = "scheduledTime, transport_line, transport_category, transport_type"),
   @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
   @Index(columnList = "journeyId, eventIndex, point_id, transport_number, transport_category, scheduledTime"),
   @Index(columnList = "journeyId, scheduledTime, transport_line, transport_number, transport_category, transport_type"),
