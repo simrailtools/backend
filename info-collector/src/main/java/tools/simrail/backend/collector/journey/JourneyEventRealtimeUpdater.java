@@ -211,7 +211,9 @@ final class JourneyEventRealtimeUpdater {
   }
 
   private void updateEventTimeAndMarkPreviousEventsAsCancelled(@Nonnull JourneyEventEntity event, int eventIndex) {
-    // update the realtime time information of the event
+    // update the realtime time information of the event,
+    // remove the marking as cancelled as it actually happened
+    event.setCancelled(false);
     event.setRealtimeTimeType(JourneyTimeType.REAL);
     event.setRealtimeTime(this.server.currentTime());
     this.markEventAsUpdated(event);
@@ -297,6 +299,13 @@ final class JourneyEventRealtimeUpdater {
           };
         };
 
+        // ensure that the event is not marked as cancelled as
+        // this method predicts the time when an event might happen
+        // and is called due to an event happening. therefore the
+        // subsequent event will (maybe) happen as well
+        var eventWasCancelled = currentEvent.isCancelled();
+        currentEvent.setCancelled(false);
+
         // update the realtime time of the current event to the constructed prediction
         var normalizedPredictedTime = this.roundAndTruncatePredictedTime(predictedTime);
         currentEvent.setRealtimeTime(normalizedPredictedTime);
@@ -307,7 +316,7 @@ final class JourneyEventRealtimeUpdater {
         // if the scheduled time is now equal to the realtime time again we can
         // stop making predictions for the following stops as this wouldn't make
         // any difference to the currently present time anyway
-        if (predictedTime.isEqual(currentEvent.getScheduledTime())) {
+        if (!eventWasCancelled && predictedTime.isEqual(currentEvent.getScheduledTime())) {
           break;
         }
       }
