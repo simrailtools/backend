@@ -252,6 +252,23 @@ class SimRailServerTimetableCollector {
           arrivalEvent.setStopType(JourneyStopType.TECHNICAL);
           previousEvent.setStopType(JourneyStopType.TECHNICAL);
         }
+
+        if (previousEvent.getStopType() == JourneyStopType.PASSENGER && !hasOverlay) {
+          // if the journey has a passenger stop scheduled but no overlay set for
+          // the station, schedule an overlay of 30 seconds for the stations to allow
+          // for passenger change. apparently the SimRail backend can currently not
+          // handle overlay that's only seconds long, therefore all times are rounded
+          // to a full minute
+          var scheduledTime = previousEvent.getScheduledTime();
+          var timeWithOverlay = scheduledTime.plusSeconds(30);
+          previousEvent.setScheduledTime(timeWithOverlay);
+          previousEvent.setRealtimeTime(timeWithOverlay);
+        } else if (!hasOverlay) {
+          // remove the stop type at the point in case there is no overlay time
+          // scheduled for the journey (basically a stop without a stop)
+          arrivalEvent.setStopType(JourneyStopType.NONE);
+          previousEvent.setStopType(JourneyStopType.NONE);
+        }
       }
 
       if (borderPoint != null && wasInBorder) {
