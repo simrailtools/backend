@@ -1,10 +1,10 @@
 [versions]
 # plugins
 protobuf = "0.9.4"
-springBoot = "3.4.1"
+springBoot = "3.4.2"
 downloadTask = "5.6.0"
 spotless = "7.0.2"
-checkstyleTools = "10.21.1"
+checkstyleTools = "10.21.2"
 springDependencyManagement = "1.1.7"
 
 # direct dependencies
@@ -13,8 +13,8 @@ feign = "13.5"
 lombok = "1.18.36"
 jackson = "2.18.2"
 fuzzywuzzy = "1.4.0"
-annotations = "26.0.1"
-springDocOpenApi = "2.8.3"
+annotations = "26.0.2"
+springDocOpenApi = "2.8.4"
 springGrpc = "0.3.0"
 
 # testing
