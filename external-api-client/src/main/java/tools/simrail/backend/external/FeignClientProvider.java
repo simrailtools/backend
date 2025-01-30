@@ -37,12 +37,13 @@ import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.ExceptionPropagationPolicy;
 import feign.Feign;
 import feign.Logger;
-import feign.http2client.Http2Client;
 import feign.jackson.JacksonDecoder;
 import feign.jackson.JacksonEncoder;
 import feign.slf4j.Slf4jLogger;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
+import tools.simrail.backend.external.feign.CustomFieldQueryMapEncoder;
+import tools.simrail.backend.external.feign.FeignJava11Client;
 
 public final class FeignClientProvider {
 
@@ -56,9 +57,10 @@ public final class FeignClientProvider {
   public static @NotNull Feign.Builder prepareFeignInstance() {
     var callingClass = CLASS_REF_RETAINING_STACK_WALKER.getCallerClass();
     return Feign.builder()
-      .client(new Http2Client())
       .logLevel(Logger.Level.FULL)
+      .client(new FeignJava11Client())
       .logger(new Slf4jLogger(callingClass))
+      .queryMapEncoder(new CustomFieldQueryMapEncoder())
       .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);
   }
 
@@ -81,11 +83,12 @@ public final class FeignClientProvider {
     // create base feign instance
     var callingClass = CLASS_REF_RETAINING_STACK_WALKER.getCallerClass();
     return Feign.builder()
-      .client(new Http2Client())
       .logLevel(Logger.Level.FULL)
+      .client(new FeignJava11Client())
       .logger(new Slf4jLogger(callingClass))
       .encoder(new JacksonEncoder(bodyMapper))
       .decoder(new JacksonDecoder(bodyMapper))
+      .queryMapEncoder(new CustomFieldQueryMapEncoder())
       .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);
   }
 }
