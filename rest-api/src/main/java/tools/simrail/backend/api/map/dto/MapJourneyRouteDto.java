@@ -22,31 +22,20 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.configuration;
+package tools.simrail.backend.api.map.dto;
 
-import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
+import io.swagger.v3.oas.annotations.media.Schema;
+import java.util.List;
+import java.util.UUID;
+import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 
-@Configuration
-class ApiClientConfiguration {
+/**
+ * DTO for the route of a journey.
+ */
+public record MapJourneyRouteDto(
+  @Schema(description = "The id of the journey to which the waypoints apply") UUID journeyId,
+  @Schema(description = "The stops along the journey route, not in a particular order") List<JourneyStopPlaceDto> stops,
+  @Schema(description = "The waypoints along the journey route") List<MapPolylineEntryDto> polyline
+) {
 
-  /**
-   * Configures the steam api client.
-   */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
-
-  /**
-   * Configures the BRouter api client.
-   */
-  @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
-  }
 }

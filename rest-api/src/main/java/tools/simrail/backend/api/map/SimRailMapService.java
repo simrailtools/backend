@@ -22,31 +22,19 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.configuration;
+package tools.simrail.backend.api.map;
 
-import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import jakarta.validation.constraints.NotNull;
+import java.util.Optional;
+import org.springframework.cache.Cache;
+import org.springframework.stereotype.Service;
 import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
 
-@Configuration
-class ApiClientConfiguration {
+@Service
+class SimRailMapService {
 
-  /**
-   * Configures the steam api client.
-   */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
+  private final Cache polylineCache;
+  private final BRouterApiClient bRouterApiClient;
 
-  /**
-   * Configures the BRouter api client.
-   */
-  @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
-  }
+  public @NotNull Optional<>
 }

@@ -22,31 +22,17 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.configuration;
+package tools.simrail.backend.api.map.dto;
 
-import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
+import io.swagger.v3.oas.annotations.media.Schema;
 
-@Configuration
-class ApiClientConfiguration {
+/**
+ * DTO for a single polyline point along a journey route.
+ */
+public record MapPolylineEntryDto(
+  @Schema(description = "The latitude of the position") double latitude,
+  @Schema(description = "The longitude of the position") double longitude,
+  @Schema(description = "The elevation of th position") double elevation
+) {
 
-  /**
-   * Configures the steam api client.
-   */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
-
-  /**
-   * Configures the BRouter api client.
-   */
-  @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
-  }
 }
