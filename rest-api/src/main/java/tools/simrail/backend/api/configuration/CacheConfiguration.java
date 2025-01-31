@@ -130,7 +130,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "journey_polyline_cache",
       Caffeine.newBuilder()
-        .expireAfterWrite(1, TimeUnit.DAYS)
+        .expireAfterWrite(1, TimeUnit.MINUTES)
         .build());
   }
 

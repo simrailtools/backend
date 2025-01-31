@@ -80,13 +80,14 @@ class SimRailMapService {
   /**
    * Resolve the stops and polyline for a single journey.
    *
-   * @param journeyId the id of the journey to resolve the information for.
+   * @param journeyId         the id of the journey to resolve the information for.
+   * @param includeAdditional if additional events should be included in the polyline.
    * @return an optional DTO for the journey polyline, empty if some info cannot be resolved.
    */
   @Cacheable(cacheNames = "journey_polyline_cache")
-  public @Nonnull Optional<MapJourneyRouteDto> polylineByJourneyId(@Nonnull UUID journeyId) {
+  public @Nonnull Optional<MapJourneyRouteDto> polylineByJourneyId(@Nonnull UUID journeyId, boolean includeAdditional) {
     // resolve the events along the journey route
-    var eventsAlongRoute = this.journeyEventRepository.findMapEventDataByJourneyId(journeyId);
+    var eventsAlongRoute = this.journeyEventRepository.findMapEventDataByJourneyId(journeyId, includeAdditional);
     if (eventsAlongRoute.isEmpty()) {
       return Optional.empty();
     }
