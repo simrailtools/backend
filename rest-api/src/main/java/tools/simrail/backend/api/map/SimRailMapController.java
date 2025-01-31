@@ -24,14 +24,25 @@
 
 package tools.simrail.backend.api.map;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Nonnull;
-import jakarta.validation.constraints.NotNull;
+import java.time.Duration;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.CacheControl;
+import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tools.simrail.backend.api.map.dto.MapJourneyRouteDto;
 
 @Validated
 @CrossOrigin
@@ -47,5 +58,41 @@ class SimRailMapController {
     this.mapService = mapService;
   }
 
-
+  /**
+   * Gets the polyline for a specific journey.
+   */
+  @GetMapping("/polyline/by-journey/{id}")
+  @Operation(
+    summary = "Get the polyline for a specific journey",
+    parameters = {
+      @Parameter(name = "id", description = "The id of the journey to get the polyline for"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The polyline for the requested journey was successfully resolved"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "404",
+        description = "No journey can be found with the given journey id",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull ResponseEntity<MapJourneyRouteDto> polylineByJourney(
+    @PathVariable("id") @UUID(version = 5, allowNil = false) String id
+  ) {
+    var journeyId = java.util.UUID.fromString(id);
+    return this.mapService.polylineByJourneyId(journeyId)
+      .map(routeInfo -> ResponseEntity.ok()
+        .cacheControl(CacheControl.maxAge(Duration.ofDays(1)))
+        .body(routeInfo))
+      .orElseGet(() -> ResponseEntity.notFound().build());
+  }
 }

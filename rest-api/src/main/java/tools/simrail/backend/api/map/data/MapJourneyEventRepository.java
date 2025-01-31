@@ -24,30 +24,25 @@
 
 package tools.simrail.backend.api.map.data;
 
-import jakarta.annotation.Nonnull;
+import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import tools.simrail.backend.common.journey.JourneyEventRepository;
 
-public interface MapEventSummaryProjection {
-
-  /**
-   * The id of the journey associated with the event.
-   */
-  @Nonnull
-  UUID getJourneyId();
+public interface MapJourneyEventRepository extends JourneyEventRepository {
 
   /**
-   * The index of the event along the journey route.
+   * Finds the relevant event data for map plotting.
+   *
+   * @param journeyId the id of the journey to get the map data of.
+   * @return the relevant event data for map plotting for the given journey id.
    */
-  int getEventIndex();
-
-  /**
-   * The id of the point where the event takes place.
-   */
-  @Nonnull
-  UUID getPointId();
-
-  /**
-   * If the point where the event happens is within the playable border.
-   */
-  boolean isPointPlayable();
+  @Query(value = """
+    SELECT DISTINCT ON (e.point_id)
+      e.journey_id, e.event_index, e.point_id, e.point_playable
+    FROM sit_journey_event e
+    WHERE e.journey_id = :journeyId
+    """, nativeQuery = true)
+  List<MapEventSummaryProjection> findMapEventDataByJourneyId(@Param("journeyId") UUID journeyId);
 }

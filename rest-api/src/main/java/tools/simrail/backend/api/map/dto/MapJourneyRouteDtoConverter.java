@@ -28,31 +28,19 @@ import com.fasterxml.jackson.databind.node.ArrayNode;
 import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.BiFunction;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.UUID;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
-import tools.simrail.backend.api.map.data.MapEventSummaryProjection;
-import tools.simrail.backend.common.point.SimRailPointProvider;
 
 /**
  * Converter for journey info to route info DTO.
  */
 @Component
-public final class MapJourneyRouteDtoConverter
-  implements BiFunction<List<MapEventSummaryProjection>, ArrayNode, MapJourneyRouteDto> {
+public final class MapJourneyRouteDtoConverter {
 
-  private final SimRailPointProvider pointProvider;
-
-  @Autowired
-  public MapJourneyRouteDtoConverter(@Nonnull SimRailPointProvider pointProvider) {
-    this.pointProvider = pointProvider;
-  }
-
-  @Override
-  public @Nonnull MapJourneyRouteDto apply(
-    @Nonnull List<MapEventSummaryProjection> events,
+  public @Nonnull MapJourneyRouteDto convert(
+    @Nonnull UUID journeyId,
+    @Nonnull List<JourneyStopPlaceDto> stops,
     @Nonnull ArrayNode routingPolylineResponse
   ) {
     // construct the polyline from the LineString feature of the GeoJson response
@@ -64,21 +52,6 @@ public final class MapJourneyRouteDtoConverter
       var elevation = data.get(2).asDouble();
       polyline.add(new MapPolylineEntryDto(lat, lon, elevation));
     }
-
-    // convert the stops along the journey route
-    var stops = new ArrayList<JourneyStopPlaceDto>();
-    for (var event : events) {
-      var stop = event.getStopDescriptor();
-      var point = this.pointProvider.findPointByIntId(stop.getId())
-        .orElseThrow(() -> new IllegalStateException("Missing point with id " + stop.getId()));
-      var pos = new JourneyGeoPositionDto(point.getPosition().getLatitude(), point.getPosition().getLongitude());
-      var stopPlace = new JourneyStopPlaceDto(stop.getId(), point.getName(), pos, stop.isPlayable());
-      stops.add(stopPlace);
-    }
-
-    // get the journey id from the first event
-    var firstEvent = events.getFirst();
-    var journeyId = firstEvent.getJourneyId();
 
     // construct the full journey route dto
     return new MapJourneyRouteDto(journeyId, stops, polyline);
