@@ -34,7 +34,7 @@ import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
  */
 public record MapJourneyRouteDto(
   @Schema(description = "The id of the journey to which the waypoints apply") UUID journeyId,
-  @Schema(description = "The stops along the journey route, not in a particular order") List<JourneyStopPlaceDto> stops,
+  @Schema(description = "The stops along the journey route") List<JourneyStopPlaceDto> stops,
   @Schema(description = "The waypoints along the journey route") List<MapPolylineEntryDto> polyline
 ) {
 
