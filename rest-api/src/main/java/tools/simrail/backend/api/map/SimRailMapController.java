@@ -67,6 +67,7 @@ class SimRailMapController {
     summary = "Get the polyline for a specific journey",
     parameters = {
       @Parameter(name = "id", description = "The id of the journey to get the polyline for"),
+      @Parameter(name = "includeCancelled", description = "If cancelled events should be included in the polyline"),
       @Parameter(name = "includeAdditional", description = "If additional events should be included in the polyline"),
     },
     responses = {
@@ -89,14 +90,17 @@ class SimRailMapController {
   )
   public @Nonnull ResponseEntity<MapJourneyRouteDto> polylineByJourney(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id,
+    @RequestParam(value = "includeCancelled", required = false) boolean includeCancelled,
     @RequestParam(value = "includeAdditional", required = false) boolean includeAdditional
   ) {
     var journeyId = java.util.UUID.fromString(id);
-    return this.mapService.polylineByJourneyId(journeyId, includeAdditional)
+    return this.mapService.polylineByJourneyId(journeyId, includeCancelled, includeAdditional)
       .map(routeInfo -> {
         // scheduled polyline (without additional events) cannot change, can be cached for a day by the caller
         // however additional events might change, therefore the result shouldn't be cached by the caller
-        var cacheControl = includeAdditional ? CacheControl.noCache() : CacheControl.maxAge(Duration.ofDays(1));
+        var cacheControl = includeCancelled || includeAdditional
+          ? CacheControl.noCache()
+          : CacheControl.maxAge(Duration.ofDays(1));
         return ResponseEntity.ok().cacheControl(cacheControl).body(routeInfo);
       })
       .orElseGet(() -> ResponseEntity.notFound().build());

@@ -36,6 +36,7 @@ public interface MapJourneyEventRepository extends JourneyEventRepository {
    * Finds the relevant event data for map plotting.
    *
    * @param journeyId         the id of the journey to get the map data of.
+   * @param includeCancelled  if cancelled events should be included in the result
    * @param includeAdditional if additional events should be included in the result.
    * @return the relevant event data for map plotting for the given journey id.
    */
@@ -43,9 +44,13 @@ public interface MapJourneyEventRepository extends JourneyEventRepository {
     SELECT DISTINCT ON (e.point_id)
       e.journey_id, e.event_index, e.point_id, e.point_playable
     FROM sit_journey_event e
-    WHERE e.journey_id = :journeyId AND (TRUE = :#{#includeAdditional} OR e.additional = :includeAdditional)
+    WHERE
+      e.journey_id = :journeyId
+      AND (TRUE = :#{#includeCancelled} OR e.cancelled = :includeCancelled)
+      AND (TRUE = :#{#includeAdditional} OR e.additional = :includeAdditional)
     """, nativeQuery = true)
   List<MapEventSummaryProjection> findMapEventDataByJourneyId(
     @Param("journeyId") UUID journeyId,
+    @Param("includeCancelled") boolean includeCancelled,
     @Param("includeAdditional") boolean includeAdditional);
 }
