@@ -22,31 +22,38 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.configuration;
+package tools.simrail.backend.api.map.dto;
 
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
+import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 
-@Configuration
-class ApiClientConfiguration {
+/**
+ * Converter for journey info to route info DTO.
+ */
+@Component
+public final class MapJourneyRouteDtoConverter {
 
-  /**
-   * Configures the steam api client.
-   */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
+  public @Nonnull MapJourneyRouteDto convert(
+    @Nonnull UUID journeyId,
+    @Nonnull List<JourneyStopPlaceDto> stops,
+    @Nonnull ArrayNode routingPolylineResponse
+  ) {
+    // construct the polyline from the LineString feature of the GeoJson response
+    var polyline = new ArrayList<MapPolylineEntryDto>();
+    for (var node : routingPolylineResponse) {
+      var data = (ArrayNode) node;
+      var lon = data.get(0).asDouble();
+      var lat = data.get(1).asDouble();
+      var elevation = data.get(2).asDouble();
+      polyline.add(new MapPolylineEntryDto(lat, lon, elevation));
+    }
 
-  /**
-   * Configures the BRouter api client.
-   */
-  @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
+    // construct the full journey route dto
+    return new MapJourneyRouteDto(journeyId, stops, polyline);
   }
 }

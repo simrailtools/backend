@@ -22,31 +22,32 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.configuration;
+package tools.simrail.backend.api.map.data;
 
 import jakarta.annotation.Nonnull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
-import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
+import java.util.UUID;
 
-@Configuration
-class ApiClientConfiguration {
+public interface MapEventSummaryProjection {
 
   /**
-   * Configures the steam api client.
+   * The id of the journey associated with the event.
    */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
+  @Nonnull
+  UUID getJourneyId();
 
   /**
-   * Configures the BRouter api client.
+   * The index of the event along the journey route.
    */
-  @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
-  }
+  int getEventIndex();
+
+  /**
+   * The id of the point where the event takes place.
+   */
+  @Nonnull
+  UUID getPointId();
+
+  /**
+   * If the point where the event happens is within the playable border.
+   */
+  boolean isPointPlayable();
 }

@@ -121,4 +121,29 @@ class CacheConfiguration {
         .expireAfterWrite(90, TimeUnit.MINUTES)
         .build());
   }
+
+  /**
+   * Cache for the journey polyline.
+   */
+  @Bean
+  public @Nonnull Cache journeyPolylineCache() {
+    return new CaffeineCache(
+      "journey_polyline_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(1, TimeUnit.MINUTES)
+        .build());
+  }
+
+  /**
+   * Cache for the polyline along a route of points.
+   */
+  @Bean
+  public @Nonnull Cache pointsPolylineCache() {
+    return new CaffeineCache(
+      "points_polyline_cache",
+      Caffeine.newBuilder()
+        .expireAfterWrite(1, TimeUnit.DAYS)
+        .build(),
+      false);
+  }
 }
