@@ -63,6 +63,7 @@ public final class PointInfoDtoConverter implements BiFunction<SimRailPoint, Col
       point.getUicRef(),
       point.getOsmNodeId(),
       point.getMaxSpeed(),
+      point.isStopPlace(),
       convertedPlatforms);
   }
 }

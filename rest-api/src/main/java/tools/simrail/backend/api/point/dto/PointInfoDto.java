@@ -48,6 +48,8 @@ public record PointInfoDto(
   long osmNodeId,
   @Schema(description = "The maximum speed any journey can drive at the point", minimum = "0")
   int maxSpeed,
+  @Schema(description = "Indicates if the point is a stop place (without switches) or a full station")
+  boolean stopPlace,
   @Schema(description = "The platforms at the point at which a passenger change can happen")
   @Nonnull List<PointPlatformInfoDto> platforms
 ) {
