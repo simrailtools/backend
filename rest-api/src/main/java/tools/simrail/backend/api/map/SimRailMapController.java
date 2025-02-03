@@ -92,11 +92,7 @@ class SimRailMapController {
           """,
         schema = @Schema(
           defaultValue = "application/json",
-          allowableValues = {
-            "application/json",
-            "application/geo+json",
-          })
-      )
+          allowableValues = {"application/json", "application/geo+json"}))
     },
     responses = {
       @ApiResponse(
