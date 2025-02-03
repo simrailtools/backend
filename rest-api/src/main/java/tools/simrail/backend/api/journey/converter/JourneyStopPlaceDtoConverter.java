@@ -56,8 +56,9 @@ public final class JourneyStopPlaceDtoConverter implements Function<JourneyStopD
     var stopPosition = new JourneyGeoPositionDto(pointPosition.getLatitude(), pointPosition.getLongitude());
     return new JourneyStopPlaceDto(
       stop.getId(),
-      stop.getName(),
+      point.getName(),
       stopPosition,
+      point.isStopPlace(),
       stop.isPlayable());
   }
 }

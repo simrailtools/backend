@@ -30,6 +30,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,12 +102,18 @@ class SimRailMapService {
     // map the stops that are along the journey route
     var stopsAlongRoute = eventsAlongRoute.stream()
       .sorted(EVENT_SORTER)
-      .map(event -> {
-        var point = this.pointProvider.findPointByIntId(event.getPointId())
-          .orElseThrow(() -> new IllegalStateException("Point with id is missing: " + event.getPointId()));
-        var pos = new JourneyGeoPositionDto(point.getPosition().getLatitude(), point.getPosition().getLongitude());
-        return new JourneyStopPlaceDto(event.getPointId(), point.getName(), pos, event.isPointPlayable());
-      })
+      .map(event -> this.pointProvider.findPointByIntId(event.getPointId())
+        .map(point -> {
+          var pos = new JourneyGeoPositionDto(point.getPosition().getLatitude(), point.getPosition().getLongitude());
+          return new JourneyStopPlaceDto(
+            event.getPointId(),
+            point.getName(),
+            pos,
+            point.isStopPlace(),
+            event.isPointPlayable());
+        })
+        .orElse(null))
+      .filter(Objects::nonNull)
       .toList();
 
     // resolve the journey polyline
@@ -136,6 +143,7 @@ class SimRailMapService {
     return this.polylineCache.get(pointsCacheKey, () -> {
       // request the geojson data for the stops along the route
       var positionsAlongRoute = stopsAlongRoute.stream()
+        .filter(place -> !place.stopPlace())
         .map(JourneyStopPlaceDto::position)
         .map(pos -> new BRouterRouteRequest.GeoPosition(pos.latitude(), pos.longitude()))
         .toList();

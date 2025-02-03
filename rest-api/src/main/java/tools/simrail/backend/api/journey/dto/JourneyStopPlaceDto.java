@@ -35,6 +35,8 @@ public record JourneyStopPlaceDto(
   @Nonnull String name,
   @Schema(description = "The position where the stop place is located")
   @Nonnull JourneyGeoPositionDto position,
+  @Schema(description = "Indicates if the point is a stop place (without switches) or a full station")
+  boolean stopPlace,
   @Schema(description = "If the stop place is within the playable border of the map")
   boolean inPlayableBorder
 ) {
