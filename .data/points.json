@@ -4,6 +4,7 @@
     "id": "e3e67982-9b50-492e-8738-45670ea59346",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "673"
     ],
@@ -33,7 +34,7 @@
     "osm_id": 3455672306,
     "uic_ref": "5100007",
     "position": {
-      "lat": 50.8084278992838,
+      "lat": 50.8084279,
       "lng": 19.1209688
     }
   },
@@ -42,6 +43,7 @@
     "id": "77f486c9-538c-4c61-9452-f39973202ca5",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "685"
     ],
@@ -71,7 +73,7 @@
     "osm_id": 9588851941,
     "uic_ref": null,
     "position": {
-      "lat": 50.7921927992869,
+      "lat": 50.7921928,
       "lng": 19.1442664
     }
   },
@@ -80,6 +82,7 @@
     "id": "a80b76ca-581a-44d4-87dc-e424fe3ebd09",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "680"
     ],
@@ -109,7 +112,7 @@
     "osm_id": 2495645644,
     "uic_ref": "5100827",
     "position": {
-      "lat": 50.7876285992877,
+      "lat": 50.7876286,
       "lng": 19.1554329
     }
   },
@@ -118,6 +121,7 @@
     "id": "ed01bc62-66fd-4b6b-8b14-43285d0df5ca",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3305",
       "5484"
@@ -148,7 +152,7 @@
     "osm_id": 3455680014,
     "uic_ref": "5102860",
     "position": {
-      "lat": 50.6769407993088,
+      "lat": 50.6769408,
       "lng": 19.2191754
     }
   },
@@ -157,6 +161,7 @@
     "id": "f927bb8f-6830-4500-804b-de58ce2e0b25",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "5380"
     ],
@@ -186,7 +191,7 @@
     "osm_id": 3455683808,
     "uic_ref": "5104381",
     "position": {
-      "lat": 50.6233169993193,
+      "lat": 50.623317,
       "lng": 19.272884
     }
   },
@@ -195,6 +200,7 @@
     "id": "20221233-1a4c-433e-a220-8c2a5fedfbfa",
     "prefix": "My",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2777",
       "2778"
@@ -225,7 +231,7 @@
     "osm_id": 1219509577,
     "uic_ref": "5102341",
     "position": {
-      "lat": 50.5743115993291,
+      "lat": 50.5743116,
       "lng": 19.3290231
     }
   },
@@ -234,6 +240,7 @@
     "id": "6840caa1-ef46-4cc4-93fb-0f26abf7c7d9",
     "prefix": "Zw",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5262"
     ],
@@ -263,7 +270,7 @@
     "osm_id": 3455716822,
     "uic_ref": "5100212",
     "position": {
-      "lat": 50.481008999348,
+      "lat": 50.481009,
       "lng": 19.4231231
     }
   },
@@ -272,6 +279,7 @@
     "id": "3a06ec18-c106-4ab7-8ad8-84f4918cab93",
     "prefix": "LA",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2374"
     ],
@@ -298,11 +306,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 361129991,
+    "osm_id": 3656473161,
     "uic_ref": null,
     "position": {
-      "lat": 50.4538972,
-      "lng": 19.420459701206898
+      "lat": 50.4539719,
+      "lng": 19.4203845
     }
   },
   {
@@ -310,6 +318,7 @@
     "id": "9c537b6b-f8e9-4b3f-ae3c-fe3e9bfe8105",
     "prefix": "LB",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2371"
     ],
@@ -339,7 +348,7 @@
     "osm_id": 2183797049,
     "uic_ref": "5101936",
     "position": {
-      "lat": 50.4300848993585,
+      "lat": 50.4300849,
       "lng": 19.3918857
     }
   },
@@ -348,6 +357,7 @@
     "id": "e7be0efb-91d9-467b-a6f7-0f4e8be18ae0",
     "prefix": "Pmi",
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "3398"
     ],
@@ -386,6 +396,7 @@
     "id": "691d668c-15f3-4653-b61b-b3737f18ab0f",
     "prefix": "LC",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2375"
     ],
@@ -412,11 +423,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 399288226,
+    "osm_id": 4020196529,
     "uic_ref": null,
     "position": {
-      "lat": 50.416442599999996,
-      "lng": 19.3629667076988
+      "lat": 50.4163909,
+      "lng": 19.3630008
     }
   },
   {
@@ -424,6 +435,7 @@
     "id": "e6747dd6-5520-4157-adf0-6b17d1bfdbb3",
     "prefix": "DZ",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "734"
     ],
@@ -453,7 +465,7 @@
     "osm_id": 3455721783,
     "uic_ref": "5100098",
     "position": {
-      "lat": 50.3665938993718,
+      "lat": 50.3665939,
       "lng": 19.2646845
     }
   },
@@ -462,6 +474,7 @@
     "id": "373d031f-7207-4c1d-b4c5-16e7b7529d77",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "720"
     ],
@@ -491,8 +504,8 @@
     "osm_id": 470404748,
     "uic_ref": "5100925",
     "position": {
-      "lat": 50.3439790993766,
-      "lng": 19.2262024
+      "lat": 50.3438817,
+      "lng": 19.2259879
     }
   },
   {
@@ -500,6 +513,7 @@
     "id": "a0f057b4-3a29-4bde-a868-b80c5eeb3abb",
     "prefix": "DG",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "719"
     ],
@@ -529,7 +543,7 @@
     "osm_id": 392952267,
     "uic_ref": "5100250",
     "position": {
-      "lat": 50.3303739993795,
+      "lat": 50.330374,
       "lng": 19.1848234
     }
   },
@@ -538,6 +552,7 @@
     "id": "f0fe3f96-8a93-41a3-9d98-a160712be4bb",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "125"
     ],
@@ -567,8 +582,8 @@
     "osm_id": 471295854,
     "uic_ref": "5100474",
     "position": {
-      "lat": 50.3306129993795,
-      "lng": 19.1584745
+      "lat": 50.3305194,
+      "lng": 19.1579342
     }
   },
   {
@@ -576,6 +591,7 @@
     "id": "f360bcf6-29d7-4b65-bf42-1fec530f18d2",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "127"
     ],
@@ -605,7 +621,7 @@
     "osm_id": 471203304,
     "uic_ref": "5100493",
     "position": {
-      "lat": 50.3191879993819,
+      "lat": 50.319188,
       "lng": 19.135537
     }
   },
@@ -614,6 +630,7 @@
     "id": "3e6641a5-73a0-4842-800a-314fd9dcebce",
     "prefix": "B",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "124"
     ],
@@ -643,7 +660,7 @@
     "osm_id": 473698393,
     "uic_ref": "5100410",
     "position": {
-      "lat": 50.3089737993841,
+      "lat": 50.3089738,
       "lng": 19.14141
     }
   },
@@ -652,6 +669,7 @@
     "id": "a50dcebe-76b0-43d4-840e-6a8475c9756d",
     "prefix": "SG",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3993"
     ],
@@ -681,7 +699,7 @@
     "osm_id": 3455731172,
     "uic_ref": "5100133",
     "position": {
-      "lat": 50.2789499993905,
+      "lat": 50.27895,
       "lng": 19.1263859
     }
   },
@@ -690,6 +708,7 @@
     "id": "ea1ae5b5-5340-4e28-855a-dbb821ee7d38",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "1649"
     ],
@@ -719,7 +738,7 @@
     "osm_id": 3343374528,
     "uic_ref": "5101812",
     "position": {
-      "lat": 50.2589151993949,
+      "lat": 50.2589152,
       "lng": 19.092466
     }
   },
@@ -728,6 +747,7 @@
     "id": "d543b681-7dbf-40cd-9088-baf83f3a867b",
     "prefix": "KZ",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1655"
     ],
@@ -757,7 +777,7 @@
     "osm_id": 2217985789,
     "uic_ref": "5101537",
     "position": {
-      "lat": 50.2572997993952,
+      "lat": 50.2572998,
       "lng": 19.0574498
     }
   },
@@ -766,6 +786,7 @@
     "id": "9474d33a-1f42-4e1e-8bf8-84258e4e3dfa",
     "prefix": "KO",
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "1614"
     ],
@@ -795,7 +816,7 @@
     "osm_id": 3246621282,
     "uic_ref": "5100020",
     "position": {
-      "lat": 50.2576070993951,
+      "lat": 50.2576071,
       "lng": 19.0171456
     }
   },
@@ -804,6 +825,7 @@
     "id": "84cf0d7b-d5c0-49c4-a0f6-87676073c631",
     "prefix": "l139_bry",
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "1615"
     ],
@@ -833,8 +855,8 @@
     "osm_id": 2183319561,
     "uic_ref": "5101542",
     "position": {
-      "lat": 50.244233899398,
-      "lng": 18.983371
+      "lat": 50.2444745,
+      "lng": 18.983721
     }
   },
   {
@@ -842,6 +864,7 @@
     "id": "038622c4-eec6-483b-b91c-ac9e3b386f59",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1624"
     ],
@@ -871,7 +894,7 @@
     "osm_id": 2181332758,
     "uic_ref": "5101522",
     "position": {
-      "lat": 50.226002299402,
+      "lat": 50.2260023,
       "lng": 18.9778134
     }
   },
@@ -880,6 +903,7 @@
     "id": "9100ecf3-e5f6-4aee-a39f-98aedcf7f247",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": true,
     "ids": [
       "1641"
     ],
@@ -909,8 +933,8 @@
     "osm_id": 2183319562,
     "uic_ref": "5101746",
     "position": {
-      "lat": 50.2132693994048,
-      "lng": 18.9699649
+      "lat": 50.2134532,
+      "lng": 18.9703936
     }
   },
   {
@@ -918,6 +942,7 @@
     "id": "2491df95-99fc-489d-858a-5ceac21cb37f",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": true,
     "ids": [
       "1642"
     ],
@@ -947,7 +972,7 @@
     "osm_id": 2183370683,
     "uic_ref": "5101808",
     "position": {
-      "lat": 50.1829286994114,
+      "lat": 50.1829287,
       "lng": 18.960329
     }
   },
@@ -956,6 +981,7 @@
     "id": "dba5c3f6-3d74-49ef-9a2d-55ea1b335a98",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4618"
     ],
@@ -985,7 +1011,7 @@
     "osm_id": 3689310738,
     "uic_ref": "5100260",
     "position": {
-      "lat": 50.1357680994218,
+      "lat": 50.1357681,
       "lng": 18.9641781
     }
   },
@@ -994,6 +1020,7 @@
     "id": "1ef0b971-a0b0-4bd0-b874-5a0c2eb12a8b",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4628"
     ],
@@ -1023,7 +1050,7 @@
     "osm_id": 3745372921,
     "uic_ref": "5103882",
     "position": {
-      "lat": 50.1211507994251,
+      "lat": 50.1211508,
       "lng": 18.9787851
     }
   },
@@ -1032,6 +1059,7 @@
     "id": "93a1f208-60b7-4b32-8669-3122f05eb7d9",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4619"
     ],
@@ -1061,7 +1089,7 @@
     "osm_id": 3745372920,
     "uic_ref": "5100278",
     "position": {
-      "lat": 50.1173369994259,
+      "lat": 50.117337,
       "lng": 18.9823778
     }
   },
@@ -1070,6 +1098,7 @@
     "id": "44e469db-2fda-4d3b-9927-f2d2bee692dd",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4621"
     ],
@@ -1099,7 +1128,7 @@
     "osm_id": 3745394914,
     "uic_ref": "5100277",
     "position": {
-      "lat": 50.1141543994266,
+      "lat": 50.1141544,
       "lng": 18.9860432
     }
   },
@@ -1108,6 +1137,7 @@
     "id": "730cb3dd-e7ca-42d2-afc3-5b7ff91e3b97",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4623"
     ],
@@ -1146,6 +1176,7 @@
     "id": "9e90de97-2a2b-4b16-a271-ea1ef6928710",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": true,
     "ids": [
       "4622"
     ],
@@ -1175,7 +1206,7 @@
     "osm_id": 3745411452,
     "uic_ref": "5100276",
     "position": {
-      "lat": 50.1077383994281,
+      "lat": 50.1077384,
       "lng": 19.0008785
     }
   },
@@ -1184,6 +1215,7 @@
     "id": "5e969d1b-9ab5-4d5c-ab17-44166c6b146c",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "4732"
     ],
@@ -1213,7 +1245,7 @@
     "osm_id": 9588851937,
     "uic_ref": "5100173",
     "position": {
-      "lat": 52.2536968990991,
+      "lat": 52.2536969,
       "lng": 21.101828
     }
   },
@@ -1222,6 +1254,7 @@
     "id": "8c58048c-e3f9-4faf-8f1f-5ecf3e978e54",
     "prefix": "WSD",
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4824"
     ],
@@ -1251,7 +1284,7 @@
     "osm_id": 33210583,
     "uic_ref": "5100066",
     "position": {
-      "lat": 52.2515888990992,
+      "lat": 52.2515889,
       "lng": 21.0523678
     }
   },
@@ -1260,6 +1293,7 @@
     "id": "889e2e4c-c306-47ca-8fd6-31e145090be3",
     "prefix": "WDC",
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4700"
     ],
@@ -1289,7 +1323,7 @@
     "osm_id": 9814916146,
     "uic_ref": "5100065",
     "position": {
-      "lat": 52.2288206991006,
+      "lat": 52.2288207,
       "lng": 21.00316
     }
   },
@@ -1298,6 +1332,7 @@
     "id": "95723311-1790-4898-b09c-c15e622a9c28",
     "prefix": "WZD",
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4837",
       "4839"
@@ -1328,7 +1363,7 @@
     "osm_id": 3390821831,
     "uic_ref": "5100067",
     "position": {
-      "lat": 52.2201571991012,
+      "lat": 52.2201572,
       "lng": 20.9651719
     }
   },
@@ -1337,6 +1372,7 @@
     "id": "7432ab4c-dc4b-4659-a227-0291048ee8d6",
     "prefix": "Wl",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4811"
     ],
@@ -1366,8 +1402,8 @@
     "osm_id": 637004421,
     "uic_ref": "5104165",
     "position": {
-      "lat": 52.206228999102,
-      "lng": 20.9150217
+      "lat": 52.206084,
+      "lng": 20.9145689
     }
   },
   {
@@ -1375,6 +1411,7 @@
     "id": "732cada3-6be7-4413-9f8a-c39a5389ee0a",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4718",
       "4723"
@@ -1405,8 +1442,8 @@
     "osm_id": 7515926824,
     "uic_ref": "5103999",
     "position": {
-      "lat": 52.2252006991009,
-      "lng": 20.9857491
+      "lat": 52.2250393,
+      "lng": 20.9850425
     }
   },
   {
@@ -1414,6 +1451,7 @@
     "id": "683eed80-fc16-4055-b8b8-36b02d885c94",
     "prefix": "Pr",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3384"
     ],
@@ -1443,8 +1481,8 @@
     "osm_id": 3455517789,
     "uic_ref": "5100330",
     "position": {
-      "lat": 52.1682637991045,
-      "lng": 20.7990569
+      "lat": 52.1682227,
+      "lng": 20.7989255
     }
   },
   {
@@ -1452,6 +1490,7 @@
     "id": "7a2878c5-3b02-47b0-b313-19fbe4f813ee",
     "prefix": "Gr",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "1251"
     ],
@@ -1481,8 +1520,8 @@
     "osm_id": 3455523757,
     "uic_ref": "5101255",
     "position": {
-      "lat": 52.1102651991087,
-      "lng": 20.6230892
+      "lat": 52.1103954,
+      "lng": 20.6234643
     }
   },
   {
@@ -1490,6 +1529,7 @@
     "id": "62513fbf-ebd5-4429-91da-ce96b16c2335",
     "prefix": "Kr",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "1852"
     ],
@@ -1519,7 +1559,7 @@
     "osm_id": 3390694217,
     "uic_ref": null,
     "position": {
-      "lat": 52.0250435991154,
+      "lat": 52.0250436,
       "lng": 20.4966174
     }
   },
@@ -1528,6 +1568,7 @@
     "id": "dd9be8a0-dcbd-4cae-a540-062339edf96d",
     "prefix": "Se",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "4338"
     ],
@@ -1557,7 +1598,7 @@
     "osm_id": 3390685104,
     "uic_ref": null,
     "position": {
-      "lat": 51.948462999122,
+      "lat": 51.948463,
       "lng": 20.4611743
     }
   },
@@ -1566,6 +1607,7 @@
     "id": "54480c30-fb6c-414e-a3c2-674a97719008",
     "prefix": "BR",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "139"
     ],
@@ -1595,8 +1637,8 @@
     "osm_id": 3390685103,
     "uic_ref": "5100567",
     "position": {
-      "lat": 51.7944183,
-      "lng": 20.4394425
+      "lat": 51.7944805,
+      "lng": 20.4394508
     }
   },
   {
@@ -1604,6 +1646,7 @@
     "id": "098471ef-b533-459b-b421-916d0b1b47f1",
     "prefix": "St",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "4147"
     ],
@@ -1633,7 +1676,7 @@
     "osm_id": 716311008,
     "uic_ref": null,
     "position": {
-      "lat": 51.646230599154,
+      "lat": 51.6462306,
       "lng": 20.4058258
     }
   },
@@ -1642,6 +1685,7 @@
     "id": "e9f19394-e106-42e4-af46-2a1186a2c0c2",
     "prefix": "Id",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "1349"
     ],
@@ -1671,7 +1715,7 @@
     "osm_id": 3390812472,
     "uic_ref": "5101367",
     "position": {
-      "lat": 51.4514495991791,
+      "lat": 51.4514496,
       "lng": 20.3150484
     }
   },
@@ -1680,6 +1724,7 @@
     "id": "51ab4c25-7379-4456-a07b-2630bd305765",
     "prefix": "Op",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2993"
     ],
@@ -1709,7 +1754,7 @@
     "osm_id": 3138262522,
     "uic_ref": "5104744",
     "position": {
-      "lat": 51.3591830991922,
+      "lat": 51.3591831,
       "lng": 20.2324376
     }
   },
@@ -1718,6 +1763,7 @@
     "id": "8fab5c80-1282-45ce-83c5-f1de91dd16d2",
     "prefix": "Pi",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3200"
     ],
@@ -1747,7 +1793,7 @@
     "osm_id": 9136097492,
     "uic_ref": null,
     "position": {
-      "lat": 51.2556656992076,
+      "lat": 51.2556657,
       "lng": 20.1223774
     }
   },
@@ -1756,6 +1802,7 @@
     "id": "4877ee6f-63f7-478a-88a8-98331aecdfbf",
     "prefix": "Ol",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2969"
     ],
@@ -1785,7 +1832,7 @@
     "osm_id": 3390869367,
     "uic_ref": null,
     "position": {
-      "lat": 51.1001588992325,
+      "lat": 51.1001589,
       "lng": 20.0686251
     }
   },
@@ -1794,6 +1841,7 @@
     "id": "66153017-fd8f-4ef4-9ead-540fb0d79aae",
     "prefix": "WP",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4987"
     ],
@@ -1823,7 +1871,7 @@
     "osm_id": 417910859,
     "uic_ref": "5104660",
     "position": {
-      "lat": 50.856394699275,
+      "lat": 50.8563947,
       "lng": 19.9460452
     }
   },
@@ -1832,6 +1880,7 @@
     "id": "b21ff406-1997-4f24-8802-9698963713f8",
     "prefix": "Kn",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "1772"
     ],
@@ -1861,7 +1910,7 @@
     "osm_id": 3390948507,
     "uic_ref": null,
     "position": {
-      "lat": 50.8009137992852,
+      "lat": 50.8009138,
       "lng": 19.9048019
     }
   },
@@ -1870,6 +1919,7 @@
     "id": "b32528f4-7c11-41ea-8102-3951902e4f1f",
     "prefix": "Ps",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "3436"
     ],
@@ -1899,7 +1949,7 @@
     "osm_id": 3390960208,
     "uic_ref": null,
     "position": {
-      "lat": 50.7348405992977,
+      "lat": 50.7348406,
       "lng": 19.8195589
     }
   },
@@ -1908,6 +1958,7 @@
     "id": "a4cb9d4f-d3ae-4e11-b627-503524fc6a4e",
     "prefix": "Str",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4092"
     ],
@@ -1937,7 +1988,7 @@
     "osm_id": 3496909712,
     "uic_ref": null,
     "position": {
-      "lat": 50.712387299302,
+      "lat": 50.7123873,
       "lng": 19.8015192
     }
   },
@@ -1946,6 +1997,7 @@
     "id": "dea13a88-8174-406c-aceb-4f7a4b8c86fb",
     "prefix": "Sp",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4021"
     ],
@@ -1975,7 +2027,7 @@
     "osm_id": 3241739027,
     "uic_ref": null,
     "position": {
-      "lat": 50.5923046993255,
+      "lat": 50.5923047,
       "lng": 19.8830491
     }
   },
@@ -1984,6 +2036,7 @@
     "id": "27f5db2c-07a1-4c23-aaa5-dff759f687ba",
     "prefix": "Kz",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1917"
     ],
@@ -2013,8 +2066,8 @@
     "osm_id": 2042630586,
     "uic_ref": "5101911",
     "position": {
-      "lat": 50.4747786993493,
-      "lng": 20.0120984
+      "lat": 50.4751827,
+      "lng": 20.0123505
     }
   },
   {
@@ -2022,6 +2075,7 @@
     "id": "acf6a575-e477-4ecd-b898-9c11adb607ee",
     "prefix": "Tl",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "4595"
     ],
@@ -2060,6 +2114,7 @@
     "id": "721496c3-7508-483b-8229-726592bb1a7d",
     "prefix": "Mi",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2592"
     ],
@@ -2089,7 +2144,7 @@
     "osm_id": 2309605127,
     "uic_ref": "5100218",
     "position": {
-      "lat": 50.3535964993746,
+      "lat": 50.3535965,
       "lng": 20.0107404
     }
   },
@@ -2098,6 +2153,7 @@
     "id": "847b1117-e6af-4011-95d2-77c7cb6a18dc",
     "prefix": "Sm",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "3923"
     ],
@@ -2127,8 +2183,8 @@
     "osm_id": 2363719938,
     "uic_ref": "5103461",
     "position": {
-      "lat": 50.2486526993971,
-      "lng": 20.0640012
+      "lat": 50.24943,
+      "lng": 20.063701
     }
   },
   {
@@ -2136,6 +2192,7 @@
     "id": "9d1848be-00ca-44d1-98fc-4ac8ac5379b9",
     "prefix": "Nd",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2820"
     ],
@@ -2165,7 +2222,7 @@
     "osm_id": 2187705499,
     "uic_ref": "5102416",
     "position": {
-      "lat": 50.2043229994067,
+      "lat": 50.204323,
       "lng": 20.0809326
     }
   },
@@ -2174,6 +2231,7 @@
     "id": "e7115dbb-eb7e-4491-a5dc-a70d0bba2e78",
     "prefix": "Zs",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "5251"
     ],
@@ -2203,7 +2261,7 @@
     "osm_id": 2317653020,
     "uic_ref": "5104252",
     "position": {
-      "lat": 50.1237783994245,
+      "lat": 50.1237784,
       "lng": 20.0690701
     }
   },
@@ -2212,6 +2270,7 @@
     "id": "e9854497-7dee-4951-a23b-587a72ccdc61",
     "prefix": "BT",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "1937"
     ],
@@ -2241,7 +2300,7 @@
     "osm_id": 48522023,
     "uic_ref": "5101756",
     "position": {
-      "lat": 50.1075320994281,
+      "lat": 50.1075321,
       "lng": 19.9954682
     }
   },
@@ -2250,6 +2309,7 @@
     "id": "44af7a07-1f5b-4700-b140-576d9d48e0ef",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1952"
     ],
@@ -2279,7 +2339,7 @@
     "osm_id": 206270454,
     "uic_ref": "5100028",
     "position": {
-      "lat": 50.0686662994368,
+      "lat": 50.0686663,
       "lng": 19.947802
     }
   },
@@ -2288,6 +2348,7 @@
     "id": "a301a1fe-bcad-4efb-a962-41bede7e4f85",
     "prefix": "GW",
     "max_speed": 200,
+    "stop_place": false,
     "ids": [
       "1193"
     ],
@@ -2317,7 +2378,7 @@
     "osm_id": 3390988551,
     "uic_ref": null,
     "position": {
-      "lat": 50.5844056993271,
+      "lat": 50.5844057,
       "lng": 19.467981
     }
   },
@@ -2326,6 +2387,7 @@
     "id": "bd63a004-01e0-4672-a798-a45635ea63f1",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "500"
     ],
@@ -2364,6 +2426,7 @@
     "id": "d5636795-9083-47a8-879e-ffa4bf3f16da",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3635"
     ],
@@ -2393,8 +2456,8 @@
     "osm_id": 3673281598,
     "uic_ref": "5103058",
     "position": {
-      "lat": 50.3039357993852,
-      "lng": 18.877762
+      "lat": 50.3038107,
+      "lng": 18.8780245
     }
   },
   {
@@ -2402,6 +2465,7 @@
     "id": "52238119-4463-4169-8ca1-aa7ac7585a42",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5169"
     ],
@@ -2440,6 +2504,7 @@
     "id": "2168c889-d17b-471a-8b26-8730d5ce1f7a",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1060"
     ],
@@ -2469,8 +2534,8 @@
     "osm_id": 2987517884,
     "uic_ref": "5100011",
     "position": {
-      "lat": 50.3010935993858,
-      "lng": 18.6769406
+      "lat": 50.301159,
+      "lng": 18.6770397
     }
   },
   {
@@ -2478,6 +2543,7 @@
     "id": "e917c6fc-2104-48f8-93f9-afa09bcd0f37",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "3638"
     ],
@@ -2507,8 +2573,8 @@
     "osm_id": 9672789772,
     "uic_ref": null,
     "position": {
-      "lat": 50.2567368993953,
-      "lng": 18.9073111
+      "lat": 50.2566935,
+      "lng": 18.9105661
     }
   },
   {
@@ -2516,6 +2582,7 @@
     "id": "ba7bd9d9-980e-45fd-aa31-f975c061b28e",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "3633"
     ],
@@ -2545,7 +2612,7 @@
     "osm_id": 3700975323,
     "uic_ref": null,
     "position": {
-      "lat": 50.2610626993944,
+      "lat": 50.2610627,
       "lng": 18.8116221
     }
   },
@@ -2554,6 +2621,7 @@
     "id": "ba634fd2-eade-4e8d-a1ce-55d9882bad7d",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "5176"
     ],
@@ -2592,6 +2660,7 @@
     "id": "07f0d8de-9c1a-4065-96d0-d633134209fb",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1774"
     ],
@@ -2621,7 +2690,7 @@
     "osm_id": 3716813411,
     "uic_ref": "5101710",
     "position": {
-      "lat": 50.2172779994039,
+      "lat": 50.217278,
       "lng": 18.688153
     }
   },
@@ -2630,6 +2699,7 @@
     "id": "09f1e4ed-7de9-4508-ac82-377999b9ae7a",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2207"
     ],
@@ -2659,7 +2729,7 @@
     "osm_id": 2511660823,
     "uic_ref": "5101991",
     "position": {
-      "lat": 50.1397516994209,
+      "lat": 50.1397517,
       "lng": 18.6176364
     }
   },
@@ -2668,6 +2738,7 @@
     "id": "44e96b43-85d7-4b4b-9d01-d9be447d6b2f",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3685"
     ],
@@ -2697,7 +2768,7 @@
     "osm_id": 2480151502,
     "uic_ref": "5100262",
     "position": {
-      "lat": 50.0889080994323,
+      "lat": 50.0889081,
       "lng": 18.547546
     }
   },
@@ -2706,6 +2777,7 @@
     "id": "2b8e5143-ccc0-45cc-ba41-78a16ebec93e",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3704"
     ],
@@ -2735,7 +2807,7 @@
     "osm_id": 6547592810,
     "uic_ref": "5103169",
     "position": {
-      "lat": 50.0666137994372,
+      "lat": 50.0666138,
       "lng": 18.5153637
     }
   },
@@ -2744,6 +2816,7 @@
     "id": "ac48393e-1605-440f-9ebf-069c640d8473",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "5437"
     ],
@@ -2773,7 +2846,7 @@
     "osm_id": 2939147750,
     "uic_ref": "5103971",
     "position": {
-      "lat": 50.041250399443,
+      "lat": 50.0412504,
       "lng": 18.4946733
     }
   },
@@ -2782,6 +2855,7 @@
     "id": "7ca48bd0-98ae-49a9-9f37-80c90a27f629",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4992"
     ],
@@ -2811,7 +2885,7 @@
     "osm_id": 506544368,
     "uic_ref": "5104095",
     "position": {
-      "lat": 50.0082336994504,
+      "lat": 50.0082337,
       "lng": 18.4763476
     }
   },
@@ -2820,6 +2894,7 @@
     "id": "bd0078f7-ccbd-469b-a88b-69a3b6b19d9f",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2984"
     ],
@@ -2849,8 +2924,8 @@
     "osm_id": 506544251,
     "uic_ref": "5102575",
     "position": {
-      "lat": 49.9600810994614,
-      "lng": 18.3381385
+      "lat": 49.9603681,
+      "lng": 18.338892
     }
   },
   {
@@ -2858,6 +2933,7 @@
     "id": "05aef413-ee22-476d-9459-ffae73458f91",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "439"
     ],
@@ -2887,8 +2963,8 @@
     "osm_id": 3725887739,
     "uic_ref": "5100708",
     "position": {
-      "lat": 49.9259203994692,
-      "lng": 18.311311
+      "lat": 49.9258005,
+      "lng": 18.3114072
     }
   },
   {
@@ -2896,6 +2972,7 @@
     "id": "34d976aa-86bc-4325-941c-cfe77fce8843",
     "prefix": "Zes",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5392",
       "5393"
@@ -2926,7 +3003,7 @@
     "osm_id": 3484796157,
     "uic_ref": "5104294",
     "position": {
-      "lat": 50.8038127992847,
+      "lat": 50.8038128,
       "lng": 19.858556
     }
   },
@@ -2935,6 +3012,7 @@
     "id": "e963d23e-9f33-4de1-bdf2-bd6581468c98",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1828"
     ],
@@ -2964,7 +3042,7 @@
     "osm_id": 1248669374,
     "uic_ref": "5100122",
     "position": {
-      "lat": 50.7763879992898,
+      "lat": 50.776388,
       "lng": 19.700042
     }
   },
@@ -2973,6 +3051,7 @@
     "id": "a571f78b-331d-4b5b-a1d4-1385b0a619ea",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": true,
     "ids": [
       "3265"
     ],
@@ -3002,7 +3081,7 @@
     "osm_id": 1239501365,
     "uic_ref": "5102704",
     "position": {
-      "lat": 50.764950299292,
+      "lat": 50.7649503,
       "lng": 19.6035627
     }
   },
@@ -3011,6 +3090,7 @@
     "id": "5094bd93-b714-441c-bf58-18f703a9fb34",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1544"
     ],
@@ -3040,7 +3120,7 @@
     "osm_id": 2187751628,
     "uic_ref": "5101476",
     "position": {
-      "lat": 50.7646465992921,
+      "lat": 50.7646466,
       "lng": 19.4732727
     }
   },
@@ -3049,6 +3129,7 @@
     "id": "dd26df5a-edc2-467b-bedd-9775e58e4d87",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": true,
     "ids": [
       "2346"
     ],
@@ -3078,7 +3159,7 @@
     "osm_id": 1290569961,
     "uic_ref": "5102053",
     "position": {
-      "lat": 50.7609030992928,
+      "lat": 50.7609031,
       "lng": 19.3880188
     }
   },
@@ -3087,6 +3168,7 @@
     "id": "45b0111c-3ea2-4249-9c27-d0c132388a8d",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "4604"
     ],
@@ -3116,7 +3198,7 @@
     "osm_id": 2187750604,
     "uic_ref": "5103855",
     "position": {
-      "lat": 50.7683868992914,
+      "lat": 50.7683869,
       "lng": 19.3171916
     }
   },
@@ -3125,6 +3207,7 @@
     "id": "f41f1552-8b17-4542-bf52-97266f319f52",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "682"
     ],
@@ -3154,7 +3237,7 @@
     "osm_id": 417385664,
     "uic_ref": "5100235",
     "position": {
-      "lat": 50.7973210992859,
+      "lat": 50.7973211,
       "lng": 19.1069996
     }
   },
@@ -3163,6 +3246,7 @@
     "id": "61d219a3-44d3-4ee5-a117-fe27c154852e",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "675"
     ],
@@ -3189,11 +3273,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 3486621062,
+    "osm_id": 242282342,
     "uic_ref": "5104421",
     "position": {
-      "lat": 50.791586799287,
-      "lng": 19.0290478
+      "lat": 50.7915853,
+      "lng": 19.0291879
     }
   },
   {
@@ -3201,6 +3285,7 @@
     "id": "244ea423-80ad-4f37-ab7e-c20701232b97",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "222"
     ],
@@ -3230,8 +3315,8 @@
     "osm_id": 2370704115,
     "uic_ref": "5100479",
     "position": {
-      "lat": 50.7736112992904,
-      "lng": 18.9686386
+      "lat": 50.7738933,
+      "lng": 18.9695889
     }
   },
   {
@@ -3239,6 +3324,7 @@
     "id": "70643020-f02e-4e71-9fd8-acb9007f9e7d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1316"
     ],
@@ -3268,8 +3354,8 @@
     "osm_id": 3206235321,
     "uic_ref": "5100112",
     "position": {
-      "lat": 50.7472975992954,
-      "lng": 18.8809378
+      "lat": 50.7476646,
+      "lng": 18.8821298
     }
   },
   {
@@ -3277,6 +3363,7 @@
     "id": "b6631ff6-3dc9-499c-93b2-9817a727fbbe",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "2277"
     ],
@@ -3306,7 +3393,7 @@
     "osm_id": 243797124,
     "uic_ref": "5102026",
     "position": {
-      "lat": 50.7208435993004,
+      "lat": 50.7208436,
       "lng": 18.791065
     }
   },
@@ -3315,6 +3402,7 @@
     "id": "847bed80-3c71-4f55-bffe-ba6879e9bb00",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "1791"
     ],
@@ -3344,8 +3432,8 @@
     "osm_id": 973681559,
     "uic_ref": "5101550",
     "position": {
-      "lat": 50.6991258993046,
-      "lng": 18.7479576
+      "lat": 50.6995415,
+      "lng": 18.7486371
     }
   },
   {
@@ -3353,6 +3441,7 @@
     "id": "9b2506bb-afc9-4e3e-9ea5-f92460cd38ff",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2331"
     ],
@@ -3382,8 +3471,8 @@
     "osm_id": 3487315240,
     "uic_ref": "5100237",
     "position": {
-      "lat": 50.6731837993096,
-      "lng": 18.6900333
+      "lat": 50.672558,
+      "lng": 18.6910442
     }
   },
   {
@@ -3391,6 +3480,7 @@
     "id": "2a7631d3-4897-41c5-a780-6aeff594614d",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "3145"
     ],
@@ -3420,8 +3510,8 @@
     "osm_id": 1910843340,
     "uic_ref": "5102969",
     "position": {
-      "lat": 50.6807073993081,
-      "lng": 18.5680338
+      "lat": 50.6807584,
+      "lng": 18.5665815
     }
   },
   {
@@ -3429,6 +3519,7 @@
     "id": "9c23956a-590e-410f-af69-9713df3d14f2",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "3238"
     ],
@@ -3458,8 +3549,8 @@
     "osm_id": 1910843621,
     "uic_ref": "5102812",
     "position": {
-      "lat": 50.6647517993112,
-      "lng": 18.4700911
+      "lat": 50.6646881,
+      "lng": 18.4686582
     }
   },
   {
@@ -3467,6 +3558,7 @@
     "id": "db609dbb-f2c7-4e60-97af-8bbd218d6be3",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "911"
     ],
@@ -3496,8 +3588,8 @@
     "osm_id": 2183290352,
     "uic_ref": "5100101",
     "position": {
-      "lat": 50.6605458993121,
-      "lng": 18.359882
+      "lat": 50.6604518,
+      "lng": 18.3601524
     }
   },
   {
@@ -3505,6 +3597,7 @@
     "id": "5fbbab81-2841-4539-abd4-34c7433a2041",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "3088"
     ],
@@ -3534,8 +3627,8 @@
     "osm_id": 1509817895,
     "uic_ref": "5102652",
     "position": {
-      "lat": 50.6699765993102,
-      "lng": 18.2093158
+      "lat": 50.6699343,
+      "lng": 18.2102647
     }
   },
   {
@@ -3543,6 +3636,7 @@
     "id": "bc87f421-743c-47ed-bd26-98e3d98a550b",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "532"
     ],
@@ -3572,8 +3666,8 @@
     "osm_id": 1915610554,
     "uic_ref": "5100814",
     "position": {
-      "lat": 50.660570499312,
-      "lng": 18.0747575
+      "lat": 50.6606642,
+      "lng": 18.0751705
     }
   },
   {
@@ -3581,6 +3675,7 @@
     "id": "40643041-fac7-47f4-85c4-6fce4fd2ac80",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "2998"
     ],
@@ -3610,7 +3705,7 @@
     "osm_id": 3374664234,
     "uic_ref": "5100046",
     "position": {
-      "lat": 50.6616474993118,
+      "lat": 50.6616475,
       "lng": 17.9272072
     }
   },
@@ -3619,6 +3714,7 @@
     "id": "86d51af6-ed4b-4afe-8593-956b6e921d73",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "3014"
     ],
@@ -3648,7 +3744,7 @@
     "osm_id": 2407324529,
     "uic_ref": "5102597",
     "position": {
-      "lat": 50.660841799312,
+      "lat": 50.6608418,
       "lng": 17.8984397
     }
   },
@@ -3657,6 +3753,7 @@
     "id": "e18844e5-ccaf-4891-9ce5-48cbfeb82065",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "741"
     ],
@@ -3686,7 +3783,7 @@
     "osm_id": 2147017363,
     "uic_ref": "5100956",
     "position": {
-      "lat": 50.691575899306,
+      "lat": 50.6915759,
       "lng": 17.753867
     }
   },
@@ -3695,6 +3792,7 @@
     "id": "3b11d220-7677-400b-8b10-025a21991df4",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2220"
     ],
@@ -3724,7 +3822,7 @@
     "osm_id": 2147015582,
     "uic_ref": "5101950",
     "position": {
-      "lat": 50.7581501992933,
+      "lat": 50.7581502,
       "lng": 17.6153236
     }
   },
@@ -3733,6 +3831,7 @@
     "id": "1c738595-1c8b-42a6-9d6b-72f19766177d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "336"
     ],
@@ -3762,7 +3861,7 @@
     "osm_id": 3037185178,
     "uic_ref": "5100003",
     "position": {
-      "lat": 50.8529010992757,
+      "lat": 50.8529011,
       "lng": 17.4708931
     }
   },
@@ -3771,6 +3870,7 @@
     "id": "0d9489a7-6aae-45b4-80a3-9b78409d25ca",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2987"
     ],
@@ -3800,7 +3900,7 @@
     "osm_id": 242360270,
     "uic_ref": "5102560",
     "position": {
-      "lat": 50.9307484992616,
+      "lat": 50.9307485,
       "lng": 17.2974306
     }
   },
@@ -3809,6 +3909,7 @@
     "id": "3cb68847-91c5-4ac2-bd2b-dee5aa37cb81",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4418"
     ],
@@ -3838,7 +3939,7 @@
     "osm_id": 413338538,
     "uic_ref": "5103699",
     "position": {
-      "lat": 51.0295632992444,
+      "lat": 51.0295633,
       "lng": 17.1231438
     }
   },
@@ -3847,6 +3948,7 @@
     "id": "f8882d8f-f6e1-46bc-bf06-2244c14f68ec",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5060"
     ],
@@ -3876,7 +3978,7 @@
     "osm_id": 155479759,
     "uic_ref": "5100069",
     "position": {
-      "lat": 51.0979159992328,
+      "lat": 51.097916,
       "lng": 17.0379512
     }
   },
@@ -3885,6 +3987,7 @@
     "id": "ab23fcad-c53b-49fc-8e0f-fe821ae059f4",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "1701"
     ],
@@ -3914,7 +4017,7 @@
     "osm_id": 1953748941,
     "uic_ref": "5100022",
     "position": {
-      "lat": 50.8743076992717,
+      "lat": 50.8743077,
       "lng": 20.6179325
     }
   },
@@ -3923,6 +4026,7 @@
     "id": "a93045e7-8d86-4eb5-ad31-2c9f0fd58f8b",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1704"
     ],
@@ -3952,7 +4056,7 @@
     "osm_id": 3483644246,
     "uic_ref": "5100121",
     "position": {
-      "lat": 50.8859057992696,
+      "lat": 50.8859058,
       "lng": 20.6024161
     }
   },
@@ -3961,6 +4065,7 @@
     "id": "ee8c48dc-e681-400f-96dd-a24f5c37383e",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1201"
     ],
@@ -3987,11 +4092,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 10278724311,
+    "osm_id": 3341813396,
     "uic_ref": "5101274",
     "position": {
-      "lat": 50.8835264992701,
-      "lng": 20.5230277
+      "lat": 50.8832303,
+      "lng": 20.5256847
     }
   },
   {
@@ -3999,6 +4104,7 @@
     "id": "3b328d43-d2db-442f-85f0-b0b2f77841f1",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3722"
     ],
@@ -4028,7 +4134,7 @@
     "osm_id": 3483820507,
     "uic_ref": "5103118",
     "position": {
-      "lat": 50.8681813992729,
+      "lat": 50.8681814,
       "lng": 20.3788822
     }
   },
@@ -4037,6 +4143,7 @@
     "id": "3e9b7009-25d5-4663-b568-e72ab2d4e490",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2528",
       "5460"
@@ -4067,7 +4174,7 @@
     "osm_id": 3484244101,
     "uic_ref": "5102280",
     "position": {
-      "lat": 50.8502131992762,
+      "lat": 50.8502132,
       "lng": 20.272798
     }
   },
@@ -4076,6 +4183,7 @@
     "id": "295eef3c-37c4-4149-9536-b0733b0a124c",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2344"
     ],
@@ -4105,7 +4213,7 @@
     "osm_id": 3484546880,
     "uic_ref": "5102145",
     "position": {
-      "lat": 50.8518710992758,
+      "lat": 50.8518711,
       "lng": 20.1626707
     }
   },
@@ -4114,6 +4222,7 @@
     "id": "59f2bab7-dfb1-4762-b242-e7a61d569abe",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "4986"
     ],
@@ -4143,7 +4252,7 @@
     "osm_id": 3484686486,
     "uic_ref": "5100154",
     "position": {
-      "lat": 50.8377902992784,
+      "lat": 50.8377903,
       "lng": 20.0145481
     }
   },
@@ -4152,6 +4261,7 @@
     "id": "c698e0ba-040a-4181-ae74-14839b8b04f4",
     "prefix": "Cz",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "613",
       "614",
@@ -4183,7 +4293,7 @@
     "osm_id": 3484762106,
     "uic_ref": "5100868",
     "position": {
-      "lat": 50.823888599281,
+      "lat": 50.8238886,
       "lng": 19.9446978
     }
   },
@@ -4192,6 +4302,7 @@
     "id": "3b99d08e-37bf-48d1-b6e7-7f87189edb45",
     "prefix": "DGHK",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "721"
     ],
@@ -4221,7 +4332,7 @@
     "osm_id": 3664391228,
     "uic_ref": null,
     "position": {
-      "lat": 50.3352423993785,
+      "lat": 50.3352424,
       "lng": 19.2599334
     }
   },
@@ -4230,6 +4341,7 @@
     "id": "b9b35fb7-fab6-4429-970b-cfc6ab563d69",
     "prefix": "DP",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "725"
     ],
@@ -4259,7 +4371,7 @@
     "osm_id": 790080045,
     "uic_ref": "5100889",
     "position": {
-      "lat": 50.3128339993833,
+      "lat": 50.312834,
       "lng": 19.2872924
     }
   },
@@ -4268,6 +4380,7 @@
     "id": "446fe4ef-6227-4f48-96f7-2488510132be",
     "prefix": "Dra",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "835"
     ],
@@ -4297,7 +4410,7 @@
     "osm_id": 3664546174,
     "uic_ref": null,
     "position": {
-      "lat": 50.2828782993897,
+      "lat": 50.2828783,
       "lng": 19.2802144
     }
   },
@@ -4306,6 +4419,7 @@
     "id": "86d1cd48-6bac-49e4-8012-37465ccf9977",
     "prefix": "Ju",
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1545"
     ],
@@ -4335,7 +4449,7 @@
     "osm_id": 3737345698,
     "uic_ref": null,
     "position": {
-      "lat": 50.2726089993919,
+      "lat": 50.272609,
       "lng": 19.2272009
     }
   },
@@ -4344,6 +4458,7 @@
     "id": "0fe1b05f-8af4-48df-ba5c-2e2b4da69a6a",
     "prefix": "SDn",
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3990"
     ],
@@ -4373,7 +4488,7 @@
     "osm_id": 2115965315,
     "uic_ref": "5103320",
     "position": {
-      "lat": 50.2655093993934,
+      "lat": 50.2655094,
       "lng": 19.1727723
     }
   },
@@ -4382,6 +4497,7 @@
     "id": "15522d10-cc7d-4d08-ba98-0d15034a8ca3",
     "prefix": "Spł1",
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4010"
     ],
@@ -4411,7 +4527,7 @@
     "osm_id": 684107255,
     "uic_ref": "5100197",
     "position": {
-      "lat": 50.2697298993925,
+      "lat": 50.2697299,
       "lng": 19.1253609
     }
   },
@@ -4420,6 +4536,7 @@
     "id": "34299eb7-d6c8-4724-8b56-b82156202f55",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1702"
     ],
@@ -4449,7 +4566,7 @@
     "osm_id": 2210361337,
     "uic_ref": "5101603",
     "position": {
-      "lat": 50.8552607992752,
+      "lat": 50.8552608,
       "lng": 20.5745188
     }
   },
@@ -4458,6 +4575,7 @@
     "id": "f233abf9-df8e-4f60-9562-9a45f4fbc284",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "1714"
     ],
@@ -4487,7 +4605,7 @@
     "osm_id": 8261972249,
     "uic_ref": "5103472",
     "position": {
-      "lat": 50.8335070992792,
+      "lat": 50.8335071,
       "lng": 20.538675
     }
   },
@@ -4496,6 +4614,7 @@
     "id": "093cab0a-102a-4faf-8ef7-be9794684495",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3841"
     ],
@@ -4525,7 +4644,7 @@
     "osm_id": 417909427,
     "uic_ref": "5103520",
     "position": {
-      "lat": 50.818256299282,
+      "lat": 50.8182563,
       "lng": 20.5504133
     }
   },
@@ -4534,6 +4653,7 @@
     "id": "3899e3dc-e31f-4bc4-b27d-d2d3a6b903b3",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5015"
     ],
@@ -4563,7 +4683,7 @@
     "osm_id": 2210355146,
     "uic_ref": "5104092",
     "position": {
-      "lat": 50.7533489992942,
+      "lat": 50.753349,
       "lng": 20.4704275
     }
   },
@@ -4572,6 +4692,7 @@
     "id": "5919818a-2804-4c27-980c-a1c5fdaf9209",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3490"
     ],
@@ -4610,6 +4731,7 @@
     "id": "6bb14771-53cd-47cc-9e35-89a41fb1347d",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3954"
     ],
@@ -4639,7 +4761,7 @@
     "osm_id": 2210353167,
     "uic_ref": "5103279",
     "position": {
-      "lat": 50.7313029992984,
+      "lat": 50.731303,
       "lng": 20.4306276
     }
   },
@@ -4648,6 +4770,7 @@
     "id": "e3bb9a07-03fe-4a12-98c5-2f154ac63671",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2588"
     ],
@@ -4677,7 +4800,7 @@
     "osm_id": 3457936668,
     "uic_ref": "5102344",
     "position": {
-      "lat": 50.7194054993007,
+      "lat": 50.7194055,
       "lng": 20.3651331
     }
   },
@@ -4686,6 +4809,7 @@
     "id": "57bbcc0c-3bd8-458e-8550-2c6bfb5a69fa",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1533"
     ],
@@ -4715,7 +4839,7 @@
     "osm_id": 3457944096,
     "uic_ref": "5100115",
     "position": {
-      "lat": 50.6445095993152,
+      "lat": 50.6445096,
       "lng": 20.2756734
     }
   },
@@ -4724,6 +4848,7 @@
     "id": "c1421758-de8d-4e66-b670-3f7bd5ab9e6f",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "3314"
     ],
@@ -4762,6 +4887,7 @@
     "id": "7213c32f-5276-4e13-9c3d-75c621b46f63",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "2079"
     ],
@@ -4791,7 +4917,7 @@
     "osm_id": 2210347131,
     "uic_ref": "5101897",
     "position": {
-      "lat": 50.5875629993264,
+      "lat": 50.587563,
       "lng": 20.1406047
     }
   },
@@ -4800,6 +4926,7 @@
     "id": "aad22ec5-18ba-4da6-910d-87d2f2219e7a",
     "prefix": "Sd",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3795"
     ],
@@ -4829,7 +4956,7 @@
     "osm_id": 642653767,
     "uic_ref": "5100208",
     "position": {
-      "lat": 50.5658816993308,
+      "lat": 50.5658817,
       "lng": 20.0548996
     }
   },
@@ -4838,6 +4965,7 @@
     "id": "65f7ea28-e101-4108-9322-5ae989d694ce",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1744"
     ],
@@ -4876,6 +5004,7 @@
     "id": "009840c6-d714-4966-85ac-753ba8c39eee",
     "prefix": "Ch",
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "447"
     ],
@@ -4905,8 +5034,8 @@
     "osm_id": 2187715426,
     "uic_ref": "5100687",
     "position": {
-      "lat": 50.3961753993656,
-      "lng": 19.9406053
+      "lat": 50.3961292,
+      "lng": 19.9413863
     }
   },
   {
@@ -4914,6 +5043,7 @@
     "id": "b1741c80-1a7e-4411-9939-b430d8c84330",
     "prefix": "Ga",
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "922",
       "5453"
@@ -4944,8 +5074,8 @@
     "osm_id": 3488368946,
     "uic_ref": "5101063",
     "position": {
-      "lat": 50.3946261993659,
-      "lng": 19.878614
+      "lat": 50.3945933,
+      "lng": 19.8788033
     }
   },
   {
@@ -4953,6 +5083,7 @@
     "id": "15958ee0-a7f7-4292-b465-be33ed6d247f",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1532"
     ],
@@ -4982,8 +5113,8 @@
     "osm_id": 2301941695,
     "uic_ref": "5101496",
     "position": {
-      "lat": 50.399294799365,
-      "lng": 19.8157146
+      "lat": 50.3992896,
+      "lng": 19.8156594
     }
   },
   {
@@ -4991,6 +5122,7 @@
     "id": "d01697b7-503f-4951-93de-a32cafa10200",
     "prefix": "W",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5013"
     ],
@@ -5020,8 +5152,8 @@
     "osm_id": 1893452418,
     "uic_ref": "5104062",
     "position": {
-      "lat": 50.3759507993699,
-      "lng": 19.7723377
+      "lat": 50.375873,
+      "lng": 19.7725255
     }
   },
   {
@@ -5029,6 +5161,7 @@
     "id": "3f8fbbf6-203f-41bf-bbcc-e8fb3a59b80f",
     "prefix": "Za",
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "5245",
       "5454"
@@ -5059,8 +5192,8 @@
     "osm_id": 2290890070,
     "uic_ref": "5104420",
     "position": {
-      "lat": 50.3630873993726,
-      "lng": 19.6984451
+      "lat": 50.3633543,
+      "lng": 19.6990007
     }
   },
   {
@@ -5068,6 +5201,7 @@
     "id": "908be3ae-066f-4c78-8ca7-7a80fa7df1db",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "533"
     ],
@@ -5097,8 +5231,8 @@
     "osm_id": 2294889671,
     "uic_ref": "5100785",
     "position": {
-      "lat": 50.3451161993764,
-      "lng": 19.686095
+      "lat": 50.344354,
+      "lng": 19.6857075
     }
   },
   {
@@ -5106,6 +5240,7 @@
     "id": "028e8d9c-10d9-47c7-a26c-449dd40473e6",
     "prefix": "JO",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1427"
     ],
@@ -5135,7 +5270,7 @@
     "osm_id": 2187720119,
     "uic_ref": "5101449",
     "position": {
-      "lat": 50.342284699377,
+      "lat": 50.3422847,
       "lng": 19.6218089
     }
   },
@@ -5144,6 +5279,7 @@
     "id": "a7574ec3-ded5-4389-98a6-bf38e87a7f00",
     "prefix": "O",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2966"
     ],
@@ -5173,8 +5309,8 @@
     "osm_id": 1394682731,
     "uic_ref": "5102573",
     "position": {
-      "lat": 50.2742790993916,
-      "lng": 19.5714418
+      "lat": 50.2744103,
+      "lng": 19.5704293
     }
   },
   {
@@ -5182,6 +5318,7 @@
     "id": "b04b15b7-66c0-4284-a54a-51482ac49607",
     "prefix": "Bo",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "381"
     ],
@@ -5211,7 +5348,7 @@
     "osm_id": 545085804,
     "uic_ref": "5100610",
     "position": {
-      "lat": 50.2639840993938,
+      "lat": 50.2639841,
       "lng": 19.4594836
     }
   },
@@ -5220,6 +5357,7 @@
     "id": "19e20a2e-b086-46b5-bf1a-abf7797d9cbe",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "382"
     ],
@@ -5249,7 +5387,7 @@
     "osm_id": 3488638636,
     "uic_ref": "5102981",
     "position": {
-      "lat": 50.2753796993913,
+      "lat": 50.2753797,
       "lng": 19.4097682
     }
   },
@@ -5258,6 +5396,7 @@
     "id": "44ae7bd1-b503-45c2-8a94-d68c9842c21e",
     "prefix": "Sl",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3916"
     ],
@@ -5287,7 +5426,7 @@
     "osm_id": 1585879534,
     "uic_ref": "5103470",
     "position": {
-      "lat": 50.2949247993871,
+      "lat": 50.2949248,
       "lng": 19.3746476
     }
   },
@@ -5296,6 +5435,7 @@
     "id": "b6fe5ca4-1f8a-4e72-88a5-9a9fd701202f",
     "prefix": "DW",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "733"
     ],
@@ -5325,7 +5465,7 @@
     "osm_id": 1766528691,
     "uic_ref": "5100930",
     "position": {
-      "lat": 50.3033647993853,
+      "lat": 50.3033648,
       "lng": 19.3112813
     }
   },
@@ -5334,6 +5474,7 @@
     "id": "006034c0-4829-4c10-bd47-f8c6e59851a8",
     "prefix": "DS",
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "727"
     ],
@@ -5363,8 +5504,8 @@
     "osm_id": 790080192,
     "uic_ref": "5100929",
     "position": {
-      "lat": 50.3108239993837,
-      "lng": 19.2685588
+      "lat": 50.3108201,
+      "lng": 19.2685547
     }
   },
   {
@@ -5372,6 +5513,7 @@
     "id": "e62f1f52-e328-4139-9a0f-a85c4be4748d",
     "prefix": "SKz",
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4003"
     ],
@@ -5401,7 +5543,7 @@
     "osm_id": 1557329529,
     "uic_ref": "5103608",
     "position": {
-      "lat": 50.2886410993884,
+      "lat": 50.2886411,
       "lng": 19.2315955
     }
   },
@@ -5410,6 +5552,7 @@
     "id": "ee519693-4367-4de8-b63c-ef8cb699648f",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "4012"
     ],
@@ -5439,7 +5582,7 @@
     "osm_id": 3496500140,
     "uic_ref": "5103616",
     "position": {
-      "lat": 50.272103199392,
+      "lat": 50.2721032,
       "lng": 19.2162482
     }
   },
@@ -5448,6 +5591,7 @@
     "id": "baa03719-7675-4a4d-9b67-7aca12e732a5",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "3642"
     ],
@@ -5477,8 +5621,8 @@
     "osm_id": 3673327633,
     "uic_ref": "5103162",
     "position": {
-      "lat": 50.3159214993826,
-      "lng": 18.8505569
+      "lat": 50.3159166,
+      "lng": 18.8508771
     }
   },
   {
@@ -5486,6 +5630,7 @@
     "id": "d9fba346-a97b-41fe-9a39-ffcf1e00727a",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "4421"
     ],
@@ -5524,6 +5669,7 @@
     "id": "59219ba6-19fc-4add-bc77-bd86456d674a",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "1654"
     ],
@@ -5553,7 +5699,7 @@
     "osm_id": 3315064602,
     "uic_ref": "5101527",
     "position": {
-      "lat": 50.2638656993938,
+      "lat": 50.2638657,
       "lng": 18.9895811
     }
   },
@@ -5562,6 +5708,7 @@
     "id": "3255a8d9-278b-4ecd-9da4-4f06345998ce",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1851"
     ],
@@ -5591,7 +5738,7 @@
     "osm_id": 3455675995,
     "uic_ref": "5101868",
     "position": {
-      "lat": 50.7382803992971,
+      "lat": 50.7382804,
       "lng": 19.1766763
     }
   },
@@ -5600,6 +5747,7 @@
     "id": "e6f3ace1-21a2-46ee-9e88-1cbb6c50fb1f",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2553"
     ],
@@ -5629,7 +5777,7 @@
     "osm_id": 3455681328,
     "uic_ref": "5102188",
     "position": {
-      "lat": 50.6511153993139,
+      "lat": 50.6511154,
       "lng": 19.2531938
     }
   },
@@ -5638,6 +5786,7 @@
     "id": "22f4e368-ab75-4c3c-9b44-496a334c0bf4",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2780"
     ],
@@ -5667,7 +5816,7 @@
     "osm_id": 3455683838,
     "uic_ref": "5102302",
     "position": {
-      "lat": 50.594832899325,
+      "lat": 50.5948329,
       "lng": 19.2915394
     }
   },
@@ -5676,6 +5825,7 @@
     "id": "b21e1591-e73a-408a-bb27-7241564b3ab7",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2781"
     ],
@@ -5705,7 +5855,7 @@
     "osm_id": 3455698825,
     "uic_ref": "5102379",
     "position": {
-      "lat": 50.5655825993309,
+      "lat": 50.5655826,
       "lng": 19.3597259
     }
   },
@@ -5714,6 +5864,7 @@
     "id": "c6a7fbd3-10b6-4220-a88a-58a2a20b99ac",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2779"
     ],
@@ -5743,7 +5894,7 @@
     "osm_id": 3455702508,
     "uic_ref": "5102325",
     "position": {
-      "lat": 50.5434753993353,
+      "lat": 50.5434754,
       "lng": 19.3773144
     }
   },
@@ -5752,6 +5903,7 @@
     "id": "317cd7f5-28b9-4070-8131-e8f647b79240",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "5263"
     ],
@@ -5781,7 +5933,7 @@
     "osm_id": 3455702509,
     "uic_ref": "5104399",
     "position": {
-      "lat": 50.5110744993419,
+      "lat": 50.5110745,
       "lng": 19.3986396
     }
   },
@@ -5790,6 +5942,7 @@
     "id": "11a5736f-02e8-44dc-8206-0f695d0802bc",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4931"
     ],
@@ -5819,7 +5972,7 @@
     "osm_id": 3455716094,
     "uic_ref": "5104122",
     "position": {
-      "lat": 50.4147794993617,
+      "lat": 50.4147795,
       "lng": 19.3496882
     }
   },
@@ -5828,6 +5981,7 @@
     "id": "add7e66b-9bd5-4ac3-bfca-7e925a957a1a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "522"
     ],
@@ -5857,8 +6011,8 @@
     "osm_id": 2196270111,
     "uic_ref": "5100811",
     "position": {
-      "lat": 50.4003508993648,
-      "lng": 19.3290255
+      "lat": 50.4003807,
+      "lng": 19.3290689
     }
   },
   {
@@ -5866,6 +6020,7 @@
     "id": "9e06eb42-058a-4873-b266-36523a1f23fa",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "726"
     ],
@@ -5895,7 +6050,7 @@
     "osm_id": 481326992,
     "uic_ref": "5100928",
     "position": {
-      "lat": 50.3886630993672,
+      "lat": 50.3886631,
       "lng": 19.2974646
     }
   },
@@ -5904,6 +6059,7 @@
     "id": "f18ed8c5-1011-4111-b106-eeb278a1336a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "724"
     ],
@@ -5933,7 +6089,7 @@
     "osm_id": 8184059841,
     "uic_ref": "5100927",
     "position": {
-      "lat": 50.3504711993752,
+      "lat": 50.3504712,
       "lng": 19.2407866
     }
   },
@@ -5942,6 +6098,7 @@
     "id": "af68e512-5719-4a66-9d90-5ca13d4c42b9",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "261",
       "260"
@@ -5981,6 +6138,7 @@
     "id": "026804ff-1fa2-41a5-bffe-49b1dd867109",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "1865"
     ],
@@ -6010,7 +6168,7 @@
     "osm_id": 2210334301,
     "uic_ref": "5101809",
     "position": {
-      "lat": 50.9217422992632,
+      "lat": 50.9217423,
       "lng": 20.615332
     }
   },
@@ -6019,6 +6177,7 @@
     "id": "9e174686-b59d-45b0-822a-43bebcb37ebe",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "5192"
     ],
@@ -6048,7 +6207,7 @@
     "osm_id": 953065168,
     "uic_ref": "5104309",
     "position": {
-      "lat": 50.9744473992539,
+      "lat": 50.9744474,
       "lng": 20.6634975
     }
   },
@@ -6057,6 +6216,7 @@
     "id": "f56bb40a-f2d2-4941-9891-b788ac296248",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2378"
     ],
@@ -6086,7 +6246,7 @@
     "osm_id": 2945844144,
     "uic_ref": "5101965",
     "position": {
-      "lat": 50.9916623992509,
+      "lat": 50.9916624,
       "lng": 20.7984417
     }
   },
@@ -6095,6 +6255,7 @@
     "id": "902d5355-6c1e-442a-8266-94ef0e50165d",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4191"
     ],
@@ -6124,7 +6285,7 @@
     "osm_id": 3416555277,
     "uic_ref": "5103648",
     "position": {
-      "lat": 51.0465576992415,
+      "lat": 51.0465577,
       "lng": 20.8496965
     }
   },
@@ -6133,6 +6294,7 @@
     "id": "56dd4273-5028-4f76-8a4b-cc6980bb1f4c",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "4192"
     ],
@@ -6162,7 +6324,7 @@
     "osm_id": 3416555281,
     "uic_ref": "5103660",
     "position": {
-      "lat": 51.0652813992383,
+      "lat": 51.0652814,
       "lng": 20.8491495
     }
   },
@@ -6171,6 +6333,7 @@
     "id": "6d1f7898-67f9-4208-b53d-3c89fbdd2538",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3863"
     ],
@@ -6200,7 +6363,7 @@
     "osm_id": 3457876492,
     "uic_ref": "5100209",
     "position": {
-      "lat": 51.1161695992298,
+      "lat": 51.1161696,
       "lng": 20.8821942
     }
   },
@@ -6209,6 +6372,7 @@
     "id": "aa92914b-2a95-431a-aebe-f936fcdca22b",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "349"
     ],
@@ -6247,6 +6411,7 @@
     "id": "ae32029d-f2ff-4631-91e3-3507a54e7248",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2811"
     ],
@@ -6276,8 +6441,8 @@
     "osm_id": 3517307423,
     "uic_ref": "5102432",
     "position": {
-      "lat": 50.7607981992928,
-      "lng": 20.5783283
+      "lat": 50.7601582,
+      "lng": 20.5785811
     }
   },
   {
@@ -6285,6 +6450,7 @@
     "id": "99e56198-23b8-4b0e-a59d-ee5624851a5f",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4989"
     ],
@@ -6314,7 +6480,7 @@
     "osm_id": 3514100685,
     "uic_ref": "5104075",
     "position": {
-      "lat": 50.6517536993138,
+      "lat": 50.6517537,
       "lng": 20.5865673
     }
   },
@@ -6323,6 +6489,7 @@
     "id": "41a42a52-8fa7-4df8-8675-d0498719cdcd",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "5475"
     ],
@@ -6352,7 +6519,7 @@
     "osm_id": 3517391528,
     "uic_ref": "5101610",
     "position": {
-      "lat": 50.6077556993224,
+      "lat": 50.6077557,
       "lng": 20.5777111
     }
   },
@@ -6361,6 +6528,7 @@
     "id": "c70e392a-2cdb-4e8c-a610-d215f32cdaa3",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "390"
     ],
@@ -6390,7 +6558,7 @@
     "osm_id": 3517501479,
     "uic_ref": "5100606",
     "position": {
-      "lat": 50.4619330993519,
+      "lat": 50.4619331,
       "lng": 20.6858176
     }
   },
@@ -6399,6 +6567,7 @@
     "id": "0d3952ce-1888-428d-8de0-b4c2e434ee99",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4802"
     ],
@@ -6428,8 +6597,8 @@
     "osm_id": 3390854024,
     "uic_ref": "5103940",
     "position": {
-      "lat": 52.1964443991027,
-      "lng": 20.8853672
+      "lat": 52.1964007,
+      "lng": 20.8852512
     }
   },
   {
@@ -6437,6 +6606,7 @@
     "id": "c34647b4-6608-4909-a8cd-61113e17e01d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4803"
     ],
@@ -6466,8 +6636,8 @@
     "osm_id": 2341850090,
     "uic_ref": "5104686",
     "position": {
-      "lat": 52.191324199103,
-      "lng": 20.8696007
+      "lat": 52.1914638,
+      "lng": 20.8700172
     }
   },
   {
@@ -6475,6 +6645,7 @@
     "id": "68ebeb49-4c90-43d5-a009-b0bdfad819e8",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3170"
     ],
@@ -6513,6 +6684,7 @@
     "id": "a86741f6-4c78-4e7d-9b4e-626f0e5f8c3b",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3128"
     ],
@@ -6542,8 +6714,8 @@
     "osm_id": 6113718270,
     "uic_ref": "5103428",
     "position": {
-      "lat": 52.1564581991054,
-      "lng": 20.7631405
+      "lat": 52.1564393,
+      "lng": 20.7631244
     }
   },
   {
@@ -6551,6 +6723,7 @@
     "id": "a1f5f25f-6c8f-4024-921c-c34df7cc85f0",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "332"
     ],
@@ -6580,8 +6753,8 @@
     "osm_id": 365228404,
     "uic_ref": "5100633",
     "position": {
-      "lat": 52.1415983991064,
-      "lng": 20.718095
+      "lat": 52.1419107,
+      "lng": 20.7190083
     }
   },
   {
@@ -6589,6 +6762,7 @@
     "id": "3bc1287e-c33f-428e-9685-be1dad28fc28",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2638"
     ],
@@ -6618,8 +6792,8 @@
     "osm_id": 2420827497,
     "uic_ref": "5102298",
     "position": {
-      "lat": 52.1250225991076,
-      "lng": 20.6678061
+      "lat": 52.1251481,
+      "lng": 20.6681761
     }
   },
   {
@@ -6627,6 +6801,7 @@
     "id": "b77aeca6-57fd-4a14-aaa6-1ead353d76c7",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "1396"
     ],
@@ -6656,7 +6831,7 @@
     "osm_id": 3372960452,
     "uic_ref": "5101429",
     "position": {
-      "lat": 52.0866650991104,
+      "lat": 52.0866651,
       "lng": 20.5518786
     }
   },
@@ -6665,6 +6840,7 @@
     "id": "0b76101b-cb16-46cb-9ef6-4cd048fa1a34",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "2614"
     ],
@@ -6694,7 +6870,7 @@
     "osm_id": 2189093926,
     "uic_ref": "5102205",
     "position": {
-      "lat": 52.0636059991122,
+      "lat": 52.063606,
       "lng": 20.4824691
     }
   },
@@ -6703,6 +6879,7 @@
     "id": "93b161a2-be98-4a52-9c4c-6ee60c288e50",
     "prefix": "5431_Zy",
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "5431"
     ],
@@ -6732,8 +6909,8 @@
     "osm_id": 3455528913,
     "uic_ref": "5104415",
     "position": {
-      "lat": 52.0524717991131,
-      "lng": 20.4489753
+      "lat": 52.0524632,
+      "lng": 20.4489804
     }
   },
   {
@@ -6741,6 +6918,7 @@
     "id": "822bcd09-f90a-41d3-9584-638cdb516207",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "4189"
     ],
@@ -6770,7 +6948,7 @@
     "osm_id": 2180982501,
     "uic_ref": "5103713",
     "position": {
-      "lat": 52.0228795991155,
+      "lat": 52.0228796,
       "lng": 20.3593707
     }
   },
@@ -6779,6 +6957,7 @@
     "id": "595e5443-af32-4afe-b94d-840da93c1288",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "1523"
     ],
@@ -6808,7 +6987,7 @@
     "osm_id": 2503070020,
     "uic_ref": "5101414",
     "position": {
-      "lat": 52.0148194991162,
+      "lat": 52.0148195,
       "lng": 20.3347217
     }
   },
@@ -6817,6 +6996,7 @@
     "id": "5e957536-1246-4913-a594-bae12b5a61cd",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3531"
     ],
@@ -6846,7 +7026,7 @@
     "osm_id": 2180988016,
     "uic_ref": "5103026",
     "position": {
-      "lat": 52.0003322991174,
+      "lat": 52.0003323,
       "lng": 20.2904767
     }
   },
@@ -6855,6 +7035,7 @@
     "id": "20c2ff84-623c-46a8-b8e8-e7b7e3d50a26",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": true,
     "ids": [
       "3891",
       "3881"
@@ -6885,7 +7066,7 @@
     "osm_id": 2180989766,
     "uic_ref": "5103587",
     "position": {
-      "lat": 51.9775851991194,
+      "lat": 51.9775852,
       "lng": 20.2213044
     }
   },
@@ -6894,6 +7075,7 @@
     "id": "61094bf5-cd95-4685-a32c-ae0fded54bed",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3877",
       "3880"
@@ -6924,8 +7106,8 @@
     "osm_id": 3455554928,
     "uic_ref": "5100294",
     "position": {
-      "lat": 51.9672792991203,
-      "lng": 20.1502998
+      "lat": 51.9676192,
+      "lng": 20.151435
     }
   },
   {
@@ -6933,6 +7115,7 @@
     "id": "84b162e7-1a2c-4331-8444-59d55960fa0f",
     "prefix": "StA",
     "max_speed": 30,
+    "stop_place": false,
     "ids": [
       "1637"
     ],
@@ -6971,6 +7154,7 @@
     "id": "bdadeadf-e9b5-4337-8040-755e2fbffe14",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3500"
     ],
@@ -6997,7 +7181,7 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 9282176667,
+    "osm_id": 3444788281,
     "uic_ref": "5100052",
     "position": {
       "lat": 51.3909217,
@@ -7009,6 +7193,7 @@
     "id": "9225e965-0379-407d-a9f5-c3dfb7020ebf",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "3502"
     ],
@@ -7038,7 +7223,7 @@
     "osm_id": 3415955389,
     "uic_ref": "5103065",
     "position": {
-      "lat": 51.3494791991936,
+      "lat": 51.3494792,
       "lng": 21.1011097
     }
   },
@@ -7047,6 +7232,7 @@
     "id": "b21d33a5-e75e-4875-bee1-88d7adff3e75",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3620"
     ],
@@ -7076,7 +7262,7 @@
     "osm_id": 3457864145,
     "uic_ref": "5103234",
     "position": {
-      "lat": 51.3388406991951,
+      "lat": 51.3388407,
       "lng": 21.0540748
     }
   },
@@ -7085,6 +7271,7 @@
     "id": "7d229eda-79bc-4b6c-a1dc-2478b816a875",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "3645"
     ],
@@ -7123,6 +7310,7 @@
     "id": "abff41a3-8989-44e9-b437-792627d8d6fc",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "5005"
     ],
@@ -7152,7 +7340,7 @@
     "osm_id": 3416055272,
     "uic_ref": "5104070",
     "position": {
-      "lat": 51.2770710992044,
+      "lat": 51.2770711,
       "lng": 21.0265513
     }
   },
@@ -7161,6 +7349,7 @@
     "id": "10331165-3f72-479e-a2c8-65185db6d236",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1454"
     ],
@@ -7190,7 +7379,7 @@
     "osm_id": 368143772,
     "uic_ref": "5101469",
     "position": {
-      "lat": 51.2488146992087,
+      "lat": 51.2488147,
       "lng": 20.9845611
     }
   },
@@ -7199,6 +7388,7 @@
     "id": "279bd019-9dcf-44c1-a7e8-d2b1c88d3d55",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "945"
     ],
@@ -7228,7 +7418,7 @@
     "osm_id": 2183593662,
     "uic_ref": "5101069",
     "position": {
-      "lat": 51.2318077992113,
+      "lat": 51.2318078,
       "lng": 20.9473313
     }
   },
@@ -7237,6 +7427,7 @@
     "id": "942acd33-7a1a-4439-8112-b52b5200e38b",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "4365"
     ],
@@ -7266,7 +7457,7 @@
     "osm_id": 3457872995,
     "uic_ref": "5103698",
     "position": {
-      "lat": 51.207996399215,
+      "lat": 51.2079964,
       "lng": 20.9234453
     }
   },
@@ -7275,6 +7466,7 @@
     "id": "94ef65f5-2137-48c5-80f5-b9d483ccdd72",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "2266"
     ],
@@ -7304,7 +7496,7 @@
     "osm_id": 417908787,
     "uic_ref": "5102098",
     "position": {
-      "lat": 51.1552436992235,
+      "lat": 51.1552437,
       "lng": 20.9010905
     }
   },
@@ -7313,6 +7505,7 @@
     "id": "74db6048-6c25-46ed-aed3-d8a6d80e1e9f",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3857",
       "3864"
@@ -7352,6 +7545,7 @@
     "id": "fdbb9964-c863-480d-b819-3536c88e264d",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "3855"
     ],
@@ -7381,7 +7575,7 @@
     "osm_id": 3416514246,
     "uic_ref": "5103594",
     "position": {
-      "lat": 51.1004357992324,
+      "lat": 51.1004358,
       "lng": 20.8595709
     }
   },
@@ -7390,6 +7584,7 @@
     "id": "79db0a61-289c-4228-af41-75668f1a3418",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "118"
     ],
@@ -7419,7 +7614,7 @@
     "osm_id": 417908789,
     "uic_ref": "5100415",
     "position": {
-      "lat": 51.0234047992454,
+      "lat": 51.0234048,
       "lng": 20.8357603
     }
   },
@@ -7428,6 +7623,7 @@
     "id": "e36fbeb1-ced2-41ac-8e5b-eb47e5fd8103",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "4594"
     ],
@@ -7457,7 +7653,7 @@
     "osm_id": 3416645555,
     "uic_ref": "5103851",
     "position": {
-      "lat": 50.9674641992551,
+      "lat": 50.9674642,
       "lng": 20.6021604
     }
   },
@@ -7466,6 +7662,7 @@
     "id": "5da9059a-6793-4efe-805e-f59e3520a7a2",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "1712"
     ],
@@ -7495,7 +7692,7 @@
     "osm_id": 2462354653,
     "uic_ref": "5101616",
     "position": {
-      "lat": 50.8897893992689,
+      "lat": 50.8897894,
       "lng": 20.6253268
     }
   },
@@ -7504,6 +7701,7 @@
     "id": "676dc7e3-87b6-4df2-a3e6-cbe9e5bc99ed",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1619"
     ],
@@ -7533,7 +7731,7 @@
     "osm_id": 7822937008,
     "uic_ref": null,
     "position": {
-      "lat": 50.1860679994107,
+      "lat": 50.186068,
       "lng": 19.0056358
     }
   },
@@ -7542,6 +7740,7 @@
     "id": "c9c9774f-a552-42c2-aff2-98dc89d9d108",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2457"
     ],
@@ -7571,7 +7770,7 @@
     "osm_id": 4176079485,
     "uic_ref": "5101974",
     "position": {
-      "lat": 51.7631037991406,
+      "lat": 51.7631038,
       "lng": 19.5438083
     }
   },
@@ -7580,6 +7779,7 @@
     "id": "adf58390-70da-49a6-80b8-33b46339941d",
     "prefix": null,
     "max_speed": 150,
+    "stop_place": false,
     "ids": [
       "2422"
     ],
@@ -7618,6 +7818,7 @@
     "id": "21f8554e-7de8-4898-b108-29cff853e0ad",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "110"
     ],
@@ -7647,7 +7848,7 @@
     "osm_id": 1651732417,
     "uic_ref": "5100407",
     "position": {
-      "lat": 51.731995599144,
+      "lat": 51.7319956,
       "lng": 19.6423494
     }
   },
@@ -7656,6 +7857,7 @@
     "id": "d42c403e-1257-46cf-bd71-08a926f60ddb",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "1548"
     ],
@@ -7685,7 +7887,7 @@
     "osm_id": 1313517188,
     "uic_ref": "5101479",
     "position": {
-      "lat": 51.7309125991441,
+      "lat": 51.7309126,
       "lng": 19.6835961
     }
   },
@@ -7694,6 +7896,7 @@
     "id": "f1f2c08d-1416-473c-b88d-73d4104d41d8",
     "prefix": null,
     "max_speed": 150,
+    "stop_place": false,
     "ids": [
       "924"
     ],
@@ -7723,7 +7926,7 @@
     "osm_id": 2586034874,
     "uic_ref": "5101064",
     "position": {
-      "lat": 51.7298222991443,
+      "lat": 51.7298223,
       "lng": 19.7318181
     }
   },
@@ -7732,6 +7935,7 @@
     "id": "9ecdd67d-9a98-48fb-bc5a-223ae6191c31",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "5375"
     ],
@@ -7761,7 +7965,7 @@
     "osm_id": 1275626180,
     "uic_ref": "5104245",
     "position": {
-      "lat": 51.732192899144,
+      "lat": 51.7321929,
       "lng": 19.7910611
     }
   },
@@ -7770,6 +7974,7 @@
     "id": "1620faed-498a-49df-bb19-6da1aa97a079",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "1803",
       "1806",
@@ -7801,7 +8006,7 @@
     "osm_id": 2183694742,
     "uic_ref": "5100024",
     "position": {
-      "lat": 51.7438514991427,
+      "lat": 51.7438515,
       "lng": 19.8186183
     }
   },
@@ -7810,6 +8015,7 @@
     "id": "f40c2348-096a-4908-ac77-ce66fb5657bd",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4857"
     ],
@@ -7839,7 +8045,7 @@
     "osm_id": 2510050406,
     "uic_ref": "5104003",
     "position": {
-      "lat": 51.7910224991376,
+      "lat": 51.7910225,
       "lng": 19.8492481
     }
   },
@@ -7848,6 +8054,7 @@
     "id": "c59e34c5-bea8-4919-9f87-d0e8da65ae85",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "3590"
     ],
@@ -7877,7 +8084,7 @@
     "osm_id": 1315590518,
     "uic_ref": "5103098",
     "position": {
-      "lat": 51.8179311991347,
+      "lat": 51.8179312,
       "lng": 19.8860058
     }
   },
@@ -7886,6 +8093,7 @@
     "id": "e674b62c-c7e4-4206-83e9-2b0504aaa058",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3423"
     ],
@@ -7915,7 +8123,7 @@
     "osm_id": 2510050405,
     "uic_ref": "5102878",
     "position": {
-      "lat": 51.8408593991324,
+      "lat": 51.8408594,
       "lng": 19.9172861
     }
   },
@@ -7924,6 +8132,7 @@
     "id": "ab212d91-3221-4f3d-9f51-f061c273fab0",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2059"
     ],
@@ -7953,7 +8162,7 @@
     "osm_id": 2510050403,
     "uic_ref": "5101799",
     "position": {
-      "lat": 51.8634119991301,
+      "lat": 51.863412,
       "lng": 19.9232028
     }
   },
@@ -7962,6 +8171,7 @@
     "id": "c2ba0b99-8158-4177-9526-582dd67d95fa",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2251"
     ],
@@ -7991,7 +8201,7 @@
     "osm_id": 2510050404,
     "uic_ref": "5102102",
     "position": {
-      "lat": 51.905216399126,
+      "lat": 51.9052164,
       "lng": 19.9430864
     }
   },
@@ -8000,6 +8210,7 @@
     "id": "731ef571-e45b-4732-a083-deb6544927e6",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "3251"
     ],
@@ -8029,7 +8240,7 @@
     "osm_id": 1798106142,
     "uic_ref": "5102816",
     "position": {
-      "lat": 51.9175620991249,
+      "lat": 51.9175621,
       "lng": 20.0034335
     }
   },
@@ -8038,6 +8249,7 @@
     "id": "aacee59f-5358-41ad-bf4f-1d24d74af911",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2501"
     ],
@@ -8067,7 +8279,7 @@
     "osm_id": 3232162495,
     "uic_ref": "5102269",
     "position": {
-      "lat": 51.9422268991226,
+      "lat": 51.9422269,
       "lng": 20.0457185
     }
   },
@@ -8076,6 +8288,7 @@
     "id": "173697ec-b722-4e40-9220-744bd77a4ac8",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "747"
     ],
@@ -8105,7 +8318,7 @@
     "osm_id": 2094092555,
     "uic_ref": "5100995",
     "position": {
-      "lat": 51.9333782991234,
+      "lat": 51.9333783,
       "lng": 20.1023797
     }
   },
@@ -8114,6 +8327,7 @@
     "id": "f5185adc-5f79-4fd1-88f3-1f563654b1e5",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "1793"
     ],
@@ -8152,6 +8366,7 @@
     "id": "6124fd16-ea34-4df3-9a16-d88e7dca8df1",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "547"
     ],
@@ -8190,6 +8405,7 @@
     "id": "7c210d0e-7a97-41f5-b847-9e6ead5b1c69",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3832"
     ],
@@ -8219,7 +8435,7 @@
     "osm_id": 1509286810,
     "uic_ref": "5103405",
     "position": {
-      "lat": 50.7988229992856,
+      "lat": 50.798823,
       "lng": 18.5936025
     }
   },
@@ -8228,6 +8444,7 @@
     "id": "dde4dbf6-2028-4125-a2b6-fa61394879cf",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4015"
     ],
@@ -8257,7 +8474,7 @@
     "osm_id": 1509286811,
     "uic_ref": "5103547",
     "position": {
-      "lat": 50.8458869992769,
+      "lat": 50.845887,
       "lng": 18.5016873
     }
   },
@@ -8266,6 +8483,7 @@
     "id": "30c48d8a-b4b2-4917-aa1e-caeecfaa9b77",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2961"
     ],
@@ -8295,7 +8513,7 @@
     "osm_id": 1881771835,
     "uic_ref": "5100185",
     "position": {
-      "lat": 50.8820721992703,
+      "lat": 50.8820722,
       "lng": 18.4248341
     }
   },
@@ -8304,6 +8522,7 @@
     "id": "c92d751b-ddba-4179-bf0f-a8f5aba94fb0",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4065"
     ],
@@ -8333,7 +8552,7 @@
     "osm_id": 1509286812,
     "uic_ref": "5103576",
     "position": {
-      "lat": 50.9155314992643,
+      "lat": 50.9155315,
       "lng": 18.3749548
     }
   },
@@ -8342,6 +8561,7 @@
     "id": "b9d3e618-964e-4c19-a78d-dbab2b08f070",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "107"
     ],
@@ -8371,7 +8591,7 @@
     "osm_id": 1509286805,
     "uic_ref": "5100371",
     "position": {
-      "lat": 50.9561236992571,
+      "lat": 50.9561237,
       "lng": 18.3145752
     }
   },
@@ -8380,6 +8600,7 @@
     "id": "e0f6c66e-591e-45eb-9827-50c9dbf23129",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1746"
     ],
@@ -8409,7 +8630,7 @@
     "osm_id": 296132852,
     "uic_ref": "5100236",
     "position": {
-      "lat": 50.9710825992545,
+      "lat": 50.9710826,
       "lng": 18.201009
     }
   },
@@ -8418,6 +8639,7 @@
     "id": "b37cfde6-4002-4f07-a064-b9fc78c8262f",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "3938"
     ],
@@ -8447,7 +8669,7 @@
     "osm_id": 296132840,
     "uic_ref": "5103474",
     "position": {
-      "lat": 50.9922428992508,
+      "lat": 50.9922429,
       "lng": 18.1443157
     }
   },
@@ -8456,6 +8678,7 @@
     "id": "e6b7074c-00f3-41a0-8114-7286b6e42714",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "5019"
     ],
@@ -8485,7 +8708,7 @@
     "osm_id": 296132816,
     "uic_ref": "5104104",
     "position": {
-      "lat": 51.0134475992471,
+      "lat": 51.0134476,
       "lng": 18.047335
     }
   },
@@ -8494,6 +8717,7 @@
     "id": "dfb5c24c-a792-4f0d-b3a9-428b2a087f2c",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4920"
     ],
@@ -8523,8 +8747,8 @@
     "osm_id": 296132802,
     "uic_ref": "5104222",
     "position": {
-      "lat": 51.0222215992456,
-      "lng": 17.9756766
+      "lat": 51.0222367,
+      "lng": 17.9757125
     }
   },
   {
@@ -8532,6 +8756,7 @@
     "id": "d15367c9-12be-4aae-bdca-bbf472125287",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "829"
     ],
@@ -8561,8 +8786,8 @@
     "osm_id": 296132788,
     "uic_ref": "5100979",
     "position": {
-      "lat": 51.0486496992411,
-      "lng": 17.883251
+      "lat": 51.0486167,
+      "lng": 17.8833572
     }
   },
   {
@@ -8570,6 +8795,7 @@
     "id": "d9b3164a-18c5-4afa-bf89-9cb9d78e03be",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "1240"
     ],
@@ -8599,8 +8825,8 @@
     "osm_id": 296132766,
     "uic_ref": "5101090",
     "position": {
-      "lat": 51.0654513992383,
-      "lng": 17.7997779
+      "lat": 51.0654331,
+      "lng": 17.7998965
     }
   },
   {
@@ -8608,6 +8834,7 @@
     "id": "64ba9b29-fc05-46b0-b445-11bbbda2743b",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2792"
     ],
@@ -8637,7 +8864,7 @@
     "osm_id": 295374525,
     "uic_ref": "5100177",
     "position": {
-      "lat": 51.0743907992368,
+      "lat": 51.0743908,
       "lng": 17.717021
     }
   },
@@ -8646,6 +8873,7 @@
     "id": "8bd5567c-42c4-472b-a78e-5f9305d407c1",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4951"
     ],
@@ -8675,7 +8903,7 @@
     "osm_id": 295374531,
     "uic_ref": "5104050",
     "position": {
-      "lat": 51.0942389992335,
+      "lat": 51.094239,
       "lng": 17.6584067
     }
   },
@@ -8684,6 +8912,7 @@
     "id": "ce10d094-b5d7-405a-9d6c-73c8068f983e",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "206"
     ],
@@ -8713,7 +8942,7 @@
     "osm_id": 295374533,
     "uic_ref": "5100566",
     "position": {
-      "lat": 51.1284442992278,
+      "lat": 51.1284443,
       "lng": 17.5461214
     }
   },
@@ -8722,6 +8951,7 @@
     "id": "a339a779-6a5c-44e9-a005-d50ec65a03b1",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "3979"
     ],
@@ -8751,8 +8981,8 @@
     "osm_id": 295374382,
     "uic_ref": "5103507",
     "position": {
-      "lat": 51.1540101992237,
-      "lng": 17.4938316
+      "lat": 51.1540096,
+      "lng": 17.4938517
     }
   },
   {
@@ -8760,6 +8990,7 @@
     "id": "de49caf5-7a28-420f-892d-3c8b1d532b25",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2963"
     ],
@@ -8789,8 +9020,8 @@
     "osm_id": 295374333,
     "uic_ref": "5100080",
     "position": {
-      "lat": 51.2006266992162,
-      "lng": 17.3864167
+      "lat": 51.200657,
+      "lng": 17.385924
     }
   },
   {
@@ -8798,6 +9029,7 @@
     "id": "02ef78bf-672c-4f24-939d-2350eae1523c",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "288"
     ],
@@ -8827,7 +9059,7 @@
     "osm_id": 295396299,
     "uic_ref": "5100628",
     "position": {
-      "lat": 51.1841095992188,
+      "lat": 51.1841096,
       "lng": 17.2760947
     }
   },
@@ -8836,6 +9068,7 @@
     "id": "303afa84-08bb-47c8-ab9c-ae04566f4360",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "788"
     ],
@@ -8865,7 +9098,7 @@
     "osm_id": 3607481169,
     "uic_ref": "5100944",
     "position": {
-      "lat": 51.1784644992197,
+      "lat": 51.1784645,
       "lng": 17.1944543
     }
   },
@@ -8874,6 +9107,7 @@
     "id": "80ab65e7-ccde-471a-bc10-f1c159cd5f6e",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "5105"
     ],
@@ -8903,7 +9137,7 @@
     "osm_id": 1401192473,
     "uic_ref": "5104120",
     "position": {
-      "lat": 51.1504519992242,
+      "lat": 51.150452,
       "lng": 17.1185445
     }
   },
@@ -8912,6 +9146,7 @@
     "id": "891cf738-a9f4-4145-a801-b5f84f28febb",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "5109"
     ],
@@ -8941,7 +9176,7 @@
     "osm_id": 241763683,
     "uic_ref": "5104139",
     "position": {
-      "lat": 51.1425484992255,
+      "lat": 51.1425485,
       "lng": 17.0835373
     }
   },
@@ -8950,6 +9185,7 @@
     "id": "994a857a-22da-4395-815d-e87515be5f32",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "5081"
     ],
@@ -8979,7 +9215,7 @@
     "osm_id": 789996265,
     "uic_ref": "5100255",
     "position": {
-      "lat": 51.1256578992283,
+      "lat": 51.1256579,
       "lng": 17.0329905
     }
   },
@@ -8988,6 +9224,7 @@
     "id": "eddab000-9c64-404b-9156-95e2fecb8aff",
     "prefix": null,
     "max_speed": 15,
+    "stop_place": false,
     "ids": [
       "4620"
     ],
@@ -9026,6 +9263,7 @@
     "id": "0a206b38-7d8a-4d47-8ca2-e5b08644e2e3",
     "prefix": null,
     "max_speed": 75,
+    "stop_place": false,
     "ids": [
       "1760"
     ],
@@ -9055,7 +9293,7 @@
     "osm_id": 1854218754,
     "uic_ref": "5101564",
     "position": {
-      "lat": 50.4513331993541,
+      "lat": 50.4513332,
       "lng": 16.6567711
     }
   },
@@ -9064,6 +9302,7 @@
     "id": "08ecf540-ec46-4a18-ad37-45daf35438f4",
     "prefix": null,
     "max_speed": 75,
+    "stop_place": true,
     "ids": [
       "2363"
     ],
@@ -9093,8 +9332,8 @@
     "osm_id": 746759958,
     "uic_ref": "5101934",
     "position": {
-      "lat": 50.4775663993487,
-      "lng": 16.6707495
+      "lat": 50.4776747,
+      "lng": 16.6708689
     }
   },
   {
@@ -9102,6 +9341,7 @@
     "id": "8b43da80-98a5-4f5e-983e-b0e25233f2c1",
     "prefix": null,
     "max_speed": 75,
+    "stop_place": true,
     "ids": [
       "80"
     ],
@@ -9131,8 +9371,8 @@
     "osm_id": 746758106,
     "uic_ref": "5100576",
     "position": {
-      "lat": 50.5048570993431,
-      "lng": 16.7337841
+      "lat": 50.5048471,
+      "lng": 16.7340785
     }
   },
   {
@@ -9140,6 +9380,7 @@
     "id": "6d22b69b-ec0c-4b65-808d-4b7fe113d407",
     "prefix": null,
     "max_speed": 75,
+    "stop_place": false,
     "ids": [
       "79"
     ],
@@ -9169,8 +9410,8 @@
     "osm_id": 746758076,
     "uic_ref": "5100367",
     "position": {
-      "lat": 50.5095289993422,
-      "lng": 16.7580075
+      "lat": 50.5095162,
+      "lng": 16.7579648
     }
   },
   {
@@ -9178,6 +9419,7 @@
     "id": "0096e70f-8acc-437f-90c8-5519e51de1a3",
     "prefix": null,
     "max_speed": 75,
+    "stop_place": true,
     "ids": [
       "4222"
     ],
@@ -9207,8 +9449,8 @@
     "osm_id": 248216848,
     "uic_ref": "5103597",
     "position": {
-      "lat": 50.5308078993379,
-      "lng": 16.8241793
+      "lat": 50.530844,
+      "lng": 16.8243733
     }
   },
   {
@@ -9216,6 +9458,7 @@
     "id": "27568ebe-5566-4744-a555-0f4d7e99ca29",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1579"
     ],
@@ -9254,6 +9497,7 @@
     "id": "98701158-135c-4718-a4ac-d7c781c062b1",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3096"
     ],
@@ -9283,7 +9527,7 @@
     "osm_id": 2555343772,
     "uic_ref": "5102692",
     "position": {
-      "lat": 50.4784246993485,
+      "lat": 50.4784247,
       "lng": 17.0110551
     }
   },
@@ -9292,6 +9536,7 @@
     "id": "1fdd7373-b438-4bfc-88da-e7a86a0291c0",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": true,
     "ids": [
       "3082"
     ],
@@ -9321,7 +9566,7 @@
     "osm_id": 331033937,
     "uic_ref": "5102630",
     "position": {
-      "lat": 50.4815877993479,
+      "lat": 50.4815878,
       "lng": 17.1089827
     }
   },
@@ -9330,6 +9575,7 @@
     "id": "2e0b73d1-7f7b-47b9-af35-b9bc3e107580",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "3081"
     ],
@@ -9359,7 +9605,7 @@
     "osm_id": 2555343793,
     "uic_ref": "5100187",
     "position": {
-      "lat": 50.4741316993494,
+      "lat": 50.4741317,
       "lng": 17.1525631
     }
   },
@@ -9368,6 +9614,7 @@
     "id": "4b3605c2-fc9e-4d8a-9017-3dc14e2a6999",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": true,
     "ids": [
       "5030"
     ],
@@ -9397,7 +9644,7 @@
     "osm_id": 3680304139,
     "uic_ref": "5104035",
     "position": {
-      "lat": 50.4684067993506,
+      "lat": 50.4684068,
       "lng": 17.2208479
     }
   },
@@ -9406,6 +9653,7 @@
     "id": "5b7ac0ed-1219-4a9f-9675-5897126f284a",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1181"
     ],
@@ -9435,7 +9683,7 @@
     "osm_id": 3680257925,
     "uic_ref": "5101235",
     "position": {
-      "lat": 50.4785203993485,
+      "lat": 50.4785204,
       "lng": 17.2571721
     }
   },
@@ -9444,6 +9692,7 @@
     "id": "0648757b-7d01-4562-8848-270836a3f8fa",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2917"
     ],
@@ -9473,7 +9722,7 @@
     "osm_id": 3679909514,
     "uic_ref": "5100044",
     "position": {
-      "lat": 50.4776490993487,
+      "lat": 50.4776491,
       "lng": 17.3419525
     }
   },
@@ -9482,6 +9731,7 @@
     "id": "dbb8b612-7f65-4df1-b9b8-c1caf7c5c0b7",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "2910"
     ],
@@ -9511,7 +9761,7 @@
     "osm_id": 2147029744,
     "uic_ref": "5102486",
     "position": {
-      "lat": 50.3776728993695,
+      "lat": 50.3776729,
       "lng": 17.3695627
     }
   },
@@ -9520,6 +9770,7 @@
     "id": "8a4ca812-880a-489c-aec4-26bdd4eff86b",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "2898"
     ],
@@ -9549,7 +9800,7 @@
     "osm_id": 2147029927,
     "uic_ref": "5102456",
     "position": {
-      "lat": 50.3621131993728,
+      "lat": 50.3621132,
       "lng": 17.4136556
     }
   },
@@ -9558,6 +9809,7 @@
     "id": "7661e47d-193b-46d8-ad41-a17e1fec142c",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": true,
     "ids": [
       "4364"
     ],
@@ -9587,7 +9839,7 @@
     "osm_id": 2147031983,
     "uic_ref": "5103274",
     "position": {
-      "lat": 50.3445919993765,
+      "lat": 50.344592,
       "lng": 17.4811159
     }
   },
@@ -9596,6 +9848,7 @@
     "id": "38974d78-1e9f-424e-9526-830cb2328bda",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3373"
     ],
@@ -9625,7 +9878,7 @@
     "osm_id": 1049606381,
     "uic_ref": "5100051",
     "position": {
-      "lat": 50.3291761993798,
+      "lat": 50.3291762,
       "lng": 17.5776593
     }
   },
@@ -9634,6 +9887,7 @@
     "id": "2bb964b6-4c8b-45ed-ae3b-23bd54048256",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "870"
     ],
@@ -9663,7 +9917,7 @@
     "osm_id": 2147033519,
     "uic_ref": "5101020",
     "position": {
-      "lat": 50.3298342993797,
+      "lat": 50.3298343,
       "lng": 17.6765639
     }
   },
@@ -9672,6 +9926,7 @@
     "id": "e4167b6b-cb1b-4616-8d5f-01509b3c5738",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3486"
     ],
@@ -9701,7 +9956,7 @@
     "osm_id": 3678732201,
     "uic_ref": "5100201",
     "position": {
-      "lat": 50.3121015993834,
+      "lat": 50.3121016,
       "lng": 17.7606123
     }
   },
@@ -9710,6 +9965,7 @@
     "id": "e4e56a3b-57bf-4632-bda4-f0f4a46b56e8",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1089"
     ],
@@ -9739,7 +9995,7 @@
     "osm_id": 2147034366,
     "uic_ref": "5101142",
     "position": {
-      "lat": 50.3475026993759,
+      "lat": 50.3475027,
       "lng": 17.8755824
     }
   },
@@ -9748,6 +10004,7 @@
     "id": "6f4783a9-911e-4c9b-a22e-4063d0a838c3",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4613"
     ],
@@ -9777,7 +10034,7 @@
     "osm_id": 2147035556,
     "uic_ref": "5103864",
     "position": {
-      "lat": 50.347132899376,
+      "lat": 50.3471329,
       "lng": 17.9988609
     }
   },
@@ -9786,6 +10043,7 @@
     "id": "82e424e2-ecf2-435a-8c25-cdf6f27d8f55",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "3283"
     ],
@@ -9815,7 +10073,7 @@
     "osm_id": 2147036687,
     "uic_ref": "5102854",
     "position": {
-      "lat": 50.3438859993767,
+      "lat": 50.343886,
       "lng": 18.0795633
     }
   },
@@ -9824,6 +10082,7 @@
     "id": "6406a117-969f-4fb4-8224-45055297a63d",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1683"
     ],
@@ -9862,6 +10121,7 @@
     "id": "3065d137-83b8-4d8b-aa90-ca5888c4d1e0",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "1676"
     ],
@@ -9891,8 +10151,8 @@
     "osm_id": 2147041781,
     "uic_ref": "5101593",
     "position": {
-      "lat": 50.3506047993752,
-      "lng": 18.1545116
+      "lat": 50.350645,
+      "lng": 18.154749
     }
   },
   {
@@ -9900,6 +10160,7 @@
     "id": "b5716508-6eed-4792-ad1e-b12e7a8017b6",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "1667"
     ],
@@ -9929,7 +10190,7 @@
     "osm_id": 331033657,
     "uic_ref": "5100119",
     "position": {
-      "lat": 50.3450592993764,
+      "lat": 50.3450593,
       "lng": 18.2046067
     }
   },
@@ -9938,6 +10199,7 @@
     "id": "f0ffd148-566a-408b-a5f5-d1a2eede6b7c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3914"
     ],
@@ -9967,7 +10229,7 @@
     "osm_id": 1876249175,
     "uic_ref": "5103301",
     "position": {
-      "lat": 50.3513781993751,
+      "lat": 50.3513782,
       "lng": 18.3138179
     }
   },
@@ -9976,6 +10238,7 @@
     "id": "48015aef-61be-41de-b5ef-98ea63ca1dc2",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "3663"
     ],
@@ -10005,7 +10268,7 @@
     "osm_id": 2182811812,
     "uic_ref": "5103181",
     "position": {
-      "lat": 50.3666306993718,
+      "lat": 50.3666307,
       "lng": 18.4042187
     }
   },
@@ -10014,6 +10277,7 @@
     "id": "32fad607-540b-4a53-87cd-3800b89370e8",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4433"
     ],
@@ -10043,7 +10307,7 @@
     "osm_id": 1891089442,
     "uic_ref": "5103758",
     "position": {
-      "lat": 50.3579866993737,
+      "lat": 50.3579867,
       "lng": 18.5078476
     }
   },
@@ -10052,6 +10316,7 @@
     "id": "d0f63301-bc9d-49fa-8651-10fcb9e72a24",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "3738"
     ],
@@ -10081,8 +10346,8 @@
     "osm_id": 3045723345,
     "uic_ref": "5103243",
     "position": {
-      "lat": 50.356573399374,
-      "lng": 18.5679477
+      "lat": 50.356604,
+      "lng": 18.5677061
     }
   },
   {
@@ -10090,6 +10355,7 @@
     "id": "efc79278-93ef-479d-935c-c38ff31ac8f5",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1064"
     ],
@@ -10128,6 +10394,7 @@
     "id": "c28e9c1f-3458-473a-a728-96dc5ae57e68",
     "prefix": "SMA",
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4006"
     ],
@@ -10157,8 +10424,8 @@
     "osm_id": 3664638696,
     "uic_ref": null,
     "position": {
-      "lat": 50.2619039993942,
-      "lng": 19.2695961
+      "lat": 50.2616765,
+      "lng": 19.2697409
     }
   },
   {
@@ -10166,6 +10433,7 @@
     "id": "c1f7aa6d-e9cb-470a-9282-ddc72e8ae004",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "872"
     ],
@@ -10195,7 +10463,7 @@
     "osm_id": 2187711691,
     "uic_ref": null,
     "position": {
-      "lat": 50.399150999365,
+      "lat": 50.399151,
       "lng": 20.008372
     }
   },
@@ -10204,6 +10472,7 @@
     "id": "bdf9952f-dcc1-4b8e-b8e6-04280e81ecc8",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "1592"
     ],
@@ -10233,7 +10502,7 @@
     "osm_id": 2060595875,
     "uic_ref": "5101674",
     "position": {
-      "lat": 50.3273491993802,
+      "lat": 50.3273492,
       "lng": 20.0057484
     }
   },
@@ -10242,6 +10511,7 @@
     "id": "1b54b0a9-69fb-4f48-bb63-94ba3c57e224",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "4320"
     ],
@@ -10271,7 +10541,7 @@
     "osm_id": 3419377765,
     "uic_ref": "5103366",
     "position": {
-      "lat": 50.3011509993858,
+      "lat": 50.301151,
       "lng": 20.0246598
     }
   },
@@ -10280,6 +10550,7 @@
     "id": "b2f4ce73-c066-44c0-86db-b80703139fcb",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "3951"
     ],
@@ -10309,7 +10580,7 @@
     "osm_id": 2363719925,
     "uic_ref": "5103489",
     "position": {
-      "lat": 50.2747039993914,
+      "lat": 50.274704,
       "lng": 20.0466789
     }
   },
@@ -10318,6 +10589,7 @@
     "id": "cbf1e3c1-099f-4c9f-b664-73013c62a4a1",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "3924"
     ],
@@ -10347,7 +10619,7 @@
     "osm_id": 48526714,
     "uic_ref": "5103465",
     "position": {
-      "lat": 50.2358729993999,
+      "lat": 50.235873,
       "lng": 20.0763665
     }
   },
@@ -10356,6 +10628,7 @@
     "id": "74afd135-6d24-4782-9745-f99f65c7ff13",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "1173"
     ],
@@ -10385,7 +10658,7 @@
     "osm_id": 2364491515,
     "uic_ref": "5101268",
     "position": {
-      "lat": 50.184650599411,
+      "lat": 50.1846506,
       "lng": 20.0612274
     }
   },
@@ -10394,6 +10667,7 @@
     "id": "61dfe881-369a-4803-a0d2-4e71ea0985fc",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "2468"
     ],
@@ -10423,7 +10697,7 @@
     "osm_id": 1438428007,
     "uic_ref": "5102124",
     "position": {
-      "lat": 50.1626092994159,
+      "lat": 50.1626093,
       "lng": 20.0744995
     }
   },
@@ -10432,6 +10706,7 @@
     "id": "68205f43-0800-4a92-8d5f-9acf7ecfd035",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "71"
     ],
@@ -10461,7 +10736,7 @@
     "osm_id": 2364819174,
     "uic_ref": "5100465",
     "position": {
-      "lat": 50.1465777994194,
+      "lat": 50.1465778,
       "lng": 20.0954104
     }
   },
@@ -10470,6 +10745,7 @@
     "id": "8e64173d-e9ad-484e-95fb-3932135cd942",
     "prefix": null,
     "max_speed": 30,
+    "stop_place": true,
     "ids": [
       "1983",
       "1984"
@@ -10500,8 +10776,8 @@
     "osm_id": 48523754,
     "uic_ref": "5101769",
     "position": {
-      "lat": 50.0903710994319,
-      "lng": 20.1282426
+      "lat": 50.0903614,
+      "lng": 20.1282485
     }
   },
   {
@@ -10509,6 +10785,7 @@
     "id": "d3236b53-3d7d-4321-b84e-b66db9dfebae",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1472"
     ],
@@ -10538,7 +10815,7 @@
     "osm_id": 1587252220,
     "uic_ref": "5100213",
     "position": {
-      "lat": 50.2463322993976,
+      "lat": 50.2463323,
       "lng": 19.2975531
     }
   },
@@ -10547,6 +10824,7 @@
     "id": "b87a7c3d-db78-4000-a6f2-69f9d185bb49",
     "prefix": "Rd",
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "3519"
     ],
@@ -10576,7 +10854,7 @@
     "osm_id": 2758141403,
     "uic_ref": "5103059",
     "position": {
-      "lat": 51.466605699177,
+      "lat": 51.4666057,
       "lng": 20.3973839
     }
   },
@@ -10585,6 +10863,7 @@
     "id": "82b051f5-893b-4359-a673-2ddc3eb49ed7",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "760"
     ],
@@ -10614,7 +10893,7 @@
     "osm_id": 2187734546,
     "uic_ref": "5100917",
     "position": {
-      "lat": 51.4819212991749,
+      "lat": 51.4819213,
       "lng": 20.2582806
     }
   },
@@ -10623,6 +10902,7 @@
     "id": "f88c91a8-2487-4366-b69a-efa5a1e23b3b",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "42"
     ],
@@ -10652,7 +10932,7 @@
     "osm_id": 2758085364,
     "uic_ref": "5100341",
     "position": {
-      "lat": 51.4757967991758,
+      "lat": 51.4757968,
       "lng": 20.1983511
     }
   },
@@ -10661,6 +10941,7 @@
     "id": "4382d2a0-fab0-4046-9361-e680c4d5c3b2",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "4527"
     ],
@@ -10690,7 +10971,7 @@
     "osm_id": 2187738903,
     "uic_ref": "5103792",
     "position": {
-      "lat": 51.5245348991693,
+      "lat": 51.5245349,
       "lng": 20.066018
     }
   },
@@ -10699,6 +10980,7 @@
     "id": "59f6009f-b4ad-482d-9969-37f5162d3a9d",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4526"
     ],
@@ -10728,7 +11010,7 @@
     "osm_id": 92794059,
     "uic_ref": "5100331",
     "position": {
-      "lat": 51.5469371991664,
+      "lat": 51.5469372,
       "lng": 20.0336231
     }
   },
@@ -10737,6 +11019,7 @@
     "id": "e03fe8a5-ca3e-47a2-95a7-e30390f282af",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3908"
     ],
@@ -10766,7 +11049,7 @@
     "osm_id": 3440671925,
     "uic_ref": "5103440",
     "position": {
-      "lat": 51.6021944991594,
+      "lat": 51.6021945,
       "lng": 19.9669659
     }
   },
@@ -10775,6 +11058,7 @@
     "id": "6b81e456-15f8-4b40-badb-eb6f7e6afe87",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "5237"
     ],
@@ -10804,7 +11088,7 @@
     "osm_id": 2489774978,
     "uic_ref": "5104249",
     "position": {
-      "lat": 51.6335453991555,
+      "lat": 51.6335454,
       "lng": 19.9335709
     }
   },
@@ -10813,6 +11097,7 @@
     "id": "d7ffb970-bdb0-4d90-ba42-d9bbcaa82e21",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "5146"
     ],
@@ -10842,7 +11127,7 @@
     "osm_id": 2489765976,
     "uic_ref": "5104206",
     "position": {
-      "lat": 51.6606448991523,
+      "lat": 51.6606449,
       "lng": 19.9046367
     }
   },
@@ -10851,6 +11136,7 @@
     "id": "935a61f8-d810-43fa-9f00-bcbffacf57d5",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5377"
     ],
@@ -10877,11 +11163,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 11662801173,
+    "osm_id": 2639477159,
     "uic_ref": "5104541",
     "position": {
-      "lat": 51.7301386,
-      "lng": 19.7862284
+      "lat": 51.7301436,
+      "lng": 19.7861951
     }
   },
   {
@@ -10889,6 +11175,7 @@
     "id": "c28d1efd-778e-4482-85da-9e5769a158b4",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2628"
     ],
@@ -10918,7 +11205,7 @@
     "osm_id": 3460197278,
     "uic_ref": null,
     "position": {
-      "lat": 51.7037452991472,
+      "lat": 51.7037453,
       "lng": 19.8650585
     }
   },
@@ -10927,6 +11214,7 @@
     "id": "a233cd7e-84fa-437c-823d-97cf7e39fd91",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "2452"
     ],
@@ -10956,7 +11244,7 @@
     "osm_id": 2504014859,
     "uic_ref": "5102082",
     "position": {
-      "lat": 51.7297930991443,
+      "lat": 51.7297931,
       "lng": 19.5947679
     }
   },
@@ -10965,6 +11253,7 @@
     "id": "f02c98b9-56b3-4c11-bcf9-1299db8a2720",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2425"
     ],
@@ -10994,7 +11283,7 @@
     "osm_id": 1494055816,
     "uic_ref": "5100038",
     "position": {
-      "lat": 51.7264088991446,
+      "lat": 51.7264089,
       "lng": 19.4841953
     }
   },
@@ -11003,6 +11292,7 @@
     "id": "52fa80fc-2452-49dd-b074-97e2e588a6b2",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "3213"
     ],
@@ -11032,7 +11322,7 @@
     "osm_id": 1744509719,
     "uic_ref": "5102743",
     "position": {
-      "lat": 50.6787661993085,
+      "lat": 50.6787662,
       "lng": 16.7732632
     }
   },
@@ -11041,6 +11331,7 @@
     "id": "7e918d26-5010-44a0-a978-86afcfd07a71",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "5272"
     ],
@@ -11070,7 +11361,7 @@
     "osm_id": 3681874597,
     "uic_ref": "5104387",
     "position": {
-      "lat": 50.5972984993245,
+      "lat": 50.5972985,
       "lng": 16.812773
     }
   },
@@ -11079,6 +11370,7 @@
     "id": "7ac44672-5bb7-42b5-b903-48effa7f9782",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4708"
     ],
@@ -11108,7 +11400,7 @@
     "osm_id": 3416823373,
     "uic_ref": "5100172",
     "position": {
-      "lat": 52.2590954990988,
+      "lat": 52.2590955,
       "lng": 20.9923588
     }
   },
@@ -11117,6 +11409,7 @@
     "id": "1d7c65cd-28c2-4b34-bdb2-21462c139acd",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "5472"
     ],
@@ -11146,8 +11439,8 @@
     "osm_id": 6944998109,
     "uic_ref": "5103484",
     "position": {
-      "lat": 52.256034699099,
-      "lng": 20.9722548
+      "lat": 52.2560751,
+      "lng": 20.9723698
     }
   },
   {
@@ -11155,6 +11448,7 @@
     "id": "19a045a2-f542-4bdf-820a-5c0bcbd2d011",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4740"
     ],
@@ -11184,7 +11478,7 @@
     "osm_id": 6002636000,
     "uic_ref": "5103482",
     "position": {
-      "lat": 52.2462108990996,
+      "lat": 52.2462109,
       "lng": 20.9590105
     }
   },
@@ -11193,6 +11487,7 @@
     "id": "427ad489-c519-4d22-b239-de327ce3350a",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4744"
     ],
@@ -11222,7 +11517,7 @@
     "osm_id": 3437806988,
     "uic_ref": "5103930",
     "position": {
-      "lat": 52.2391697991,
+      "lat": 52.2391698,
       "lng": 20.9584688
     }
   },
@@ -11231,6 +11526,7 @@
     "id": "f1684518-4413-490e-ac96-7a38bb1c7816",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4815"
     ],
@@ -11260,8 +11556,8 @@
     "osm_id": 3437788326,
     "uic_ref": "5104156",
     "position": {
-      "lat": 52.2299992991006,
-      "lng": 20.9578418
+      "lat": 52.2297939,
+      "lng": 20.9578322
     }
   },
   {
@@ -11269,6 +11565,7 @@
     "id": "60e231c2-85c3-44ab-9684-8fd8ef66561d",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "4719"
     ],
@@ -11307,6 +11604,7 @@
     "id": "a0453219-138c-4b07-a1ac-57d8afd33af3",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "4569"
     ],
@@ -11336,7 +11634,7 @@
     "osm_id": 6093920532,
     "uic_ref": "5100072",
     "position": {
-      "lat": 50.1540181994178,
+      "lat": 50.1540182,
       "lng": 19.4531632
     }
   },
@@ -11345,6 +11643,7 @@
     "id": "d1fd3ba0-1ec9-4fc7-963f-1c3326605831",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "67"
     ],
@@ -11374,7 +11673,7 @@
     "osm_id": 1836363894,
     "uic_ref": "5100363",
     "position": {
-      "lat": 50.1790490994123,
+      "lat": 50.1790491,
       "lng": 19.3834057
     }
   },
@@ -11383,6 +11682,7 @@
     "id": "31243441-4538-400a-9589-db10ce53f45e",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "1470"
     ],
@@ -11412,7 +11712,7 @@
     "osm_id": 599222835,
     "uic_ref": "5101482",
     "position": {
-      "lat": 50.2129796994048,
+      "lat": 50.2129797,
       "lng": 19.3370763
     }
   },
@@ -11421,6 +11721,7 @@
     "id": "7f491ece-85a8-4288-bdc2-17a15f4e1805",
     "prefix": "MW",
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2762"
     ],
@@ -11450,7 +11751,7 @@
     "osm_id": 539118751,
     "uic_ref": "5100175",
     "position": {
-      "lat": 50.2378388993994,
+      "lat": 50.2378389,
       "lng": 19.1416677
     }
   },
@@ -11459,6 +11760,7 @@
     "id": "93d4e9c2-eff6-48d6-8a51-dc83d7e809e7",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3995"
     ],
@@ -11488,7 +11790,7 @@
     "osm_id": 3396120384,
     "uic_ref": null,
     "position": {
-      "lat": 50.2418808993986,
+      "lat": 50.2418809,
       "lng": 19.1977897
     }
   },
@@ -11497,6 +11799,7 @@
     "id": "25faa517-01d4-482b-b06d-dd7ea31d36d3",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "858"
     ],
@@ -11526,7 +11829,7 @@
     "osm_id": 599222836,
     "uic_ref": "5101002",
     "position": {
-      "lat": 50.1404707994208,
+      "lat": 50.1404708,
       "lng": 19.5206512
     }
   },
@@ -11535,6 +11838,7 @@
     "id": "fa2968eb-f355-43c4-83ba-51111dc9a794",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "5004"
     ],
@@ -11564,7 +11868,7 @@
     "osm_id": 271736515,
     "uic_ref": "5104097",
     "position": {
-      "lat": 50.1308587994229,
+      "lat": 50.1308588,
       "lng": 19.5771039
     }
   },
@@ -11573,6 +11877,7 @@
     "id": "ac21c7f2-8749-456a-84bc-96ee7b482f11",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "2088",
       "2089"
@@ -11603,7 +11908,7 @@
     "osm_id": 1661872853,
     "uic_ref": "5101863",
     "position": {
-      "lat": 50.1307694994229,
+      "lat": 50.1307695,
       "lng": 19.6361612
     }
   },
@@ -11612,6 +11917,7 @@
     "id": "970fdce0-740b-486d-ab33-bb66f8c5ec8d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3650"
     ],
@@ -11641,7 +11947,7 @@
     "osm_id": 3293098653,
     "uic_ref": "5103176",
     "position": {
-      "lat": 50.1188182994256,
+      "lat": 50.1188183,
       "lng": 19.7193337
     }
   },
@@ -11650,6 +11956,7 @@
     "id": "4ee8bc40-677b-48e0-b196-219875abc94e",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5163"
     ],
@@ -11679,8 +11986,8 @@
     "osm_id": 482252685,
     "uic_ref": "5104268",
     "position": {
-      "lat": 50.1178615994258,
-      "lng": 19.7985948
+      "lat": 50.1180111,
+      "lng": 19.7983574
     }
   },
   {
@@ -11688,6 +11995,7 @@
     "id": "d145c84f-44be-4306-9aca-36274e79dea9",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1951"
     ],
@@ -11726,6 +12034,7 @@
     "id": "a1b46356-7764-4796-a574-492adcabef9e",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1982"
     ],
@@ -11755,8 +12064,8 @@
     "osm_id": 1191001097,
     "uic_ref": "5101673",
     "position": {
-      "lat": 50.0912289994317,
-      "lng": 19.8444108
+      "lat": 50.091177,
+      "lng": 19.8444739
     }
   },
   {
@@ -11764,6 +12073,7 @@
     "id": "6a94abda-3132-44c6-a955-facae2024ded",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1971",
       "1973"
@@ -11794,8 +12104,8 @@
     "osm_id": 41943557,
     "uic_ref": "5101689",
     "position": {
-      "lat": 50.0835966994335,
-      "lng": 19.8596997
+      "lat": 50.0835874,
+      "lng": 19.8597855
     }
   },
   {
@@ -11803,6 +12113,7 @@
     "id": "3e9d6076-55cc-456a-8ea5-287261559508",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "1950"
     ],
@@ -11832,8 +12143,8 @@
     "osm_id": 6519017988,
     "uic_ref": "5104798",
     "position": {
-      "lat": 50.0828928994336,
-      "lng": 19.8927105
+      "lat": 50.0828345,
+      "lng": 19.8923031
     }
   },
   {
@@ -11841,6 +12152,7 @@
     "id": "59ff86f4-bdb5-4cd3-aa00-4ceecb009a8a",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "1960",
       "5465"
@@ -11880,6 +12192,7 @@
     "id": "71a5408e-e81d-4d57-b27a-1bb43ec32ce3",
     "prefix": "DTA",
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "728"
     ],
@@ -11909,7 +12222,7 @@
     "osm_id": 9258510861,
     "uic_ref": null,
     "position": {
-      "lat": 50.3195640993818,
+      "lat": 50.3195641,
       "lng": 19.3288762
     }
   },
@@ -11918,6 +12231,7 @@
     "id": "de52770d-d382-4c85-8884-f5ab6e7cc16c",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "676"
     ],
@@ -11947,7 +12261,7 @@
     "osm_id": 3727624805,
     "uic_ref": null,
     "position": {
-      "lat": 50.7526316992943,
+      "lat": 50.7526317,
       "lng": 19.190229
     }
   },
@@ -11956,6 +12270,7 @@
     "id": "91fece59-14ec-426a-937f-822e9e612c41",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2100"
     ],
@@ -11985,7 +12300,7 @@
     "osm_id": 2151490923,
     "uic_ref": "5101887",
     "position": {
-      "lat": 51.0261459992449,
+      "lat": 51.026146,
       "lng": 18.2017595
     }
   },
@@ -11994,6 +12309,7 @@
     "id": "feda69b8-ad03-49df-82a2-1aeb6bd25aa5",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "392"
     ],
@@ -12023,7 +12339,7 @@
     "osm_id": 1508458390,
     "uic_ref": "5100643",
     "position": {
-      "lat": 51.1137154992303,
+      "lat": 51.1137155,
       "lng": 18.1998832
     }
   },
@@ -12032,6 +12348,7 @@
     "id": "7a804ae0-15ee-4c88-b0eb-b85e66dff0a9",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1866"
     ],
@@ -12061,7 +12378,7 @@
     "osm_id": 2151489736,
     "uic_ref": "5101815",
     "position": {
-      "lat": 51.1656635992218,
+      "lat": 51.1656636,
       "lng": 18.1455528
     }
   },
@@ -12070,6 +12387,7 @@
     "id": "e2bbfb74-8df7-473b-9208-290aa91a8b08",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2389"
     ],
@@ -12099,7 +12417,7 @@
     "osm_id": 2151489190,
     "uic_ref": "5102043",
     "position": {
-      "lat": 51.2171845992136,
+      "lat": 51.2171846,
       "lng": 18.0915432
     }
   },
@@ -12108,6 +12426,7 @@
     "id": "e2ec8a12-9eea-43ea-a57b-308032126e94",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1688"
     ],
@@ -12134,11 +12453,11 @@
       ]
     ],
     "country": "POL",
-    "osm_id": 1508480102,
+    "osm_id": 12529059962,
     "uic_ref": "5100023",
     "position": {
-      "lat": 51.2918344992021,
-      "lng": 18.0009731
+      "lat": 51.2919541,
+      "lng": 18.0014127
     }
   },
   {
@@ -12146,6 +12465,7 @@
     "id": "b7edc762-cef6-4fde-858a-d3640162ce80",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1303"
     ],
@@ -12175,8 +12495,8 @@
     "osm_id": 3964538466,
     "uic_ref": null,
     "position": {
-      "lat": 51.3046998992002,
-      "lng": 17.9931001
+      "lat": 51.304342,
+      "lng": 17.9933565
     }
   },
   {
@@ -12184,6 +12504,7 @@
     "id": "54f65ee9-65dc-44d1-82f1-dbaa1da87b1a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "826"
     ],
@@ -12213,7 +12534,7 @@
     "osm_id": 2037348225,
     "uic_ref": "5100970",
     "position": {
-      "lat": 51.3443615991943,
+      "lat": 51.3443616,
       "lng": 17.995327
     }
   },
@@ -12222,6 +12543,7 @@
     "id": "9ae8200c-8aae-4bab-8948-7342458f6552",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3067"
     ],
@@ -12251,7 +12573,7 @@
     "osm_id": 3194983999,
     "uic_ref": "5100223",
     "position": {
-      "lat": 51.4295171991821,
+      "lat": 51.4295172,
       "lng": 17.9405633
     }
   },
@@ -12260,6 +12582,7 @@
     "id": "5fd943fa-5bdf-4c72-b105-48a008e57096",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "41"
     ],
@@ -12289,7 +12612,7 @@
     "osm_id": 2151484414,
     "uic_ref": "5100342",
     "position": {
-      "lat": 51.5124975991709,
+      "lat": 51.5124976,
       "lng": 17.8611802
     }
   },
@@ -12298,6 +12621,7 @@
     "id": "16276bef-f0cd-42ca-bc5f-f756a01ca92a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3421"
     ],
@@ -12327,7 +12651,7 @@
     "osm_id": 3194987936,
     "uic_ref": "5102996",
     "position": {
-      "lat": 51.5699570991634,
+      "lat": 51.5699571,
       "lng": 17.8299969
     }
   },
@@ -12336,6 +12660,7 @@
     "id": "3103fafe-98d0-454d-a289-59a7cc47c9a3",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3060"
     ],
@@ -12365,7 +12690,7 @@
     "osm_id": 528526130,
     "uic_ref": "5100047",
     "position": {
-      "lat": 51.6492286991536,
+      "lat": 51.6492287,
       "lng": 17.8052356
     }
   },
@@ -12374,6 +12699,7 @@
     "id": "4e78209a-809a-4486-be41-54dcae28b8ba",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "212"
     ],
@@ -12403,7 +12729,7 @@
     "osm_id": 2003323592,
     "uic_ref": "5100499",
     "position": {
-      "lat": 51.7389469991432,
+      "lat": 51.738947,
       "lng": 17.7924013
     }
   },
@@ -12412,6 +12738,7 @@
     "id": "b8d13e3e-d105-4b5e-abbc-170ba941a652",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "327"
     ],
@@ -12441,7 +12768,7 @@
     "osm_id": 2003324668,
     "uic_ref": "5100558",
     "position": {
-      "lat": 51.7944960991372,
+      "lat": 51.7944961,
       "lng": 17.7743076
     }
   },
@@ -12450,6 +12777,7 @@
     "id": "ff6e1867-4e00-4118-90c6-55cb39df1a5b",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4435"
     ],
@@ -12479,7 +12807,7 @@
     "osm_id": 3970953178,
     "uic_ref": "5103773",
     "position": {
-      "lat": 51.8409611991324,
+      "lat": 51.8409612,
       "lng": 17.7561366
     }
   },
@@ -12488,6 +12816,7 @@
     "id": "168fbe8f-5665-414c-b509-3340dd291c0c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3236"
     ],
@@ -12517,7 +12846,7 @@
     "osm_id": 2002363570,
     "uic_ref": "5100192",
     "position": {
-      "lat": 51.8925871991273,
+      "lat": 51.8925872,
       "lng": 17.7322175
     }
   },
@@ -12526,6 +12855,7 @@
     "id": "977ae90b-f043-436d-946c-129a9ae11baf",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1897"
     ],
@@ -12555,7 +12885,7 @@
     "osm_id": 2003325756,
     "uic_ref": "5101806",
     "position": {
-      "lat": 51.9146046991251,
+      "lat": 51.9146047,
       "lng": 17.6489564
     }
   },
@@ -12564,6 +12894,7 @@
     "id": "8bfe0280-80be-4b62-8827-ba6a7f462d36",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4966"
     ],
@@ -12593,7 +12924,7 @@
     "osm_id": 826538420,
     "uic_ref": "5104168",
     "position": {
-      "lat": 51.9360278991231,
+      "lat": 51.9360279,
       "lng": 17.5627832
     }
   },
@@ -12602,6 +12933,7 @@
     "id": "470c2847-ba1c-4ae9-b5c9-2896ffcedae7",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1417"
     ],
@@ -12631,7 +12963,7 @@
     "osm_id": 3203653735,
     "uic_ref": "5100016",
     "position": {
-      "lat": 51.9683098991202,
+      "lat": 51.9683099,
       "lng": 17.4947192
     }
   },
@@ -12640,6 +12972,7 @@
     "id": "8c9c3488-eafd-428a-afd8-eaca24fea08c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2609"
     ],
@@ -12669,7 +13002,7 @@
     "osm_id": 826919336,
     "uic_ref": "5102385",
     "position": {
-      "lat": 52.0231580991155,
+      "lat": 52.0231581,
       "lng": 17.4405874
     }
   },
@@ -12678,6 +13011,7 @@
     "id": "a3d7502b-d26a-4efa-99c1-1c123843c235",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "476"
     ],
@@ -12707,7 +13041,7 @@
     "osm_id": 826919348,
     "uic_ref": "5100788",
     "position": {
-      "lat": 52.0702476991117,
+      "lat": 52.0702477,
       "lng": 17.3495687
     }
   },
@@ -12716,6 +13050,7 @@
     "id": "093008a9-8e06-4bd0-b45d-a1c9b53a23f3",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4203"
     ],
@@ -12745,7 +13080,7 @@
     "osm_id": 826919358,
     "uic_ref": "5103672",
     "position": {
-      "lat": 52.1386952991066,
+      "lat": 52.1386953,
       "lng": 17.3088147
     }
   },
@@ -12754,6 +13089,7 @@
     "id": "2b5f93fb-a6ad-4a23-9a62-f1463713effa",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4391"
     ],
@@ -12783,7 +13119,7 @@
     "osm_id": 253705465,
     "uic_ref": "5103572",
     "position": {
-      "lat": 52.2183301991013,
+      "lat": 52.2183302,
       "lng": 17.2741954
     }
   },
@@ -12792,6 +13128,7 @@
     "id": "705efcaa-7251-423c-8b71-40330a55e854",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3187"
     ],
@@ -12821,7 +13158,7 @@
     "osm_id": 253705452,
     "uic_ref": "5102997",
     "position": {
-      "lat": 52.2633302990986,
+      "lat": 52.2633303,
       "lng": 17.1573486
     }
   },
@@ -12830,6 +13167,7 @@
     "id": "2e215d67-0f30-4b08-a0e3-823ff2434a8d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "942"
     ],
@@ -12859,7 +13197,7 @@
     "osm_id": 253705450,
     "uic_ref": "5101058",
     "position": {
-      "lat": 52.3019626990964,
+      "lat": 52.3019627,
       "lng": 17.0455008
     }
   },
@@ -12868,6 +13206,7 @@
     "id": "5a3c7160-6437-4ac5-8611-9a81b784caaa",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3341"
     ],
@@ -12897,7 +13236,7 @@
     "osm_id": 10217020351,
     "uic_ref": "5102841",
     "position": {
-      "lat": 52.3416968990944,
+      "lat": 52.3416969,
       "lng": 16.9755354
     }
   },
@@ -12906,6 +13245,7 @@
     "id": "72197b38-f65d-43c7-9e2d-598e28608875",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3348"
     ],
@@ -12935,7 +13275,7 @@
     "osm_id": 10217223540,
     "uic_ref": "5100226",
     "position": {
-      "lat": 52.3662311990933,
+      "lat": 52.3662312,
       "lng": 16.9342759
     }
   },
@@ -12944,6 +13284,7 @@
     "id": "6236677a-3dc7-454b-aa9c-ef736b5d2c0f",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3332"
     ],
@@ -12973,7 +13314,7 @@
     "osm_id": 646734838,
     "uic_ref": "5100081",
     "position": {
-      "lat": 52.4016268990917,
+      "lat": 52.4016269,
       "lng": 16.9115788
     }
   },
@@ -12982,6 +13323,7 @@
     "id": "943c1df7-d80c-4cd1-a151-46ba7672b07a",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2144"
     ],
@@ -13011,7 +13353,7 @@
     "osm_id": 3312550572,
     "uic_ref": "5100033",
     "position": {
-      "lat": 53.5119983991207,
+      "lat": 53.5119984,
       "lng": 23.6424065
     }
   },
@@ -13020,6 +13362,7 @@
     "id": "c8d14b06-6c24-4346-a283-ce12887e464c",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3971"
     ],
@@ -13049,7 +13392,7 @@
     "osm_id": 3309512444,
     "uic_ref": "5100132",
     "position": {
-      "lat": 53.4031556991108,
+      "lat": 53.4031557,
       "lng": 23.5066903
     }
   },
@@ -13058,6 +13401,7 @@
     "id": "19c53e2f-f43e-44f1-9459-99c88f0eb07c",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2488"
     ],
@@ -13087,8 +13431,8 @@
     "osm_id": 3308220992,
     "uic_ref": "5102295",
     "position": {
-      "lat": 53.3314850991051,
-      "lng": 23.3179722
+      "lat": 53.33172,
+      "lng": 23.3181155
     }
   },
   {
@@ -13096,6 +13440,7 @@
     "id": "8620dbd3-7075-43cb-903f-dc4e8e65ac02",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "610"
     ],
@@ -13125,8 +13470,8 @@
     "osm_id": 3305010194,
     "uic_ref": "5100853",
     "position": {
-      "lat": 53.3058639991033,
-      "lng": 23.2798443
+      "lat": 53.3057028,
+      "lng": 23.2797591
     }
   },
   {
@@ -13134,6 +13479,7 @@
     "id": "53097809-c189-40f2-8d26-1c8e34b6b026",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4848"
     ],
@@ -13163,8 +13509,8 @@
     "osm_id": 1827888170,
     "uic_ref": "5103938",
     "position": {
-      "lat": 53.1978734990964,
-      "lng": 23.1767524
+      "lat": 53.198325,
+      "lng": 23.1770421
     }
   },
   {
@@ -13172,6 +13518,7 @@
     "id": "e53b8ac7-94b1-48ee-9e88-8d4c71f4d58f",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "159"
     ],
@@ -13201,8 +13548,8 @@
     "osm_id": 9692651458,
     "uic_ref": null,
     "position": {
-      "lat": 53.1310591,
-      "lng": 23.1301065
+      "lat": 53.1310559,
+      "lng": 23.1301019
     }
   },
   {
@@ -13210,6 +13557,7 @@
     "id": "7b273047-409a-42a9-885a-1e0cd82e7d2d",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "63"
     ],
@@ -13239,7 +13587,7 @@
     "osm_id": 3296495083,
     "uic_ref": "5100360",
     "position": {
-      "lat": 53.0465825990894,
+      "lat": 53.0465826,
       "lng": 22.982717
     }
   },
@@ -13248,6 +13596,7 @@
     "id": "06e14305-2098-420c-a1f4-85c1a89ec9cc",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2356"
     ],
@@ -13277,8 +13626,8 @@
     "osm_id": 3293181207,
     "uic_ref": "5100127",
     "position": {
-      "lat": 52.9903413990876,
-      "lng": 22.8842468
+      "lat": 52.9899169,
+      "lng": 22.8835129
     }
   },
   {
@@ -13286,6 +13635,7 @@
     "id": "7ef25bd4-62e8-4326-95e8-8b56852eff60",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "3478"
     ],
@@ -13315,7 +13665,7 @@
     "osm_id": 1238299399,
     "uic_ref": "5103048",
     "position": {
-      "lat": 52.929589699086,
+      "lat": 52.9295897,
       "lng": 22.7116649
     }
   },
@@ -13324,6 +13674,7 @@
     "id": "6e317792-0927-4157-988c-2e6139b9faab",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4340"
     ],
@@ -13353,7 +13704,7 @@
     "osm_id": 3280154778,
     "uic_ref": "5100148",
     "position": {
-      "lat": 52.8702563990849,
+      "lat": 52.8702564,
       "lng": 22.5414659
     }
   },
@@ -13362,6 +13713,7 @@
     "id": "0dbf9a49-59f0-4a44-b577-5f9267aa26e1",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "693"
     ],
@@ -13391,7 +13743,7 @@
     "osm_id": 3277530800,
     "uic_ref": "5100097",
     "position": {
-      "lat": 52.7997432990843,
+      "lat": 52.7997433,
       "lng": 22.3421671
     }
   },
@@ -13400,6 +13752,7 @@
     "id": "7c01d6e5-857a-42a3-815c-e55fbbd6a1d9",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "1721"
     ],
@@ -13429,7 +13782,7 @@
     "osm_id": 3277530802,
     "uic_ref": "5101602",
     "position": {
-      "lat": 52.7439788990842,
+      "lat": 52.7439789,
       "lng": 22.178791
     }
   },
@@ -13438,6 +13791,7 @@
     "id": "6a0347ae-b102-496a-bd4c-b6b09350cce9",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2526"
     ],
@@ -13467,7 +13821,7 @@
     "osm_id": 3275141671,
     "uic_ref": "5100087",
     "position": {
-      "lat": 52.6946016990844,
+      "lat": 52.6946017,
       "lng": 22.0348575
     }
   },
@@ -13476,6 +13830,7 @@
     "id": "91a4a27e-335f-4881-b1c7-3e48a52c9d07",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "2393"
     ],
@@ -13505,7 +13860,7 @@
     "osm_id": 1596777158,
     "uic_ref": "5102073",
     "position": {
-      "lat": 52.5339647990871,
+      "lat": 52.5339648,
       "lng": 21.6875326
     }
   },
@@ -13514,6 +13869,7 @@
     "id": "38c108aa-9776-4b0a-b4fe-f77fc7708c66",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4517"
     ],
@@ -13543,8 +13899,8 @@
     "osm_id": 2479742065,
     "uic_ref": "5103787",
     "position": {
-      "lat": 52.4304389990905,
-      "lng": 21.4337187
+      "lat": 52.4311161,
+      "lng": 21.4354004
     }
   },
   {
@@ -13552,6 +13908,7 @@
     "id": "11b9b531-8aa3-4fba-b16c-4aa8e0e5bd84",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "5020",
       "5023"
@@ -13582,8 +13939,8 @@
     "osm_id": 1892481875,
     "uic_ref": "5104103",
     "position": {
-      "lat": 52.3466968990942,
-      "lng": 21.2381996
+      "lat": 52.3466298,
+      "lng": 21.2380648
     }
   },
   {
@@ -13591,6 +13948,7 @@
     "id": "ca4c59de-d323-49bf-af0e-9bb0df2b8d61",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "5333"
     ],
@@ -13620,8 +13978,8 @@
     "osm_id": 3266122070,
     "uic_ref": "5104322",
     "position": {
-      "lat": 52.3114581990959,
-      "lng": 21.1568511
+      "lat": 52.3118146,
+      "lng": 21.1576638
     }
   },
   {
@@ -13629,6 +13987,7 @@
     "id": "13baf9e2-70a2-4fb7-bc18-8d14bbf72f1e",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "4795"
     ],
@@ -13658,7 +14017,7 @@
     "osm_id": 3401904483,
     "uic_ref": "5103922",
     "position": {
-      "lat": 52.2571083990989,
+      "lat": 52.2571084,
       "lng": 21.158478
     }
   },
@@ -13667,6 +14026,7 @@
     "id": "f38d6268-f011-41e4-a2a2-ee8c44f19c77",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4825"
     ],
@@ -13696,7 +14056,7 @@
     "osm_id": 9060585849,
     "uic_ref": null,
     "position": {
-      "lat": 52.2594251990988,
+      "lat": 52.2594252,
       "lng": 21.0878386
     }
   },
@@ -13705,6 +14065,7 @@
     "id": "b0d84d5d-574d-457e-9157-5ddd4d55b6ff",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4762",
       "4787",
@@ -13736,7 +14097,7 @@
     "osm_id": 3438082486,
     "uic_ref": "5104161",
     "position": {
-      "lat": 52.2775106990978,
+      "lat": 52.2775107,
       "lng": 21.0223526
     }
   },
@@ -13745,6 +14106,7 @@
     "id": "43cd0568-9a7a-4b28-bad6-c63d03d4f02d",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4735"
     ],
@@ -13774,7 +14136,7 @@
     "osm_id": 9056685266,
     "uic_ref": null,
     "position": {
-      "lat": 52.2364463991002,
+      "lat": 52.2364464,
       "lng": 20.923998
     }
   },
@@ -13783,6 +14145,7 @@
     "id": "d5c31e0b-d1a2-4dd5-83b4-c0ec4f98be99",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3594"
     ],
@@ -13812,7 +14175,7 @@
     "osm_id": 2713790979,
     "uic_ref": "5103144",
     "position": {
-      "lat": 51.6675457991514,
+      "lat": 51.6675458,
       "lng": 19.780676
     }
   },
@@ -13821,6 +14184,7 @@
     "id": "c822c23e-1cc8-4121-8a60-4a64f91865d2",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "60"
     ],
@@ -13850,7 +14214,7 @@
     "osm_id": 2183718976,
     "uic_ref": "5100372",
     "position": {
-      "lat": 51.5369263991676,
+      "lat": 51.5369264,
       "lng": 19.7167575
     }
   },
@@ -13859,6 +14223,7 @@
     "id": "8d456c56-773a-4f60-9b17-687bb63d9955",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3223"
     ],
@@ -13888,7 +14253,7 @@
     "osm_id": 1864585459,
     "uic_ref": "5100190",
     "position": {
-      "lat": 51.4104652991848,
+      "lat": 51.4104653,
       "lng": 19.6846413
     }
   },
@@ -13897,6 +14262,7 @@
     "id": "41027dc6-90a0-4d48-b04f-dc63f5aa9441",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3617"
     ],
@@ -13926,7 +14292,7 @@
     "osm_id": 634988098,
     "uic_ref": "5103160",
     "position": {
-      "lat": 51.3015855992007,
+      "lat": 51.3015856,
       "lng": 19.6601416
     }
   },
@@ -13935,6 +14301,7 @@
     "id": "96688945-87ef-4437-9dc3-45bb86ab535e",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1153"
     ],
@@ -13964,7 +14331,7 @@
     "osm_id": 634988100,
     "uic_ref": "5101324",
     "position": {
-      "lat": 51.2182937992134,
+      "lat": 51.2182938,
       "lng": 19.603241
     }
   },
@@ -13973,6 +14340,7 @@
     "id": "9ad2a53c-e60a-43b2-93a3-dbf79e4bda16",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1140"
     ],
@@ -14002,7 +14370,7 @@
     "osm_id": 2183750243,
     "uic_ref": "5101226",
     "position": {
-      "lat": 51.1635620992221,
+      "lat": 51.1635621,
       "lng": 19.4867937
     }
   },
@@ -14011,6 +14379,7 @@
     "id": "b9abdae8-e170-4577-b64c-c5a29b6a6bea",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3509"
     ],
@@ -14040,7 +14409,7 @@
     "osm_id": 3455626075,
     "uic_ref": "5100088",
     "position": {
-      "lat": 51.0745338992367,
+      "lat": 51.0745339,
       "lng": 19.4376128
     }
   },
@@ -14049,6 +14418,7 @@
     "id": "de6bc4f7-50aa-4df5-837d-1e64e1c41c4d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4890"
     ],
@@ -14078,7 +14448,7 @@
     "osm_id": 2183780373,
     "uic_ref": "5103972",
     "position": {
-      "lat": 50.9810383992527,
+      "lat": 50.9810384,
       "lng": 19.367218
     }
   },
@@ -14087,6 +14457,7 @@
     "id": "dc142ec5-f630-48d1-b929-35187452a727",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1769"
     ],
@@ -14116,7 +14487,7 @@
     "osm_id": 3455641806,
     "uic_ref": "5101672",
     "position": {
-      "lat": 50.9159862992642,
+      "lat": 50.9159863,
       "lng": 19.3414573
     }
   },
@@ -14125,6 +14496,7 @@
     "id": "618fad0c-9a25-4949-876a-201033dc489d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3659"
     ],
@@ -14154,7 +14526,7 @@
     "osm_id": 3233257675,
     "uic_ref": "5103109",
     "position": {
-      "lat": 50.878208899271,
+      "lat": 50.8782089,
       "lng": 19.2322503
     }
   },
@@ -14163,6 +14535,7 @@
     "id": "85afb2d2-2d92-4544-a0e8-c7a08a33807b",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "284"
     ],
@@ -14192,8 +14565,8 @@
     "osm_id": 2183586936,
     "uic_ref": "5100559",
     "position": {
-      "lat": 50.665603099311,
-      "lng": 18.9012261
+      "lat": 50.6653812,
+      "lng": 18.9014251
     }
   },
   {
@@ -14201,6 +14574,7 @@
     "id": "e1bc93e7-ab08-4909-a2b4-faac9b7fa2c3",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": true,
     "ids": [
       "4153"
     ],
@@ -14230,8 +14604,8 @@
     "osm_id": 3205261568,
     "uic_ref": "5103359",
     "position": {
-      "lat": 50.6180738993204,
-      "lng": 18.8999632
+      "lat": 50.6184205,
+      "lng": 18.9000352
     }
   },
   {
@@ -14239,6 +14613,7 @@
     "id": "82be8e33-1c78-457d-8e5c-6aa49d98e1f9",
     "prefix": null,
     "max_speed": 30,
+    "stop_place": false,
     "ids": [
       "1558"
     ],
@@ -14268,7 +14643,7 @@
     "osm_id": 652833663,
     "uic_ref": "5100117",
     "position": {
-      "lat": 50.5663492993307,
+      "lat": 50.5663493,
       "lng": 18.8882607
     }
   },
@@ -14277,6 +14652,7 @@
     "id": "9437057b-58ec-45fc-bcba-ec5a2c1c7b6b",
     "prefix": null,
     "max_speed": 30,
+    "stop_place": true,
     "ids": [
       "5358"
     ],
@@ -14306,7 +14682,7 @@
     "osm_id": 2172480454,
     "uic_ref": "5104403",
     "position": {
-      "lat": 50.6094000993221,
+      "lat": 50.6094001,
       "lng": 22.9840181
     }
   },
@@ -14315,6 +14691,7 @@
     "id": "c87e1823-799e-4e1d-bae3-c7e75429255e",
     "prefix": null,
     "max_speed": 30,
+    "stop_place": false,
     "ids": [
       "4469",
       "4473"
@@ -14345,7 +14722,7 @@
     "osm_id": 313433612,
     "uic_ref": "5100074",
     "position": {
-      "lat": 50.4460324993552,
+      "lat": 50.4460325,
       "lng": 18.8644041
     }
   },
@@ -14354,6 +14731,7 @@
     "id": "ea9c7244-001a-4f6f-a9fe-09a84c099dd2",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "399"
     ],
@@ -14383,7 +14761,7 @@
     "osm_id": 3437310369,
     "uic_ref": "5100005",
     "position": {
-      "lat": 53.1352904990932,
+      "lat": 53.1352905,
       "lng": 17.991601
     }
   },
@@ -14392,6 +14770,7 @@
     "id": "45a3a791-e105-415c-8f92-3adca4a2c6d5",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "408"
     ],
@@ -14430,6 +14809,7 @@
     "id": "1c971b5d-a212-493d-93cc-1968b98c1c92",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "406"
     ],
@@ -14459,7 +14839,7 @@
     "osm_id": 589834220,
     "uic_ref": "5100648",
     "position": {
-      "lat": 53.1278961990928,
+      "lat": 53.1278962,
       "lng": 18.0838582
     }
   },
@@ -14468,6 +14848,7 @@
     "id": "866c2a31-5931-4b00-a112-00fb034b0314",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "403"
     ],
@@ -14506,6 +14887,7 @@
     "id": "7f3a5532-53c2-4510-ba79-b4d7b0b7b463",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "404"
     ],
@@ -14544,6 +14926,7 @@
     "id": "18780e83-7f91-4852-8f68-48fba03b84dd",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3977"
     ],
@@ -14573,7 +14956,7 @@
     "osm_id": 2154830748,
     "uic_ref": "5103527",
     "position": {
-      "lat": 53.0782443990907,
+      "lat": 53.0782444,
       "lng": 18.2258941
     }
   },
@@ -14582,6 +14965,7 @@
     "id": "ca57faf0-e46d-4e3b-9ecf-b92b3a92983d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3424"
     ],
@@ -14611,7 +14995,7 @@
     "osm_id": 1487879432,
     "uic_ref": "5102895",
     "position": {
-      "lat": 53.0497448990895,
+      "lat": 53.0497449,
       "lng": 18.3242696
     }
   },
@@ -14620,6 +15004,7 @@
     "id": "aa84013d-7c18-48d8-9967-55e474eb60ea",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "563"
     ],
@@ -14649,7 +15034,7 @@
     "osm_id": 10006430693,
     "uic_ref": "5100800",
     "position": {
-      "lat": 52.9889213990876,
+      "lat": 52.9889214,
       "lng": 18.4685966
     }
   },
@@ -14658,6 +15043,7 @@
     "id": "4fd83eca-80d4-481d-af9e-e3e5347cdf15",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "4534"
     ],
@@ -14687,7 +15073,7 @@
     "osm_id": 1013299074,
     "uic_ref": "5100062",
     "position": {
-      "lat": 53.0001061990879,
+      "lat": 53.0001062,
       "lng": 18.6146297
     }
   },
@@ -14696,6 +15082,7 @@
     "id": "72424824-bc74-4a1c-aae6-251d09efe80c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3080"
     ],
@@ -14725,7 +15112,7 @@
     "osm_id": 1477806471,
     "uic_ref": "5102632",
     "position": {
-      "lat": 52.9127122990857,
+      "lat": 52.9127123,
       "lng": 18.6926443
     }
   },
@@ -14734,6 +15121,7 @@
     "id": "e5dcbe07-b7a4-4179-8b6e-b17ddb5a9e9b",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "34"
     ],
@@ -14763,7 +15151,7 @@
     "osm_id": 3459334926,
     "uic_ref": "5100339",
     "position": {
-      "lat": 52.875864599085,
+      "lat": 52.8758646,
       "lng": 18.6963912
     }
   },
@@ -14772,6 +15160,7 @@
     "id": "123fd295-b3a3-45aa-8ee5-8682bc5c4a1a",
     "prefix": null,
     "max_speed": 125,
+    "stop_place": false,
     "ids": [
       "2833"
     ],
@@ -14801,7 +15190,7 @@
     "osm_id": 3459325116,
     "uic_ref": "5102417",
     "position": {
-      "lat": 52.8030126990843,
+      "lat": 52.8030127,
       "lng": 18.8701947
     }
   },
@@ -14810,6 +15199,7 @@
     "id": "b18dcab6-bbdb-4471-8b73-8a92a1e5fc4d",
     "prefix": null,
     "max_speed": 125,
+    "stop_place": true,
     "ids": [
       "2288"
     ],
@@ -14839,7 +15229,7 @@
     "osm_id": 2344601576,
     "uic_ref": "5102126",
     "position": {
-      "lat": 52.7430045990842,
+      "lat": 52.7430046,
       "lng": 18.9241433
     }
   },
@@ -14848,6 +15238,7 @@
     "id": "1ccbd879-4908-4387-889d-4df9c60373ef",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4980"
     ],
@@ -14886,6 +15277,7 @@
     "id": "839a9115-4e92-44a1-ac36-ed58fdbf117c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4979"
     ],
@@ -14915,7 +15307,7 @@
     "osm_id": 3459316528,
     "uic_ref": "5100315",
     "position": {
-      "lat": 52.6532537990848,
+      "lat": 52.6532538,
       "lng": 19.0587525
     }
   },
@@ -14924,6 +15316,7 @@
     "id": "8b081eae-9651-49f1-8658-456cb2112172",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "646"
     ],
@@ -14953,7 +15346,7 @@
     "osm_id": 1388656438,
     "uic_ref": "5100831",
     "position": {
-      "lat": 52.5089240990878,
+      "lat": 52.5089241,
       "lng": 19.0893425
     }
   },
@@ -14962,6 +15355,7 @@
     "id": "ae0ec7c9-6e22-4346-83d1-566c43d56166",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1565"
     ],
@@ -14991,7 +15385,7 @@
     "osm_id": 2134667870,
     "uic_ref": "5101514",
     "position": {
-      "lat": 52.4119893990913,
+      "lat": 52.4119894,
       "lng": 19.1239223
     }
   },
@@ -15000,6 +15394,7 @@
     "id": "c9ec2e7a-3aed-47dc-a136-ecd361a52586",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3056"
     ],
@@ -15029,7 +15424,7 @@
     "osm_id": 2157495414,
     "uic_ref": "5102585",
     "position": {
-      "lat": 52.2990365990966,
+      "lat": 52.2990366,
       "lng": 19.1919623
     }
   },
@@ -15038,6 +15433,7 @@
     "id": "f28d8ff6-2131-4af2-b0e2-974be4f142a1",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2133"
     ],
@@ -15067,7 +15463,7 @@
     "osm_id": 3456935411,
     "uic_ref": "5100032",
     "position": {
-      "lat": 52.2270738991007,
+      "lat": 52.2270739,
       "lng": 19.3481878
     }
   },
@@ -15076,6 +15472,7 @@
     "id": "683a03be-9484-4a5a-985f-c3aa1e0ffd23",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "4971"
     ],
@@ -15105,7 +15502,7 @@
     "osm_id": 29830460,
     "uic_ref": "5104172",
     "position": {
-      "lat": 52.1568163991053,
+      "lat": 52.1568164,
       "lng": 19.2765941
     }
   },
@@ -15114,6 +15511,7 @@
     "id": "56971a13-60bc-42c5-8093-c65fe123c2f5",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "2385"
     ],
@@ -15143,7 +15541,7 @@
     "osm_id": 29830409,
     "uic_ref": "5101964",
     "position": {
-      "lat": 52.0492369991134,
+      "lat": 52.049237,
       "lng": 19.1932523
     }
   },
@@ -15152,6 +15550,7 @@
     "id": "a9f51a0d-924b-4d7b-96e5-6be948b6b1f5",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "3089"
     ],
@@ -15181,7 +15580,7 @@
     "osm_id": 29830362,
     "uic_ref": "5102654",
     "position": {
-      "lat": 51.9714973991199,
+      "lat": 51.9714974,
       "lng": 19.2662162
     }
   },
@@ -15190,6 +15589,7 @@
     "id": "ccf51258-dcda-4945-b528-babc96abb6a9",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "477"
     ],
@@ -15219,7 +15619,7 @@
     "osm_id": 29830311,
     "uic_ref": "5100696",
     "position": {
-      "lat": 51.9234491991243,
+      "lat": 51.9234492,
       "lng": 19.2673865
     }
   },
@@ -15228,6 +15628,7 @@
     "id": "5f116379-6670-4c00-9449-991ed1f183ac",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "5314"
     ],
@@ -15257,7 +15658,7 @@
     "osm_id": 29829423,
     "uic_ref": "5104311",
     "position": {
-      "lat": 51.8691545991295,
+      "lat": 51.8691546,
       "lng": 19.3837488
     }
   },
@@ -15266,6 +15667,7 @@
     "id": "d99b69a3-80d2-47c8-89a9-58bd61bd6341",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5311"
     ],
@@ -15295,7 +15697,7 @@
     "osm_id": 9794646827,
     "uic_ref": "5104308",
     "position": {
-      "lat": 51.8494635991315,
+      "lat": 51.8494636,
       "lng": 19.4257929
     }
   },
@@ -15304,6 +15706,7 @@
     "id": "ee468ee0-2cca-4a55-bff4-881a9a202cfb",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2463"
     ],
@@ -15333,7 +15736,7 @@
     "osm_id": 3329212910,
     "uic_ref": "5102173",
     "position": {
-      "lat": 51.7935513991373,
+      "lat": 51.7935514,
       "lng": 19.4070192
     }
   },
@@ -15342,6 +15745,7 @@
     "id": "f4f83261-97d6-4a38-ac68-5657b99097b2",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2432"
     ],
@@ -15371,7 +15775,7 @@
     "osm_id": 1974456578,
     "uic_ref": "5100039",
     "position": {
-      "lat": 51.7578219991411,
+      "lat": 51.757822,
       "lng": 19.4305417
     }
   },
@@ -15380,6 +15784,7 @@
     "id": "55570b55-fa42-4698-8ed2-b5503d3c10d5",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4667"
     ],
@@ -15418,6 +15823,7 @@
     "id": "6197616d-6cac-4de8-834a-00327049a1b1",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4546"
     ],
@@ -15456,6 +15862,7 @@
     "id": "2f7496f0-bedf-4d4b-b9dd-d8f77bfa1d97",
     "prefix": null,
     "max_speed": 150,
+    "stop_place": false,
     "ids": [
       "873"
     ],
@@ -15494,6 +15901,7 @@
     "id": "37d71cb7-bdf5-45bc-b51b-a41e6ca25b00",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3441"
     ],
@@ -15532,6 +15940,7 @@
     "id": "034f461b-8fdf-4359-9c37-7bacc5d72e3e",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "3003"
     ],
@@ -15570,6 +15979,7 @@
     "id": "20024260-7836-4eb2-826e-ef588c306cc1",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2911"
     ],
@@ -15608,6 +16018,7 @@
     "id": "5d3e6dca-34e2-4bad-bdd1-6c480e44b44c",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "3310"
     ],
@@ -15646,6 +16057,7 @@
     "id": "00428549-3b84-4593-b5b8-08ad9f9bbc13",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2800"
     ],
@@ -15684,6 +16096,7 @@
     "id": "c7c41814-cff7-42b3-9170-1723f1f28466",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "1230"
     ],
@@ -15722,6 +16135,7 @@
     "id": "6183ae21-4e81-4e88-9fa5-9b32503e2c0a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1734"
     ],
@@ -15760,6 +16174,7 @@
     "id": "34708cc2-e2b0-43cd-9ec3-fa8b1ce3c6fc",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "4186"
     ],
@@ -15798,6 +16213,7 @@
     "id": "fb61d8f5-399d-4ed0-823c-f914477fedfe",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "5300"
     ],
@@ -15836,6 +16252,7 @@
     "id": "7fff61e4-cd34-4bb4-a2b9-3c0ad0d667d4",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2791"
     ],
@@ -15874,6 +16291,7 @@
     "id": "4c7c3cc2-e1a5-4b4b-b2d5-44ac92679c3d",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "3529"
     ],
@@ -15912,6 +16330,7 @@
     "id": "caa07c89-b2a9-460d-949e-fb8d8e806b3c",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1946"
     ],
@@ -15950,6 +16369,7 @@
     "id": "57c5fee3-3a17-4583-80e6-c968a999e80a",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4217"
     ],
@@ -15988,6 +16408,7 @@
     "id": "69ceb62c-3f17-42ab-a823-2c4860620fe6",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "186"
     ],
@@ -16026,6 +16447,7 @@
     "id": "f7e06a89-162f-47ef-bf2b-717d89cec673",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "1359"
     ],
@@ -16064,6 +16486,7 @@
     "id": "c2d8ac38-cd9f-4ffd-a6ae-e7af5cb91e8c",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2310"
     ],
@@ -16102,6 +16525,7 @@
     "id": "62fd6cdc-a885-436e-9dca-0a168808ad9f",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "952"
     ],
@@ -16140,6 +16564,7 @@
     "id": "210d3b71-1dee-4d41-b870-5c623261a9dc",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4669"
     ],
@@ -16178,6 +16603,7 @@
     "id": "3d4233a1-7786-430a-9eeb-34cf73b0d2c4",
     "prefix": null,
     "max_speed": 30,
+    "stop_place": false,
     "ids": [
       "628"
     ],
@@ -16216,6 +16642,7 @@
     "id": "9ed9a361-f4b3-4b9d-9b1e-25ff295280f4",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5202"
     ],
@@ -16254,6 +16681,7 @@
     "id": "4c994de9-b6d1-4f5c-b6f9-a98d38896218",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4241"
     ],
@@ -16292,6 +16720,7 @@
     "id": "be217650-fa75-45e8-ba31-83c2eb44ab04",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3219"
     ],
@@ -16330,6 +16759,7 @@
     "id": "faecffa0-dd2f-429e-8ae9-3cdfd097932c",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "1837"
     ],
@@ -16368,6 +16798,7 @@
     "id": "17ea5740-08b8-4757-960d-62ca72368941",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1414"
     ],
@@ -16406,6 +16837,7 @@
     "id": "34639329-049c-477a-859a-e89211110cea",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2677"
     ],
@@ -16444,6 +16876,7 @@
     "id": "bd40d9b7-0cb5-4a08-a31c-0a23da18d13c",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1501"
     ],
@@ -16482,6 +16915,7 @@
     "id": "5e636b0d-7f30-4db8-a720-baeb636a1efb",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1194"
     ],
@@ -16520,6 +16954,7 @@
     "id": "5a172fc3-7523-4781-a713-02d34f3947c4",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": false,
     "ids": [
       "1538"
     ],
@@ -16558,6 +16993,7 @@
     "id": "300d589c-42b3-4995-835f-b9913f9aba20",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "2327"
     ],
@@ -16596,6 +17032,7 @@
     "id": "aa8c7d99-c993-4db1-86cf-b4c0780ba3d2",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3770"
     ],
@@ -16634,6 +17071,7 @@
     "id": "c6fe9e8f-f3e9-4c0a-88c5-782402c660b3",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5432"
     ],
@@ -16672,6 +17110,7 @@
     "id": "bce0261b-ce09-47cc-ac2e-49b148e79162",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4415"
     ],
@@ -16710,6 +17149,7 @@
     "id": "3b1aa596-886a-4f93-8b85-b8e752421704",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2504"
     ],
@@ -16748,6 +17188,7 @@
     "id": "1cddc9d7-43f7-4f0a-a5ac-94f5298251e3",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3983"
     ],
@@ -16786,6 +17227,7 @@
     "id": "d46b81cf-0209-455c-820f-833155b2da95",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "5216"
     ],
@@ -16824,6 +17266,7 @@
     "id": "495de086-24a5-4527-9f27-e83f56ffa91f",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "3470"
     ],
@@ -16862,6 +17305,7 @@
     "id": "728268cd-f100-4955-bd54-6a6d3f401ff4",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "150"
     ],
@@ -16900,6 +17344,7 @@
     "id": "a4569ea0-0490-4b17-a8c9-1f58dce54343",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "3870"
     ],
@@ -16938,6 +17383,7 @@
     "id": "5b141d03-e681-4678-b326-395b84d36616",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "3710"
     ],
@@ -16976,6 +17422,7 @@
     "id": "029d9f0a-9e42-456a-a87c-0619ac5ab459",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "103"
     ],
@@ -17014,6 +17461,7 @@
     "id": "8809030f-25eb-4117-996c-131ad054f1cb",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "629"
     ],
@@ -17052,6 +17500,7 @@
     "id": "b628f2c7-e503-449e-997d-8d16aeb405ff",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "3036"
     ],
@@ -17090,6 +17539,7 @@
     "id": "560d12e8-2655-4ae8-9593-abcb4e1a7f12",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3793"
     ],
@@ -17128,6 +17578,7 @@
     "id": "4f926da5-7310-4aa6-964d-75571fa41a7d",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4145"
     ],
@@ -17166,6 +17617,7 @@
     "id": "e7af03fa-cd29-4c61-84ff-18655e40ef07",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "255"
     ],
@@ -17204,6 +17656,7 @@
     "id": "39b6ecbc-df60-4275-9ae6-bb5489cc779b",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "5247"
     ],
@@ -17242,6 +17695,7 @@
     "id": "ed02b144-a506-46bf-a6fb-a428a76ccbe3",
     "prefix": null,
     "max_speed": 70,
+    "stop_place": false,
     "ids": [
       "1575"
     ],
@@ -17280,6 +17734,7 @@
     "id": "b139f090-5ef3-400a-b203-1e68a4e53a24",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "4727"
     ],
@@ -17318,6 +17773,7 @@
     "id": "0535f058-d55e-4a22-acdd-6e4a9bbcb824",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4664"
     ],
@@ -17356,6 +17812,7 @@
     "id": "f83171a2-c79f-4de6-b268-f0222769cb64",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3563"
     ],
@@ -17394,6 +17851,7 @@
     "id": "0bc632a6-f3b3-457b-bef0-ff7456bab4bf",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1020"
     ],
@@ -17432,6 +17890,7 @@
     "id": "6794acc1-7e0c-4249-9c11-1b31f582dfed",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4799"
     ],
@@ -17470,6 +17929,7 @@
     "id": "6d8f38e3-6b3f-440e-b234-75776a649392",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "5381"
     ],
@@ -17508,6 +17968,7 @@
     "id": "5d5d1df2-c65d-4473-841c-60f58b075c4a",
     "prefix": null,
     "max_speed": 125,
+    "stop_place": true,
     "ids": [
       "3454"
     ],
@@ -17546,6 +18007,7 @@
     "id": "06d0cb83-f765-4c28-bf16-582c2c956865",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "549"
     ],
@@ -17584,6 +18046,7 @@
     "id": "ff4306c3-3766-484d-a8a3-9d99c4d6b6d8",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2679"
     ],
@@ -17622,6 +18085,7 @@
     "id": "832c4dc3-ec6b-46d6-942d-d4945c2eeabe",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "661"
     ],
@@ -17660,6 +18124,7 @@
     "id": "ce503e00-1f34-4c6e-9934-9b5a9131ef6a",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2544"
     ],
@@ -17698,6 +18163,7 @@
     "id": "4152f43a-18f8-49f4-92ee-f735268bb3d0",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2167"
     ],
@@ -17736,6 +18202,7 @@
     "id": "5fc7ba73-1730-486d-9e96-d890c8305648",
     "prefix": null,
     "max_speed": 125,
+    "stop_place": false,
     "ids": [
       "3452"
     ],
@@ -17774,6 +18241,7 @@
     "id": "a49bac6b-b301-4d4c-bc19-de18209b7e81",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "2010"
     ],
@@ -17812,6 +18280,7 @@
     "id": "dfd1c6a1-5b06-4369-907d-0700e998ea87",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4746"
     ],
@@ -17866,6 +18335,7 @@
     "id": "1b819b66-77cb-4e9f-a4be-0653cc2ba459",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2030"
     ],
@@ -17904,6 +18374,7 @@
     "id": "054e064c-f439-432a-b684-f2adc817044d",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "258"
     ],
@@ -17942,6 +18413,7 @@
     "id": "860e2002-1622-4670-96c9-e08c3e184520",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "3823"
     ],
@@ -17980,6 +18452,7 @@
     "id": "0f41cc54-ecd3-44a5-ab1d-de1de2a222b6",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "926"
     ],
@@ -18018,6 +18491,7 @@
     "id": "99678d70-e9a3-4e7c-80ac-d25a6af2d1eb",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": true,
     "ids": [
       "3548"
     ],
@@ -18056,6 +18530,7 @@
     "id": "44b62c49-88a1-4ae0-bf40-afc2d637a39c",
     "prefix": null,
     "max_speed": 150,
+    "stop_place": false,
     "ids": [
       "3357"
     ],
@@ -18094,6 +18569,7 @@
     "id": "8b5d8c77-c4da-414b-9f39-444fc2d4829b",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "4804"
     ],
@@ -18132,6 +18608,7 @@
     "id": "a24da3a5-4580-4943-9d0b-af82e7697fd2",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "4371"
     ],
@@ -18170,6 +18647,7 @@
     "id": "dad0bf10-0332-4841-ae9c-cc5de34b84fd",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": true,
     "ids": [
       "966"
     ],
@@ -18208,6 +18686,7 @@
     "id": "ef2a326e-3d0a-4108-8dda-c7616eeece9c",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "3541"
     ],
@@ -18246,6 +18725,7 @@
     "id": "a020f5dc-e533-4568-9331-b9df90aa497c",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "3946"
     ],
@@ -18284,6 +18764,7 @@
     "id": "b44999ba-9fa2-4b17-b09e-5cf0d12983ef",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3092"
     ],
@@ -18322,6 +18803,7 @@
     "id": "b63e3645-5844-44d4-b8ae-a090834e4514",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1360"
     ],
@@ -18360,6 +18842,7 @@
     "id": "361e4b09-6f5d-4a8e-a95c-b202eb68a78e",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "1495"
     ],
@@ -18398,6 +18881,7 @@
     "id": "b0b2e92f-697d-4f76-b541-9aeab95c331a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3218"
     ],
@@ -18436,6 +18920,7 @@
     "id": "371dc4b0-19ad-4f71-9220-c78a84eb403a",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "5334"
     ],
@@ -18474,6 +18959,7 @@
     "id": "7b348beb-cd3d-49d3-9862-3d99067e615d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "4745"
     ],
@@ -18512,6 +18998,7 @@
     "id": "c361939a-1411-4f79-916f-c15ed4510753",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4666"
     ],
@@ -18550,6 +19037,7 @@
     "id": "849c20fd-1361-47f7-aad7-3ff695b2ca39",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "4494"
     ],
@@ -18588,6 +19076,7 @@
     "id": "a985d4c1-9961-4e4e-afe5-d54371253567",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "995"
     ],
@@ -18626,6 +19115,7 @@
     "id": "d24a0774-f880-4201-854f-7fe6ee93d2cd",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1484"
     ],
@@ -18664,6 +19154,7 @@
     "id": "17beb42e-850b-4516-9fd9-c1949571bd12",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1124"
     ],
@@ -18702,6 +19193,7 @@
     "id": "9d70e632-f200-41cc-a4ba-f49e950f986f",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4759"
     ],
@@ -18748,6 +19240,7 @@
     "id": "a15faf06-7d5a-41fd-8aed-ffecba4671fb",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2703"
     ],
@@ -18786,6 +19279,7 @@
     "id": "97e2349d-43b1-47da-93a3-9ce6c2f6e166",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "4797"
     ],
@@ -18815,8 +19309,8 @@
     "osm_id": 3390793459,
     "uic_ref": "5104158",
     "position": {
-      "lat": 52.2447462,
-      "lng": 21.0439574
+      "lat": 52.2447987,
+      "lng": 21.0439637
     }
   },
   {
@@ -18824,6 +19318,7 @@
     "id": "d1f0c429-7b4a-4267-b868-9f46b16617e6",
     "prefix": null,
     "max_speed": 40,
+    "stop_place": true,
     "ids": [
       "5218"
     ],
@@ -18862,6 +19357,7 @@
     "id": "bca7c9d1-48cb-4362-90ff-dbf373643131",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2369"
     ],
@@ -18900,6 +19396,7 @@
     "id": "339e7d97-1861-4cf2-ac25-cdd25946915a",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "253"
     ],
@@ -18938,6 +19435,7 @@
     "id": "45fd17a8-f7fd-469b-8e94-e0ba4ce8b4ed",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2179"
     ],
@@ -18976,6 +19474,7 @@
     "id": "f30bae33-377a-4ba1-b477-62ed2ad1cae7",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3451"
     ],
@@ -19014,6 +19513,7 @@
     "id": "b2f9e5fd-d617-45f1-a344-a6bf18128c4c",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": true,
     "ids": [
       "1780"
     ],
@@ -19052,6 +19552,7 @@
     "id": "4c1a053c-e16a-478c-b298-9c67d50607d8",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "1013"
     ],
@@ -19090,6 +19591,7 @@
     "id": "239d5c67-03d1-4931-b37a-8752eb9c91c1",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "4409"
     ],
@@ -19128,6 +19630,7 @@
     "id": "28af8699-a2fd-4610-b4f8-3c396d34f66f",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2732"
     ],
@@ -19166,6 +19669,7 @@
     "id": "39aa76a5-78c3-4d90-ae32-40558ccc4ac0",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "1439"
     ],
@@ -19204,6 +19708,7 @@
     "id": "be4bc65f-05b5-4da4-9bf9-dbe18131d410",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "947"
     ],
@@ -19242,6 +19747,7 @@
     "id": "cd7d694f-bd92-4a23-af0a-ab31c6dca363",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "2894"
     ],
@@ -19280,6 +19786,7 @@
     "id": "ad70694f-bbf5-4665-b054-e702e048e57b",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "4132"
     ],
@@ -19318,6 +19825,7 @@
     "id": "737f4608-3179-4254-b4ee-602f50fe49a7",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "2688"
     ],
@@ -19356,6 +19864,7 @@
     "id": "5e6de5ee-9027-4c70-a0cf-8246f0714158",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "5122"
     ],
@@ -19394,6 +19903,7 @@
     "id": "a4968719-9690-42a2-9c67-6c8c01d62e4f",
     "prefix": null,
     "max_speed": 130,
+    "stop_place": false,
     "ids": [
       "1662"
     ],
@@ -19432,6 +19942,7 @@
     "id": "f992e64d-24fe-4fdf-8ea4-746814111aaf",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3439"
     ],
@@ -19470,6 +19981,7 @@
     "id": "a690c0be-ced0-4912-b8e4-d7c21c35e07d",
     "prefix": null,
     "max_speed": 90,
+    "stop_place": false,
     "ids": [
       "4995"
     ],
@@ -19508,6 +20020,7 @@
     "id": "c82be829-29e2-4561-97db-75cbcfc96a24",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3435"
     ],
@@ -19546,6 +20059,7 @@
     "id": "945fcbd7-9775-4473-b061-df6d069687a1",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "2003"
     ],
@@ -19584,6 +20098,7 @@
     "id": "e73f5dbd-f1ab-4f20-b7ff-c975284795d8",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2502"
     ],
@@ -19622,6 +20137,7 @@
     "id": "f076dc5a-5fd6-4e42-898d-07ab517417a7",
     "prefix": null,
     "max_speed": 160,
+    "stop_place": false,
     "ids": [
       "3376"
     ],
@@ -19660,6 +20176,7 @@
     "id": "a99ccee8-f5e7-4212-b121-dba36f5ae961",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2198"
     ],
@@ -19698,6 +20215,7 @@
     "id": "f1548079-7051-437f-afd3-0cbc6b0dbd5c",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "3023"
     ],
@@ -19736,6 +20254,7 @@
     "id": "fdd87a21-5cd8-420a-a86b-351fd2b5dee2",
     "prefix": null,
     "max_speed": 140,
+    "stop_place": false,
     "ids": [
       "980"
     ],
@@ -19774,6 +20293,7 @@
     "id": "8fdcbe95-7882-4fb9-945b-7773d4f4ba26",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1354"
     ],
@@ -19812,6 +20332,7 @@
     "id": "562a549d-fb25-4c3f-95a5-5829f5dafd51",
     "prefix": null,
     "max_speed": 50,
+    "stop_place": false,
     "ids": [
       "498"
     ],
@@ -19850,6 +20371,7 @@
     "id": "b64acc84-a826-4ac5-a084-f8f5ee4fff92",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "3268"
     ],
@@ -19888,37 +20410,38 @@
     "id": "9c91e793-46f0-4ad3-97db-e3e2ab725e97",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "354"
     ],
     "bb": [
       [
-        19.1457795886,
-        51.0648980744
+        19.1461571105,
+        51.0650283072
       ],
       [
-        19.1456804686,
-        51.0740801376
+        19.1473909267,
+        51.0650283072
       ],
       [
-        19.1474399572,
-        51.0740876366
+        19.1473909267,
+        51.076549648
       ],
       [
-        19.1475390772,
-        51.064905575
+        19.1461571105,
+        51.076549648
       ],
       [
-        19.1457795886,
-        51.0648980744
+        19.1461571105,
+        51.0650283072
       ]
     ],
     "country": "POL",
     "osm_id": 3713698511,
     "uic_ref": null,
     "position": {
-      "lat": 51.072336,
-      "lng": 19.1466518
+      "lat": 51.0759088,
+      "lng": 19.1467188
     }
   },
   {
@@ -19926,6 +20449,7 @@
     "id": "0038e231-4860-4cbf-a6be-559c3ad09193",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "131"
     ],
@@ -19964,6 +20488,7 @@
     "id": "85418f4a-f92f-411a-bd78-17642643ced5",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "1998"
     ],
@@ -20002,6 +20527,7 @@
     "id": "3eed766c-67fe-4d50-9c66-da2c170d2f64",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "239"
     ],
@@ -20040,37 +20566,38 @@
     "id": "4627e099-d07c-4a22-a428-bc23ab07de87",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": true,
     "ids": [
       "591"
     ],
     "bb": [
       [
-        19.1613454216,
-        50.9692062206
+        19.1623133965,
+        50.9640527271
       ],
       [
-        19.1603005182,
-        50.9779579267
+        19.1607934438,
+        50.9780049019
       ],
       [
-        19.1627678675,
-        50.978074718
+        19.1627428062,
+        50.9780890997
       ],
       [
-        19.163812771,
-        50.9693230339
+        19.1642627588,
+        50.9641369502
       ],
       [
-        19.1613454216,
-        50.9692062206
+        19.1623133965,
+        50.9640527271
       ]
     ],
     "country": "POL",
     "osm_id": 7481986659,
     "uic_ref": null,
     "position": {
-      "lat": 50.9762622,
-      "lng": 19.161737
+      "lat": 50.9645567,
+      "lng": 19.1634744
     }
   },
   {
@@ -20078,6 +20605,7 @@
     "id": "305f23fa-e117-466a-836d-4b7df849ae87",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "341"
     ],
@@ -20116,6 +20644,7 @@
     "id": "229f5692-7a80-4b41-a739-9eabe58b7dba",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "5009"
     ],
@@ -20154,6 +20683,7 @@
     "id": "8a771dcb-71f0-44a0-9a5b-01fb9b0aeb11",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "251"
     ],
@@ -20192,6 +20722,7 @@
     "id": "7d8ab8c2-6bcf-44b9-b918-eafb9b2587d1",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4483"
     ],
@@ -20230,6 +20761,7 @@
     "id": "9db8325e-8442-4612-afc1-df19f1b7b032",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "4478"
     ],
@@ -20268,6 +20800,7 @@
     "id": "25f90f86-7f1f-4336-a388-5e409f6a0ce9",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "1753"
     ],
@@ -20306,37 +20839,38 @@
     "id": "b0178d02-e306-441c-8519-3020fc6936c1",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "134"
     ],
     "bb": [
       [
-        19.0238275408,
-        51.1749962383
+        19.0255028354,
+        51.1749907649
       ],
       [
-        19.0100557483,
-        51.1763071196
+        19.0100308269,
+        51.176443884
       ],
       [
-        19.0102231741,
-        51.1769984488
+        19.0101345774,
+        51.1768780649
       ],
       [
-        19.0239949666,
-        51.1756875873
+        19.025606586,
+        51.1754249595
       ],
       [
-        19.0238275408,
-        51.1749962383
+        19.0255028354,
+        51.1749907649
       ]
     ],
     "country": "POL",
     "osm_id": 1661085569,
     "uic_ref": null,
     "position": {
-      "lat": 51.1757138,
-      "lng": 19.0198887
+      "lat": 51.1752413,
+      "lng": 19.0249527
     }
   },
   {
@@ -20344,6 +20878,7 @@
     "id": "7858984a-1b62-4a7d-9c57-7eeb79ca645a",
     "prefix": "KPm",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2020"
     ],
@@ -20382,6 +20917,7 @@
     "id": "1c0c40bc-a158-4541-a247-08f8fbdead5e",
     "prefix": "Rc",
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "3475"
     ],
@@ -20420,6 +20956,7 @@
     "id": "1c57e9ce-81c1-4b21-b8de-cb90a40b0481",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": true,
     "ids": [
       "292"
     ],
@@ -20458,6 +20995,7 @@
     "id": "5d03eeb0-c593-4d74-84d4-7d30feceb359",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "2360"
     ],
@@ -20496,6 +21034,7 @@
     "id": "2b27f203-637b-4f9b-88e3-0145ebe74c77",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3792"
     ],
@@ -20534,6 +21073,7 @@
     "id": "11adda83-1648-4e07-9b1c-69275c9f7cff",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": false,
     "ids": [
       "2330"
     ],
@@ -20572,6 +21112,7 @@
     "id": "93fe2f41-111e-420c-9864-0306c771f5f5",
     "prefix": null,
     "max_speed": 60,
+    "stop_place": true,
     "ids": [
       "802"
     ],
@@ -20610,6 +21151,7 @@
     "id": "db0879b2-690f-4d1a-bb90-34e38d0f83f8",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "5291"
     ],
@@ -20648,6 +21190,7 @@
     "id": "c9d47624-58be-4116-b0ed-1a7f5e9c6015",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "1566"
     ],
@@ -20686,6 +21229,7 @@
     "id": "5f97cdad-2b43-411c-9b8e-d9494718eb17",
     "prefix": null,
     "max_speed": 100,
+    "stop_place": false,
     "ids": [
       "3827"
     ],
@@ -20724,6 +21268,7 @@
     "id": "86fcaee2-627e-4e48-99c3-abd58e6954e8",
     "prefix": null,
     "max_speed": 110,
+    "stop_place": false,
     "ids": [
       "3093"
     ],
@@ -20762,6 +21307,7 @@
     "id": "93cec358-1bbe-45c2-ab5e-0451d67bacfd",
     "prefix": null,
     "max_speed": 80,
+    "stop_place": false,
     "ids": [
       "2877"
     ],
@@ -20800,6 +21346,7 @@
     "id": "6671883e-5a47-4c7d-8403-d59a875dd30f",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "3492"
     ],
@@ -20838,6 +21385,7 @@
     "id": "173b04cb-5767-468e-9f7e-dbc2b6d0cc6d",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "225"
     ],
@@ -20876,6 +21424,7 @@
     "id": "5b333765-8a29-41e0-9c1e-dc536c0c1af9",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "632"
     ],
@@ -20914,6 +21463,7 @@
     "id": "dc89bbbc-5756-47bc-8f14-b0db96fb9f96",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": true,
     "ids": [
       "2582"
     ],
@@ -20952,6 +21502,7 @@
     "id": "d949c538-5c17-43ba-ba60-9bc7a7cddfd3",
     "prefix": null,
     "max_speed": 120,
+    "stop_place": false,
     "ids": [
       "2991"
     ],
