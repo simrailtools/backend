@@ -630,6 +630,21 @@
     "max_speed": 140
   },
   {
+    "id": "0db18166-02b1-4b0f-888d-32f682237285",
+    "api_name": "4E/EP08-008",
+    "display_name": "EP08-008",
+    "required_dlc_id": null,
+    "type": "LOCOMOTIVE",
+    "type_id": "102E",
+    "designation": "EP08",
+    "producer": "Pafawag Wroclaw",
+    "production_years": "1972-1976",
+    "weight": 80,
+    "length": 15.9,
+    "width": 3,
+    "max_speed": 140
+  },
+  {
     "id": "7c877a80-e685-4cd5-95bc-f61c7a8b83af",
     "api_name": "4E/EP08-013",
     "display_name": "EP08-013",
