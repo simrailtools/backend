@@ -29,14 +29,11 @@ import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.history.RevisionRepository;
 
 /**
  * A repository for SimRail dispatch post information.
  */
-public interface SimRailDispatchPostRepository extends
-  ListCrudRepository<SimRailDispatchPostEntity, UUID>,
-  RevisionRepository<SimRailDispatchPostEntity, UUID, Long> {
+public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRailDispatchPostEntity, UUID> {
 
   /**
    * Finds a single dispatch post by the given point id.

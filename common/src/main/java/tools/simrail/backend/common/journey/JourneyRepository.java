@@ -26,13 +26,10 @@ package tools.simrail.backend.common.journey;
 
 import java.util.UUID;
 import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.history.RevisionRepository;
 
 /**
  * A repository for journeys.
  */
-public interface JourneyRepository extends
-  ListCrudRepository<JourneyEntity, UUID>,
-  RevisionRepository<JourneyEntity, UUID, Long> {
+public interface JourneyRepository extends ListCrudRepository<JourneyEntity, UUID> {
 
 }

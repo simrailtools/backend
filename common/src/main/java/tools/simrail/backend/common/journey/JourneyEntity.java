@@ -48,7 +48,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.envers.Audited;
 import org.springframework.data.domain.Persistable;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
@@ -132,20 +131,17 @@ public final class JourneyEntity implements Persistable<UUID> {
    * The current speed of the train, null if the train is currently not active.
    */
   @Column
-  @Audited
   private Integer speed;
   /**
    * The current position of the train, null if the train is currently not active.
    */
   @Column
-  @Audited
   @Embedded
   private GeoPositionEntity position;
   /**
    * The signal that is in front of this journey, null if the train is not active or the signal is too far away.
    */
   @Column
-  @Audited
   @Embedded
   @AttributeOverrides({
     @AttributeOverride(name = "name", column = @Column(name = "next_signal_name")),
@@ -157,7 +153,6 @@ public final class JourneyEntity implements Persistable<UUID> {
    * The steam id of the player that currently controls the train, null if the train is currently not active or not
    * driven by a player.
    */
-  @Audited
   @Column(length = 20)
   private String driverSteamId;
 

@@ -46,7 +46,6 @@ dependencies {
   implementation("org.postgresql:postgresql")
   implementation("io.grpc:grpc-servlet-jakarta")
 
-  implementation("org.springframework.data:spring-data-envers")
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")

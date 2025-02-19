@@ -32,16 +32,13 @@ import java.util.UUID;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
-import org.springframework.data.repository.history.RevisionRepository;
 import org.springframework.data.repository.query.Param;
 
 /**
  * A repository for SimRail server information.
  */
 @Primary
-public interface SimRailServerRepository extends
-  ListCrudRepository<SimRailServerEntity, UUID>,
-  RevisionRepository<SimRailServerEntity, UUID, Long> {
+public interface SimRailServerRepository extends ListCrudRepository<SimRailServerEntity, UUID> {
 
   /**
    * Finds a single SimRail server by the given server code.

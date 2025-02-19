@@ -42,7 +42,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.envers.Audited;
 
 /**
  * The entity that holds all information about a single server registered in the SimRail api.
@@ -105,7 +104,6 @@ public final class SimRailServerEntity {
    * The timezone that is used on the server (e.g. UTC+1).
    */
   @Nonnull
-  @Audited
   @Column(nullable = false)
   private String timezone;
   /**
@@ -118,13 +116,11 @@ public final class SimRailServerEntity {
   /**
    * If this server is currently online.
    */
-  @Audited
   @Column
   private boolean online;
   /**
    * If this server is no longer registered in the SimRail backend.
    */
-  @Audited
   @Column
   private boolean deleted;
 
@@ -132,7 +128,6 @@ public final class SimRailServerEntity {
    * The tags that are applied to the server, can be an empty list if no tags are applied.
    */
   @Nonnull
-  @Audited
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
   private List<String> tags;

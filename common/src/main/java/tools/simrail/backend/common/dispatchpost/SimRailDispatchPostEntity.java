@@ -44,7 +44,6 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
-import org.hibernate.envers.Audited;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
@@ -115,13 +114,11 @@ public final class SimRailDispatchPostEntity {
    * If the dispatch post is no longer registered in the SimRail backend.
    */
   @Column
-  @Audited
   private boolean deleted;
   /**
    * The difficulty level of the station.
    */
   @Column
-  @Audited
   private int difficultyLevel;
   /**
    * The geo position where the dispatch post building is located.
@@ -143,7 +140,6 @@ public final class SimRailDispatchPostEntity {
   // impl note: this is a set as there might be multiple dispatchers for a station coming in the future,
   //            confirmed in a recent blog post, plus the api returns an array the dispatchers anyway
   @Nonnull
-  @Audited
   @OrderColumn
   @Column(nullable = false)
   @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
