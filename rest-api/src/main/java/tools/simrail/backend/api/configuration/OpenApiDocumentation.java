@@ -68,7 +68,7 @@ class OpenApiDocumentation {
            - Servers: Live & Historic Information about Servers
            - Dispatch Posts: Live & Historic Information about Dispatch Posts
            - Points: Detail Information about Points for Journeys Timetables
-           - Events: Websocket providing Live Data Changes for Servers, Dispatch Posts and Servers
+           - Events: Websocket providing Live Data Changes for Journeys, Dispatch Posts and Servers
           """))
       .servers(List.of(new Server()
         .description("Default Backend")
