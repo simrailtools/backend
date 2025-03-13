@@ -1290,6 +1290,36 @@
     "max_speed": 160
   },
   {
+    "id": "cef116ae-c764-490f-b512-6785671602e6",
+    "api_name": "629Z/230-01_31514508558-7",
+    "display_name": "230-01-31514508558-7",
+    "required_dlc_id": null,
+    "type": "WAGON",
+    "type_id": "230-01",
+    "designation": "Sgmmns-x",
+    "producer": "Tatravagónka Poprad",
+    "production_years": "2022",
+    "weight": 16.5,
+    "length": 13.4875,
+    "width": 3,
+    "max_speed": 120
+  },
+  {
+    "id": "f230702c-ee14-479a-897f-1c16cc47c659",
+    "api_name": "629Z/434Z_31514553133-5",
+    "display_name": "434Z-31514553133-5",
+    "required_dlc_id": "2868050",
+    "type": "WAGON",
+    "type_id": "434Z",
+    "designation": "Sgns",
+    "producer": "EKK Wagon",
+    "production_years": "2013",
+    "weight": 18.875,
+    "length": 19.7375,
+    "width": 3,
+    "max_speed": 120
+  },
+  {
     "id": "827cd7e1-cc3a-41c9-b953-0773a96de449",
     "api_name": "441V/441V_31516635283-3",
     "display_name": "441V-31516635283-3",
@@ -1316,6 +1346,21 @@
     "production_years": "2005-2007",
     "weight": 24,
     "length": 13.5,
+    "width": 3,
+    "max_speed": 120
+  },
+  {
+    "id": "605b0af7-0e9c-4d2f-8028-5328f74f147e",
+    "api_name": "629Z/629Z_31514960133-0",
+    "display_name": "629Z-31514960133-0",
+    "required_dlc_id": "2868050",
+    "type": "WAGON",
+    "type_id": "629Z",
+    "designation": "Sggrss",
+    "producer": "EKK Wagon",
+    "production_years": "2013",
+    "weight": 28.5,
+    "length": 26.6375,
     "width": 3,
     "max_speed": 120
   },

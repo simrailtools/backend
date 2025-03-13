@@ -40,6 +40,7 @@ public enum JourneyVehicleLoad {
   METAL_SHEET,
   STEEL_CIRCLE,
   CONCRETE_SLAB,
+  GAS_CONTAINER,
 
   PETROL,
   ETHANOL,
@@ -70,12 +71,17 @@ public enum JourneyVehicleLoad {
       case "Steel_circle" -> STEEL_CIRCLE;
       case "Concrete_slab" -> CONCRETE_SLAB;
       case "Pipeline", "Gas_pipeline" -> PIPELINE;
+      case "GasContainer4x20", "GasContainer3x20", "GasContainer2x20" -> GAS_CONTAINER;
       case "RandomContainerAll",
            "RandomContainer3x20",
            "RandomContainer1x40",
            "RandomContainer2040",
            "RandomContainer1x20",
-           "RandomContainer2x20" -> CONTAINER;
+           "RandomContainer2x20",
+           "RandomContainer4x20",
+           "RandomContainer2x40",
+           "RandomContainer202040",
+           "RandomContainer402020" -> CONTAINER;
 
       // 406Ra
       case "Petrol" -> PETROL;
