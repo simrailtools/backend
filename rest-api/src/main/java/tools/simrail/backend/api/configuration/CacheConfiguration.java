@@ -45,6 +45,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "server_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(10, TimeUnit.SECONDS)
         .build());
   }
@@ -57,6 +58,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "journey_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(5, TimeUnit.SECONDS)
         .build());
   }
@@ -69,6 +71,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "journey_search_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(5, TimeUnit.MINUTES)
         .build());
   }
@@ -82,6 +85,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "point_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(5, TimeUnit.MINUTES)
         .build());
   }
@@ -94,6 +98,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "dispatch_post_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(5, TimeUnit.SECONDS)
         .build());
   }
@@ -106,6 +111,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "vehicle_sequence_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(2, TimeUnit.MINUTES)
         .build());
   }
@@ -118,6 +124,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "user_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(90, TimeUnit.MINUTES)
         .build());
   }
@@ -130,6 +137,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "journey_polyline_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(1, TimeUnit.MINUTES)
         .build());
   }
@@ -142,6 +150,7 @@ class CacheConfiguration {
     return new CaffeineCache(
       "points_polyline_cache",
       Caffeine.newBuilder()
+        .recordStats()
         .expireAfterWrite(1, TimeUnit.DAYS)
         .build(),
       false);
