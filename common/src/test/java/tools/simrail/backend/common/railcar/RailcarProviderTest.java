@@ -49,7 +49,7 @@ public final class RailcarProviderTest {
   @Test
   void testAllRailcarsWereLoaded() {
     var railcars = this.railcarProvider.railcars;
-    Assertions.assertEquals(102, railcars.size());
+    Assertions.assertEquals(105, railcars.size());
   }
 
   @Test
