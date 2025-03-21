@@ -312,6 +312,27 @@ class JourneyVehicleCollector {
         vehicle.setRailcarId(vehicleRailcar.getId());
         convertedVehicles.add(vehicle);
 
+        if (vehicleDataParts.length == 2) {
+          // workaround for an upstream api issue, where the brake regime and load weight are merged
+          // for example: "629Z/434Z_31514553133-5:G39@RandomContainer2x20"
+          // brake regime G and load weight 39 are in one part rather than being split up into two
+          // this code will also trigger for e.g. locomotives "4E/EU07-193:G:", therefore we have to check
+          // if the brake regime part is longer than one char and suffixed with numbers
+          var brakeRegimePart = vehicleDataParts[1];
+          if (brakeRegimePart.length() > 1) {
+            var firstChar = brakeRegimePart.charAt(0); // brake regime, can be P, G & R
+            var secondChar = brakeRegimePart.charAt(1); // might be a number following the brake regime
+            if ((firstChar == 'P' || firstChar == 'G' || firstChar == 'R')
+              && (secondChar >= '0' && secondChar <= '9')) {
+              var newDataParts = new String[3];
+              newDataParts[0] = vehicleDataParts[0]; // vehicle api identifier
+              newDataParts[1] = Character.toString(firstChar); // vehicle brake regime
+              newDataParts[2] = brakeRegimePart.substring(1); // load weight & load part, without brake regime
+              vehicleDataParts = newDataParts;
+            }
+          }
+        }
+
         if (vehicleDataParts.length == 3) {
           // fully featured vehicle data, parse load weight and type as well
           var vehicleLoadInfo = vehicleDataParts[2].split("@");
