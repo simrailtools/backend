@@ -46,6 +46,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.railcar.RailcarProvider;
+import tools.simrail.backend.common.util.StringUtils;
 import tools.simrail.backend.common.vehicle.JourneyVehicle;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
@@ -343,7 +344,7 @@ class JourneyVehicleCollector {
         if (vehicleDataParts.length == 3) {
           // fully featured vehicle data, parse load weight and type as well
           var vehicleLoadInfo = vehicleDataParts[2].split("@");
-          var vehicleLoadWeight = Integer.parseInt(vehicleLoadInfo[0]);
+          var vehicleLoadWeight = StringUtils.parseIntSafe(vehicleLoadInfo[0]);
           if (vehicleLoadInfo.length == 2) {
             // load type is also included
             var loadType = JourneyVehicleLoad.mapApiLoadType(vehicleLoadInfo[1]);
