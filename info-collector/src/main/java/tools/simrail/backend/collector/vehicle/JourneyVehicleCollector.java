@@ -145,8 +145,14 @@ class JourneyVehicleCollector {
         continue;
       }
 
+      // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
+      var timetable = run.getTimetable();
+      if (timetable.isEmpty()) {
+        continue;
+      }
+
       // find the previous vehicles (previous day) and insert a predicted vehicle composition
-      var firstEvent = run.getTimetable().getFirst();
+      var firstEvent = timetable.getFirst();
       var previousJourneyKey = String.format("%s_%s", firstEvent.getTrainType(), firstEvent.getTrainNumber());
       var previousVehicles = previousCompositions.get(previousJourneyKey);
       if (previousVehicles == null || previousVehicles.isEmpty()) {
@@ -221,7 +227,13 @@ class JourneyVehicleCollector {
     // build a filter criteria entry for each given train run
     var criteriaBuilder = new StringJoiner(" OR ");
     for (var run : trainRuns) {
-      var firstEvent = run.getTimetable().getFirst();
+      // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
+      var timetable = run.getTimetable();
+      if (timetable.isEmpty()) {
+        continue;
+      }
+
+      var firstEvent = timetable.getFirst();
       var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
       var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
       var formattedCriteria = String.format(

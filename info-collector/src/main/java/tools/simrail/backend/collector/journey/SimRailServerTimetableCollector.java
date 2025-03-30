@@ -168,9 +168,15 @@ class SimRailServerTimetableCollector {
       .map(label -> label.substring(1, label.length() - 1))
       .orElse(null);
 
+    // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
+    var originalTimetable = run.getTimetable();
+    if (originalTimetable.isEmpty()) {
+      return;
+    }
+
     // create events for all timetable entries
     var inBorder = false; // keeps track if the journey is within the playable border
-    var timetable = this.fixupTimetable(run.getTimetable()); // timetable of the journey
+    var timetable = this.fixupTimetable(originalTimetable); // timetable of the journey
     var lastTimetableIndex = timetable.size() - 1; // the last index of the timetable
     JourneyEventEntity previousEvent = null; // the previous constructed event
     var events = new ArrayList<JourneyEventEntity>(); // all constructed events
