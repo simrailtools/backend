@@ -193,7 +193,8 @@ class JourneyVehicleCollector {
     @Nonnull List<SimRailAwsTrainRun> trainRuns
   ) {
     // if no train runs are given there is nothing to select
-    if (trainRuns.isEmpty()) {
+    var relevantTrainRuns = trainRuns.stream().filter(run -> !run.getTimetable().isEmpty()).toList();
+    if (relevantTrainRuns.isEmpty()) {
       return Map.of();
     }
 
@@ -226,14 +227,8 @@ class JourneyVehicleCollector {
 
     // build a filter criteria entry for each given train run
     var criteriaBuilder = new StringJoiner(" OR ");
-    for (var run : trainRuns) {
-      // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
-      var timetable = run.getTimetable();
-      if (timetable.isEmpty()) {
-        continue;
-      }
-
-      var firstEvent = timetable.getFirst();
+    for (var run : relevantTrainRuns) {
+      var firstEvent = run.getTimetable().getFirst();
       var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
       var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
       var formattedCriteria = String.format(
