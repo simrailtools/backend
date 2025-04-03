@@ -74,4 +74,11 @@ public class SchedulerConfiguration {
     var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
     return new ConcurrentTaskScheduler(executor);
   }
+
+  @Bean(name = "database_cleanup_scheduler")
+  public @Nonnull TaskScheduler databaseCleanupTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("database-cleanup-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
 }
