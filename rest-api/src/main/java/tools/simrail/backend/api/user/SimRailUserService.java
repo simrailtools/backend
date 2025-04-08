@@ -28,32 +28,28 @@ import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
-import java.util.Optional;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.external.steam.SteamApiClient;
-import tools.simrail.backend.external.steam.wrapper.SteamUserSummaryWrapper;
 
 @Service
 class SimRailUserService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimRailUserService.class);
-
   private final Cache userCache;
-  private final SteamApiClient steamApiClient;
+  private final SteamUserFetchQueue userFetchQueue;
   private final SimRailUserDtoConverter userConverter;
 
   @Autowired
   public SimRailUserService(
-    @Nonnull SteamApiClient steamApiClient,
+    @Nonnull SteamUserFetchQueue userFetchQueue,
     @Nonnull SimRailUserDtoConverter userConverter,
     @Nonnull CacheManager cacheManager
   ) {
-    this.steamApiClient = steamApiClient;
+    this.userFetchQueue = userFetchQueue;
     this.userConverter = userConverter;
     this.userCache = cacheManager.getCache("user_cache");
   }
@@ -84,27 +80,31 @@ class SimRailUserService {
     }
 
     if (!missingIds.isEmpty()) {
-      try {
-        // resolve and cache the profiles that are missing
-        var steamProfiles = this.steamApiClient.getPlayerSummaries(missingIds);
-        Optional.of(steamProfiles)
-          .map(SteamUserSummaryWrapper.Root::response)
-          .map(SteamUserSummaryWrapper.NestL1::players)
-          .stream()
-          .flatMap(List::stream)
-          .map(this.userConverter)
-          .forEach(user -> {
-            users.add(user);
-            missingIds.remove(user.id());
-            this.userCache.put(user.id(), user);
-          });
+      // queue the resolving of the missing non-cached steam users
+      var fetchFutures = missingIds.stream()
+        .map(this.userFetchQueue::queueUserFetch)
+        .toArray(CompletableFuture[]::new);
+      CompletableFuture.allOf(fetchFutures)
+        .orTimeout(5, TimeUnit.SECONDS)
+        .exceptionally(_ -> null)
+        .join();
 
-        // cache requested ids without a steam user to prevent more useless lookups
-        for (var missingId : missingIds) {
-          this.userCache.put(missingId, null);
+      // cache all users that were fetched successfully from steam, either
+      // their converted user information or just that they do not exist
+      for (var future : fetchFutures) {
+        if (future.state() == Future.State.SUCCESS) {
+          var fetchResult = (SteamUserFetchQueue.UserFetchResult) future.resultNow();
+          if (fetchResult != null) {
+            var steamUser = fetchResult.userSummary();
+            if (steamUser != null) {
+              var user = this.userConverter.apply(steamUser);
+              this.userCache.put(user.id(), user);
+              users.add(user);
+            } else {
+              this.userCache.put(fetchResult.userId(), null);
+            }
+          }
         }
-      } catch (Exception exception) {
-        LOGGER.error("Error while resolving steam profiles {}", missingIds, exception);
       }
     }
 

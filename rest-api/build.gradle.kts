@@ -42,6 +42,7 @@ dependencies {
   implementation(projects.common)
   implementation(projects.externalApiClient)
 
+  implementation(libs.feignCore)
   implementation(libs.fuzzywuzzy)
   implementation(libs.springDocOpenApi)
   implementation("io.grpc:grpc-services")
