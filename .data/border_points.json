@@ -55,13 +55,6 @@
     ]
   },
   {
-    "name": "Żelisławice",
-    "ext_point_ids": [
-      "5392",
-      "5393"
-    ]
-  },
-  {
     "name": "Czarnca",
     "ext_point_ids": [
       "613",
@@ -168,6 +161,18 @@
     "name": "Marków",
     "ext_point_ids": [
       "2547"
+    ]
+  },
+  {
+    "name": "Warszawa Podskarbińska",
+    "ext_point_ids": [
+      "4758"
+    ]
+  },
+  {
+    "name": "Łódź Fabryczna",
+    "ext_point_ids": [
+      "2431"
     ]
   }
 ]

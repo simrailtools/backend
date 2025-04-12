@@ -3698,7 +3698,7 @@
     "name": "Opole Główne",
     "id": "40643041-fac7-47f4-85c4-6fce4fd2ac80",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
       "2998"
@@ -7997,7 +7997,7 @@
     "name": "Koluszki",
     "id": "1620faed-498a-49df-bb19-6da1aa97a079",
     "prefix": null,
-    "max_speed": 60,
+    "max_speed": 150,
     "stop_place": false,
     "ids": [
       "1803",
@@ -8077,7 +8077,7 @@
     "name": "Rogów",
     "id": "c59e34c5-bea8-4919-9f87-d0e8da65ae85",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 160,
     "stop_place": false,
     "ids": [
       "3590"
@@ -8194,7 +8194,7 @@
     "name": "Lipce Reymontowskie",
     "id": "c2ba0b99-8158-4177-9526-582dd67d95fa",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 110,
     "stop_place": true,
     "ids": [
       "2251"
@@ -8233,7 +8233,7 @@
     "name": "Płyćwia",
     "id": "731ef571-e45b-4732-a083-deb6544927e6",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 150,
     "stop_place": false,
     "ids": [
       "3251"
@@ -9052,7 +9052,7 @@
     "name": "Borowa Oleśnicka",
     "id": "02ef78bf-672c-4f24-939d-2350eae1523c",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 110,
     "stop_place": false,
     "ids": [
       "288"
@@ -9091,7 +9091,7 @@
     "name": "Długołęka",
     "id": "303afa84-08bb-47c8-ab9c-ae04566f4360",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 110,
     "stop_place": false,
     "ids": [
       "788"
@@ -9130,7 +9130,7 @@
     "name": "Wrocław Psie Pole",
     "id": "80ab65e7-ccde-471a-bc10-f1c159cd5f6e",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 110,
     "stop_place": false,
     "ids": [
       "5105"
@@ -9169,7 +9169,7 @@
     "name": "Wrocław Sołtysowice",
     "id": "891cf738-a9f4-4145-a801-b5f84f28febb",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
       "5109"
@@ -13580,7 +13580,7 @@
     "name": "Baciuty",
     "id": "7b273047-409a-42a9-885a-1e0cd82e7d2d",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
       "63"
@@ -13619,7 +13619,7 @@
     "name": "Łapy",
     "id": "06e14305-2098-420c-a1f4-85c1a89ec9cc",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
       "2356"
@@ -13658,7 +13658,7 @@
     "name": "Racibory",
     "id": "7ef25bd4-62e8-4326-95e8-8b56852eff60",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "3478"
@@ -13697,7 +13697,7 @@
     "name": "Szepietowo",
     "id": "6e317792-0927-4157-988c-2e6139b9faab",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "4340"
@@ -13736,7 +13736,7 @@
     "name": "Czyżew",
     "id": "0dbf9a49-59f0-4a44-b577-5f9267aa26e1",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "693"
@@ -13775,7 +13775,7 @@
     "name": "Kietlanka",
     "id": "7c01d6e5-857a-42a3-815c-e55fbbd6a1d9",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "1721"
@@ -13814,7 +13814,7 @@
     "name": "Małkinia",
     "id": "6a0347ae-b102-496a-bd4c-b6b09350cce9",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "2526"
@@ -13853,7 +13853,7 @@
     "name": "Łochów",
     "id": "91a4a27e-335f-4881-b1c7-3e48a52c9d07",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "2393"
@@ -13892,7 +13892,7 @@
     "name": "Tłuszcz",
     "id": "38c108aa-9776-4b0a-b4fe-f77fc7708c66",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "4517"
@@ -13931,7 +13931,7 @@
     "name": "Wołomin",
     "id": "11b9b531-8aa3-4fba-b16c-4aa8e0e5bd84",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
       "5020",
@@ -21636,6 +21636,513 @@
     "position": {
       "lat": 51.9680200,
       "lng": 20.4988349
+    }
+  },
+  {
+    "name": "Twardogóra",
+    "id": "a66df045-48df-40b6-9c0c-782be58f3f3b",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": false,
+    "ids": [
+      "4614"
+    ],
+    "bb": [
+      [
+        17.4584418686,
+        51.3595558884
+      ],
+      [
+        17.4583721743,
+        51.3601951534
+      ],
+      [
+        17.4706186125,
+        51.360715729
+      ],
+      [
+        17.4706883068,
+        51.3600764713
+      ],
+      [
+        17.4584418686,
+        51.3595558884
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3322950957,
+    "uic_ref": "5103867",
+    "position": {
+      "lat": 51.3602630,
+      "lng": 17.4677429
+    }
+  },
+  {
+    "name": "Dobroszyce",
+    "id": "2e000a81-aa13-4532-84e0-5b0556d6a10c",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "804"
+    ],
+    "bb": [
+      [
+        17.3628864222,
+        51.2678590855
+      ],
+      [
+        17.3610440163,
+        51.268395505
+      ],
+      [
+        17.3672954253,
+        51.2768000914
+      ],
+      [
+        17.3691378312,
+        51.27626377
+      ],
+      [
+        17.3628864222,
+        51.2678590855
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2003309188,
+    "uic_ref": "5101026",
+    "position": {
+      "lat": 51.2705063,
+      "lng": 17.3637981
+    }
+  },
+  {
+    "name": "Grabowno Wielkie",
+    "id": "57a6ff8f-a8ad-4b5f-8ccc-51e4a0600154",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "1223"
+    ],
+    "bb": [
+      [
+        17.4038119164,
+        51.3382750706
+      ],
+      [
+        17.4005367087,
+        51.3454619275
+      ],
+      [
+        17.4040742237,
+        51.346090949
+      ],
+      [
+        17.4073494314,
+        51.3389041906
+      ],
+      [
+        17.4038119164,
+        51.3382750706
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2003311924,
+    "uic_ref": "5101082",
+    "position": {
+      "lat": 51.3432200,
+      "lng": 17.4034740
+    }
+  },
+  {
+    "name": "Bełchów",
+    "id": "8b600a48-2a02-4bd2-95cb-f3275c5dadb8",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": false,
+    "ids": [
+      "113"
+    ],
+    "bb": [
+      [
+        20.0348115918,
+        52.0220945312
+      ],
+      [
+        20.0285236404,
+        52.0313282751
+      ],
+      [
+        20.0307716872,
+        52.0319077764
+      ],
+      [
+        20.0370596386,
+        52.0226741522
+      ],
+      [
+        20.0348115918,
+        52.0220945312
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3458306888,
+    "uic_ref": "5100411",
+    "position": {
+      "lat": 52.0264867,
+      "lng": 20.0331400
+    }
+  },
+  {
+    "name": "Dąbrowa Oleśnicka",
+    "id": "c4d80ab4-54ea-4656-afee-9852fd31c0d9",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "742"
+    ],
+    "bb": [
+      [
+        17.3686160477,
+        51.2279294997
+      ],
+      [
+        17.3679136859,
+        51.2280107123
+      ],
+      [
+        17.3690536764,
+        51.2318768601
+      ],
+      [
+        17.3697560382,
+        51.2317956543
+      ],
+      [
+        17.3686160477,
+        51.2279294997
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1420388750,
+    "uic_ref": "5100905",
+    "position": {
+      "lat": 51.2300777,
+      "lng": 17.3689153
+    }
+  },
+  {
+    "name": "Topola-Osiedle",
+    "id": "7d4bef1e-e723-4bc1-9a0a-06b1d9cdb8d4",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "4529"
+    ],
+    "bb": [
+      [
+        17.7572085271,
+        51.6101567855
+      ],
+      [
+        17.7564005422,
+        51.6108442089
+      ],
+      [
+        17.7666753723,
+        51.6155013244
+      ],
+      [
+        17.7674833571,
+        51.6148139715
+      ],
+      [
+        17.7572085271,
+        51.6101567855
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 528524484,
+    "uic_ref": "5103806",
+    "position": {
+      "lat": 51.6128545,
+      "lng": 17.7619041
+    }
+  },
+  {
+    "name": "Odolanów",
+    "id": "a8c9ac23-1e14-4ff6-925f-b0957b0f506f",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": false,
+    "ids": [
+      "2940"
+    ],
+    "bb": [
+      [
+        17.6625277708,
+        51.5705949412
+      ],
+      [
+        17.6616292243,
+        51.5711101925
+      ],
+      [
+        17.6685762251,
+        51.5757901409
+      ],
+      [
+        17.6694747716,
+        51.5752749426
+      ],
+      [
+        17.6625277708,
+        51.5705949412
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 10218344847,
+    "uic_ref": "5102538",
+    "position": {
+      "lat": 51.5745910,
+      "lng": 17.6677164
+    }
+  },
+  {
+    "name": "Oleśnica Rataje",
+    "id": "bb7493a0-6287-4a23-8951-f03ec469398e",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": true,
+    "ids": [
+      "2965"
+    ],
+    "bb": [
+      [
+        17.3646544667,
+        51.2150524746
+      ],
+      [
+        17.3639192544,
+        51.2151258103
+      ],
+      [
+        17.3647448613,
+        51.2183733626
+      ],
+      [
+        17.3654800737,
+        51.218300032
+      ],
+      [
+        17.3646544667,
+        51.2150524746
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 703660050,
+    "uic_ref": "5100245",
+    "position": {
+      "lat": 51.2165073,
+      "lng": 17.3646194
+    }
+  },
+  {
+    "name": "Wrocław Mikołajów",
+    "id": "1cd10819-8955-491b-a75f-ab4e40ae0082",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": true,
+    "ids": [
+      "5076"
+    ],
+    "bb": [
+      [
+        16.9987067678,
+        51.1149749588
+      ],
+      [
+        16.997543195,
+        51.1150889037
+      ],
+      [
+        16.9982031272,
+        51.1177445528
+      ],
+      [
+        16.9993667,
+        51.1176306144
+      ],
+      [
+        16.9987067678,
+        51.1149749588
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 302223767,
+    "uic_ref": "5104134",
+    "position": {
+      "lat": 51.1162965,
+      "lng": 16.9983950
+    }
+  },
+  {
+    "name": "Sośnie Ostrowskie",
+    "id": "e785a444-a339-47d5-9288-d1f9726be357",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "4014"
+    ],
+    "bb": [
+      [
+        17.6385433561,
+        51.4646063996
+      ],
+      [
+        17.6379111569,
+        51.4732612051
+      ],
+      [
+        17.6410621742,
+        51.4733505144
+      ],
+      [
+        17.6416943734,
+        51.4646957259
+      ],
+      [
+        17.6385433561,
+        51.4646063996
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2003316494,
+    "uic_ref": "5103536",
+    "position": {
+      "lat": 51.4715395,
+      "lng": 17.6394539
+    }
+  },
+  {
+    "name": "Białystok",
+    "id": "a87f75ee-09d2-4f6c-a348-1ea86d265830",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": false,
+    "ids": [
+      "154"
+    ],
+    "bb": [
+      [
+        23.1175057419,
+        53.1191144361
+      ],
+      [
+        23.1117788782,
+        53.1227355605
+      ],
+      [
+        23.1366420064,
+        53.1368943886
+      ],
+      [
+        23.1423688702,
+        53.133274457
+      ],
+      [
+        23.1175057419,
+        53.1191144361
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3298971170,
+    "uic_ref": "5100002",
+    "position": {
+      "lat": 53.1336211,
+      "lng": 23.1354375
+    }
+  },
+  {
+    "name": "Granowiec",
+    "id": "5246a545-52db-45d0-97df-98a0c3db2c1c",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "ids": [
+      "1233"
+    ],
+    "bb": [
+      [
+        17.6453382538,
+        51.5065209593
+      ],
+      [
+        17.6438184064,
+        51.5065865361
+      ],
+      [
+        17.644476843,
+        51.5124981953
+      ],
+      [
+        17.6459966904,
+        51.512432627
+      ],
+      [
+        17.6453382538,
+        51.5065209593
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2003316757,
+    "uic_ref": "5101073",
+    "position": {
+      "lat": 51.5116753,
+      "lng": 17.6451794
+    }
+  },
+  {
+    "name": "Łódź Fabryczna",
+    "id": "e4e62308-a557-4fb9-b8d9-6777341c3102",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": false,
+    "ids": [
+      "2431"
+    ],
+    "bb": [
+      [
+        19.4735878751,
+        51.7688744975
+      ],
+      [
+        19.466192216,
+        51.7691937057
+      ],
+      [
+        19.4663312109,
+        51.7704269268
+      ],
+      [
+        19.4737268699,
+        51.7701077274
+      ],
+      [
+        19.4735878751,
+        51.7688744975
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 4304797718,
+    "uic_ref": "5100317",
+    "position": {
+      "lat": 51.7695535,
+      "lng": 19.4696108
     }
   }
 ]

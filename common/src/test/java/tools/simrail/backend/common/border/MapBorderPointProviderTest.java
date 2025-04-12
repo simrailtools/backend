@@ -96,6 +96,10 @@ public final class MapBorderPointProviderTest {
 
       var timetable = trainRun.get("timetable");
       var trainRunId = trainRun.get("runId").asText();
+      if (timetable.isEmpty()) {
+        continue;
+      }
+
       for (var timetableEntry : timetable) {
         var pointId = timetableEntry.get("pointId").asText();
         var isBorderPoint = this.borderPointProvider.isMapBorderPoint(pointId);
