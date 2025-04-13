@@ -26,7 +26,9 @@ package tools.simrail.backend.api.server;
 
 import jakarta.annotation.Nonnull;
 import java.time.OffsetDateTime;
+import java.time.ZoneId;
 import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -53,8 +55,11 @@ public final class SimRailServerTimeService {
   @Nonnull
   public Optional<Pair<EventbusServerSnapshotDto, OffsetDateTime>> findServerAndTime(@Nonnull String serverId) {
     return this.snapshotCache.findCachedServer(serverId).map(serverSnapshot -> {
-      var utcTime = OffsetDateTime.now(ZoneOffset.UTC);
-      var serverTime = utcTime.plusHours(serverSnapshot.getUtcOffsetHours());
+      var serverTimezone = ZoneId.of(serverSnapshot.getTimezoneId());
+      var serverTime = ZonedDateTime.now(ZoneOffset.UTC)
+        .plusHours(serverSnapshot.getUtcOffsetHours())
+        .withZoneSameLocal(serverTimezone)
+        .toOffsetDateTime();
       return Pair.of(serverSnapshot, serverTime);
     });
   }
