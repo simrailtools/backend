@@ -98,7 +98,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByEvent(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull LocalDate date,
     @Nullable String line,
     @Nullable String journeyNumber,
@@ -141,7 +141,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByPlayableDeparture(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull OffsetDateTime timeStart,
     @Nonnull OffsetDateTime timeEnd,
     @Nullable String line,
@@ -186,7 +186,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByTail(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull OffsetDateTime startTime,
     @Nonnull UUID startStationId,
     @Nonnull String startJourneyNumber,
@@ -227,7 +227,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByRailcar(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull LocalDate date,
     @Nonnull UUID railcarId
   ) {

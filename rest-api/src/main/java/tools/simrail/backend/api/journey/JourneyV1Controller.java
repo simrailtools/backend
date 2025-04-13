@@ -161,7 +161,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byTail(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "startTime") OffsetDateTime startTime,
     @RequestParam(name = "startStationId") @UUID(version = 4, allowNil = false) String startStationId,
     @RequestParam(name = "startJourneyNumber") @Pattern(regexp = ".+") String startJourneyNumber,
@@ -169,8 +169,8 @@ class JourneyV1Controller {
     @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
     @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
   ) {
+    var serverIdFilter = java.util.UUID.fromString(serverId);
     var stationStationIdFilter = java.util.UUID.fromString(startStationId);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
     return this.journeyService.findByTail(
       page,
@@ -226,7 +226,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byEvent(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
     @RequestParam(name = "journeyNumber", required = false) @Pattern(regexp = ".+") String journeyNumber,
@@ -242,12 +242,13 @@ class JourneyV1Controller {
       // default the requested date to the current date
       date = LocalDate.now(ZoneOffset.UTC);
     }
+
     if (transportTypes == null || transportTypes.isEmpty()) {
       // default the transport types to all if not given
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
+    var serverIdFilter = java.util.UUID.fromString(serverId);
     return this.journeyService.findByEvent(
       page,
       limit,
@@ -298,7 +299,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byPlayableDeparture(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
     @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
     @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
@@ -309,6 +310,7 @@ class JourneyV1Controller {
       // default the requested time start to the current UTC time if not provided
       timeStart = OffsetDateTime.now(ZoneOffset.UTC);
     }
+
     if (timeEnd == null) {
       // default the requested time end to 15 minutes after the requested time start if not provided
       timeEnd = timeStart.plusMinutes(15);
@@ -326,9 +328,9 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
+    var serverIdFilter = java.util.UUID.fromString(serverId);
     var truncatedStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
     var truncatedEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     return this.journeyService.findByPlayableDeparture(
       page,
       limit,
@@ -375,7 +377,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byRailcar(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
   ) {
@@ -384,8 +386,8 @@ class JourneyV1Controller {
       date = LocalDate.now(ZoneOffset.UTC);
     }
 
+    var serverIdFilter = java.util.UUID.fromString(serverId);
     var railcarIdFilter = java.util.UUID.fromString(railcarId);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
   }
 }

@@ -86,7 +86,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     JOIN first_events fe ON fe.journey_id = j.id
     JOIN last_events le ON le.journey_id = j.id
     WHERE
-      (:serverId IS NULL OR j.server_id = :serverId)
+      j.server_id = :serverId
       AND (TRUE = :#{#startTime == null} OR fe.time = :startTime)
       AND (:startStationId IS NULL OR fe.station_id = :startStationId)
       AND (:startJourneyNumber IS NULL OR fe.journey_number = :startJourneyNumber)
@@ -129,7 +129,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       FROM sit_journey j
       JOIN sit_journey_event je ON je.journey_id = j.id
       WHERE
-        (:serverId IS NULL OR j.server_id = :serverId)
+        j.server_id = :serverId
         AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
           je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
         AND (:line IS NULL OR je.transport_line = :line)
@@ -191,7 +191,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     FROM sit_journey j
     JOIN first_playable_events fe ON fe.journey_id = j.id
     WHERE
-      (:serverId IS NULL OR j.server_id = :serverId)
+      j.server_id = :serverId
       AND (fe.scheduled_time BETWEEN :start AND :end)
       AND (:line IS NULL OR fe.transport_line = :line)
       AND (:journeyCategory IS NULL OR fe.transport_category = :journeyCategory)
@@ -229,7 +229,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       JOIN sit_journey_event je ON j.id = je.journey_id
       JOIN sit_vehicle v ON j.id = v.journey_id
       WHERE
-        (:serverId IS NULL OR j.server_id = :serverId)
+        j.server_id = :serverId
         AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
              je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
         AND v.railcar_id = :railcarId
