@@ -42,6 +42,8 @@ record SimRailServerDto(
   @Nonnull String code,
   @Schema(description = "The timezone id of the server according to the ISO-8601 specification")
   @Nonnull String timezoneId,
+  @Schema(description = "The difference in hours between the UTC time and the time on the server")
+  int utcOffsetHours,
   @Schema(description = "The region where the server is located")
   @Nonnull SimRailServerRegion region,
   @Schema(description = "Tags of the server, for example providing detail information about the moderation status")

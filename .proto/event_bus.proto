@@ -82,6 +82,8 @@ message ServerUpdateFrame {
   optional bool online = 3;
   // The timezone offset of the server, not given in case the timezone didn't change.
   optional string zone_offset = 5;
+  // The utc offset of the server in hours, not given in case the offset didn't change.
+  optional sint32 utc_offset_hours = 6;
 }
 
 // A single update frame for a single dispatch post holding all fields that can be updated.

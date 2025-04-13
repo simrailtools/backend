@@ -25,30 +25,37 @@
 package tools.simrail.backend.api.server;
 
 import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.common.server.SimRailServerEntity;
+import java.time.OffsetDateTime;
+import java.time.ZoneOffset;
+import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
+import org.springframework.stereotype.Service;
+import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
+import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 
-/**
- * A converter for server entities to server DTOs.
- */
-@Component
-final class SimRailServerDtoConverter implements Function<SimRailServerEntity, SimRailServerDto> {
+@Service
+public final class SimRailServerTimeService {
 
-  @Override
-  public @Nonnull SimRailServerDto apply(@Nonnull SimRailServerEntity server) {
-    return new SimRailServerDto(
-      server.getId(),
-      server.getCode(),
-      server.getTimezone(),
-      server.getUtcOffsetHours(),
-      server.getRegion(),
-      server.getTags(),
-      server.getSpokenLanguage(),
-      server.getUpdateTime(),
-      server.getRegisteredSince(),
-      server.isOnline(),
-      server.isDeleted()
-    );
+  private final SitSnapshotCache snapshotCache;
+
+  @Autowired
+  public SimRailServerTimeService(@Nonnull SitSnapshotCache snapshotCache) {
+    this.snapshotCache = snapshotCache;
+  }
+
+  /**
+   * Get the cached server snapshot and current server time for the server with the given id.
+   *
+   * @param serverId the id of the server to get the snapshot and time of.
+   * @return a pair holding the server snapshot and time of the server with the given id.
+   */
+  @Nonnull
+  public Optional<Pair<EventbusServerSnapshotDto, OffsetDateTime>> findServerAndTime(@Nonnull String serverId) {
+    return this.snapshotCache.findCachedServer(serverId).map(serverSnapshot -> {
+      var utcTime = OffsetDateTime.now(ZoneOffset.UTC);
+      var serverTime = utcTime.plusHours(serverSnapshot.getUtcOffsetHours());
+      return Pair.of(serverSnapshot, serverTime);
+    });
   }
 }

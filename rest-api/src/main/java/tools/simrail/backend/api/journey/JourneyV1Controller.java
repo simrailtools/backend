@@ -38,12 +38,12 @@ import jakarta.validation.constraints.Pattern;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -53,10 +53,12 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
+import tools.simrail.backend.api.server.SimRailServerTimeService;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @Validated
@@ -71,10 +73,29 @@ class JourneyV1Controller {
     List.copyOf(EnumSet.allOf(JourneyTransportType.class));
 
   private final JourneyService journeyService;
+  private final SimRailServerTimeService serverTimeService;
 
   @Autowired
-  public JourneyV1Controller(@Nonnull JourneyService journeyService) {
+  public JourneyV1Controller(
+    @Nonnull JourneyService journeyService,
+    @Nonnull SimRailServerTimeService serverTimeService
+  ) {
     this.journeyService = journeyService;
+    this.serverTimeService = serverTimeService;
+  }
+
+  /**
+   * Get the cached server snapshot and current server time for the server with the given id. If the server is not
+   * cached locally an exception is thrown instead.
+   *
+   * @param serverId the id of the server to get the snapshot and time of.
+   * @return a pair holding the server snapshot and time of the server with the given id.
+   * @throws IllegalRequestParameterException if no server with the given id is cached.
+   */
+  private @Nonnull Pair<EventbusServerSnapshotDto, OffsetDateTime> getServerAndTime(@Nonnull String serverId) {
+    return this.serverTimeService
+      .findServerAndTime(serverId)
+      .orElseThrow(() -> new IllegalRequestParameterException("Invalid server id provided"));
   }
 
   /**
@@ -169,13 +190,13 @@ class JourneyV1Controller {
     @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
     @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
   ) {
-    var serverIdFilter = java.util.UUID.fromString(serverId);
+    var server = this.getServerAndTime(serverId).getFirst();
     var stationStationIdFilter = java.util.UUID.fromString(startStationId);
     var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
     return this.journeyService.findByTail(
       page,
       limit,
-      serverIdFilter,
+      server.getServerId(),
       startTime,
       stationStationIdFilter,
       startJourneyNumber,
@@ -238,9 +259,10 @@ class JourneyV1Controller {
       throw new IllegalRequestParameterException("Either journey number or line must be provided");
     }
 
+    var serverAndTime = this.getServerAndTime(serverId);
     if (date == null) {
-      // default the requested date to the current date
-      date = LocalDate.now(ZoneOffset.UTC);
+      // default the requested date to the current date on the requested server
+      date = serverAndTime.getSecond().toLocalDate();
     }
 
     if (transportTypes == null || transportTypes.isEmpty()) {
@@ -248,7 +270,7 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = java.util.UUID.fromString(serverId);
+    var serverIdFilter = serverAndTime.getFirst().getServerId();
     return this.journeyService.findByEvent(
       page,
       limit,
@@ -306,9 +328,10 @@ class JourneyV1Controller {
     @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
     @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
   ) {
+    var serverAndTime = this.getServerAndTime(serverId);
     if (timeStart == null) {
-      // default the requested time start to the current UTC time if not provided
-      timeStart = OffsetDateTime.now(ZoneOffset.UTC);
+      // default the requested time start to the current time on the requested server
+      timeStart = serverAndTime.getSecond();
     }
 
     if (timeEnd == null) {
@@ -328,7 +351,7 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = java.util.UUID.fromString(serverId);
+    var serverIdFilter = serverAndTime.getFirst().getServerId();
     var truncatedStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
     var truncatedEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
     return this.journeyService.findByPlayableDeparture(
@@ -381,12 +404,13 @@ class JourneyV1Controller {
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
   ) {
+    var serverAndTime = this.getServerAndTime(serverId);
     if (date == null) {
-      // default the requested date to the current date
-      date = LocalDate.now(ZoneOffset.UTC);
+      // default the requested date to the current date on the requested server
+      date = serverAndTime.getSecond().toLocalDate();
     }
 
-    var serverIdFilter = java.util.UUID.fromString(serverId);
+    var serverIdFilter = serverAndTime.getFirst().getServerId();
     var railcarIdFilter = java.util.UUID.fromString(railcarId);
     return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
   }

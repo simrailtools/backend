@@ -105,7 +105,7 @@ public final class SimRailServerCollector implements SimRailServerService {
         return newServer;
       });
       var originalOnline = serverEntity.isOnline();
-      var originalTimezoneId = serverEntity.getTimezone();
+      var originalUtcOffset = serverEntity.getUtcOffsetHours();
 
       // update the base information
       serverEntity.setCode(server.getCode());
@@ -157,6 +157,10 @@ public final class SimRailServerCollector implements SimRailServerService {
         // collect the actual server timezone offset seconds
         var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
         serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
+
+        // convert the collected utc offset seconds to utc offset hours and update it in the server entity
+        var utcOffsetHours = (int) Math.ceil(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
+        serverEntity.setUtcOffsetHours(utcOffsetHours);
       }
 
       // save the entity and register it as discovered during the run if we did a full collection
@@ -175,7 +179,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       if (serverEntity.isNew()) {
         this.serverUpdateHandler.handleServerAdd(savedEntity);
       } else {
-        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalTimezoneId, savedEntity);
+        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, savedEntity);
       }
     }
 
