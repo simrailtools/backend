@@ -152,13 +152,12 @@ class JourneyV1Controller {
     summary = "Find journeys based on its tails",
     description = """
       Filters journeys based on its start and end events, where the start event data is required for filtering and the
-      end event data can optionally be supplied for further narrowing. Additionally the server id can be given to limit
-      results to a single server rather than selecting journeys from all servers.
+      end event data can optionally be supplied for further narrowing.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
       @Parameter(name = "startTime", description = "The scheduled time when the journey departs from the first station"),
       @Parameter(name = "startStationId", description = "The id of the station where the journey is scheduled to depart"),
       @Parameter(name = "startJourneyNumber", description = "The number of the journey at the first station"),
@@ -224,8 +223,8 @@ class JourneyV1Controller {
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current server date if omitted"),
       @Parameter(name = "line", description = "The line at an event, at least journeyNumber or line must be provided"),
       @Parameter(name = "journeyNumber", description = "The number at an event, at least journeyNumber or line must be provided"),
       @Parameter(name = "journeyCategory", description = "The category at an event"),
@@ -292,14 +291,14 @@ class JourneyV1Controller {
     description = """
       Finds journeys that become playable in the provided time range. Optionally additional filter parameters can be
       provided to narrow down the results. The provided time range must be at least 1 minute and at most 60 minutes
-      long. If the start time is omitted it defaults to the current UTC time, if the end time is omitted it defaults to
-      the start time plus 15 minutes.
+      long. If the start time is omitted it defaults to the current server time, if the end time is omitted it defaults
+      to the start time plus 15 minutes.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current time (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current server time if omitted"),
       @Parameter(name = "timeEnd", description = "The end of the time range (ISO-8601 with offset), defaults to start plus 15 minutes if omitted"),
       @Parameter(name = "line", description = "The line of the journey at the first playable event"),
       @Parameter(name = "journeyCategory", description = "The category of the journey at the first playable event"),
@@ -373,15 +372,15 @@ class JourneyV1Controller {
   @Operation(
     summary = "Finds journeys that are using the given railcar in their vehicle composition",
     description = """
-      Finds journeys that use the given railcar in their vehicle composition on the given date. The result can
-      optionally be filtered for a specific server id. The results might be incomplete or incorrect for journeys that
-      were not active yet, as the result data will be based on predictions and not the real composition of the journey.
+      Finds journeys that use the given railcar in their vehicle composition on the given date. The results might be
+      incomplete or incorrect for journeys that were not active yet, as the result data will be based on predictions
+      and not the real composition of the journey.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current server date if omitted"),
       @Parameter(name = "railcar", description = "The id of the railcar that must be included in the vehicle composition of the journey"),
     },
     responses = {
