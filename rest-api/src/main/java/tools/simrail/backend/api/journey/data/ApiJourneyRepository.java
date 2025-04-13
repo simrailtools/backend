@@ -174,7 +174,10 @@ public interface ApiJourneyRepository extends JourneyRepository {
         e.scheduled_time,
         e.transport_line,
         e.transport_type,
-        e.transport_category
+        e.transport_category,
+        e.point_id,
+        e.point_name,
+        e.cancelled
       FROM sit_journey_event e
       WHERE e.event_index = (
         SELECT MIN(e2.event_index)
@@ -187,7 +190,11 @@ public interface ApiJourneyRepository extends JourneyRepository {
       j.server_id,
       j.first_seen_time,
       j.last_seen_time,
-      j.cancelled
+      j.cancelled,
+      fe.point_id AS fe_point_id,
+      fe.point_name AS fe_point_name,
+      fe.scheduled_time AS fe_scheduled_time,
+      fe.cancelled AS fe_cancelled
     FROM sit_journey j
     JOIN first_playable_events fe ON fe.journey_id = j.id
     WHERE
@@ -200,7 +207,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     LIMIT :limit
     OFFSET :offset
     """, nativeQuery = true)
-  List<JourneySummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
+  List<JourneyWithEventSummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
     @Param("serverId") UUID serverId,
     @Param("line") String line,
     @Param("journeyCategory") String journeyCategory,

@@ -29,7 +29,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
 import tools.simrail.backend.api.journey.data.JourneySummaryProjection;
+import tools.simrail.backend.api.journey.data.JourneyWithEventSummaryProjection;
+import tools.simrail.backend.api.journey.dto.JourneyEventDescriptorDto;
+import tools.simrail.backend.api.journey.dto.JourneyStopPlaceSummaryDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.journey.dto.JourneyTerminalEventDto;
 
 /**
@@ -71,11 +75,41 @@ public final class JourneySummaryDtoConverter {
   }
 
   /**
+   * Converts a journey and its associated first/last event into a DTO.
+   */
+  public @Nonnull JourneySummaryWithPlayableEventDto convert(
+    @Nonnull JourneyWithEventSummaryProjection journey,
+    @Nonnull JourneyEventSummaryProjection firstEvent,
+    @Nonnull JourneyEventSummaryProjection lastEvent
+  ) {
+    var originEvent = this.convertSummaryEvent(firstEvent);
+    var destinationEvent = this.convertSummaryEvent(lastEvent);
+    var firstPlayableEvent = this.convertFirstEvent(journey);
+    return new JourneySummaryWithPlayableEventDto(
+      journey.getId(),
+      journey.getServerId(),
+      journey.getFirstSeenTime(),
+      journey.getLastSeenTime(),
+      journey.isFeCancelled(),
+      originEvent,
+      destinationEvent,
+      firstPlayableEvent);
+  }
+
+  /**
    * Converts a single event summary projection into a terminal event DTO.
    */
   private @Nonnull JourneyTerminalEventDto convertSummaryEvent(@Nonnull JourneyEventSummaryProjection summary) {
     var transport = this.transportDtoConverter.apply(summary.getTransport());
     var stopPlace = this.stopPlaceDtoConverter.apply(summary.getStopDescriptor());
     return new JourneyTerminalEventDto(stopPlace, summary.getScheduledTime(), transport, summary.isCancelled());
+  }
+
+  /**
+   * Converts the first playable event that is encapsulated in the given journey projection.
+   */
+  private @Nonnull JourneyEventDescriptorDto convertFirstEvent(@Nonnull JourneyWithEventSummaryProjection summary) {
+    var stopPlace = new JourneyStopPlaceSummaryDto(summary.getFePointId(), summary.getFePointName(), true);
+    return new JourneyEventDescriptorDto(stopPlace, summary.getFeScheduledTime(), summary.isFeCancelled());
   }
 }

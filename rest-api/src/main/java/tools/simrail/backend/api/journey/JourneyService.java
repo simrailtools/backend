@@ -32,9 +32,11 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import tools.simrail.backend.api.journey.converter.JourneyDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneySummaryDtoConverter;
@@ -44,6 +46,7 @@ import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
 import tools.simrail.backend.api.journey.data.JourneySummaryProjection;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
@@ -120,7 +123,11 @@ class JourneyService {
       transportTypes,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -138,7 +145,7 @@ class JourneyService {
    * @return a pagination wrapper around the query results based on the given filter parameters.
    */
   @Cacheable(cacheNames = "journey_search_cache", sync = true)
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByPlayableDeparture(
+  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> findByPlayableDeparture(
     @Nullable Integer page,
     @Nullable Integer limit,
     @Nonnull UUID serverId,
@@ -163,7 +170,11 @@ class JourneyService {
       timeEnd,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -210,7 +221,11 @@ class JourneyService {
       endStationId,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -243,7 +258,11 @@ class JourneyService {
       railcarId,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -254,9 +273,10 @@ class JourneyService {
    * @param queriedItems   the items that were actually queried from the database.
    * @return a paginated response wrapper for the queried items.
    */
-  private @Nonnull PaginatedResponseDto<JourneySummaryDto> filterJourneys(
+  private @Nonnull <P extends JourneySummaryProjection, R> PaginatedResponseDto<R> filterJourneys(
     int requestedLimit,
-    @Nonnull List<JourneySummaryProjection> queriedItems
+    @Nonnull List<P> queriedItems,
+    @Nonnull BiFunction<P, Pair<JourneyEventSummaryProjection, JourneyEventSummaryProjection>, R> dtoConverter
   ) {
     // return an empty response if no items were queried
     if (queriedItems.isEmpty()) {
@@ -284,11 +304,10 @@ class JourneyService {
         var associatedEvents = eventsByJourneyId.get(journey.getId());
         var firstEvent = associatedEvents.getFirst();
         var lastEvent = associatedEvents.get(1);
-        if (firstEvent.getEventIndex() == 0) {
-          return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
-        } else {
-          return this.journeySummaryDtoConverter.convert(journey, lastEvent, firstEvent);
-        }
+        var eventPair = firstEvent.getEventIndex() == 0
+          ? Pair.of(firstEvent, lastEvent)
+          : Pair.of(lastEvent, firstEvent);
+        return dtoConverter.apply(journey, eventPair);
       })
       .toList();
     return new PaginatedResponseDto<>(returnedItems, morePagesAvailable);

@@ -57,6 +57,7 @@ import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 import tools.simrail.backend.api.server.SimRailServerTimeService;
 import tools.simrail.backend.common.journey.JourneyTransportType;
@@ -318,7 +319,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byPlayableDeparture(
+  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> byPlayableDeparture(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
