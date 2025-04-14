@@ -90,7 +90,7 @@ tasks.withType<ProcessResources> {
       overwrite(true)
       onlyIfModified(true)
       useETag("strongOnly")
-      src("https://unpkg.com/rapidoc/dist/rapidoc-min.js")
+      src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
       dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
     }
   }
