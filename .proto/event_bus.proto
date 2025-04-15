@@ -69,6 +69,9 @@ message JourneyUpdateFrame {
   optional uint32 speed = 6;
   // The current position of the journey, not present if the position didn't change.
   optional GeoPosition position = 7;
+
+  // Indicates if one event along the journey route was updated.
+  bool event_updated = 8;
 }
 
 // A single update frame for a single server holding all fields that can be updated.

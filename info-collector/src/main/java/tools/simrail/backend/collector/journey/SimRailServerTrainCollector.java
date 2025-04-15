@@ -273,7 +273,13 @@ class SimRailServerTrainCollector {
           updater.updateEventsDueToPositionChange();
         }
 
-        return updater.getUpdatedJourneyEvents().stream();
+        // mark that one event of the journey was updated if we updated at least one event
+        var updatedEvents = updater.getUpdatedJourneyEvents();
+        if (!updatedEvents.isEmpty()) {
+          recorder.markEventUpdated();
+        }
+
+        return updatedEvents.stream();
       })
       .toList();
     this.journeyEventRepository.saveAll(updatedJourneys);

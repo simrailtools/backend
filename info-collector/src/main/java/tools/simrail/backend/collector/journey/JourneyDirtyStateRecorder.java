@@ -59,6 +59,7 @@ final class JourneyDirtyStateRecorder {
 
   // === fields keeping track of changes in the recorder
   private boolean removed;
+  private boolean eventUpdated;
   private ValueHolder<String> foreignId;
   private ValueHolder<Integer> speed;
   private ValueHolder<String> driverSteamId;
@@ -133,6 +134,13 @@ final class JourneyDirtyStateRecorder {
     if (this.original.getLastSeenTime() == null) {
       this.removed = true;
     }
+  }
+
+  /**
+   * Marks that at least one event of the associated journey was updated.
+   */
+  public void markEventUpdated() {
+    this.eventUpdated = true;
   }
 
   /**
@@ -219,6 +227,7 @@ final class JourneyDirtyStateRecorder {
     if (this.removed) {
       return JourneyUpdateFrame.newBuilder()
         .setUpdateType(UpdateType.REMOVE)
+        .setEventUpdated(this.eventUpdated)
         .setServerId(this.server.id().toString())
         .setJourneyId(this.original.getId().toString())
         .setDriver(SteamIdWrapper.getDefaultInstance())
@@ -230,6 +239,7 @@ final class JourneyDirtyStateRecorder {
     var updateType = this.foreignId != null ? UpdateType.ADD : UpdateType.UPDATE;
     var updateFrameBuilder = JourneyUpdateFrame.newBuilder()
       .setUpdateType(updateType)
+      .setEventUpdated(this.eventUpdated)
       .setServerId(this.server.id().toString())
       .setJourneyId(this.original.getId().toString());
 
