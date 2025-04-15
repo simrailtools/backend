@@ -52,14 +52,16 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor
 @Entity(name = "sit_journey_event")
 @Table(indexes = {
+  // single column indexes are used for searching in api
   @Index(columnList = "journeyId"),
-  @Index(columnList = "journeyId, scheduledTime"),
+  @Index(name = "idx_point_id", columnList = "point_id"),
+  @Index(name = "idx_scheduled_time", columnList = "scheduledTime"),
+  @Index(name = "idx_transport_line", columnList = "transport_line"),
+  @Index(name = "idx_transport_type", columnList = "transport_type"),
+  @Index(name = "idx_transport_number", columnList = "transport_number"),
+  @Index(name = "idx_transport_category", columnList = "transport_category"),
   @Index(columnList = "journeyId, eventIndex, point_playable"),
-  @Index(columnList = "journeyId, eventIndex, point_id, scheduledTime"),
-  @Index(columnList = "scheduledTime, transport_line, transport_category, transport_type"),
   @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
-  @Index(columnList = "journeyId, eventIndex, point_id, transport_number, transport_category, scheduledTime"),
-  @Index(columnList = "journeyId, scheduledTime, transport_line, transport_number, transport_category, transport_type"),
 })
 public final class JourneyEventEntity {
 

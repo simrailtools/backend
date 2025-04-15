@@ -48,6 +48,7 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Entity(name = "sit_vehicle")
 @Table(indexes = {
   @Index(columnList = "journeyId"),
+  @Index(columnList = "railcarId"),
   @Index(columnList = "journeyId, status"),
   @Index(columnList = "journeyId, indexInGroup"),
 })
