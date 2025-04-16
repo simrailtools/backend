@@ -135,7 +135,9 @@ final class JourneyEventRealtimeUpdater {
 
     // update the passenger stop info if the journey has a passenger stop at the point and the next signal is known
     var nextSignal = this.journey.getNextSignal();
-    if (arrivalEvent.getStopType() == JourneyStopType.PASSENGER && nextSignal != null) {
+    if (arrivalEvent.getStopType() == JourneyStopType.PASSENGER
+      && arrivalEvent.getRealtimePassengerStopInfo() == null
+      && nextSignal != null) {
       this.signalProvider.findSignalInfo(currentPoint.getId(), nextSignal.getName()).ifPresent(platformInfo -> {
         // found the associated platform, update the passenger stop info
         var realtimeStopInfo = new JourneyPassengerStopInfo(platformInfo.getTrack(), platformInfo.getPlatform());
