@@ -81,7 +81,7 @@ public final class SimRailServerCollector implements SimRailServerService {
    * Collects the information of all SimRail servers every 30 seconds.
    */
   @Scheduled(initialDelay = 0, fixedRate = 30, timeUnit = TimeUnit.SECONDS, scheduler = "server_collect_scheduler")
-  public void collectServerInformation() {
+  public void collectServerInformation() throws Exception {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
     var fullCollection = this.collectionRuns++ % 2 == 0;
@@ -94,8 +94,9 @@ public final class SimRailServerCollector implements SimRailServerService {
     }
 
     var foundServers = new ArrayList<SimRailServerDescriptor>();
-    for (var server : servers) {
+    for (var index = 0; index < servers.size(); index++) {
       // get or create the server entity, store the original variable information
+      var server = servers.get(index);
       var serverEntity = this.serverRepository.findByForeignId(server.getId()).orElseGet(() -> {
         var newServer = new SimRailServerEntity();
         newServer.setNew(true);
@@ -180,6 +181,12 @@ public final class SimRailServerCollector implements SimRailServerService {
         this.serverUpdateHandler.handleServerAdd(savedEntity);
       } else {
         this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, savedEntity);
+      }
+
+      // add a small delay every 5 servers to prevent exceeding api quota limits
+      if (index != 0 && index % 5 == 0) {
+        //noinspection BusyWait
+        Thread.sleep(1000);
       }
     }
 
