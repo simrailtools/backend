@@ -62,7 +62,7 @@ the case for Journey Details, as the update frames don't contain relevant inform
 initially. Update frames only contain the information that was changed, every other field is not included in the frame
 data by the backend.
 
-### 0. Update Frame Wrapper
+#### 0. Update Frame Wrapper
 
 Each update frame sent by the server contains the following base fields:
 
