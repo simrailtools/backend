@@ -26,6 +26,7 @@ package tools.simrail.backend.collector.server;
 
 import feign.Response;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
@@ -45,13 +46,16 @@ final class ServerTimeUtil {
    * @param serverTimeResponse the response from the SimRail api time endpoint.
    * @return the time difference between UTC and the server time, in seconds.
    */
-  public static long calculateTimezoneOffsetSeconds(@Nonnull Response serverTimeResponse) {
+  public static @Nullable Long calculateTimezoneOffsetSeconds(@Nonnull Response serverTimeResponse) {
     try (var bodyStream = serverTimeResponse.body().asInputStream()) {
       // parse the server time returned in the response body
       var serverTimeBytes = bodyStream.readAllBytes();
       var serverTimeString = new String(serverTimeBytes, StandardCharsets.UTF_8);
       var serverTimeMillis = Long.parseLong(serverTimeString);
-      var serverTime = Instant.ofEpochMilli(serverTimeMillis);
+      if (serverTimeMillis == -1) {
+        // api responds with -1 if the server is offline, cannot parse time in that case
+        return null;
+      }
 
       // parse the date when the server sent the response (current time)
       var dateValues = serverTimeResponse.headers().get(HttpHeaders.DATE);
@@ -60,6 +64,7 @@ final class ServerTimeUtil {
       var responseInstant = responseDate.toInstant();
 
       // calculate the time difference between the realtime and server time in seconds
+      var serverTime = Instant.ofEpochMilli(serverTimeMillis);
       var between = Duration.between(responseInstant, serverTime);
       return between.toSeconds();
     } catch (Exception exception) {

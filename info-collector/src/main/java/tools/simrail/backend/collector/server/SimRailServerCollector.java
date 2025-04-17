@@ -160,13 +160,15 @@ public final class SimRailServerCollector implements SimRailServerService {
         serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
 
         // convert the collected utc offset seconds to utc offset hours and update it in the server entity
-        var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
-        serverEntity.setUtcOffsetHours(utcOffsetHours);
+        if (serverZoneOffsetSeconds != null) {
+          var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
+          serverEntity.setUtcOffsetHours(utcOffsetHours);
+        }
       }
 
       // save the entity and register it as discovered during the run if we did a full collection
       var savedEntity = this.serverRepository.save(serverEntity);
-      if (serverZoneOffset != null) {
+      if (serverZoneOffset != null && serverZoneOffsetSeconds != null) {
         var serverDescriptor = new SimRailServerDescriptor(
           savedEntity.getId(),
           server.getId(),
