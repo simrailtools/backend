@@ -28,17 +28,17 @@ check if the connection is still alive in two ways:
 
 The communication for SIT-Events is done via WebSocket. This is done by sending an http request with upgrade intent to
 `wss://apis.simrail.tools/sit-events`. To subscribe or unsubscribe from updates, a text message in the following format
-must be sent to the server: `sit-events/<action>/<data type>/<version>/<server id>/<data id>`. Multiple messages can be
+must be sent to the server: `sit-events/<action>/<data-type>/<version>/<server-id>/<data-id>`. Multiple messages can be
 sent to subscribe to multiple data updates types on the same connection. The placeholders must be filled with the
 following replacements:
 
 | Placeholder   | Required Value                                                                                                                                                                                                                                                                               |
 |---------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | `<action>`    | The requested action to take, can be `subscribe` or `unsubscribe`                                                                                                                                                                                                                            |
-| `<data type>` | The type of data being requested, can be one of: `servers` (for server updates), `dispatch-posts` (for dispatch post updates), `journey-details` (for updates when one or more events along a journey route are updated), `journey-positions` (for updates on position related journey data) |
+| `<data-type>` | The type of data being requested, can be one of: `servers` (for server updates), `dispatch-posts` (for dispatch post updates), `journey-details` (for updates when one or more events along a journey route are updated), `journey-positions` (for updates on position related journey data) |
 | `<version>`   | The requested data version (defines the way how update frames sent to the client are encoded). Currently only version `v1` is in use for all data types.                                                                                                                                     |
-| `<server id>` | The id of the server with which the requested data is associated, e.g. the id of the server where a journey is active.                                                                                                                                                                       |
-| `<data id>`   | The specific id of the data to receive updates of, e.g. the id of a single journey to only receive updates of that journey. Can be `+` to subscribe to all updates of the data on the specified server.                                                                                      |
+| `<server-id>` | The id of the server with which the requested data is associated, e.g. the id of the server where a journey is active.                                                                                                                                                                       |
+| `<data-id>`   | The specific id of the data to receive updates of, e.g. the id of a single journey to only receive updates of that journey. Can be `+` to subscribe to all updates of the data on the specified server.                                                                                      |
 
 Example text messages to subscribe to data:
 
