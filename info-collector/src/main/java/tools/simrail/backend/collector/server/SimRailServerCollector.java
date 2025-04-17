@@ -161,6 +161,12 @@ public final class SimRailServerCollector implements SimRailServerService {
         var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
         serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
 
+        // only continue the full collection cycle (which will consequently update the servers)
+        // if a valid time was found for the server. if we didn't find a valid time, the server
+        // will not be added to `foundServers` causing it to be removed from the available
+        // server list which will hinder the data collection
+        fullCollection = serverZoneOffsetSeconds != null;
+
         // convert the collected utc offset seconds to utc offset hours and update it in the server entity
         if (serverZoneOffsetSeconds != null) {
           var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
