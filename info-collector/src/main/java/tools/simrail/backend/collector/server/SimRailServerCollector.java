@@ -106,6 +106,7 @@ public final class SimRailServerCollector implements SimRailServerService {
         return newServer;
       });
       var originalOnline = serverEntity.isOnline();
+      var originalDeleted = serverEntity.isDeleted();
       var originalUtcOffset = serverEntity.getUtcOffsetHours();
 
       // update the base information
@@ -180,7 +181,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       }
 
       // publish a possible change to all listeners
-      if (serverEntity.isNew()) {
+      if (serverEntity.isNew() || originalDeleted) {
         this.serverUpdateHandler.handleServerAdd(savedEntity);
       } else {
         this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, savedEntity);
