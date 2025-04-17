@@ -85,7 +85,13 @@ class SteamUserFetchQueue {
         remaining.future.complete(fetchResult);
       }
     } catch (Exception exception) {
-      LOGGER.warn("Exception while fetching steam users", exception);
+      // 429 is a common exception that only spams the console, don't
+      // log the exception to prevent spamming with unnecessary stacktraces
+      if (exception instanceof FeignException.TooManyRequests) {
+        LOGGER.warn("Received status 429 (Too Many Requests) while fetching user info from steam");
+      } else {
+        LOGGER.warn("Exception while fetching steam users", exception);
+      }
 
       // remove and complete all requests that have been retried too many times
       for (var entry : fetchBatch.entrySet()) {
