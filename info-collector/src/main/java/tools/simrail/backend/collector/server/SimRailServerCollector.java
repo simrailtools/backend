@@ -109,6 +109,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       var originalUtcOffset = serverEntity.getUtcOffsetHours();
 
       // update the base information
+      serverEntity.setDeleted(false);
       serverEntity.setCode(server.getCode());
       serverEntity.setOnline(server.isOnline());
 
