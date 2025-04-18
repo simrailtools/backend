@@ -113,6 +113,12 @@ final class SimRailDispatchPostCollector {
           dispatchPost.getPositionLatitude(),
           dispatchPost.getPositionLongitude()));
 
+        // override position for Miechów as the upstream provided position is way off (in the middle of a field)
+        // TODO: remove when position is fixed in upstream
+        if (dispatchPost.getId().equals("675330d44337b38ac4027545")) {
+          postEntity.setPosition(new GeoPositionEntity(50.354694, 20.011680));
+        }
+
         // update the time when the post was initially registered in the SimRail backend
         var registeredSince = MongoIdDecodeUtil.parseMongoId(dispatchPost.getId());
         postEntity.setRegisteredSince(registeredSince);
