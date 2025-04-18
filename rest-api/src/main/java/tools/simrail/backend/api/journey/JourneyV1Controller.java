@@ -54,6 +54,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
+import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
@@ -141,6 +142,41 @@ class JourneyV1Controller {
         .lastModified(journey.lastUpdated().toInstant())
         .body(journey))
       .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Get all journeys that are currently on the server with the given id.
+   */
+  @GetMapping("/active")
+  @Operation(
+    summary = "Get all journeys that are currently active on a server",
+    description = """
+      Get descriptive information about all journeys that are currently active on a server. Data returned by this
+      endpoint updates every 15 seconds. This endpoint shouldn't be used to poll journey updates, use the event system
+      SIT-Events instead.
+      """,
+    parameters = {
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The active journeys of the given server were successfully resolved"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull List<JourneyActiveDto> active(
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId
+  ) {
+    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
+    return this.journeyService.findActiveJourneys(serverIdFilter);
   }
 
   /**

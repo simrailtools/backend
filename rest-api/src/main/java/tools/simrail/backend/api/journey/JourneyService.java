@@ -38,12 +38,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
+import tools.simrail.backend.api.journey.converter.JourneyActiveDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneyDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneySummaryDtoConverter;
 import tools.simrail.backend.api.journey.data.ApiJourneyEventRepository;
 import tools.simrail.backend.api.journey.data.ApiJourneyRepository;
 import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
 import tools.simrail.backend.api.journey.data.JourneySummaryProjection;
+import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
@@ -53,22 +56,28 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 @Service
 class JourneyService {
 
+  private final SitSnapshotCache snapshotCache;
   private final ApiJourneyRepository journeyRepository;
   private final ApiJourneyEventRepository journeyEventRepository;
 
   private final JourneyDtoConverter journeyDtoConverter;
+  private final JourneyActiveDtoConverter journeyActiveDtoConverter;
   private final JourneySummaryDtoConverter journeySummaryDtoConverter;
 
   @Autowired
   public JourneyService(
+    @Nonnull SitSnapshotCache snapshotCache,
     @Nonnull ApiJourneyRepository journeyRepository,
     @Nonnull ApiJourneyEventRepository journeyEventRepository,
     @Nonnull JourneyDtoConverter journeyDtoConverter,
+    @Nonnull JourneyActiveDtoConverter journeyActiveDtoConverter,
     @Nonnull JourneySummaryDtoConverter journeySummaryDtoConverter
   ) {
+    this.snapshotCache = snapshotCache;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyDtoConverter = journeyDtoConverter;
+    this.journeyActiveDtoConverter = journeyActiveDtoConverter;
     this.journeySummaryDtoConverter = journeySummaryDtoConverter;
   }
 
@@ -81,6 +90,26 @@ class JourneyService {
   @Cacheable(cacheNames = "journey_cache", key = "'by_id_' + #journeyId")
   public @Nonnull Optional<JourneyDto> findById(@Nonnull UUID journeyId) {
     return this.journeyRepository.findWithEventsById(journeyId).map(this.journeyDtoConverter);
+  }
+
+  /**
+   * Get a list of all active journey on the server with the given id.
+   *
+   * @param serverId the id of the server to get the active journeys on.
+   * @return all journeys that are currently active on the given server.
+   */
+  @Cacheable(cacheNames = "active_journey_cache", key = "'by_server_' + #serverId")
+  public @Nonnull List<JourneyActiveDto> findActiveJourneys(@Nonnull UUID serverId) {
+    return this.snapshotCache.getCachedJourneySnapshots()
+      .filter(snapshot -> snapshot.getServerId().equals(serverId))
+      .filter(snapshot -> {
+        var speed = snapshot.getSpeed();
+        var positionLat = snapshot.getPositionLat();
+        var positionLng = snapshot.getPositionLng();
+        return speed != null && positionLat != null && positionLng != null;
+      })
+      .map(this.journeyActiveDtoConverter)
+      .toList();
   }
 
   /**
