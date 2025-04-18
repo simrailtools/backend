@@ -204,6 +204,10 @@ Add frames hold the following data:
     "category": "EIJ",
     // the number of the train (string, not null)
     "number": "5411",
+    // the line of the train (string, nullable)
+    "line": "S41",
+    // the label of the train (string, nullable)
+    "label": "Henryk",
     // the id of the signal ahead of the train (string, null if signal is too far away)
     "nextSignalId": "DG_A",
     // the distance of the train to the signal ahead (integer, null if signal is too far away)
