@@ -33,7 +33,7 @@ import tools.simrail.backend.common.tristate.Tristate;
 /**
  * DTO for updating a journey, only contains the fields that can be updated.
  */
-public record EventJourneyUpdateDto(
+public record EventJourneyPositionUpdateDto(
   @Nonnull String journeyId,
   @Nullable @JsonInclude(JsonInclude.Include.NON_NULL) Integer speed,
   @Nonnull @JsonInclude(JsonInclude.Include.NON_EMPTY) Tristate<String> driverSteamId,
@@ -52,7 +52,7 @@ public record EventJourneyUpdateDto(
    * @param frame the update frame to construct the update frame from.
    * @return the constructed update dto from the given update frame.
    */
-  public static @Nonnull EventJourneyUpdateDto fromJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
+  public static @Nonnull EventJourneyPositionUpdateDto fromJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
     // extract the position data, if given
     Double positionLat = null;
     Double positionLng = null;
@@ -100,7 +100,7 @@ public record EventJourneyUpdateDto(
     }
 
     var speed = frame.hasSpeed() ? frame.getSpeed() : null;
-    return new EventJourneyUpdateDto(
+    return new EventJourneyPositionUpdateDto(
       frame.getJourneyId(),
       speed,
       driverSteamId,

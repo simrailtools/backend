@@ -24,46 +24,21 @@
 
 package tools.simrail.backend.api.event.dto;
 
-import java.util.Arrays;
-import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import jakarta.annotation.Nonnull;
+import tools.simrail.backend.common.rpc.JourneyUpdateFrame;
 
 /**
- * The types of updates that can be sent out by an update frame.
+ * DTO for updating the event data of a journey, only contains the fields that can be updated.
  */
-@Getter
-@AllArgsConstructor
-public enum EventFrameType {
+public record EventJourneyDataUpdateDto(@Nonnull String journeyId) {
 
   /**
-   * Updates about server details.
+   * Constructs an update dto from the given frame data.
+   *
+   * @param frame the frame data to construct the dto from.
+   * @return a new journey data update frame based on the given journey update frame.
    */
-  SERVER("servers"),
-  /**
-   * Updates about dispatch posts on a server (or specific post).
-   */
-  DISPATCH_POST("dispatch-posts"),
-  /**
-   * Updates when the data of a journey changes.
-   */
-  JOURNEY_DETAILS("journey-details"),
-  /**
-   * Updates when the position of a journey changes.
-   */
-  JOURNEY_POSITION("journey-positions"),
-  ;
-
-  /**
-   * An unmodifiable lookup map for the registration name to the associated event frame type.
-   */
-  public static final Map<String, EventFrameType> BY_REGISTRATION_NAME = Arrays.stream(EventFrameType.values())
-    .collect(Collectors.toUnmodifiableMap(EventFrameType::getRegistrationName, Function.identity()));
-
-  /**
-   * The name that must be sent by a client to register a listener for the frame type.
-   */
-  private final String registrationName;
+  public static @Nonnull EventJourneyDataUpdateDto fromJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
+    return new EventJourneyDataUpdateDto(frame.getJourneyId());
+  }
 }

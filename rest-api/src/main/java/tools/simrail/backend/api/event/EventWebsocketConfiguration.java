@@ -39,22 +39,16 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 class EventWebsocketConfiguration implements WebSocketConfigurer {
 
   private final EventWebsocketHandler eventWebsocketHandler;
-  private final EventWebsocketHandshakeInterceptor eventWebsocketInterceptor;
 
   @Autowired
-  public EventWebsocketConfiguration(
-    @Nonnull EventWebsocketHandler eventWebsocketHandler,
-    @Nonnull EventWebsocketHandshakeInterceptor eventWebsocketInterceptor
-  ) {
+  public EventWebsocketConfiguration(@Nonnull EventWebsocketHandler eventWebsocketHandler) {
     this.eventWebsocketHandler = eventWebsocketHandler;
-    this.eventWebsocketInterceptor = eventWebsocketInterceptor;
   }
 
   @Override
   public void registerWebSocketHandlers(@Nonnull WebSocketHandlerRegistry registry) {
     registry
-      .addHandler(this.eventWebsocketHandler, "/sit-events/v1")
-      .addInterceptors(this.eventWebsocketInterceptor)
+      .addHandler(this.eventWebsocketHandler, "/sit-events")
       .setAllowedOrigins("*");
   }
 }
