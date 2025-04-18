@@ -162,7 +162,7 @@ Add frames hold the following data:
     "longitude": 19.801761627197266,
     // the steam ids of the dispatchers in the dispatch post (array of string, not null)
     "dispatcherSteamIds": [
-      "76561199082772640"
+      "76561198342066455"
     ]
   }
 }
@@ -199,7 +199,7 @@ Add frames hold the following data:
     // the current speed of the journey (integer, not null)
     "speed": 102,
     // the steam id of the driver (string, null if bot drives train)
-    "driverSteamId": "76561198041272795",
+    "driverSteamId": "76561198342066455",
     // the category of the train (string, not null)
     "category": "EIJ",
     // the number of the train (string, not null)
@@ -230,7 +230,7 @@ Update and delete frames hold the following data:
     // the current speed of the journey (integer, not present if unchanged)
     "speed": 102,
     // the steam id of the driver (string, not present if unchanged)
-    "driverSteamId": "76561198041272795",
+    "driverSteamId": "76561198342066455",
     // the id of the signal ahead of the train (string, not present if unchanged)
     "nextSignalId": "DG_A",
     // the distance of the train to the signal ahead (integer, not present if unchanged)
