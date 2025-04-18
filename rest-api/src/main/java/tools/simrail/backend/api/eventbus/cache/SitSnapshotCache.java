@@ -29,14 +29,17 @@ import com.github.benmanes.caffeine.cache.Caffeine;
 import com.github.benmanes.caffeine.cache.RemovalCause;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.time.Duration;
+import java.time.Instant;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
@@ -53,13 +56,16 @@ import tools.simrail.backend.common.rpc.UpdateType;
 @Component
 public final class SitSnapshotCache {
 
+  // the grace period in seconds before a snapshot becomes eligible for cache purging
+  private static final int CLEANUP_GRACE_SECONDS = 15;
+
   private final EventbusServerRepository serverRepository;
   private final EventbusJourneyRepository journeyRepository;
   private final EventbusDispatchPostRepository dispatchPostRepository;
 
-  private final Map<String, EventbusServerSnapshotDto> serverSnapshots;
-  private final Map<String, EventbusJourneySnapshotDto> journeySnapshots;
-  private final Map<String, EventbusDispatchPostSnapshotDto> dispatchPostSnapshots;
+  private final Map<String, SnapshotRegistration<EventbusServerSnapshotDto>> serverSnapshots;
+  private final Map<String, SnapshotRegistration<EventbusJourneySnapshotDto>> journeySnapshots;
+  private final Map<String, SnapshotRegistration<EventbusDispatchPostSnapshotDto>> dispatchPostSnapshots;
 
   private final Cache<String, Boolean> removedIdsCache;
 
@@ -77,7 +83,7 @@ public final class SitSnapshotCache {
     var activeServers = serverRepository.findSnapshotsOfAllActiveServers();
     this.serverSnapshots = activeServers.stream().collect(Collectors.toMap(
       server -> server.getServerId().toString(),
-      Function.identity(),
+      SnapshotRegistration::new,
       (left, _) -> left,
       ConcurrentHashMap::new));
 
@@ -85,7 +91,7 @@ public final class SitSnapshotCache {
     var activeJourneys = journeyRepository.findSnapshotsOfAllActiveJourneys();
     this.journeySnapshots = activeJourneys.stream().collect(Collectors.toMap(
       journey -> journey.getJourneyId().toString(),
-      Function.identity(),
+      SnapshotRegistration::new,
       (left, _) -> left,
       ConcurrentHashMap::new));
 
@@ -93,7 +99,7 @@ public final class SitSnapshotCache {
     var activeDispatchPosts = dispatchPostRepository.findSnapshotsOfAllActiveDispatchPosts();
     this.dispatchPostSnapshots = activeDispatchPosts.stream().collect(Collectors.toMap(
       post -> post.getPostId().toString(),
-      Function.identity(),
+      SnapshotRegistration::new,
       (left, _) -> left,
       ConcurrentHashMap::new));
 
@@ -153,7 +159,8 @@ public final class SitSnapshotCache {
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getServerId());
-      return this.serverSnapshots.remove(frame.getServerId());
+      var registration = this.serverSnapshots.remove(frame.getServerId());
+      return registration == null ? null : registration.snapshot();
     }
 
     // remove the removal marking for the id of the given server if the action is an add
@@ -163,19 +170,21 @@ public final class SitSnapshotCache {
 
     // resolve the server with the provided server id and cache it
     // apply the frame as an update in case the server was updated
-    var serverToUpdate = this.serverSnapshots.computeIfAbsent(frame.getServerId(), _ -> {
+    var registration = this.serverSnapshots.computeIfAbsent(frame.getServerId(), _ -> {
       var serverId = UUID.fromString(frame.getServerId());
       return this.serverRepository.findServerSnapshotById(serverId)
         .filter(_ -> !this.isIdMarkedAsRemoved(frame.getServerId()))
+        .map(SnapshotRegistration::new)
         .orElse(null);
     });
+    var serverToUpdate = registration == null ? null : registration.snapshot();
     if (serverToUpdate != null) {
       serverToUpdate.applyUpdateFrame(frame);
     }
 
     // check if the id was marked as removed while the update/add was applied
     // to prevent caching something that will never receive an update again
-    if (serverToUpdate != null && this.isIdMarkedAsRemoved(frame.getServerId())) {
+    if (registration != null && this.isIdMarkedAsRemoved(frame.getServerId())) {
       this.serverSnapshots.remove(frame.getServerId());
       return null;
     }
@@ -194,7 +203,8 @@ public final class SitSnapshotCache {
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getJourneyId());
-      return this.journeySnapshots.remove(frame.getJourneyId());
+      var registration = this.journeySnapshots.remove(frame.getJourneyId());
+      return registration == null ? null : registration.snapshot();
     }
 
     // remove the removal marking for the id of the given journey if the action is an add
@@ -204,19 +214,21 @@ public final class SitSnapshotCache {
 
     // resolve the journey with the provided journey id and cache it
     // apply the frame as an update in case the journey was updated
-    var journeyToUpdate = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), _ -> {
+    var registration = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), _ -> {
       var journeyId = UUID.fromString(frame.getJourneyId());
       return this.journeyRepository.findJourneySnapshotById(journeyId)
         .filter(_ -> !this.isIdMarkedAsRemoved(frame.getJourneyId()))
+        .map(SnapshotRegistration::new)
         .orElse(null);
     });
+    var journeyToUpdate = registration == null ? null : registration.snapshot();
     if (journeyToUpdate != null) {
       journeyToUpdate.applyUpdateFrame(frame);
     }
 
     // check if the id was marked as removed while the update/add was applied
     // to prevent caching something that will never receive an update again
-    if (journeyToUpdate != null && this.isIdMarkedAsRemoved(frame.getJourneyId())) {
+    if (registration != null && this.isIdMarkedAsRemoved(frame.getJourneyId())) {
       this.journeySnapshots.remove(frame.getJourneyId());
       return null;
     }
@@ -237,7 +249,8 @@ public final class SitSnapshotCache {
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getPostId());
-      return this.dispatchPostSnapshots.remove(frame.getPostId());
+      var registration = this.dispatchPostSnapshots.remove(frame.getPostId());
+      return registration == null ? null : registration.snapshot();
     }
 
     // remove the removal marking for the id of the given dispatch post if the action is an add
@@ -247,19 +260,21 @@ public final class SitSnapshotCache {
 
     // resolve the dispatch post with the provided dispatch post id and cache it
     // apply the frame as an update in case the dispatch post was updated
-    var postToUpdate = this.dispatchPostSnapshots.computeIfAbsent(frame.getPostId(), _ -> {
+    var registration = this.dispatchPostSnapshots.computeIfAbsent(frame.getPostId(), _ -> {
       var postId = UUID.fromString(frame.getPostId());
       return this.dispatchPostRepository.findDispatchPostSnapshotById(postId)
         .filter(_ -> !this.isIdMarkedAsRemoved(frame.getPostId()))
+        .map(SnapshotRegistration::new)
         .orElse(null);
     });
+    var postToUpdate = registration == null ? null : registration.snapshot();
     if (postToUpdate != null) {
       postToUpdate.applyUpdateFrame(frame);
     }
 
     // check if the id was marked as removed while the update/add was applied
     // to prevent caching something that will never receive an update again
-    if (postToUpdate != null && this.isIdMarkedAsRemoved(frame.getPostId())) {
+    if (registration != null && this.isIdMarkedAsRemoved(frame.getPostId())) {
       this.dispatchPostSnapshots.remove(frame.getPostId());
       return null;
     }
@@ -274,7 +289,7 @@ public final class SitSnapshotCache {
    * @return an optional holding the cached server snapshot, if one exists.
    */
   public @Nonnull Optional<EventbusServerSnapshotDto> findCachedServer(@Nonnull String id) {
-    return Optional.ofNullable(this.serverSnapshots.get(id));
+    return Optional.ofNullable(this.serverSnapshots.get(id)).map(SnapshotRegistration::snapshot);
   }
 
   /**
@@ -284,7 +299,7 @@ public final class SitSnapshotCache {
    * @return an optional holding the cached journey snapshot, if one exists.
    */
   public @Nonnull Optional<EventbusJourneySnapshotDto> findCachedJourney(@Nonnull String id) {
-    return Optional.ofNullable(this.journeySnapshots.get(id));
+    return Optional.ofNullable(this.journeySnapshots.get(id)).map(SnapshotRegistration::snapshot);
   }
 
   /**
@@ -294,7 +309,7 @@ public final class SitSnapshotCache {
    * @return an optional holding the cached dispatch post snapshot, if one exists.
    */
   public @Nonnull Optional<EventbusDispatchPostSnapshotDto> findCachedDispatchPost(@Nonnull String id) {
-    return Optional.ofNullable(this.dispatchPostSnapshots.get(id));
+    return Optional.ofNullable(this.dispatchPostSnapshots.get(id)).map(SnapshotRegistration::snapshot);
   }
 
   /**
@@ -302,8 +317,8 @@ public final class SitSnapshotCache {
    *
    * @return the server snapshots that are cached locally.
    */
-  public @Nonnull Collection<EventbusServerSnapshotDto> getCachedServerSnapshots() {
-    return this.serverSnapshots.values();
+  public @Nonnull Stream<EventbusServerSnapshotDto> getCachedServerSnapshots() {
+    return this.serverSnapshots.values().stream().map(SnapshotRegistration::snapshot);
   }
 
   /**
@@ -311,8 +326,8 @@ public final class SitSnapshotCache {
    *
    * @return the journey snapshots that are cached locally.
    */
-  public @Nonnull Collection<EventbusJourneySnapshotDto> getCachedJourneySnapshots() {
-    return this.journeySnapshots.values();
+  public @Nonnull Stream<EventbusJourneySnapshotDto> getCachedJourneySnapshots() {
+    return this.journeySnapshots.values().stream().map(SnapshotRegistration::snapshot);
   }
 
   /**
@@ -320,7 +335,50 @@ public final class SitSnapshotCache {
    *
    * @return the dispatch post snapshots that are cached locally.
    */
-  public @Nonnull Collection<EventbusDispatchPostSnapshotDto> getCachedDispatchPostSnapshots() {
-    return this.dispatchPostSnapshots.values();
+  public @Nonnull Stream<EventbusDispatchPostSnapshotDto> getCachedDispatchPostSnapshots() {
+    return this.dispatchPostSnapshots.values().stream().map(SnapshotRegistration::snapshot);
+  }
+
+  /**
+   * Cleans up all journey snapshots from the cache that are no longer active.
+   *
+   * @param activeJourneyIds the ids of the journeys that are still active.
+   */
+  @Nonnull
+  Collection<EventbusJourneySnapshotDto> cleanupJourneySnapshots(@Nonnull Collection<UUID> activeJourneyIds) {
+    var now = Instant.now();
+    var removed = new ArrayList<EventbusJourneySnapshotDto>();
+
+    var journeyRegistrationIterator = this.journeySnapshots.values().iterator();
+    while (journeyRegistrationIterator.hasNext()) {
+      var registration = journeyRegistrationIterator.next();
+      var snapshot = registration.snapshot();
+      var registeredSeconds = Duration.between(registration.registeredAt(), now).toSeconds();
+      if (!activeJourneyIds.contains(snapshot.getJourneyId()) && registeredSeconds > CLEANUP_GRACE_SECONDS) {
+        removed.add(registration.snapshot());
+        journeyRegistrationIterator.remove();
+      }
+    }
+
+    return removed;
+  }
+
+  /**
+   * A registration of a snapshot, associated with the time when the snapshot was registered.
+   *
+   * @param registeredAt the time when the snapshot was registered (ADD frame received by collector)
+   * @param snapshot     the snapshot.
+   * @param <S>          the type of the snapshot.
+   */
+  private record SnapshotRegistration<S>(@Nonnull Instant registeredAt, @Nonnull S snapshot) {
+
+    /**
+     * Creates a new snapshot registration instance with the current timestamp.
+     *
+     * @param snapshot the snapshot.
+     */
+    private SnapshotRegistration(@Nonnull S snapshot) {
+      this(Instant.now(), snapshot);
+    }
   }
 }

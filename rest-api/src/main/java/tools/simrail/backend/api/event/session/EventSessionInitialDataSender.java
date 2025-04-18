@@ -76,13 +76,10 @@ final class EventSessionInitialDataSender {
       var serverIdFilter = request.serverId();
       Stream<?> snapshots = switch (request.frameType()) {
         case SERVER -> this.snapshotCache.getCachedServerSnapshots()
-          .stream()
           .filter(snapshot -> snapshot.getServerId().equals(serverIdFilter));
         case DISPATCH_POST -> this.snapshotCache.getCachedDispatchPostSnapshots()
-          .stream()
           .filter(snapshot -> snapshot.getServerId().equals(serverIdFilter));
         case JOURNEY_POSITION -> this.snapshotCache.getCachedJourneySnapshots()
-          .stream()
           .filter(snapshot -> snapshot.getServerId().equals(serverIdFilter));
         case JOURNEY_DETAILS -> null; // don't send initial data for journey details, only updates
       };
