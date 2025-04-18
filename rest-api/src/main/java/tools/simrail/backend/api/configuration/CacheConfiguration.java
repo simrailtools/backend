@@ -46,7 +46,7 @@ class CacheConfiguration {
       "server_cache",
       Caffeine.newBuilder()
         .recordStats()
-        .expireAfterWrite(10, TimeUnit.SECONDS)
+        .expireAfterWrite(30, TimeUnit.SECONDS)
         .build());
   }
 

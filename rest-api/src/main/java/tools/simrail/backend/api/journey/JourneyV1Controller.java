@@ -53,7 +53,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tools.simrail.backend.api.eventbus.dto.EventbusServerSnapshotDto;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
@@ -86,16 +85,16 @@ class JourneyV1Controller {
   }
 
   /**
-   * Get the cached server snapshot and current server time for the server with the given id. If the server is not
-   * cached locally an exception is thrown instead.
+   * Get the parsed server id and current server time for the server with the given id. If the server doesn't exist, an
+   * exception is thrown instead.
    *
    * @param serverId the id of the server to get the snapshot and time of.
-   * @return a pair holding the server snapshot and time of the server with the given id.
-   * @throws IllegalRequestParameterException if no server with the given id is cached.
+   * @return a pair holding the parsed server id and time of the server with the given id.
+   * @throws IllegalRequestParameterException if no server with the given id exists.
    */
-  private @Nonnull Pair<EventbusServerSnapshotDto, OffsetDateTime> getServerAndTime(@Nonnull String serverId) {
+  private @Nonnull Pair<java.util.UUID, OffsetDateTime> getServerIdAndTime(@Nonnull String serverId) {
     return this.serverTimeService
-      .findServerAndTime(serverId)
+      .resolveServerTime(serverId)
       .orElseThrow(() -> new IllegalRequestParameterException("Invalid server id provided"));
   }
 
@@ -190,13 +189,13 @@ class JourneyV1Controller {
     @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
     @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
   ) {
-    var server = this.getServerAndTime(serverId).getFirst();
+    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
     var stationStationIdFilter = java.util.UUID.fromString(startStationId);
     var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
     return this.journeyService.findByTail(
       page,
       limit,
-      server.getServerId(),
+      serverIdFilter,
       startTime,
       stationStationIdFilter,
       startJourneyNumber,
@@ -259,7 +258,7 @@ class JourneyV1Controller {
       throw new IllegalRequestParameterException("Either journey number or line must be provided");
     }
 
-    var serverAndTime = this.getServerAndTime(serverId);
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (date == null) {
       // default the requested date to the current date on the requested server
       date = serverAndTime.getSecond().toLocalDate();
@@ -270,7 +269,7 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = serverAndTime.getFirst().getServerId();
+    var serverIdFilter = serverAndTime.getFirst();
     return this.journeyService.findByEvent(
       page,
       limit,
@@ -328,7 +327,7 @@ class JourneyV1Controller {
     @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
     @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
   ) {
-    var serverAndTime = this.getServerAndTime(serverId);
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (timeStart == null) {
       // default the requested time start to the current time on the requested server
       timeStart = serverAndTime.getSecond();
@@ -351,7 +350,7 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = serverAndTime.getFirst().getServerId();
+    var serverIdFilter = serverAndTime.getFirst();
     var truncatedStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
     var truncatedEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
     return this.journeyService.findByPlayableDeparture(
@@ -404,13 +403,13 @@ class JourneyV1Controller {
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
   ) {
-    var serverAndTime = this.getServerAndTime(serverId);
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (date == null) {
       // default the requested date to the current date on the requested server
       date = serverAndTime.getSecond().toLocalDate();
     }
 
-    var serverIdFilter = serverAndTime.getFirst().getServerId();
+    var serverIdFilter = serverAndTime.getFirst();
     var railcarIdFilter = java.util.UUID.fromString(railcarId);
     return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
   }
