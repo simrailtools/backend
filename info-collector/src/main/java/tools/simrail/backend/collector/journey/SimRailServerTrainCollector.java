@@ -119,13 +119,16 @@ class SimRailServerTrainCollector {
           // fetch and update train positions and speed
           this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
 
-          // check if any journeys changed and take appropriate action
-          var updatedJourneys = dirtyRecorders.values().stream().filter(JourneyDirtyStateRecorder::isDirty).toList();
+          // check if any journeys changed, apply changed data to cached snapshot
+          // (data is only persisted into the database during full collections in a later step)
+          var updatedJourneys = dirtyRecorders.values().stream()
+            .filter(JourneyDirtyStateRecorder::isDirty)
+            .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
+            .toList();
           if (!updatedJourneys.isEmpty()) {
             if (fullCollection) {
               // if this is a full collection run, persist the changed journeys into the database as well
               var updatedJourneyEntities = updatedJourneys.stream()
-                .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
                 .map(JourneyDirtyStateRecorder::getOriginal)
                 .toList();
               this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
