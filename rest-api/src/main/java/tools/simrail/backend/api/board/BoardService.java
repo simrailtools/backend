@@ -35,6 +35,7 @@ import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import tools.simrail.backend.api.board.converter.BoardEntryDtoConverter;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
@@ -46,9 +47,6 @@ import tools.simrail.backend.api.server.SimRailServerTimeService;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 
-/**
- *
- */
 @Service
 class BoardService {
 
@@ -81,12 +79,15 @@ class BoardService {
   }
 
   /**
-   * @param serverId
-   * @param pointId
-   * @param timeStart
-   * @param timeEnd
-   * @param transportTypes
-   * @return
+   * Validates the given input requests parameters and builds a board request parameters object which can subsequently
+   * be used to request an arrival or departure board.
+   *
+   * @param serverId       the requested server id.
+   * @param pointId        the requested point id.
+   * @param timeStart      the requested time frame start.
+   * @param timeEnd        the requested time frame end.
+   * @param transportTypes the requested transport types.
+   * @return an object holding the given request parameters for further requesting of data.
    */
   public @Nonnull BoardRequestParameters buildRequestParameters(
     @Nonnull String serverId,
@@ -135,9 +136,12 @@ class BoardService {
   }
 
   /**
-   * @param requestParameters
-   * @return
+   * Lists all arrivals that are matching the given request parameters.
+   *
+   * @param requestParameters the request parameters.
+   * @return all arrivals that are matching the given request parameters.
    */
+  @Cacheable(cacheNames = "boards_cache", key = "'arr_' + #requestParameters")
   public @Nonnull List<BoardEntryDto> listArrivals(@Nonnull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getArrivals(
         requestParameters.serverId(),
@@ -151,9 +155,12 @@ class BoardService {
   }
 
   /**
-   * @param requestParameters
-   * @return
+   * Lists all departures that are matching the given request parameters.
+   *
+   * @param requestParameters the request parameters.
+   * @return all departures that are matching the given request parameters.
    */
+  @Cacheable(cacheNames = "boards_cache", key = "'dep_' + #requestParameters")
   public @Nonnull List<BoardEntryDto> listDepartures(@Nonnull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getDepartures(
         requestParameters.serverId(),
