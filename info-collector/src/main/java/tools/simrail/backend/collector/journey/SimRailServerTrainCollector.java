@@ -33,6 +33,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.SynchronousQueue;
+import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -41,9 +45,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
-import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
@@ -61,7 +65,9 @@ class SimRailServerTrainCollector {
   private final CollectorJourneyService journeyService;
   private final JourneyUpdateHandler journeyUpdateHandler;
   private final JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory;
-  private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
+
+  private final ExecutorService trainCollectExecutor;
+  private final TransactionTemplate transactionTemplate;
 
   // last time when the full train information was fetched
   private transient Instant lastTrainsFetch;
@@ -72,87 +78,113 @@ class SimRailServerTrainCollector {
     @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull CollectorJourneyService journeyService,
     @Nonnull JourneyUpdateHandler journeyUpdateHandler,
-    @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
-    @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
+    @Nonnull TransactionTemplate transactionTemplate,
+    @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory
   ) {
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
     this.journeyUpdateHandler = journeyUpdateHandler;
-    this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
+
+    this.transactionTemplate = transactionTemplate;
+    this.trainCollectExecutor = new ThreadPoolExecutor(
+      15,
+      30,
+      60L,
+      TimeUnit.SECONDS,
+      new SynchronousQueue<>());
+  }
+
+  /**
+   * Executes the given task in a transaction, catching all exceptions thrown by it and counting down the given latch
+   * when the task did complete in any way.
+   *
+   * @param taskLatch the task latch to count down once the given task runnable completed.
+   * @param task      the task runnable to execute transactional in the train collector executor.
+   */
+  private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Runnable task) {
+    this.trainCollectExecutor.submit(() -> this.transactionTemplate.execute((_) -> {
+      try {
+        task.run();
+      } catch (Exception exception) {
+        LOGGER.error("Caught exception while executing journey collection task", exception);
+      } finally {
+        taskLatch.countDown();
+      }
+
+      return null;
+    }));
   }
 
   @Scheduled(initialDelay = 0, fixedDelay = 2, timeUnit = TimeUnit.SECONDS, scheduler = "train_collect_scheduler")
   public void collectActiveTrains() throws InterruptedException {
-    try (var scope = this.transactionalTaskScopeFactory.get()) {
-      // get if a full train data collection should be performed this time
-      var lastFullFetch = this.lastTrainsFetch;
-      var fullCollection = lastFullFetch == null || Duration.between(lastFullFetch, Instant.now()).toSeconds() >= 7;
-      if (fullCollection) {
-        this.lastTrainsFetch = Instant.now();
-      }
+    // get if a full train data collection should be performed this time
+    var lastFullFetch = this.lastTrainsFetch;
+    var fullCollection = lastFullFetch == null || Duration.between(lastFullFetch, Instant.now()).toSeconds() >= 7;
+    if (fullCollection) {
+      this.lastTrainsFetch = Instant.now();
+    }
 
-      var servers = this.serverService.getServers();
-      for (var server : servers) {
-        scope.fork(() -> {
-          var startTime = Instant.now();
-          var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
+    var servers = this.serverService.getServers();
+    var taskCountLatch = new CountDownLatch(servers.size());
+    for (var server : servers) {
+      this.executeCollectionTask(taskCountLatch, () -> {
+        var startTime = Instant.now();
+        var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
 
-          // keeps track of the dirty journeys without retaining duplicates
-          var dirtyRecorders = new HashMap<UUID, JourneyDirtyStateRecorder>();
-          Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory =
-            journey -> dirtyRecorders.computeIfAbsent(
-              journey.getId(),
-              _ -> new JourneyDirtyStateRecorder(journey, server));
+        // keeps track of the dirty journeys without retaining duplicates
+        var dirtyRecorders = new HashMap<UUID, JourneyDirtyStateRecorder>();
+        Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory =
+          journey -> dirtyRecorders.computeIfAbsent(
+            journey.getId(),
+            _ -> new JourneyDirtyStateRecorder(journey, server));
 
+        if (fullCollection) {
+          // fetch full train details in case we're doing a full collection
+          this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
+        }
+
+        // fetch and update train positions and speed
+        this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
+
+        // check if any journeys changed, apply changed data to cached snapshot
+        // (data is only persisted into the database during full collections in a later step)
+        var updatedJourneys = dirtyRecorders.values().stream()
+          .filter(JourneyDirtyStateRecorder::isDirty)
+          .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
+          .toList();
+        if (!updatedJourneys.isEmpty()) {
           if (fullCollection) {
-            // fetch full train details in case we're doing a full collection
-            this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
+            // if this is a full collection run, persist the changed journeys into the database as well
+            var updatedJourneyEntities = updatedJourneys.stream()
+              .map(JourneyDirtyStateRecorder::getOriginal)
+              .toList();
+            this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
           }
 
-          // fetch and update train positions and speed
-          this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
-
-          // check if any journeys changed, apply changed data to cached snapshot
-          // (data is only persisted into the database during full collections in a later step)
-          var updatedJourneys = dirtyRecorders.values().stream()
-            .filter(JourneyDirtyStateRecorder::isDirty)
-            .map(JourneyDirtyStateRecorder::applyChangesToOriginal)
-            .toList();
-          if (!updatedJourneys.isEmpty()) {
-            if (fullCollection) {
-              // if this is a full collection run, persist the changed journeys into the database as well
-              var updatedJourneyEntities = updatedJourneys.stream()
-                .map(JourneyDirtyStateRecorder::getOriginal)
-                .toList();
-              this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
-            }
-
-            // update journey events that are associated with journeys that got relevant updates
-            var relevantJourneys = updatedJourneys.stream()
-              .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved())
-              .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
-            if (!relevantJourneys.isEmpty()) {
-              var relevantJourneyIds = relevantJourneys.keySet();
-              var journeyEvents = this.journeyService.resolveCachedJourneyEvents(server.id(), relevantJourneyIds);
-              this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
-            }
-
-            // publish the updated journey information to listeners
-            this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
-
-            var elapsedTime = Duration.between(startTime, Instant.now()).toMillis();
-            LOGGER.info("Updated {} trains on {} in {}ms", updatedJourneys.size(), server.code(), elapsedTime);
+          // update journey events that are associated with journeys that got relevant updates
+          var relevantJourneys = updatedJourneys.stream()
+            .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved())
+            .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
+          if (!relevantJourneys.isEmpty()) {
+            var relevantJourneyIds = relevantJourneys.keySet();
+            var journeyEvents = this.journeyService.resolveCachedJourneyEvents(server.id(), relevantJourneyIds);
+            this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
           }
 
-          return null;
-        });
-      }
+          // publish the updated journey information to listeners
+          this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
 
-      // wait for all update tasks to complete, log the first exception if one occurred
-      scope.join();
-      scope.firstException().ifPresent(throwable -> LOGGER.warn("Exception collecting active trains", throwable));
+          var elapsedTime = Duration.between(startTime, Instant.now()).toMillis();
+          LOGGER.info("Updated {} trains on {} in {}ms", updatedJourneys.size(), server.code(), elapsedTime);
+        }
+      });
+    }
+
+    var allDidComplete = taskCountLatch.await(20, TimeUnit.SECONDS);
+    if (!allDidComplete) {
+      LOGGER.warn("At least one journey collect task did not complete within 20 seconds");
     }
   }
 
