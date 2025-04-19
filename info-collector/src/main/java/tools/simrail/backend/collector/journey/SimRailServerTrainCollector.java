@@ -29,7 +29,6 @@ import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
-import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -47,7 +46,6 @@ import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.concurrent.TransactionalFailShutdownTaskScopeFactory;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
-import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
@@ -62,7 +60,6 @@ class SimRailServerTrainCollector {
   private final SimRailPanelApiClient panelApiClient;
   private final CollectorJourneyService journeyService;
   private final JourneyUpdateHandler journeyUpdateHandler;
-  private final JourneyEventRepository journeyEventRepository;
   private final JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory;
   private final TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory;
 
@@ -75,7 +72,6 @@ class SimRailServerTrainCollector {
     @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull CollectorJourneyService journeyService,
     @Nonnull JourneyUpdateHandler journeyUpdateHandler,
-    @Nonnull JourneyEventRepository journeyEventRepository,
     @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
     @Nonnull TransactionalFailShutdownTaskScopeFactory transactionalTaskScopeFactory
   ) {
@@ -83,7 +79,6 @@ class SimRailServerTrainCollector {
     this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
     this.journeyUpdateHandler = journeyUpdateHandler;
-    this.journeyEventRepository = journeyEventRepository;
     this.transactionalTaskScopeFactory = transactionalTaskScopeFactory;
     this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
   }
@@ -132,23 +127,16 @@ class SimRailServerTrainCollector {
                 .map(JourneyDirtyStateRecorder::getOriginal)
                 .toList();
               this.journeyService.persistJourneysAndPopulateCache(server.id(), updatedJourneyEntities);
+            }
 
-              // update journey events that are associated with journeys that got relevant updates
-              var relevantJourneys = updatedJourneys.stream()
-                .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved())
-                .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
-              if (!relevantJourneys.isEmpty()) {
-                var eventsByJourneyId = this.journeyEventRepository.findAllByJourneyIdIn(relevantJourneys.keySet())
-                  .stream()
-                  .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
-                    Collectors.toList(),
-                    events -> {
-                      events.sort(Comparator.comparingInt(JourneyEventEntity::getEventIndex));
-                      return events;
-                    }
-                  )));
-                this.updateJourneyEvents(server, relevantJourneys.values(), eventsByJourneyId);
-              }
+            // update journey events that are associated with journeys that got relevant updates
+            var relevantJourneys = updatedJourneys.stream()
+              .filter(journey -> journey.hasPositionChanged() || journey.wasRemoved())
+              .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
+            if (!relevantJourneys.isEmpty()) {
+              var relevantJourneyIds = relevantJourneys.keySet();
+              var journeyEvents = this.journeyService.resolveCachedJourneyEvents(server.id(), relevantJourneyIds);
+              this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
             }
 
             // publish the updated journey information to listeners
@@ -272,6 +260,7 @@ class SimRailServerTrainCollector {
         var updater = this.journeyEventRealtimeUpdaterFactory.create(journey, server, events);
         if (recorder.wasRemoved()) {
           updater.updateEventsDueToRemoval();
+          eventsByJourney.remove(journey.getId()); // removes all unnecessary events from the cache
         } else if (recorder.hasPositionChanged()) {
           updater.updateEventsDueToPositionChange();
         }
@@ -285,7 +274,7 @@ class SimRailServerTrainCollector {
         return updatedEvents.stream();
       })
       .toList();
-    this.journeyEventRepository.saveAll(updatedJourneys);
+    this.journeyService.persistJourneyEventsAndPopulateCache(server.id(), updatedJourneys);
   }
 
   private @Nullable JourneySignalInfo constructNextSignal(@Nonnull SimRailPanelTrain.DetailData detailData) {
