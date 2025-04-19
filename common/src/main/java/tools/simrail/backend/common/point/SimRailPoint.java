@@ -33,7 +33,6 @@ import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.locationtech.jts.geom.Polygon;
 
 /**
  * A single SimRail point information.
@@ -106,5 +105,5 @@ public final class SimRailPoint {
    */
   @JsonProperty("bb")
   @JsonDeserialize(using = SimRailPointBBDeserializer.class)
-  private Polygon boundingBox;
+  private OptimizedBoundingBox boundingBox;
 }
