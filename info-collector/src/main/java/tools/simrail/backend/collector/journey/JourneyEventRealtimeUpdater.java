@@ -186,21 +186,13 @@ final class JourneyEventRealtimeUpdater {
 
     if (departureEvent == null) {
       // assume that the journey is at the first playable point along the route if no previous
-      // arrival event was recorded for the journey. this check however is only relevant if the
+      // arrival event was recorded for the journey. however, this check is only relevant if the
       // first playable event is also the first event along the route, as we can record an arrival
       // at the first point using the journey position anyway
-      departureEvent = this.journeyEvents.stream()
-        .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
-        .filter(event -> event.getStopDescriptor().isPlayable())
-        .findFirst()
-        .orElse(null);
-      if (departureEvent == null || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
-        return; // should usually not happen
-      }
-
-      // check the comment above for the check reasoning
-      var firstEvent = this.journeyEvents.getFirst();
-      if (firstEvent != departureEvent) {
+      departureEvent = this.journeyEvents.getFirst();
+      if (departureEvent.getEventType() != JourneyEventType.DEPARTURE
+        || !departureEvent.getStopDescriptor().isPlayable()
+        || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
         return;
       }
     }
