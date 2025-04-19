@@ -22,29 +22,29 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * DTO for board transport information.
  */
-public enum JourneyTimeType {
+public record BoardTransportDto(
+  @Schema(description = "The external category of the transport")
+  @Nonnull String category,
+  @Schema(description = "The number of the transport")
+  @Nonnull String number,
+  @Schema(description = "The line of the transport, null in case no line is associated with the transport")
+  @Nullable String line,
+  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport")
+  @Nullable String label,
+  @Schema(description = "The higher-level category of the transport")
+  @Nonnull JourneyTransportType type,
+  @Schema(description = "The maximum speed (in km/h) of the journey is allowed to drive at the associated point")
+  int maxSpeed
+) {
 
-  /**
-   * The time is the same as the scheduled time.
-   */
-  SCHEDULE,
-  /**
-   * The realtime time is a prediction when the event might happen.
-   */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
 }

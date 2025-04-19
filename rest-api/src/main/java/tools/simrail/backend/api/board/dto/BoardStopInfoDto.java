@@ -22,29 +22,16 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * DTO for passenger stop information.
  */
-public enum JourneyTimeType {
+public record BoardStopInfoDto(
+  @Schema(description = "The platform of the passenger change", minimum = "1") int platform,
+  @Schema(description = "The track of the passenger change", minimum = "1") int track
+) {
 
-  /**
-   * The time is the same as the scheduled time.
-   */
-  SCHEDULE,
-  /**
-   * The realtime time is a prediction when the event might happen.
-   */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
 }

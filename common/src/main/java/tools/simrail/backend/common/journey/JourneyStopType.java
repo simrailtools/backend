@@ -41,4 +41,10 @@ public enum JourneyStopType {
    * The journey has a scheduled stop with passenger change at the stop.
    */
   PASSENGER,
+  ;
+
+  /**
+   * JVM-static values array to prevent copies during access.
+   */
+  public static final JourneyStopType[] VALUES = JourneyStopType.values();
 }

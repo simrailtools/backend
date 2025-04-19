@@ -25,24 +25,21 @@
 package tools.simrail.backend.api.board;
 
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.LocalDate;
-import java.time.LocalTime;
+import jakarta.annotation.Nonnull;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.UUID;
-import java.util.stream.Collectors;
-import org.slf4j.LoggerFactory;
+import java.util.Objects;
+import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-import tools.simrail.backend.api.board.data.BoardJourneyProjection;
-import tools.simrail.backend.api.board.data.BoardJourneyRepository;
+import tools.simrail.backend.api.board.dto.BoardEntryDto;
+import tools.simrail.backend.api.board.request.BoardEntrySortOrder;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @Validated
 @CrossOrigin
@@ -51,38 +48,44 @@ import tools.simrail.backend.api.board.data.BoardJourneyRepository;
 @Tag(name = "boards-v1", description = "SimRail Boards Data APIs (Version 1)")
 class BoardV1Controller {
 
+  private final BoardService boardService;
+
   @Autowired
-  private BoardJourneyRepository repository;
+  public BoardV1Controller(@Nonnull BoardService boardService) {
+    this.boardService = boardService;
+  }
+
+  @GetMapping("/arrivals")
+  public @Nonnull List<BoardEntryDto> listArrivals(
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
+    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
+    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes,
+    @RequestParam(name = "sortBy", required = false) BoardEntrySortOrder sortBy
+  ) {
+    var sortOrder = Objects.requireNonNullElse(sortBy, BoardEntrySortOrder.REALTIME_TIME);
+    var requestParams = this.boardService.buildRequestParameters(serverId, pointId, timeStart, timeEnd, transportTypes);
+
+    var arrivals = this.boardService.listArrivals(requestParams);
+    arrivals.sort(sortOrder.getComparator());
+    return arrivals;
+  }
 
   @GetMapping("/departures")
-  public String arrivals() {
-    var sid = UUID.fromString("9db9b77d-a5ff-5385-89c3-6c6224e0824f");
-    var pid = UUID.fromString("6840caa1-ef46-4cc4-93fb-0f26abf7c7d9");
-    var start = OffsetDateTime.of(LocalDate.now(), LocalTime.of(16, 0), ZoneOffset.ofHours(2));
-    var end = OffsetDateTime.of(LocalDate.now(), LocalTime.of(16, 30), ZoneOffset.ofHours(2));
-    var arrivals = this.repository.getDepartures(sid, pid, start, end).stream().collect(Collectors.collectingAndThen(
-      Collectors.groupingBy(BoardJourneyProjection::getJourneyId),
-      grouped -> {
-        grouped.forEach((_, v) -> v.sort(Comparator.comparing(BoardJourneyProjection::getEventIndex)));
-        return grouped;
-      }
-    ));
+  public @Nonnull List<BoardEntryDto> listDepartures(
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
+    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
+    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes,
+    @RequestParam(name = "sortBy", required = false) BoardEntrySortOrder sortBy
+  ) {
+    var sortOrder = Objects.requireNonNullElse(sortBy, BoardEntrySortOrder.REALTIME_TIME);
+    var requestParams = this.boardService.buildRequestParameters(serverId, pointId, timeStart, timeEnd, transportTypes);
 
-    var l = LoggerFactory.getLogger(BoardV1Controller.class);
-    for (Map.Entry<UUID, List<BoardJourneyProjection>> entry : arrivals.entrySet()) {
-      var jid = entry.getKey();
-      var via = entry.getValue();
-      var first = via.getFirst();
-      l.info("--> {} [{} - {}]", jid, first.getInitialTransportCategory(), first.getInitialTransportNumber());
-      l.info("  - type: {}", first.getInitialTransportType());
-      l.info("  - scheduled: {}", first.getInitialScheduledTime());
-      l.info("  - realtime: {} @ {}", first.getInitialRealtimeTime(), first.getInitialRealtimeTimeType());
-      l.info("  - via:");
-      for (BoardJourneyProjection v : via) {
-        l.info("    - {} @ {}", v.getPointName(), v.getPointId());
-      }
-    }
-
-    return "arrivals";
+    var departures = this.boardService.listDepartures(requestParams);
+    departures.sort(sortOrder.getComparator());
+    return departures;
   }
 }
