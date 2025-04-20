@@ -25,36 +25,40 @@
 package tools.simrail.backend.external.feign;
 
 import feign.FeignException;
+import feign.InvocationContext;
 import feign.Response;
-import feign.codec.Decoder;
+import feign.ResponseInterceptor;
+import feign.Util;
+import feign.codec.DecodeException;
 import java.io.IOException;
-import java.lang.reflect.ParameterizedType;
-import java.lang.reflect.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 /**
- * Response decoder that can decode a FeignJsonResponseTuple or pass the request to the given downstream decoder.
+ * Response interceptor that always calls request decoder in context.
  */
-public record FeignJsonResponseTupleDecoder(@NotNull Decoder downstream) implements Decoder {
+public final class FeignResponseInterceptor implements ResponseInterceptor {
 
   @Override
-  public @Nullable Object decode(@NotNull Response response, @NotNull Type type) throws IOException, FeignException {
-    if (type instanceof ParameterizedType pt
-      && pt.getRawType() instanceof Class<?> rawType
-      && rawType == FeignJsonResponseTuple.class) {
-      var bodyType = pt.getActualTypeArguments()[0];
-      var body = this.downstream.decode(response, bodyType);
-      return new FeignJsonResponseTuple<>(response, body);
+  public @Nullable Object intercept(@NotNull InvocationContext context, @NotNull Chain chain) {
+    var decoder = context.decoder();
+    var response = context.response();
+    var returnType = context.returnType();
+
+    // can quit early if response is requested as method return type
+    if (returnType == Response.class) {
+      return response;
     }
 
-    // only call downstream decoder if the request was successful
-    var shouldDecode = response.status() >= 200 && response.status() < 300;
-    if (shouldDecode) {
-      return this.downstream.decode(response, type);
-    } else {
-      var methodKey = response.request().requestTemplate().methodMetadata().configKey();
-      throw FeignException.errorStatus(methodKey, response);
+    try {
+      return decoder.decode(response, returnType);
+    } catch (FeignException feignException) {
+      // pass feign exception directly through
+      throw feignException;
+    } catch (RuntimeException | IOException exception) {
+      throw new DecodeException(response.status(), exception.getMessage(), response.request(), exception);
+    } finally {
+      Util.ensureClosed(response.body());
     }
   }
 }
