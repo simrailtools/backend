@@ -385,6 +385,7 @@ final class JourneyEventRealtimeUpdater {
   ) {
     var eventId = this.journeyEventIdFactory.create(journeyId.toString() + stop.getId() + previousEventId + type);
     var journeyEvent = new JourneyEventEntity();
+    journeyEvent.setNew(true);
     journeyEvent.setId(eventId);
     journeyEvent.setEventType(type);
     journeyEvent.setAdditional(true);

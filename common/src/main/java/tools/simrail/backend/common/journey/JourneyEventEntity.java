@@ -34,6 +34,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,6 +43,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.Persistable;
 
 /**
  * A single event along the route of a journey.
@@ -63,7 +65,7 @@ import org.hibernate.annotations.CreationTimestamp;
   @Index(columnList = "journeyId, eventIndex, point_playable"),
   @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
 })
-public final class JourneyEventEntity {
+public final class JourneyEventEntity implements Persistable<UUID> {
 
   /**
    * The namespace used to generate UUIDv5 ids for event entities.
@@ -176,6 +178,12 @@ public final class JourneyEventEntity {
    */
   @Column
   private boolean additional;
+
+  /**
+   * Indicates if this journey event was newly created or already existed in the database.
+   */
+  @Transient
+  private boolean isNew;
 
   /**
    * Checks if one of the scheduled data fields differs from the given other entity.
