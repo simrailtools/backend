@@ -169,7 +169,7 @@ class SimRailServerTrainCollector {
             .collect(Collectors.toMap(recorder -> recorder.getOriginal().getId(), Function.identity()));
           if (!relevantJourneys.isEmpty()) {
             var relevantJourneyIds = relevantJourneys.keySet();
-            var journeyEvents = this.journeyService.resolveCachedJourneyEvents(server.id(), relevantJourneyIds);
+            var journeyEvents = this.journeyService.resolveJourneyEvents(relevantJourneyIds);
             this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
           }
 
@@ -306,7 +306,7 @@ class SimRailServerTrainCollector {
         return updatedEvents.stream();
       })
       .toList();
-    this.journeyService.persistJourneyEventsAndPopulateCache(server.id(), updatedJourneys);
+    this.journeyService.persistJourneyEvents(updatedJourneys);
   }
 
   private @Nullable JourneySignalInfo constructNextSignal(@Nonnull SimRailPanelTrain.DetailData detailData) {

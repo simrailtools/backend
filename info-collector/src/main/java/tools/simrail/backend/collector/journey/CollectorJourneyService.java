@@ -31,7 +31,6 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -51,12 +50,14 @@ import tools.simrail.backend.common.journey.JourneyEventRepository;
 @Service
 class CollectorJourneyService {
 
+  private static final Comparator<JourneyEventEntity> EVENT_BY_INDEX_COMPARATOR =
+    Comparator.comparingInt(JourneyEventEntity::getEventIndex);
+
   private final EntityManager entityManager;
   private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
 
   private final Map<UUID, Map<UUID, JourneyEntity>> activeJourneysByServer;
-  private final Map<UUID, Map<UUID, List<JourneyEventEntity>>> journeyEventsByServer;
 
   @Autowired
   public CollectorJourneyService(
@@ -68,7 +69,6 @@ class CollectorJourneyService {
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.activeJourneysByServer = new ConcurrentHashMap<>();
-    this.journeyEventsByServer = new ConcurrentHashMap<>();
   }
 
   /**
@@ -162,40 +162,22 @@ class CollectorJourneyService {
   }
 
   /**
-   * Resolves the journey events for the given server by using the given server id and journey ids, fetching and caching
-   * all missing journey events that are not cached but requested by the given id collection. Note that changes to the
-   * returned map are reflected into the cache and vice vera.
+   * Resolves the journey events that are associated with the given journey ids.
    *
-   * @param serverId   the id of the server to get the journey events of.
    * @param journeyIds the ids of the journeys to get the events of.
    * @return the journey events for all requested journeys, in a journey id to events mapping.
    */
   @Nonnull
-  public Map<UUID, List<JourneyEventEntity>> resolveCachedJourneyEvents(
-    @Nonnull UUID serverId,
-    @Nonnull Collection<UUID> journeyIds
-  ) {
-    var cachedEvents = this.journeyEventsByServer.computeIfAbsent(serverId, _ -> new HashMap<>());
-
-    // check if there are journeys required that are not currently cached,
-    // resolve the events of these journeys from the database in that case
-    // and add them to the local cache of the server
-    var missingJourneyIds = new HashSet<>(journeyIds);
-    missingJourneyIds.removeAll(cachedEvents.keySet());
-    if (!missingJourneyIds.isEmpty()) {
-      var eventsByJourneyId = this.journeyEventRepository.findAllByJourneyIdIn(missingJourneyIds)
-        .stream()
-        .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
-          Collectors.toList(),
-          events -> {
-            events.sort(Comparator.comparingInt(JourneyEventEntity::getEventIndex));
-            return events;
-          }
-        )));
-      cachedEvents.putAll(eventsByJourneyId);
-    }
-
-    return cachedEvents;
+  public Map<UUID, List<JourneyEventEntity>> resolveJourneyEvents(@Nonnull Collection<UUID> journeyIds) {
+    return this.journeyEventRepository.findAllByJourneyIdIn(journeyIds)
+      .stream()
+      .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
+        Collectors.toList(),
+        events -> {
+          events.sort(EVENT_BY_INDEX_COMPARATOR);
+          return events;
+        }
+      )));
   }
 
   /**
@@ -231,31 +213,15 @@ class CollectorJourneyService {
   }
 
   /**
-   * Updates all given journey events that were updated on the server with the given id in one batch while also updating
-   * the references of these events in the server event cache. If a journey is not already stored in the cached, the
-   * associated updated events will not be added to the cache.
+   * Persists all new journey events created during journey data collection on a server. Events that are not new will
+   * not be saved directly this is up to the persistence context to do once the current transaction closes.
    *
-   * @param serverId      the id of the server on which the journey events were updated.
-   * @param journeyEvents the updated journey events to persist and store in the cache.
+   * @param journeyEvents the updated journey events to persist.
    */
-  public void persistJourneyEventsAndPopulateCache(
-    @Nonnull UUID serverId,
-    @Nonnull Collection<JourneyEventEntity> journeyEvents
-  ) {
-    var savedEntities = this.journeyEventRepository.saveAll(journeyEvents);
-    var cachedJourneyEvents = this.journeyEventsByServer.get(serverId);
-    if (cachedJourneyEvents != null) {
-      for (var savedEntity : savedEntities) {
-        var events = cachedJourneyEvents.get(savedEntity.getJourneyId());
-        if (events != null) {
-          // this uses the fact that the equals method is only implemented using
-          // the id of the event which never changes. therefore, resolving the index
-          // of the old event entity is possible this way
-          var indexOfEvent = events.indexOf(savedEntity);
-          if (indexOfEvent != -1) {
-            events.set(indexOfEvent, savedEntity);
-          }
-        }
+  public void persistJourneyEvents(@Nonnull Collection<JourneyEventEntity> journeyEvents) {
+    for (JourneyEventEntity event : journeyEvents) {
+      if (event.isNew()) {
+        this.journeyEventRepository.save(event);
       }
     }
   }
