@@ -162,9 +162,7 @@ class CollectorJourneyService {
   }
 
   /**
-   * Resolves the journey events for the given server by using the given server id and journey ids, fetching and caching
-   * all missing journey events that are not cached but requested by the given id collection. Note that changes to the
-   * returned map are reflected into the cache and vice vera.
+   * Resolves the journey events that are associated with the given journey ids.
    *
    * @param journeyIds the ids of the journeys to get the events of.
    * @return the journey events for all requested journeys, in a journey id to events mapping.
