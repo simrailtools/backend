@@ -33,6 +33,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.SynchronousQueue;
@@ -43,6 +44,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -69,8 +71,8 @@ class SimRailServerTrainCollector {
   private final ExecutorService trainCollectExecutor;
   private final TransactionTemplate transactionTemplate;
 
-  // last time when the full train information was fetched
-  private transient Instant lastTrainsFetch;
+  // storage for collect information per server
+  private final Map<UUID, CollectorRequestDataStorage> serversDataStorage;
 
   @Autowired
   public SimRailServerTrainCollector(
@@ -94,6 +96,7 @@ class SimRailServerTrainCollector {
       60L,
       TimeUnit.SECONDS,
       new SynchronousQueue<>());
+    this.serversDataStorage = new ConcurrentHashMap<>(20, 0.75f, 1);
   }
 
   /**
@@ -119,19 +122,15 @@ class SimRailServerTrainCollector {
 
   @Scheduled(initialDelay = 0, fixedDelay = 2, timeUnit = TimeUnit.SECONDS, scheduler = "train_collect_scheduler")
   public void collectActiveTrains() throws InterruptedException {
-    // get if a full train data collection should be performed this time
-    var lastFullFetch = this.lastTrainsFetch;
-    var fullCollection = lastFullFetch == null || Duration.between(lastFullFetch, Instant.now()).toSeconds() >= 7;
-    if (fullCollection) {
-      this.lastTrainsFetch = Instant.now();
-    }
-
     var servers = this.serverService.getServers();
     var taskCountLatch = new CountDownLatch(servers.size());
     for (var server : servers) {
       this.executeCollectionTask(taskCountLatch, () -> {
         var startTime = Instant.now();
         var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
+
+        var dataStorage = this.serversDataStorage.computeIfAbsent(server.id(), _ -> new CollectorRequestDataStorage());
+        var fullCollection = dataStorage.shouldDoTrainsCollection(startTime);
 
         // keeps track of the dirty journeys without retaining duplicates
         var dirtyRecorders = new HashMap<UUID, JourneyDirtyStateRecorder>();
@@ -141,12 +140,20 @@ class SimRailServerTrainCollector {
             _ -> new JourneyDirtyStateRecorder(journey, server));
 
         if (fullCollection) {
-          // fetch full train details in case we're doing a full collection
-          this.fetchFullTrainInformation(server, activeServerJourneys, dirtyRecorderFactory);
+          // fetch full train details in case we're doing a full collection,
+          // don't do a full collection if the train data didn't change
+          fullCollection = this.fetchFullTrainInformation(
+            server,
+            dataStorage,
+            activeServerJourneys,
+            dirtyRecorderFactory);
+          if (fullCollection) {
+            dataStorage.updateLastTrainCollect(startTime);
+          }
         }
 
         // fetch and update train positions and speed
-        this.fetchTrainPositionInformation(server, activeServerJourneys, dirtyRecorderFactory);
+        this.fetchTrainPositionInformation(server, dataStorage, activeServerJourneys, dirtyRecorderFactory);
 
         // check if any journeys changed, apply changed data to cached snapshot
         // (data is only persisted into the database during full collections in a later step)
@@ -188,18 +195,26 @@ class SimRailServerTrainCollector {
     }
   }
 
-  private void fetchFullTrainInformation(
+  private boolean fetchFullTrainInformation(
     @Nonnull SimRailServerDescriptor server,
+    @Nonnull CollectorRequestDataStorage eTagStorage,
     @Nonnull Map<UUID, JourneyEntity> activeJourneys,
     @Nonnull Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory
   ) {
+    // get the train positions from upstream api, don't do anything if data didn't change
+    var responseTuple = this.panelApiClient.getTrains(server.code(), eTagStorage.getTrainsEtag());
+    eTagStorage.updateTrainsEtag(responseTuple);
+    if (responseTuple.response().status() == HttpStatus.NOT_MODIFIED.value()) {
+      return false;
+    }
+
     // get the trains that are currently active on the target server, the returned
     // list can be empty if, for example, the server is currently down
-    var response = this.panelApiClient.getTrains(server.code());
+    var response = responseTuple.body();
     var activeTrains = response.getEntries();
     if (!response.isSuccess() || activeTrains == null || activeTrains.isEmpty()) {
       LOGGER.warn("SimRail api returned no active trains for server {}", server.code());
-      return;
+      return true;
     }
 
     var activeTrainRuns = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
@@ -235,16 +250,26 @@ class SimRailServerTrainCollector {
       dirtyRecorder.markRemoved();
       activeJourneys.remove(journey.getId()); // also updates the cache
     }
+
+    return true;
   }
 
   private void fetchTrainPositionInformation(
     @Nonnull SimRailServerDescriptor server,
+    @Nonnull CollectorRequestDataStorage eTagStorage,
     @Nonnull Map<UUID, JourneyEntity> activeJourneys,
     @Nonnull Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory
   ) {
+    // get the train positions from upstream api, don't do anything if data didn't change
+    var responseTuple = this.panelApiClient.getTrainPositions(server.code(), eTagStorage.getTrainPositionsEtag());
+    eTagStorage.updateTrainPositionsEtag(responseTuple);
+    if (responseTuple.response().status() == HttpStatus.NOT_MODIFIED.value()) {
+      return;
+    }
+
     // get the trains that are currently active on the target server, the returned
     // list can be empty if, for example, the server is currently down
-    var response = this.panelApiClient.getTrainPositions(server.code());
+    var response = responseTuple.body();
     var trainPositions = response.getEntries();
     if (!response.isSuccess() || trainPositions == null || trainPositions.isEmpty()) {
       LOGGER.warn("SimRail api returned no train positions for server {}", server.code());

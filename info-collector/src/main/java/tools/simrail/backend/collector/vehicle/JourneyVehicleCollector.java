@@ -101,7 +101,7 @@ class JourneyVehicleCollector {
     // collect the real vehicle compositions
     for (var server : servers) {
       var startTime = Instant.now();
-      var response = this.panelApiClient.getTrains(server.code());
+      var response = this.panelApiClient.getTrains(server.code(), null).body();
       var activeTrains = response.getEntries();
       if (!response.isSuccess() || activeTrains == null || activeTrains.isEmpty()) {
         LOGGER.warn("SimRail api returned no active trains for server {}", server.code());

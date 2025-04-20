@@ -31,6 +31,7 @@ import java.util.List;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.FeignClientProvider;
+import tools.simrail.backend.external.feign.FeignJsonResponseTuple;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelResponseWrapper;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelServer;
@@ -63,8 +64,11 @@ public interface SimRailPanelApiClient {
    * @return the trains that are currently active on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /trains-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelTrain> getTrains(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrain>> getTrains(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Get the current positions of the trains that are active on the specified server.
@@ -73,8 +77,11 @@ public interface SimRailPanelApiClient {
    * @return the positions of the trains that are currently active on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /train-positions-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelTrainPosition> getTrainPositions(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrainPosition>> getTrainPositions(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Lists the dispatch posts that are available on the specified server.
