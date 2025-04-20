@@ -175,13 +175,13 @@ class CollectorJourneyService {
     @Nonnull UUID serverId,
     @Nonnull Collection<UUID> journeyIds
   ) {
-    var cachedEvents = this.journeyEventsByServer.computeIfAbsent(serverId, _ -> new HashMap<>());
+    Map<UUID, List<JourneyEventEntity>> cachedEvents = new HashMap<>(); // this.journeyEventsByServer.computeIfAbsent(serverId, _ -> new HashMap<>());
 
     // check if there are journeys required that are not currently cached,
     // resolve the events of these journeys from the database in that case
     // and add them to the local cache of the server
     var missingJourneyIds = new HashSet<>(journeyIds);
-    missingJourneyIds.removeAll(cachedEvents.keySet());
+    // missingJourneyIds.removeAll(cachedEvents.keySet());
     if (!missingJourneyIds.isEmpty()) {
       var eventsByJourneyId = this.journeyEventRepository.findAllByJourneyIdIn(missingJourneyIds)
         .stream()
