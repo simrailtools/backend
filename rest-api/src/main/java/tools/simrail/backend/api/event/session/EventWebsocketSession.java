@@ -118,7 +118,7 @@ public final class EventWebsocketSession {
         registration.publishUpdateFrame(snapshot, frame);
       }
     } catch (Exception exception) {
-      LOGGER.warn("Failed to send update frame to client", exception);
+      LOGGER.debug("Failed to send update frame to client", exception);
     }
   }
 
