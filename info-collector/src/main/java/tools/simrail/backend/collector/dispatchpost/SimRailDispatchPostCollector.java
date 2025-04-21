@@ -25,14 +25,19 @@
 package tools.simrail.backend.collector.dispatchpost;
 
 import jakarta.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.collector.server.SimRailServerService;
@@ -54,6 +59,7 @@ final class SimRailDispatchPostCollector {
   private final SimRailServerService serverService;
   private final UuidV5Factory dispatchPostIdFactory;
   private final SimRailPanelApiClient panelApiClient;
+  private final Map<UUID, String> postDataEtagByServer;
   private final DispatchPostUpdateHandler dispatchPostUpdateHandler;
   private final SimRailDispatchPostRepository dispatchPostRepository;
 
@@ -68,6 +74,7 @@ final class SimRailDispatchPostCollector {
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
+    this.postDataEtagByServer = new HashMap<>();
     this.dispatchPostRepository = dispatchPostRepository;
     this.dispatchPostUpdateHandler = dispatchPostUpdateHandler;
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
@@ -75,16 +82,26 @@ final class SimRailDispatchPostCollector {
 
   @Scheduled(
     initialDelay = 0,
-    fixedRate = 7,
+    fixedDelay = 2,
     timeUnit = TimeUnit.SECONDS,
     scheduler = "dispatch_post_collect_scheduler"
   )
   public void collectDispatchPostInformation() {
     var servers = this.serverService.getServers();
     for (var server : servers) {
-      var response = this.panelApiClient.getDispatchPosts(server.code());
-      var dispatchPosts = response.getEntries();
-      if (!response.isSuccess() || dispatchPosts == null || dispatchPosts.isEmpty()) {
+      // get the train positions from upstream api, don't do anything if data didn't change
+      var etag = this.postDataEtagByServer.get(server.id());
+      var responseTuple = this.panelApiClient.getDispatchPosts(server.code(), etag);
+      responseTuple
+        .firstHeaderValue(HttpHeaders.ETAG)
+        .ifPresent(responseEtag -> this.postDataEtagByServer.put(server.id(), responseEtag));
+      if (responseTuple.response().status() == HttpStatus.NOT_MODIFIED.value()) {
+        continue;
+      }
+
+      var response = responseTuple.body();
+      var dispatchPosts = response == null ? null : response.getEntries();
+      if (dispatchPosts == null || dispatchPosts.isEmpty()) {
         LOGGER.warn("API did not return a successful result while getting dispatch post list on {}", server.code());
         continue;
       }

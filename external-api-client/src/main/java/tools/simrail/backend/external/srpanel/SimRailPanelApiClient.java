@@ -61,6 +61,7 @@ public interface SimRailPanelApiClient {
    * Lists all trains that are currently active on the specified server.
    *
    * @param serverCode the code of the servers to retrieve the trains of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the trains that are currently active on the server with the given code.
    */
   @NotNull
@@ -74,6 +75,7 @@ public interface SimRailPanelApiClient {
    * Get the current positions of the trains that are active on the specified server.
    *
    * @param serverCode the code of the servers to retrieve the train positions of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the positions of the trains that are currently active on the server with the given code.
    */
   @NotNull
@@ -87,11 +89,15 @@ public interface SimRailPanelApiClient {
    * Lists the dispatch posts that are available on the specified server.
    *
    * @param serverCode the code of the server to retrieve the dispatch posts of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the dispatch posts that are available on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /stations-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelDispatchPost> getDispatchPosts(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelDispatchPost>> getDispatchPosts(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Get the current SimRail information about one or more users.

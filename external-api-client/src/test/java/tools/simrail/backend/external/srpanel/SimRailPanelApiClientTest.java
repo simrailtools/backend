@@ -94,7 +94,7 @@ public final class SimRailPanelApiClientTest {
   @Test
   void testDispatchPosts() {
     var client = SimRailPanelApiClient.create();
-    var response = client.getDispatchPosts("de1");
+    var response = client.getDispatchPosts("de1", null).body();
 
     Assertions.assertNotNull(response);
     Assertions.assertTrue(response.isSuccess());
