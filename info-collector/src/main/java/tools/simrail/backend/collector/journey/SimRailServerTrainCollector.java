@@ -211,10 +211,10 @@ class SimRailServerTrainCollector {
     // get the trains that are currently active on the target server, the returned
     // list can be empty if, for example, the server is currently down
     var response = responseTuple.body();
-    var activeTrains = response.getEntries();
-    if (!response.isSuccess() || activeTrains == null || activeTrains.isEmpty()) {
+    var activeTrains = response == null ? null : response.getEntries();
+    if (activeTrains == null || activeTrains.isEmpty()) {
       LOGGER.warn("SimRail api returned no active trains for server {}", server.code());
-      return true;
+      return false;
     }
 
     var activeTrainRuns = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
@@ -270,8 +270,8 @@ class SimRailServerTrainCollector {
     // get the trains that are currently active on the target server, the returned
     // list can be empty if, for example, the server is currently down
     var response = responseTuple.body();
-    var trainPositions = response.getEntries();
-    if (!response.isSuccess() || trainPositions == null || trainPositions.isEmpty()) {
+    var trainPositions = response == null ? null : response.getEntries();
+    if (trainPositions == null || trainPositions.isEmpty()) {
       LOGGER.warn("SimRail api returned no train positions for server {}", server.code());
       return;
     }

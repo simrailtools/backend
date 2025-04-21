@@ -28,6 +28,7 @@ import feign.Response;
 import java.util.Optional;
 import java.util.SequencedCollection;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Tuple that contains both a feign response object and a deserialized JSON value from the response body.
@@ -36,7 +37,7 @@ import org.jetbrains.annotations.NotNull;
  * @param body     the deserialized JSON body as a java POJO.
  * @param <T>      the type of the deserialized POJO from the response body.
  */
-public record FeignJsonResponseTuple<T>(@NotNull Response response, @NotNull T body) {
+public record FeignJsonResponseTuple<T>(@NotNull Response response, @Nullable T body) {
 
   /**
    * Convenience method that returns an optional containing the first header string value of the given named (and
