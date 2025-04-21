@@ -240,7 +240,7 @@ class SimRailPointV1Controller {
     }
   )
   public @Nonnull List<PointInfoDto> findByName(
-    @PathVariable("searchQuery") @NotBlank @Pattern(regexp = "^.{3,35}$") String searchQuery,
+    @PathVariable(name = "searchQuery") @NotBlank @Pattern(regexp = "^.{3,35}$") String searchQuery,
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(25) Integer limit
   ) {
@@ -280,8 +280,8 @@ class SimRailPointV1Controller {
     }
   )
   public @Nonnull List<PointInfoDto> findByPosition(
-    @RequestParam("latitude") @Min(-90) @Max(90) double latitude,
-    @RequestParam("longitude") @Min(-180) @Max(180) double longitude,
+    @RequestParam(name = "latitude") @Min(-90) @Max(90) double latitude,
+    @RequestParam(name = "longitude") @Min(-180) @Max(180) double longitude,
     @RequestParam(name = "radius", required = false) @Min(100) @Max(10_000) Integer radius,
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(25) Integer limit
