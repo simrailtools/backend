@@ -26,6 +26,7 @@ package tools.simrail.backend.api.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.util.Collection;
@@ -115,8 +116,8 @@ class JourneyService {
    * @return all journeys that are currently active on the given server.
    */
   @Cacheable(cacheNames = "active_journey_cache", key = "'by_server_' + #serverId")
-  public @Nonnull List<JourneyActiveDto> findActiveJourneys(@Nonnull UUID serverId) {
-    return this.snapshotCache.getCachedJourneySnapshots()
+  public @Nonnull Pair<Instant, List<JourneyActiveDto>> findActiveJourneys(@Nonnull UUID serverId) {
+    var activeJourneys = this.snapshotCache.getCachedJourneySnapshots()
       .filter(snapshot -> snapshot.getServerId().equals(serverId))
       .filter(snapshot -> {
         var speed = snapshot.getSpeed();
@@ -126,6 +127,7 @@ class JourneyService {
       })
       .map(this.journeyActiveDtoConverter)
       .toList();
+    return Pair.of(Instant.now(), activeJourneys);
   }
 
   /**

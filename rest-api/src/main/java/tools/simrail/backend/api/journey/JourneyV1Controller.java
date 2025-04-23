@@ -192,6 +192,11 @@ class JourneyV1Controller {
       """,
     parameters = {
       @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(
+        name = "If-Modified-Since",
+        in = ParameterIn.HEADER,
+        description = "If provided the response body is empty in case the data didn't change since the given date",
+        schema = @Schema(type = "string", format = "date-time", examples = "Wed, 21 Oct 2015 07:28:00 GMT")),
     },
     responses = {
       @ApiResponse(
@@ -207,11 +212,14 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<JourneyActiveDto> active(
+  public @Nonnull ResponseEntity<List<JourneyActiveDto>> active(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId
   ) {
     var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
-    return this.journeyService.findActiveJourneys(serverIdFilter);
+    var journeysWithLastUpdated = this.journeyService.findActiveJourneys(serverIdFilter);
+    return ResponseEntity.ok()
+      .lastModified(journeysWithLastUpdated.getFirst())
+      .body(journeysWithLastUpdated.getSecond());
   }
 
   /**
