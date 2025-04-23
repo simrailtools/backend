@@ -35,12 +35,14 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
@@ -50,6 +52,8 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -142,6 +146,37 @@ class JourneyV1Controller {
         .lastModified(journey.lastUpdated().toInstant())
         .body(journey))
       .orElseGet(() -> ResponseEntity.notFound().build());
+  }
+
+  /**
+   * Fetches multiple (up to 250) journeys at the same time using their ids.
+   */
+  @PostMapping("/by-ids")
+  @Operation(
+    summary = "Get a batch of journeys (up to 250) by their id",
+    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      description = "An array containing the ids of the journeys to resolve"
+    ),
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The journeys that were successfully resolved based on the given input ids"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull List<JourneyDto> byIds(
+    @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 5, allowNil = false) String> ids
+  ) {
+    // sort ids to prevent cache misses when the same request is sent twice with a different id order
+    var journeyIds = ids.stream().map(java.util.UUID::fromString).sorted().toList();
+    return this.journeyService.findByIds(journeyIds);
   }
 
   /**

@@ -28,6 +28,7 @@ import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -90,6 +91,21 @@ class JourneyService {
   @Cacheable(cacheNames = "journey_cache", key = "'by_id_' + #journeyId")
   public @Nonnull Optional<JourneyDto> findById(@Nonnull UUID journeyId) {
     return this.journeyRepository.findWithEventsById(journeyId).map(this.journeyDtoConverter);
+  }
+
+  /**
+   * Get all journeys by the given ids. This method either returns from DB or from cache.
+   *
+   * @param journeyIds the ids of the journeys to get.
+   * @return a list of all journeys that were successfully resolved based on an id in the given id collection.
+   */
+  @Cacheable(cacheNames = "journey_cache", key = "'by_ids_' + #journeyIds")
+  public @Nonnull List<JourneyDto> findByIds(@Nonnull Collection<UUID> journeyIds) {
+    if (journeyIds.isEmpty()) {
+      return List.of();
+    } else {
+      return this.journeyRepository.findWithEventsByIdIn(journeyIds).stream().map(this.journeyDtoConverter).toList();
+    }
   }
 
   /**
