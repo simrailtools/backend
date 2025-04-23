@@ -46,7 +46,7 @@ class CacheConfiguration {
       "server_cache",
       Caffeine.newBuilder()
         .recordStats()
-        .expireAfterWrite(10, TimeUnit.SECONDS)
+        .expireAfterWrite(30, TimeUnit.SECONDS)
         .build());
   }
 
@@ -60,6 +60,19 @@ class CacheConfiguration {
       Caffeine.newBuilder()
         .recordStats()
         .expireAfterWrite(5, TimeUnit.SECONDS)
+        .build());
+  }
+
+  /**
+   * Cache for actives journeys (data expires after 15 seconds in the cache).
+   */
+  @Bean
+  public @Nonnull Cache activeJourneyCache() {
+    return new CaffeineCache(
+      "active_journey_cache",
+      Caffeine.newBuilder()
+        .recordStats()
+        .expireAfterWrite(15, TimeUnit.SECONDS)
         .build());
   }
 
@@ -152,6 +165,20 @@ class CacheConfiguration {
       Caffeine.newBuilder()
         .recordStats()
         .expireAfterWrite(1, TimeUnit.DAYS)
+        .build(),
+      false);
+  }
+
+  /**
+   * Cache for board entries, expiring 30 seconds after writing.
+   */
+  @Bean
+  public @Nonnull Cache boardsCache() {
+    return new CaffeineCache(
+      "boards_cache",
+      Caffeine.newBuilder()
+        .recordStats()
+        .expireAfterWrite(30, TimeUnit.SECONDS)
         .build(),
       false);
   }

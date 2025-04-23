@@ -27,6 +27,7 @@ package tools.simrail.backend.api.journey.data;
 import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +48,15 @@ public interface ApiJourneyRepository extends JourneyRepository {
    */
   @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
   Optional<JourneyEntity> findWithEventsById(@Nonnull UUID uuid);
+
+  /**
+   * Get a batch of journeys by the given ids with their event entities loaded as well.
+   *
+   * @param ids the ids of the journeys to resolve.
+   * @return a list containing the journeys that were resolved using the given journey ids.
+   */
+  @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
+  List<JourneyEntity> findWithEventsByIdIn(@Nonnull Collection<UUID> ids);
 
   /**
    * Finds the journey summary projections by the matching tails of a journey.
@@ -86,7 +96,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     JOIN first_events fe ON fe.journey_id = j.id
     JOIN last_events le ON le.journey_id = j.id
     WHERE
-      (:serverId IS NULL OR j.server_id = :serverId)
+      j.server_id = :serverId
       AND (TRUE = :#{#startTime == null} OR fe.time = :startTime)
       AND (:startStationId IS NULL OR fe.station_id = :startStationId)
       AND (:startJourneyNumber IS NULL OR fe.journey_number = :startJourneyNumber)
@@ -129,7 +139,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       FROM sit_journey j
       JOIN sit_journey_event je ON je.journey_id = j.id
       WHERE
-        (:serverId IS NULL OR j.server_id = :serverId)
+        j.server_id = :serverId
         AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
           je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
         AND (:line IS NULL OR je.transport_line = :line)
@@ -174,7 +184,10 @@ public interface ApiJourneyRepository extends JourneyRepository {
         e.scheduled_time,
         e.transport_line,
         e.transport_type,
-        e.transport_category
+        e.transport_category,
+        e.point_id,
+        e.point_name,
+        e.cancelled
       FROM sit_journey_event e
       WHERE e.event_index = (
         SELECT MIN(e2.event_index)
@@ -187,11 +200,15 @@ public interface ApiJourneyRepository extends JourneyRepository {
       j.server_id,
       j.first_seen_time,
       j.last_seen_time,
-      j.cancelled
+      j.cancelled,
+      fe.point_id AS fe_point_id,
+      fe.point_name AS fe_point_name,
+      fe.scheduled_time AS fe_scheduled_time,
+      fe.cancelled AS fe_cancelled
     FROM sit_journey j
     JOIN first_playable_events fe ON fe.journey_id = j.id
     WHERE
-      (:serverId IS NULL OR j.server_id = :serverId)
+      j.server_id = :serverId
       AND (fe.scheduled_time BETWEEN :start AND :end)
       AND (:line IS NULL OR fe.transport_line = :line)
       AND (:journeyCategory IS NULL OR fe.transport_category = :journeyCategory)
@@ -200,7 +217,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     LIMIT :limit
     OFFSET :offset
     """, nativeQuery = true)
-  List<JourneySummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
+  List<JourneyWithEventSummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
     @Param("serverId") UUID serverId,
     @Param("line") String line,
     @Param("journeyCategory") String journeyCategory,
@@ -229,7 +246,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       JOIN sit_journey_event je ON j.id = je.journey_id
       JOIN sit_vehicle v ON j.id = v.journey_id
       WHERE
-        (:serverId IS NULL OR j.server_id = :serverId)
+        j.server_id = :serverId
         AND (je.scheduled_time >= CAST(:date AS TIMESTAMP) AND
              je.scheduled_time < CAST(:date AS TIMESTAMP) + INTERVAL '1 day')
         AND v.railcar_id = :railcarId

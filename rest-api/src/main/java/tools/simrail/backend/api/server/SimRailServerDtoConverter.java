@@ -41,6 +41,7 @@ final class SimRailServerDtoConverter implements Function<SimRailServerEntity, S
       server.getId(),
       server.getCode(),
       server.getTimezone(),
+      server.getUtcOffsetHours(),
       server.getRegion(),
       server.getTags(),
       server.getSpokenLanguage(),

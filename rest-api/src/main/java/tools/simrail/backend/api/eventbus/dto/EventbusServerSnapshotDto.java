@@ -54,6 +54,7 @@ public final class EventbusServerSnapshotDto {
   // changing fields
   private boolean online;
   private String timezoneId;
+  private int utcOffsetHours;
 
   public EventbusServerSnapshotDto(@Nonnull SimRailServerEntity entity) {
     this.serverId = entity.getId();
@@ -63,6 +64,7 @@ public final class EventbusServerSnapshotDto {
     this.region = entity.getRegion();
     this.online = entity.isOnline();
     this.timezoneId = entity.getTimezone();
+    this.utcOffsetHours = entity.getUtcOffsetHours();
   }
 
   /**
@@ -77,6 +79,10 @@ public final class EventbusServerSnapshotDto {
 
     if (frame.hasZoneOffset()) {
       this.timezoneId = frame.getZoneOffset();
+    }
+
+    if (frame.hasUtcOffsetHours()) {
+      this.utcOffsetHours = frame.getUtcOffsetHours();
     }
   }
 }

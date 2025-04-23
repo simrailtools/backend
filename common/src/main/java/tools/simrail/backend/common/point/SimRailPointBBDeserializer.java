@@ -32,16 +32,15 @@ import com.fasterxml.jackson.databind.node.NumericNode;
 import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import org.locationtech.jts.geom.Coordinate;
-import org.locationtech.jts.geom.Polygon;
 import tools.simrail.backend.common.util.GeoUtil;
 
 /**
  * Deserializes a polygon from a list of points (in format Double[][]).
  */
-public final class SimRailPointBBDeserializer extends JsonDeserializer<Polygon> {
+final class SimRailPointBBDeserializer extends JsonDeserializer<OptimizedBoundingBox> {
 
   @Override
-  public @Nonnull Polygon deserialize(
+  public @Nonnull OptimizedBoundingBox deserialize(
     @Nonnull JsonParser parser,
     @Nonnull DeserializationContext context
   ) throws IOException {
@@ -56,6 +55,7 @@ public final class SimRailPointBBDeserializer extends JsonDeserializer<Polygon> 
     }
 
     var linearRing = GeoUtil.GEOMETRY_FACTORY.createLinearRing(polyCoordinates);
-    return GeoUtil.GEOMETRY_FACTORY.createPolygon(linearRing);
+    var polygon = GeoUtil.GEOMETRY_FACTORY.createPolygon(linearRing);
+    return new OptimizedBoundingBox(polygon);
   }
 }

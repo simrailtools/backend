@@ -135,7 +135,9 @@ final class JourneyEventRealtimeUpdater {
 
     // update the passenger stop info if the journey has a passenger stop at the point and the next signal is known
     var nextSignal = this.journey.getNextSignal();
-    if (arrivalEvent.getStopType() == JourneyStopType.PASSENGER && nextSignal != null) {
+    if (arrivalEvent.getStopType() == JourneyStopType.PASSENGER
+      && arrivalEvent.getRealtimePassengerStopInfo() == null
+      && nextSignal != null) {
       this.signalProvider.findSignalInfo(currentPoint.getId(), nextSignal.getName()).ifPresent(platformInfo -> {
         // found the associated platform, update the passenger stop info
         var realtimeStopInfo = new JourneyPassengerStopInfo(platformInfo.getTrack(), platformInfo.getPlatform());
@@ -184,21 +186,13 @@ final class JourneyEventRealtimeUpdater {
 
     if (departureEvent == null) {
       // assume that the journey is at the first playable point along the route if no previous
-      // arrival event was recorded for the journey. this check however is only relevant if the
+      // arrival event was recorded for the journey. however, this check is only relevant if the
       // first playable event is also the first event along the route, as we can record an arrival
       // at the first point using the journey position anyway
-      departureEvent = this.journeyEvents.stream()
-        .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
-        .filter(event -> event.getStopDescriptor().isPlayable())
-        .findFirst()
-        .orElse(null);
-      if (departureEvent == null || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
-        return; // should usually not happen
-      }
-
-      // check the comment above for the check reasoning
-      var firstEvent = this.journeyEvents.getFirst();
-      if (firstEvent != departureEvent) {
+      departureEvent = this.journeyEvents.getFirst();
+      if (departureEvent.getEventType() != JourneyEventType.DEPARTURE
+        || !departureEvent.getStopDescriptor().isPlayable()
+        || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
         return;
       }
     }
@@ -391,6 +385,7 @@ final class JourneyEventRealtimeUpdater {
   ) {
     var eventId = this.journeyEventIdFactory.create(journeyId.toString() + stop.getId() + previousEventId + type);
     var journeyEvent = new JourneyEventEntity();
+    journeyEvent.setNew(true);
     journeyEvent.setId(eventId);
     journeyEvent.setEventType(type);
     journeyEvent.setAdditional(true);

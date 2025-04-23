@@ -107,6 +107,11 @@ public final class SimRailServerEntity {
   @Column(nullable = false)
   private String timezone;
   /**
+   * The time offset on the server (in hours) from the current utc time.
+   */
+  @Column
+  private int utcOffsetHours;
+  /**
    * The language used to communicate on the server, null for international servers.
    */
   @Column

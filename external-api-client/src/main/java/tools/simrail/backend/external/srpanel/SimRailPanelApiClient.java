@@ -31,6 +31,7 @@ import java.util.List;
 import org.jetbrains.annotations.Contract;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.FeignClientProvider;
+import tools.simrail.backend.external.feign.FeignJsonResponseTuple;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelResponseWrapper;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelServer;
@@ -60,31 +61,43 @@ public interface SimRailPanelApiClient {
    * Lists all trains that are currently active on the specified server.
    *
    * @param serverCode the code of the servers to retrieve the trains of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the trains that are currently active on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /trains-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelTrain> getTrains(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrain>> getTrains(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Get the current positions of the trains that are active on the specified server.
    *
    * @param serverCode the code of the servers to retrieve the train positions of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the positions of the trains that are currently active on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /train-positions-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelTrainPosition> getTrainPositions(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrainPosition>> getTrainPositions(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Lists the dispatch posts that are available on the specified server.
    *
    * @param serverCode the code of the server to retrieve the dispatch posts of.
+   * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the dispatch posts that are available on the server with the given code.
    */
   @NotNull
+  @Headers("If-None-Match: {etag}")
   @RequestLine("GET /stations-open?serverCode={serverCode}")
-  SimRailPanelResponseWrapper<SimRailPanelDispatchPost> getDispatchPosts(@Param("serverCode") String serverCode);
+  FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelDispatchPost>> getDispatchPosts(
+    @Param("serverCode") String serverCode,
+    @Param("etag") String etag);
 
   /**
    * Get the current SimRail information about one or more users.

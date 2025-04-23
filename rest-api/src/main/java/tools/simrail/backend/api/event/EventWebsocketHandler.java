@@ -25,8 +25,6 @@
 package tools.simrail.backend.api.event;
 
 import jakarta.annotation.Nonnull;
-import java.util.List;
-import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.CloseStatus;
@@ -36,7 +34,7 @@ import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketHandler;
 import org.springframework.web.socket.WebSocketMessage;
 import org.springframework.web.socket.WebSocketSession;
-import tools.simrail.backend.api.event.dto.EventFrameType;
+import tools.simrail.backend.api.event.registration.EventFrameRegistrationRequest;
 import tools.simrail.backend.api.event.session.EventSessionManager;
 
 /**
@@ -53,16 +51,10 @@ final class EventWebsocketHandler implements WebSocketHandler {
   }
 
   @Override
-  @SuppressWarnings("unchecked")
   public void afterConnectionEstablished(@Nonnull WebSocketSession session) {
-    // don't allow any data to be sent from the client, except for ping messages
-    session.setTextMessageSizeLimit(4);
     session.setBinaryMessageSizeLimit(0);
-
-    // get the frame types added by the handshake interceptor and register the session
-    var requestedFrameTypes = (Map<EventFrameType, List<String>>)
-      session.getAttributes().get(EventWebsocketHandshakeInterceptor.UPDATE_FRAMES_ATTRIBUTE);
-    this.sessionManager.registerSession(session, requestedFrameTypes);
+    session.setTextMessageSizeLimit(EventFrameRegistrationRequest.MAX_REQUEST_TEXT_LENGTH);
+    this.sessionManager.registerSession(session);
   }
 
   @Override
@@ -76,12 +68,12 @@ final class EventWebsocketHandler implements WebSocketHandler {
     }
 
     switch (message) {
-      // client send a ping (to check if the server is still active), respond with a pong
+      // ping-pong handling for keeping the connection alive
       case PingMessage _ -> eventSession.sendPong();
-      // received pong from the client, mark the client as alive
       case PongMessage _ -> eventSession.handlePongReceive();
-      // client sends a ping in form of a text message, respond with a pong text message
       case TextMessage tm when tm.getPayload().equals("ping") -> eventSession.sendPongText();
+      // handle the text message for the associated session
+      case TextMessage tm -> eventSession.handleTextMessage(tm.getPayload());
       // reject all other type of websocket messages being sent by the client
       default -> session.close(CloseStatus.NOT_ACCEPTABLE);
     }

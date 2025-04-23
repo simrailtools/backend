@@ -86,8 +86,8 @@ class SimRailServerV1Controller {
     }
   )
   public @Nonnull List<SimRailServerDto> listServers(
-    @RequestParam(value = "includeOffline", defaultValue = "false") boolean includeOffline,
-    @RequestParam(value = "includeDeleted", defaultValue = "false") boolean includeDeleted
+    @RequestParam(name = "includeOffline", defaultValue = "false") boolean includeOffline,
+    @RequestParam(name = "includeDeleted", defaultValue = "false") boolean includeDeleted
   ) {
     return this.serverService.listServers(includeOffline, includeDeleted);
   }

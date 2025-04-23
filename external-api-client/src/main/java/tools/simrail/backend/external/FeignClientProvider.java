@@ -44,6 +44,8 @@ import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.feign.CustomFieldQueryMapEncoder;
 import tools.simrail.backend.external.feign.FeignJava11Client;
+import tools.simrail.backend.external.feign.FeignJsonResponseTupleDecoder;
+import tools.simrail.backend.external.feign.FeignResponseInterceptor;
 
 public final class FeignClientProvider {
 
@@ -87,8 +89,9 @@ public final class FeignClientProvider {
       .client(new FeignJava11Client())
       .logger(new Slf4jLogger(callingClass))
       .encoder(new JacksonEncoder(bodyMapper))
-      .decoder(new JacksonDecoder(bodyMapper))
+      .decoder(new FeignJsonResponseTupleDecoder(new JacksonDecoder(bodyMapper)))
       .queryMapEncoder(new CustomFieldQueryMapEncoder())
+      .responseInterceptor(new FeignResponseInterceptor())
       .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);
   }
 }

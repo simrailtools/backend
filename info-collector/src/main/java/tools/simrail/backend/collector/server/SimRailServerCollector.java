@@ -81,7 +81,7 @@ public final class SimRailServerCollector implements SimRailServerService {
    * Collects the information of all SimRail servers every 30 seconds.
    */
   @Scheduled(initialDelay = 0, fixedRate = 30, timeUnit = TimeUnit.SECONDS, scheduler = "server_collect_scheduler")
-  public void collectServerInformation() {
+  public void collectServerInformation() throws Exception {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
     var fullCollection = this.collectionRuns++ % 2 == 0;
@@ -94,8 +94,9 @@ public final class SimRailServerCollector implements SimRailServerService {
     }
 
     var foundServers = new ArrayList<SimRailServerDescriptor>();
-    for (var server : servers) {
+    for (var index = 0; index < servers.size(); index++) {
       // get or create the server entity, store the original variable information
+      var server = servers.get(index);
       var serverEntity = this.serverRepository.findByForeignId(server.getId()).orElseGet(() -> {
         var newServer = new SimRailServerEntity();
         newServer.setNew(true);
@@ -105,9 +106,11 @@ public final class SimRailServerCollector implements SimRailServerService {
         return newServer;
       });
       var originalOnline = serverEntity.isOnline();
-      var originalTimezoneId = serverEntity.getTimezone();
+      var originalDeleted = serverEntity.isDeleted();
+      var originalUtcOffset = serverEntity.getUtcOffsetHours();
 
       // update the base information
+      serverEntity.setDeleted(false);
       serverEntity.setCode(server.getCode());
       serverEntity.setOnline(server.isOnline());
 
@@ -157,11 +160,23 @@ public final class SimRailServerCollector implements SimRailServerService {
         // collect the actual server timezone offset seconds
         var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
         serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
+
+        // only continue the full collection cycle (which will consequently update the servers)
+        // if a valid time was found for the server. if we didn't find a valid time, the server
+        // will not be added to `foundServers` causing it to be removed from the available
+        // server list which will hinder the data collection
+        fullCollection = serverZoneOffsetSeconds != null;
+
+        // convert the collected utc offset seconds to utc offset hours and update it in the server entity
+        if (serverZoneOffsetSeconds != null) {
+          var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
+          serverEntity.setUtcOffsetHours(utcOffsetHours);
+        }
       }
 
       // save the entity and register it as discovered during the run if we did a full collection
       var savedEntity = this.serverRepository.save(serverEntity);
-      if (serverZoneOffset != null) {
+      if (serverZoneOffset != null && serverZoneOffsetSeconds != null) {
         var serverDescriptor = new SimRailServerDescriptor(
           savedEntity.getId(),
           server.getId(),
@@ -172,10 +187,16 @@ public final class SimRailServerCollector implements SimRailServerService {
       }
 
       // publish a possible change to all listeners
-      if (serverEntity.isNew()) {
+      if (serverEntity.isNew() || originalDeleted) {
         this.serverUpdateHandler.handleServerAdd(savedEntity);
       } else {
-        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalTimezoneId, savedEntity);
+        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, savedEntity);
+      }
+
+      // add a small delay every 5 servers to prevent exceeding api quota limits
+      if (index != 0 && index % 5 == 0) {
+        //noinspection BusyWait
+        Thread.sleep(1000);
       }
     }
 

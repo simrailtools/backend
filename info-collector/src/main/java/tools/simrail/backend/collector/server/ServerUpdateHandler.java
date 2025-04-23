@@ -49,19 +49,19 @@ final class ServerUpdateHandler {
    * Handles the update of a single server. It is not guaranteed that the provided server entity actually contains
    * changés, therefore the original values of the values that can change must be provided as well for dirty checking.
    *
-   * @param originalOnline     the original online state of the given updated server entity.
-   * @param originalTimezoneId the original timezone id of the given updated server entity.
-   * @param server             the updated server entity.
+   * @param originalOnline    the original online state of the given updated server entity.
+   * @param originalUtcOffset the original utc offset hours id of the given updated server entity.
+   * @param server            the updated server entity.
    */
   public void handleServerUpdate(
     boolean originalOnline,
-    @Nonnull String originalTimezoneId,
+    int originalUtcOffset,
     @Nonnull SimRailServerEntity server
   ) {
     // check if the given server entity is actually dirty
     var newOnline = server.isOnline();
-    var newTimezoneId = server.getTimezone();
-    var dirty = newOnline != originalOnline || !newTimezoneId.equals(originalTimezoneId);
+    var newUtcOffset = server.getUtcOffsetHours();
+    var dirty = newOnline != originalOnline || originalUtcOffset != newUtcOffset;
     if (dirty) {
       var frameBuilder = ServerUpdateFrame.newBuilder()
         .setUpdateType(UpdateType.UPDATE)
@@ -71,8 +71,9 @@ final class ServerUpdateHandler {
       if (newOnline != originalOnline) {
         frameBuilder.setOnline(newOnline);
       }
-      if (!newTimezoneId.equals(originalTimezoneId)) {
-        frameBuilder.setZoneOffset(newTimezoneId);
+      if (originalUtcOffset != newUtcOffset) {
+        frameBuilder.setUtcOffsetHours(newUtcOffset);
+        frameBuilder.setZoneOffset(server.getTimezone());
       }
 
       this.internalRpcEventBusService.publishServerUpdate(frameBuilder.build());

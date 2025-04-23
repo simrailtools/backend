@@ -34,6 +34,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.time.OffsetDateTime;
 import java.util.Objects;
 import java.util.UUID;
@@ -42,6 +43,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
+import org.springframework.data.domain.Persistable;
 
 /**
  * A single event along the route of a journey.
@@ -52,16 +54,19 @@ import org.hibernate.annotations.CreationTimestamp;
 @AllArgsConstructor
 @Entity(name = "sit_journey_event")
 @Table(indexes = {
+  // single column indexes are used for searching in api
   @Index(columnList = "journeyId"),
-  @Index(columnList = "journeyId, scheduledTime"),
+  @Index(name = "idx_point_id", columnList = "point_id"),
+  @Index(name = "idx_scheduled_time", columnList = "scheduledTime"),
+  @Index(name = "idx_transport_line", columnList = "transport_line"),
+  @Index(name = "idx_transport_type", columnList = "transport_type"),
+  @Index(name = "idx_transport_number", columnList = "transport_number"),
+  @Index(name = "idx_transport_category", columnList = "transport_category"),
   @Index(columnList = "journeyId, eventIndex, point_playable"),
-  @Index(columnList = "journeyId, eventIndex, point_id, scheduledTime"),
-  @Index(columnList = "scheduledTime, transport_line, transport_category, transport_type"),
   @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
-  @Index(columnList = "journeyId, eventIndex, point_id, transport_number, transport_category, scheduledTime"),
-  @Index(columnList = "journeyId, scheduledTime, transport_line, transport_number, transport_category, transport_type"),
+  @Index(name = "idx_board_filter", columnList = "eventType, point_id, transport_type, realtimeTime, scheduledTime")
 })
-public final class JourneyEventEntity {
+public final class JourneyEventEntity implements Persistable<UUID> {
 
   /**
    * The namespace used to generate UUIDv5 ids for event entities.
@@ -174,6 +179,12 @@ public final class JourneyEventEntity {
    */
   @Column
   private boolean additional;
+
+  /**
+   * Indicates if this journey event was newly created or already existed in the database.
+   */
+  @Transient
+  private boolean isNew;
 
   /**
    * Checks if one of the scheduled data fields differs from the given other entity.

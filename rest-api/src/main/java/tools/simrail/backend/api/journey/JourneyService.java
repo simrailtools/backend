@@ -26,46 +26,60 @@ package tools.simrail.backend.api.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import java.time.Instant;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import java.util.function.BiFunction;
 import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
+import tools.simrail.backend.api.journey.converter.JourneyActiveDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneyDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneySummaryDtoConverter;
 import tools.simrail.backend.api.journey.data.ApiJourneyEventRepository;
 import tools.simrail.backend.api.journey.data.ApiJourneyRepository;
 import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
 import tools.simrail.backend.api.journey.data.JourneySummaryProjection;
+import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @Service
 class JourneyService {
 
+  private final SitSnapshotCache snapshotCache;
   private final ApiJourneyRepository journeyRepository;
   private final ApiJourneyEventRepository journeyEventRepository;
 
   private final JourneyDtoConverter journeyDtoConverter;
+  private final JourneyActiveDtoConverter journeyActiveDtoConverter;
   private final JourneySummaryDtoConverter journeySummaryDtoConverter;
 
   @Autowired
   public JourneyService(
+    @Nonnull SitSnapshotCache snapshotCache,
     @Nonnull ApiJourneyRepository journeyRepository,
     @Nonnull ApiJourneyEventRepository journeyEventRepository,
     @Nonnull JourneyDtoConverter journeyDtoConverter,
+    @Nonnull JourneyActiveDtoConverter journeyActiveDtoConverter,
     @Nonnull JourneySummaryDtoConverter journeySummaryDtoConverter
   ) {
+    this.snapshotCache = snapshotCache;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyDtoConverter = journeyDtoConverter;
+    this.journeyActiveDtoConverter = journeyActiveDtoConverter;
     this.journeySummaryDtoConverter = journeySummaryDtoConverter;
   }
 
@@ -78,6 +92,42 @@ class JourneyService {
   @Cacheable(cacheNames = "journey_cache", key = "'by_id_' + #journeyId")
   public @Nonnull Optional<JourneyDto> findById(@Nonnull UUID journeyId) {
     return this.journeyRepository.findWithEventsById(journeyId).map(this.journeyDtoConverter);
+  }
+
+  /**
+   * Get all journeys by the given ids. This method either returns from DB or from cache.
+   *
+   * @param journeyIds the ids of the journeys to get.
+   * @return a list of all journeys that were successfully resolved based on an id in the given id collection.
+   */
+  @Cacheable(cacheNames = "journey_cache", key = "'by_ids_' + #journeyIds")
+  public @Nonnull List<JourneyDto> findByIds(@Nonnull Collection<UUID> journeyIds) {
+    if (journeyIds.isEmpty()) {
+      return List.of();
+    } else {
+      return this.journeyRepository.findWithEventsByIdIn(journeyIds).stream().map(this.journeyDtoConverter).toList();
+    }
+  }
+
+  /**
+   * Get a list of all active journey on the server with the given id.
+   *
+   * @param serverId the id of the server to get the active journeys on.
+   * @return all journeys that are currently active on the given server.
+   */
+  @Cacheable(cacheNames = "active_journey_cache", key = "'by_server_' + #serverId")
+  public @Nonnull Pair<Instant, List<JourneyActiveDto>> findActiveJourneys(@Nonnull UUID serverId) {
+    var activeJourneys = this.snapshotCache.getCachedJourneySnapshots()
+      .filter(snapshot -> snapshot.getServerId().equals(serverId))
+      .filter(snapshot -> {
+        var speed = snapshot.getSpeed();
+        var positionLat = snapshot.getPositionLat();
+        var positionLng = snapshot.getPositionLng();
+        return speed != null && positionLat != null && positionLng != null;
+      })
+      .map(this.journeyActiveDtoConverter)
+      .toList();
+    return Pair.of(Instant.now(), activeJourneys);
   }
 
   /**
@@ -98,7 +148,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByEvent(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull LocalDate date,
     @Nullable String line,
     @Nullable String journeyNumber,
@@ -120,7 +170,11 @@ class JourneyService {
       transportTypes,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -138,10 +192,10 @@ class JourneyService {
    * @return a pagination wrapper around the query results based on the given filter parameters.
    */
   @Cacheable(cacheNames = "journey_search_cache", sync = true)
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByPlayableDeparture(
+  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> findByPlayableDeparture(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull OffsetDateTime timeStart,
     @Nonnull OffsetDateTime timeEnd,
     @Nullable String line,
@@ -163,7 +217,11 @@ class JourneyService {
       timeEnd,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -186,7 +244,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByTail(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull OffsetDateTime startTime,
     @Nonnull UUID startStationId,
     @Nonnull String startJourneyNumber,
@@ -210,7 +268,11 @@ class JourneyService {
       endStationId,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -227,7 +289,7 @@ class JourneyService {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByRailcar(
     @Nullable Integer page,
     @Nullable Integer limit,
-    @Nullable UUID serverId,
+    @Nonnull UUID serverId,
     @Nonnull LocalDate date,
     @Nonnull UUID railcarId
   ) {
@@ -243,7 +305,11 @@ class JourneyService {
       railcarId,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
-    return this.filterJourneys(requestedLimit, queriedItems);
+    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
+      var firstEvent = eventPair.getFirst();
+      var lastEvent = eventPair.getSecond();
+      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
+    });
   }
 
   /**
@@ -254,9 +320,10 @@ class JourneyService {
    * @param queriedItems   the items that were actually queried from the database.
    * @return a paginated response wrapper for the queried items.
    */
-  private @Nonnull PaginatedResponseDto<JourneySummaryDto> filterJourneys(
+  private @Nonnull <P extends JourneySummaryProjection, R> PaginatedResponseDto<R> filterJourneys(
     int requestedLimit,
-    @Nonnull List<JourneySummaryProjection> queriedItems
+    @Nonnull List<P> queriedItems,
+    @Nonnull BiFunction<P, Pair<JourneyEventSummaryProjection, JourneyEventSummaryProjection>, R> dtoConverter
   ) {
     // return an empty response if no items were queried
     if (queriedItems.isEmpty()) {
@@ -284,11 +351,10 @@ class JourneyService {
         var associatedEvents = eventsByJourneyId.get(journey.getId());
         var firstEvent = associatedEvents.getFirst();
         var lastEvent = associatedEvents.get(1);
-        if (firstEvent.getEventIndex() == 0) {
-          return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
-        } else {
-          return this.journeySummaryDtoConverter.convert(journey, lastEvent, firstEvent);
-        }
+        var eventPair = firstEvent.getEventIndex() == 0
+          ? Pair.of(firstEvent, lastEvent)
+          : Pair.of(lastEvent, firstEvent);
+        return dtoConverter.apply(journey, eventPair);
       })
       .toList();
     return new PaginatedResponseDto<>(returnedItems, morePagesAvailable);

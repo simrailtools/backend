@@ -35,28 +35,35 @@ import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
+import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
+import tools.simrail.backend.api.server.SimRailServerTimeService;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @Validated
@@ -71,10 +78,29 @@ class JourneyV1Controller {
     List.copyOf(EnumSet.allOf(JourneyTransportType.class));
 
   private final JourneyService journeyService;
+  private final SimRailServerTimeService serverTimeService;
 
   @Autowired
-  public JourneyV1Controller(@Nonnull JourneyService journeyService) {
+  public JourneyV1Controller(
+    @Nonnull JourneyService journeyService,
+    @Nonnull SimRailServerTimeService serverTimeService
+  ) {
     this.journeyService = journeyService;
+    this.serverTimeService = serverTimeService;
+  }
+
+  /**
+   * Get the parsed server id and current server time for the server with the given id. If the server doesn't exist, an
+   * exception is thrown instead.
+   *
+   * @param serverId the id of the server to get the snapshot and time of.
+   * @return a pair holding the parsed server id and time of the server with the given id.
+   * @throws IllegalRequestParameterException if no server with the given id exists.
+   */
+  private @Nonnull Pair<java.util.UUID, OffsetDateTime> getServerIdAndTime(@Nonnull String serverId) {
+    return this.serverTimeService
+      .resolveServerTime(serverId)
+      .orElseThrow(() -> new IllegalRequestParameterException("Invalid server id provided"));
   }
 
   /**
@@ -123,6 +149,80 @@ class JourneyV1Controller {
   }
 
   /**
+   * Fetches multiple (up to 250) journeys at the same time using their ids.
+   */
+  @PostMapping("/by-ids")
+  @Operation(
+    summary = "Get a batch of journeys (up to 250) by their id",
+    requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
+      description = "An array containing the ids of the journeys to resolve"
+    ),
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The journeys that were successfully resolved based on the given input ids"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull List<JourneyDto> byIds(
+    @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 5, allowNil = false) String> ids
+  ) {
+    // sort ids to prevent cache misses when the same request is sent twice with a different id order
+    var journeyIds = ids.stream().map(java.util.UUID::fromString).sorted().toList();
+    return this.journeyService.findByIds(journeyIds);
+  }
+
+  /**
+   * Get all journeys that are currently on the server with the given id.
+   */
+  @GetMapping("/active")
+  @Operation(
+    summary = "Get all journeys that are currently active on a server",
+    description = """
+      Get descriptive information about all journeys that are currently active on a server. Data returned by this
+      endpoint updates every 15 seconds. This endpoint shouldn't be used to poll journey updates, use the event system
+      SIT-Events instead.
+      """,
+    parameters = {
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(
+        name = "If-Modified-Since",
+        in = ParameterIn.HEADER,
+        description = "If provided the response body is empty in case the data didn't change since the given date",
+        schema = @Schema(type = "string", format = "date-time", examples = "Wed, 21 Oct 2015 07:28:00 GMT")),
+    },
+    responses = {
+      @ApiResponse(
+        responseCode = "200",
+        description = "The active journeys of the given server were successfully resolved"),
+      @ApiResponse(
+        responseCode = "400",
+        description = "One of the filter parameters is invalid",
+        content = @Content(schema = @Schema(hidden = true))),
+      @ApiResponse(
+        responseCode = "500",
+        description = "An internal error occurred while processing the request",
+        content = @Content(schema = @Schema(hidden = true))),
+    }
+  )
+  public @Nonnull ResponseEntity<List<JourneyActiveDto>> active(
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId
+  ) {
+    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
+    var journeysWithLastUpdated = this.journeyService.findActiveJourneys(serverIdFilter);
+    return ResponseEntity.ok()
+      .lastModified(journeysWithLastUpdated.getFirst())
+      .body(journeysWithLastUpdated.getSecond());
+  }
+
+  /**
    * Finds journeys based on their tail events.
    */
   @GetMapping("/by-tail")
@@ -130,13 +230,12 @@ class JourneyV1Controller {
     summary = "Find journeys based on its tails",
     description = """
       Filters journeys based on its start and end events, where the start event data is required for filtering and the
-      end event data can optionally be supplied for further narrowing. Additionally the server id can be given to limit
-      results to a single server rather than selecting journeys from all servers.
+      end event data can optionally be supplied for further narrowing.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
       @Parameter(name = "startTime", description = "The scheduled time when the journey departs from the first station"),
       @Parameter(name = "startStationId", description = "The id of the station where the journey is scheduled to depart"),
       @Parameter(name = "startJourneyNumber", description = "The number of the journey at the first station"),
@@ -161,7 +260,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byTail(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "startTime") OffsetDateTime startTime,
     @RequestParam(name = "startStationId") @UUID(version = 4, allowNil = false) String startStationId,
     @RequestParam(name = "startJourneyNumber") @Pattern(regexp = ".+") String startJourneyNumber,
@@ -169,8 +268,8 @@ class JourneyV1Controller {
     @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
     @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
   ) {
+    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
     var stationStationIdFilter = java.util.UUID.fromString(startStationId);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
     return this.journeyService.findByTail(
       page,
@@ -202,8 +301,8 @@ class JourneyV1Controller {
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current server date if omitted"),
       @Parameter(name = "line", description = "The line at an event, at least journeyNumber or line must be provided"),
       @Parameter(name = "journeyNumber", description = "The number at an event, at least journeyNumber or line must be provided"),
       @Parameter(name = "journeyCategory", description = "The category at an event"),
@@ -226,7 +325,7 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byEvent(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
     @RequestParam(name = "journeyNumber", required = false) @Pattern(regexp = ".+") String journeyNumber,
@@ -238,16 +337,18 @@ class JourneyV1Controller {
       throw new IllegalRequestParameterException("Either journey number or line must be provided");
     }
 
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (date == null) {
-      // default the requested date to the current date
-      date = LocalDate.now(ZoneOffset.UTC);
+      // default the requested date to the current date on the requested server
+      date = serverAndTime.getSecond().toLocalDate();
     }
+
     if (transportTypes == null || transportTypes.isEmpty()) {
       // default the transport types to all if not given
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
+    var serverIdFilter = serverAndTime.getFirst();
     return this.journeyService.findByEvent(
       page,
       limit,
@@ -268,14 +369,14 @@ class JourneyV1Controller {
     description = """
       Finds journeys that become playable in the provided time range. Optionally additional filter parameters can be
       provided to narrow down the results. The provided time range must be at least 1 minute and at most 60 minutes
-      long. If the start time is omitted it defaults to the current UTC time, if the end time is omitted it defaults to
-      the start time plus 15 minutes.
+      long. If the start time is omitted it defaults to the current server time, if the end time is omitted it defaults
+      to the start time plus 15 minutes.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current time (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current server time if omitted"),
       @Parameter(name = "timeEnd", description = "The end of the time range (ISO-8601 with offset), defaults to start plus 15 minutes if omitted"),
       @Parameter(name = "line", description = "The line of the journey at the first playable event"),
       @Parameter(name = "journeyCategory", description = "The category of the journey at the first playable event"),
@@ -295,20 +396,22 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byPlayableDeparture(
+  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> byPlayableDeparture(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
     @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
     @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
     @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
     @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
   ) {
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (timeStart == null) {
-      // default the requested time start to the current UTC time if not provided
-      timeStart = OffsetDateTime.now(ZoneOffset.UTC);
+      // default the requested time start to the current time on the requested server
+      timeStart = serverAndTime.getSecond();
     }
+
     if (timeEnd == null) {
       // default the requested time end to 15 minutes after the requested time start if not provided
       timeEnd = timeStart.plusMinutes(15);
@@ -326,9 +429,9 @@ class JourneyV1Controller {
       transportTypes = ALL_TRANSPORT_TYPES;
     }
 
+    var serverIdFilter = serverAndTime.getFirst();
     var truncatedStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
     var truncatedEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     return this.journeyService.findByPlayableDeparture(
       page,
       limit,
@@ -347,15 +450,15 @@ class JourneyV1Controller {
   @Operation(
     summary = "Finds journeys that are using the given railcar in their vehicle composition",
     description = """
-      Finds journeys that use the given railcar in their vehicle composition on the given date. The result can
-      optionally be filtered for a specific server id. The results might be incomplete or incorrect for journeys that
-      were not active yet, as the result data will be based on predictions and not the real composition of the journey.
+      Finds journeys that use the given railcar in their vehicle composition on the given date. The results might be
+      incomplete or incorrect for journeys that were not active yet, as the result data will be based on predictions
+      and not the real composition of the journey.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on, by default all servers are considered"),
-      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current date (UTC) if omitted"),
+      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current server date if omitted"),
       @Parameter(name = "railcar", description = "The id of the railcar that must be included in the vehicle composition of the journey"),
     },
     responses = {
@@ -375,17 +478,18 @@ class JourneyV1Controller {
   public @Nonnull PaginatedResponseDto<JourneySummaryDto> byRailcar(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
+    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
   ) {
+    var serverAndTime = this.getServerIdAndTime(serverId);
     if (date == null) {
-      // default the requested date to the current date
-      date = LocalDate.now(ZoneOffset.UTC);
+      // default the requested date to the current date on the requested server
+      date = serverAndTime.getSecond().toLocalDate();
     }
 
+    var serverIdFilter = serverAndTime.getFirst();
     var railcarIdFilter = java.util.UUID.fromString(railcarId);
-    var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
   }
 }

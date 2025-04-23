@@ -51,7 +51,7 @@ public final class SimRailPanelApiClientTest {
   @Test
   void testTrains() {
     var client = SimRailPanelApiClient.create();
-    var response = client.getTrains("de1");
+    var response = client.getTrains("de1", null).body();
 
     Assertions.assertNotNull(response);
     Assertions.assertTrue(response.isSuccess());
@@ -79,7 +79,7 @@ public final class SimRailPanelApiClientTest {
   @Test
   void testTrainPositions() {
     var client = SimRailPanelApiClient.create();
-    var response = client.getTrainPositions("de1");
+    var response = client.getTrainPositions("de1", null).body();
 
     Assertions.assertNotNull(response);
     Assertions.assertTrue(response.isSuccess());
@@ -94,7 +94,7 @@ public final class SimRailPanelApiClientTest {
   @Test
   void testDispatchPosts() {
     var client = SimRailPanelApiClient.create();
-    var response = client.getDispatchPosts("de1");
+    var response = client.getDispatchPosts("de1", null).body();
 
     Assertions.assertNotNull(response);
     Assertions.assertTrue(response.isSuccess());

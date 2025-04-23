@@ -24,12 +24,46 @@
 
 package tools.simrail.backend.api.event.dto;
 
+import java.util.Arrays;
+import java.util.Map;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+
 /**
  * The types of updates that can be sent out by an update frame.
  */
+@Getter
+@AllArgsConstructor
 public enum EventFrameType {
 
-  SERVER,
-  JOURNEY,
-  DISPATCH_POST,
+  /**
+   * Updates about server details.
+   */
+  SERVER("servers"),
+  /**
+   * Updates about dispatch posts on a server (or specific post).
+   */
+  DISPATCH_POST("dispatch-posts"),
+  /**
+   * Updates when the data of a journey changes.
+   */
+  JOURNEY_DETAILS("journey-details"),
+  /**
+   * Updates when the position of a journey changes.
+   */
+  JOURNEY_POSITION("journey-positions"),
+  ;
+
+  /**
+   * An unmodifiable lookup map for the registration name to the associated event frame type.
+   */
+  public static final Map<String, EventFrameType> BY_REGISTRATION_NAME = Arrays.stream(EventFrameType.values())
+    .collect(Collectors.toUnmodifiableMap(EventFrameType::getRegistrationName, Function.identity()));
+
+  /**
+   * The name that must be sent by a client to register a listener for the frame type.
+   */
+  private final String registrationName;
 }

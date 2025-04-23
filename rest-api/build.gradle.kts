@@ -64,11 +64,11 @@ dependencies {
 
 protobuf {
   protoc {
-    artifact = "com.google.protobuf:protoc"
+    artifact = "com.google.protobuf:protoc:${dependencyManagement.importedProperties["protobuf-java.version"]}"
   }
   plugins {
     id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java"
+      artifact = "io.grpc:protoc-gen-grpc-java:${dependencyManagement.importedProperties["grpc.version"]}"
     }
   }
   generateProtoTasks {
@@ -90,7 +90,7 @@ tasks.withType<ProcessResources> {
       overwrite(true)
       onlyIfModified(true)
       useETag("strongOnly")
-      src("https://unpkg.com/rapidoc/dist/rapidoc-min.js")
+      src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
       dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
     }
   }

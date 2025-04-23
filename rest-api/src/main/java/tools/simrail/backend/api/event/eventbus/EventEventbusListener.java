@@ -51,12 +51,12 @@ final class EventEventbusListener implements SitEventbusListener {
 
   @Override
   public void handleServerUpdate(@Nonnull ServerUpdateFrame frame, @Nonnull EventbusServerSnapshotDto snapshot) {
-    this.clientSessionManager.handleServerUpdate(frame, snapshot);
+    this.clientSessionManager.publishUpdateFrame(snapshot, frame);
   }
 
   @Override
   public void handleJourneyUpdate(@Nonnull JourneyUpdateFrame frame, @Nonnull EventbusJourneySnapshotDto snapshot) {
-    this.clientSessionManager.handleJourneyUpdate(frame, snapshot);
+    this.clientSessionManager.publishUpdateFrame(snapshot, frame);
   }
 
   @Override
@@ -64,6 +64,6 @@ final class EventEventbusListener implements SitEventbusListener {
     @Nonnull DispatchPostUpdateFrame frame,
     @Nonnull EventbusDispatchPostSnapshotDto snapshot
   ) {
-    this.clientSessionManager.handleDispatchPostUpdate(frame, snapshot);
+    this.clientSessionManager.publishUpdateFrame(snapshot, frame);
   }
 }

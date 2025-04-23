@@ -6,6 +6,14 @@
   "healthchecks": {
     "web": [
       {
+        "wait": 3,
+        "attempts": 20,
+        "initialDelay": 5,
+        "type": "startup",
+        "path": "/admin/health",
+        "name": "container startup check"
+      },
+      {
         "wait": 5,
         "type": "liveness",
         "path": "/admin/health",

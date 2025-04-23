@@ -29,6 +29,7 @@ import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -49,16 +50,13 @@ import tools.simrail.backend.common.journey.JourneyEventRepository;
 @Service
 class CollectorJourneyService {
 
+  private static final Comparator<JourneyEventEntity> EVENT_BY_INDEX_COMPARATOR =
+    Comparator.comparingInt(JourneyEventEntity::getEventIndex);
+
   private final EntityManager entityManager;
   private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
 
-  // caches all active trains per server. while the outer map is concurrent, the inner map is not
-  // this is done as the inner map is only accessed by one collector thread concurrently and doesn't
-  // need to be synchronized at all. this also allows for every caller that gets an instance of the
-  // internal map to make changes that directly reflect into the cache, without having to call some
-  // server methods or having to copy the map every time it's accessed. beware that this also has the
-  // risk of being used improperly and causing exceptions or even crashes of the collector
   private final Map<UUID, Map<UUID, JourneyEntity>> activeJourneysByServer;
 
   @Autowired
@@ -164,6 +162,25 @@ class CollectorJourneyService {
   }
 
   /**
+   * Resolves the journey events that are associated with the given journey ids.
+   *
+   * @param journeyIds the ids of the journeys to get the events of.
+   * @return the journey events for all requested journeys, in a journey id to events mapping.
+   */
+  @Nonnull
+  public Map<UUID, List<JourneyEventEntity>> resolveJourneyEvents(@Nonnull Collection<UUID> journeyIds) {
+    return this.journeyEventRepository.findAllByJourneyIdIn(journeyIds)
+      .stream()
+      .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
+        Collectors.toList(),
+        events -> {
+          events.sort(EVENT_BY_INDEX_COMPARATOR);
+          return events;
+        }
+      )));
+  }
+
+  /**
    * Persists a single journey into the database and local cache.
    *
    * @param journey the journey to persist.
@@ -191,6 +208,20 @@ class CollectorJourneyService {
         if (cachedServerJourneys.containsKey(savedEntity.getId())) {
           cachedServerJourneys.put(savedEntity.getId(), savedEntity);
         }
+      }
+    }
+  }
+
+  /**
+   * Persists all new journey events created during journey data collection on a server. Events that are not new will
+   * not be saved directly this is up to the persistence context to do once the current transaction closes.
+   *
+   * @param journeyEvents the updated journey events to persist.
+   */
+  public void persistJourneyEvents(@Nonnull Collection<JourneyEventEntity> journeyEvents) {
+    for (JourneyEventEntity event : journeyEvents) {
+      if (event.isNew()) {
+        this.journeyEventRepository.save(event);
       }
     }
   }
