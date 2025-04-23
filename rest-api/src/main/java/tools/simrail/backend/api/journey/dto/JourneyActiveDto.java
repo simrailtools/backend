@@ -37,22 +37,14 @@ public record JourneyActiveDto(
   @Nonnull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey is active")
   @Nonnull UUID serverId,
-  @Schema(description = "The category of the journey")
-  @Nonnull String category,
-  @Schema(description = "The number of the journey")
-  @Nonnull String number,
-  @Schema(description = "The line of the journey")
-  @Nullable String line,
-  @Schema(description = "The label of the journey")
-  @Nullable String label,
-  @Schema(description = "The steam identifier of the player that is currently driving the train")
+  @Schema(description = "Information about the transport at the first event of the journey")
+  @Nonnull JourneyActiveTransportDto transport,
+  @Schema(description = "The steam id of the current driver")
   @Nullable String driverSteamId,
-  @Schema(description = "The latitude where the journey is currently located")
-  double positionLatitude,
-  @Schema(description = "The longitude where the journey is currently located")
-  double positionLongitude,
-  @Schema(description = "The current speed of the journey")
-  int speed
+  @Schema(minimum = "0", description = "The current, rounded speed of the journey")
+  int speed,
+  @Schema(description = "The current position of the journey")
+  @Nonnull JourneyGeoPositionDto position
 ) {
 
 }

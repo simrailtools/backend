@@ -22,36 +22,24 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.converter;
+package tools.simrail.backend.api.journey.dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
-import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
-import tools.simrail.backend.api.journey.dto.JourneyActiveTransportDto;
-import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
+import jakarta.annotation.Nullable;
 
 /**
- * Converter for locally cached journey snapshots to DTOs.
+ * Transport information of an active journey.
  */
-@Component
-public final class JourneyActiveDtoConverter implements Function<EventbusJourneySnapshotDto, JourneyActiveDto> {
+public record JourneyActiveTransportDto(
+  @Schema(description = "The category of the journey")
+  @Nonnull String category,
+  @Schema(description = "The number of the journey")
+  @Nonnull String number,
+  @Schema(description = "The line of the journey")
+  @Nullable String line,
+  @Schema(description = "The label of the journey")
+  @Nullable String label
+) {
 
-  @Override
-  public @Nonnull JourneyActiveDto apply(@Nonnull EventbusJourneySnapshotDto snapshot) {
-    var position = new JourneyGeoPositionDto(snapshot.getPositionLat(), snapshot.getPositionLng());
-    var transport = new JourneyActiveTransportDto(
-      snapshot.getCategory(),
-      snapshot.getNumber(),
-      snapshot.getLine(),
-      snapshot.getLabel());
-    return new JourneyActiveDto(
-      snapshot.getJourneyId(),
-      snapshot.getServerId(),
-      transport,
-      snapshot.getDriverSteamId(),
-      snapshot.getSpeed(),
-      position);
-  }
 }
