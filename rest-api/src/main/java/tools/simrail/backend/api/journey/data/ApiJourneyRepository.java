@@ -27,6 +27,7 @@ package tools.simrail.backend.api.journey.data;
 import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -47,6 +48,15 @@ public interface ApiJourneyRepository extends JourneyRepository {
    */
   @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
   Optional<JourneyEntity> findWithEventsById(@Nonnull UUID uuid);
+
+  /**
+   * Get a batch of journeys by the given ids with their event entities loaded as well.
+   *
+   * @param ids the ids of the journeys to resolve.
+   * @return a list containing the journeys that were resolved using the given journey ids.
+   */
+  @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
+  List<JourneyEntity> findWithEventsByIdIn(@Nonnull Collection<UUID> ids);
 
   /**
    * Finds the journey summary projections by the matching tails of a journey.
