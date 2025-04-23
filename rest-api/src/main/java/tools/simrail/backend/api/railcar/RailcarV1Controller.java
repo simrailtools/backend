@@ -137,7 +137,7 @@ class RailcarV1Controller {
   @Operation(
     summary = "Get a batch of railcars (up to 250) by their id",
     requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-      description = "An array containing the ids of the points to resolve"
+      description = "An array containing the ids of the railcars to resolve"
     ),
     responses = {
       @ApiResponse(
