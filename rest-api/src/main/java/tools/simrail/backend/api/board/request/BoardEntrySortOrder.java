@@ -22,29 +22,28 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.request;
+
+import java.util.Comparator;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import tools.simrail.backend.api.board.dto.BoardEntryDto;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * Orders in which board events can be sorted.
  */
-public enum JourneyTimeType {
+@Getter
+@AllArgsConstructor
+public enum BoardEntrySortOrder {
 
   /**
-   * The time is the same as the scheduled time.
+   * Sorted by their realtime time information.
    */
-  SCHEDULE,
+  REALTIME_TIME(Comparator.comparing(BoardEntryDto::realtimeTime)),
   /**
-   * The realtime time is a prediction when the event might happen.
+   * Sorted by their scheduled time information.
    */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
+  SCHEDULED_TIME(Comparator.comparing(BoardEntryDto::scheduledTime));
 
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
+  private final Comparator<BoardEntryDto> comparator;
 }

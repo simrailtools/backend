@@ -168,4 +168,18 @@ class CacheConfiguration {
         .build(),
       false);
   }
+
+  /**
+   * Cache for board entries, expiring 30 seconds after writing.
+   */
+  @Bean
+  public @Nonnull Cache boardsCache() {
+    return new CaffeineCache(
+      "boards_cache",
+      Caffeine.newBuilder()
+        .recordStats()
+        .expireAfterWrite(30, TimeUnit.SECONDS)
+        .build(),
+      false);
+  }
 }

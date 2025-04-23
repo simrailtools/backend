@@ -22,29 +22,30 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.converter;
+
+import jakarta.annotation.Nonnull;
+import java.util.function.Function;
+import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.board.data.BoardJourneyProjection;
+import tools.simrail.backend.api.board.dto.BoardTransportDto;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * Converter for journey projections to dto.
  */
-public enum JourneyTimeType {
+@Component
+public final class BoardTransportDtoConverter implements Function<BoardJourneyProjection, BoardTransportDto> {
 
-  /**
-   * The time is the same as the scheduled time.
-   */
-  SCHEDULE,
-  /**
-   * The realtime time is a prediction when the event might happen.
-   */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
+  @Override
+  public @Nonnull BoardTransportDto apply(@Nonnull BoardJourneyProjection projection) {
+    var journeyTransportType = JourneyTransportType.VALUES[projection.getInitialTransportType()];
+    return new BoardTransportDto(
+      projection.getInitialTransportCategory(),
+      projection.getInitialTransportNumber(),
+      projection.getInitialTransportLine(),
+      projection.getInitialTransportLabel(),
+      journeyTransportType,
+      projection.getInitialTransportMaxSpeed());
+  }
 }

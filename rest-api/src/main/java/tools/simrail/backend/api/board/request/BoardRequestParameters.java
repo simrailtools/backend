@@ -22,29 +22,29 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.request;
+
+import jakarta.annotation.Nonnull;
+import java.time.OffsetDateTime;
+import java.util.List;
+import java.util.UUID;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * Extracted and parsed request parameters for an arrival/departure board.
+ *
+ * @param serverId       the id of the server on which the board should be retrieved.
+ * @param pointId        the id of the point to return the point of.
+ * @param timeStart      the start time of the board time range.
+ * @param timeEnd        the end time of the board time range.
+ * @param transportTypes the transport types to include in the board.
  */
-public enum JourneyTimeType {
+public record BoardRequestParameters(
+  @Nonnull UUID serverId,
+  @Nonnull UUID pointId,
+  @Nonnull OffsetDateTime timeStart,
+  @Nonnull OffsetDateTime timeEnd,
+  @Nonnull List<JourneyTransportType> transportTypes
+) {
 
-  /**
-   * The time is the same as the scheduled time.
-   */
-  SCHEDULE,
-  /**
-   * The realtime time is a prediction when the event might happen.
-   */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
 }

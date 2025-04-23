@@ -64,6 +64,7 @@ import org.springframework.data.domain.Persistable;
   @Index(name = "idx_transport_category", columnList = "transport_category"),
   @Index(columnList = "journeyId, eventIndex, point_playable"),
   @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
+  @Index(name = "idx_board_filter", columnList = "eventType, point_id, transport_type, realtimeTime, scheduledTime")
 })
 public final class JourneyEventEntity implements Persistable<UUID> {
 

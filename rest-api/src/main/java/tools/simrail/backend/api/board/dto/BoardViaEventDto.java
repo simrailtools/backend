@@ -22,29 +22,24 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.journey;
+package tools.simrail.backend.api.board.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.annotation.Nonnull;
+import java.util.UUID;
 
 /**
- * Enumeration of the different precisions of the provided realtime time of an event.
+ * DTO for a via event along the route before/after the requested event.
  */
-public enum JourneyTimeType {
+public record BoardViaEventDto(
+  @Schema(description = "Id of the point")
+  @Nonnull UUID pointId,
+  @Schema(description = "Name of the point")
+  @Nonnull String pointName,
+  @Schema(description = "If the particular point was cancelled")
+  boolean cancelled,
+  @Schema(description = "If the particular point is additional")
+  boolean additional
+) {
 
-  /**
-   * The time is the same as the scheduled time.
-   */
-  SCHEDULE,
-  /**
-   * The realtime time is a prediction when the event might happen.
-   */
-  PREDICTION,
-  /**
-   * The time is confirmed and the event actually happened at the time.
-   */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
 }
