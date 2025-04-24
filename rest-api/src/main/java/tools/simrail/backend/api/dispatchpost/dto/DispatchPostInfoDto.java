@@ -24,7 +24,10 @@
 
 package tools.simrail.backend.api.dispatchpost.dto;
 
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -33,17 +36,17 @@ import java.util.UUID;
  * DTO for information about a dispatch post.
  */
 public record DispatchPostInfoDto(
-  @Nonnull UUID id,
-  @Nonnull String name,
-  @Nonnull UUID pointId,
-  @Nonnull UUID serverId,
-  @Nonnull OffsetDateTime lastUpdated,
-  @Nonnull OffsetDateTime registeredSince,
-  @Nonnull DispatchPointGeoPositionDto position,
-  @Nonnull Set<String> images,
-  @Nonnull Set<String> dispatchers,
-  int difficulty,
-  boolean deleted
+  @NotNull UUID id,
+  @NotNull @NotBlank String name,
+  @NotNull UUID pointId,
+  @NotNull UUID serverId,
+  @NotNull OffsetDateTime lastUpdated,
+  @NotNull OffsetDateTime registeredSince,
+  @NotNull DispatchPointGeoPositionDto position,
+  @NotNull Set<String> images,
+  @NotNull Set<String> dispatchers,
+  @NotNull @Min(1) @Max(5) int difficulty,
+  @NotNull boolean deleted
 ) {
 
 }

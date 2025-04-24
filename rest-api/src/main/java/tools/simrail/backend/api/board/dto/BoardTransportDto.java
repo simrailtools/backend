@@ -25,8 +25,10 @@
 package tools.simrail.backend.api.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
@@ -34,17 +36,17 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
  */
 public record BoardTransportDto(
   @Schema(description = "The external category of the transport")
-  @Nonnull String category,
+  @NotNull @NotBlank String category,
   @Schema(description = "The number of the transport")
-  @Nonnull String number,
-  @Schema(description = "The line of the transport, null in case no line is associated with the transport")
+  @NotNull @NotBlank String number,
+  @Schema(description = "The line of the transport, null in case no line is associated with the transport", nullable = true)
   @Nullable String line,
-  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport")
+  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport", nullable = true)
   @Nullable String label,
   @Schema(description = "The higher-level category of the transport")
-  @Nonnull JourneyTransportType type,
+  @NotNull JourneyTransportType type,
   @Schema(description = "The maximum speed (in km/h) of the journey is allowed to drive at the associated point")
-  int maxSpeed
+  @NotNull @Min(1) int maxSpeed
 ) {
 
 }

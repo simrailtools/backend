@@ -25,8 +25,11 @@
 package tools.simrail.backend.api.point.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
 
@@ -35,23 +38,23 @@ import java.util.UUID;
  */
 public record PointInfoDto(
   @Schema(description = "The id of the point")
-  @Nonnull UUID id,
+  @NotNull UUID id,
   @Schema(description = "The name of the point")
-  @Nonnull String name,
+  @NotNull @NotBlank String name,
   @Schema(description = "The ISO 3166-1 alpha-3 country code where the point is located")
-  @Nonnull String country,
+  @NotNull @Size(min = 3, max = 3) String country,
   @Schema(description = "The position where the point located")
-  @Nonnull PointGeoPositionDto position,
-  @Schema(description = "The UIC reference of the point, might not null in case it is unknown")
+  @NotNull PointGeoPositionDto position,
+  @Schema(description = "The UIC reference of the point, might not null in case it is unknown", nullable = true)
   @Nullable String uicRef,
   @Schema(description = "The OSM node id of the point")
-  long osmNodeId,
+  @NotNull long osmNodeId,
   @Schema(description = "The maximum speed any journey can drive at the point", minimum = "0")
-  int maxSpeed,
+  @NotNull @Min(0) int maxSpeed,
   @Schema(description = "Indicates if the point is a stop place (without switches) or a full station")
-  boolean stopPlace,
+  @NotNull boolean stopPlace,
   @Schema(description = "The platforms at the point at which a passenger change can happen")
-  @Nonnull List<PointPlatformInfoDto> platforms
+  @NotNull List<PointPlatformInfoDto> platforms
 ) {
 
 }

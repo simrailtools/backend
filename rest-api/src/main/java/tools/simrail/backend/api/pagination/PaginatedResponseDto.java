@@ -25,14 +25,14 @@
 package tools.simrail.backend.api.pagination;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotNull;
 import java.util.List;
 
 public record PaginatedResponseDto<T>(
   @Schema(description = "The items that are one the requested page")
-  @Nonnull List<T> items,
+  @NotNull List<T> items,
   @Schema(description = "Indicates if more pages are available and can be loaded")
-  boolean morePages
+  @NotNull boolean morePages
 ) {
 
 }

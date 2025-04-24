@@ -25,19 +25,21 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for a journey signal.
  */
 public record JourneySignalDto(
   @Schema(description = "The id (name) of the signal")
-  @Nonnull String name,
-  @Schema(description = "The allowed speed of passing the signal, null in case it shows a Vmax aspect")
+  @NotNull @NotBlank String name,
+  @Schema(description = "The allowed speed of passing the signal, null in case it shows a Vmax aspect", nullable = true)
   @Nullable Short maxSpeed,
   @Schema(description = "The distance of the journey to the signal, in 10 meter steps")
-  int distance
+  @NotNull @Min(0) int distance
 ) {
 
 }

@@ -25,7 +25,9 @@
 package tools.simrail.backend.api.vehicle.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 import tools.simrail.backend.common.railcar.RailcarType;
 
@@ -34,17 +36,17 @@ import tools.simrail.backend.common.railcar.RailcarType;
  */
 public record VehicleRailcarSummaryDto(
   @Schema(description = "The unique identifier of the railcar")
-  @Nonnull UUID id,
+  @NotNull UUID id,
   @Schema(description = "The display name of the railcar")
-  @Nonnull String name,
+  @NotNull @NotBlank String name,
   @Schema(description = "The grouping type of the railcar")
-  @Nonnull RailcarType type,
+  @NotNull RailcarType type,
   @Schema(description = "The weight of the railcar in tons")
-  double weight,
+  @NotNull @Min(0) double weight,
   @Schema(description = "The width of the railcar in meters")
-  double width,
+  @NotNull @Min(0) double width,
   @Schema(description = "The length of the railcar in meters")
-  double length
+  @NotNull @Min(0) double length
 ) {
 
 }

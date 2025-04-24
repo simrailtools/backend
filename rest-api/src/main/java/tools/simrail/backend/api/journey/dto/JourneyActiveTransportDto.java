@@ -25,20 +25,21 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * Transport information of an active journey.
  */
 public record JourneyActiveTransportDto(
   @Schema(description = "The category of the journey")
-  @Nonnull String category,
+  @NotNull @NotBlank String category,
   @Schema(description = "The number of the journey")
-  @Nonnull String number,
-  @Schema(description = "The line of the journey")
+  @NotNull @NotBlank String number,
+  @Schema(description = "The line of the journey", nullable = true)
   @Nullable String line,
-  @Schema(description = "The label of the journey")
+  @Schema(description = "The label of the journey", nullable = true)
   @Nullable String label
 ) {
 

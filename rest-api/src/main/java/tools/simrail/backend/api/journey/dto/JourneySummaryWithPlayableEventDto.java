@@ -25,8 +25,8 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.UUID;
 
@@ -35,21 +35,21 @@ import java.util.UUID;
  */
 public record JourneySummaryWithPlayableEventDto(
   @Schema(description = "The identifier of the journey")
-  @Nonnull UUID journeyId,
+  @NotNull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey takes place")
-  @Nonnull UUID serverId,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet")
+  @NotNull UUID serverId,
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet", nullable = true)
   @Nullable OffsetDateTime firstSeenTime,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still active or wasn't active")
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still active or wasn't active", nullable = true)
   @Nullable OffsetDateTime lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
-  boolean journeyCancelled,
+  @NotNull boolean journeyCancelled,
   @Schema(description = "The origin (first) event of the journey")
-  @Nonnull JourneyTerminalEventDto originEvent,
+  @NotNull JourneyTerminalEventDto originEvent,
   @Schema(description = "The destination (last) event of the journey")
-  @Nonnull JourneyTerminalEventDto destinationEvent,
+  @NotNull JourneyTerminalEventDto destinationEvent,
   @Schema(description = "The first event that is within the playable map border of the journey")
-  @Nonnull JourneyEventDescriptorDto firstPlayableEvent
+  @NotNull JourneyEventDescriptorDto firstPlayableEvent
 ) {
 
 }
