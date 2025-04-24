@@ -94,7 +94,7 @@ class BoardV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<BoardEntryDto> listArrivals(
+  public @Nonnull List<BoardEntryDto> listBoardArrivals(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
@@ -144,7 +144,7 @@ class BoardV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<BoardEntryDto> listDepartures(
+  public @Nonnull List<BoardEntryDto> listBoardDepartures(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,

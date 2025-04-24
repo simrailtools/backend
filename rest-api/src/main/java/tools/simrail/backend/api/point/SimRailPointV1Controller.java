@@ -127,7 +127,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<PointInfoDto> findById(
+  public @Nonnull Optional<PointInfoDto> findPointById(
     @PathVariable("id") @UUID(version = 4, allowNil = false) String id
   ) {
     return this.pointService.findPointById(java.util.UUID.fromString(id));
@@ -203,7 +203,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<PointInfoDto> findByPointId(
+  public @Nonnull Optional<PointInfoDto> findPointBySimRailPointId(
     @PathVariable("id") @Pattern(regexp = "[0-9]{2,4}") String pointId
   ) {
     return this.pointService.findPointByPointId(pointId);
@@ -239,7 +239,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<PointInfoDto> findByName(
+  public @Nonnull List<PointInfoDto> findPointByName(
     @PathVariable(name = "searchQuery") @NotBlank @Pattern(regexp = "^.{3,35}$") String searchQuery,
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(25) Integer limit
@@ -279,7 +279,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<PointInfoDto> findByPosition(
+  public @Nonnull List<PointInfoDto> findPointByPosition(
     @RequestParam(name = "latitude") @Min(-90) @Max(90) double latitude,
     @RequestParam(name = "longitude") @Min(-180) @Max(180) double longitude,
     @RequestParam(name = "radius", required = false) @Min(100) @Max(10_000) Integer radius,

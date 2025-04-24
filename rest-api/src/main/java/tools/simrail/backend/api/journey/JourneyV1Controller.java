@@ -139,7 +139,9 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<JourneyDto> byId(@PathVariable("id") @UUID(version = 5, allowNil = false) String id) {
+  public @Nonnull ResponseEntity<JourneyDto> findJourneyById(
+    @PathVariable("id") @UUID(version = 5, allowNil = false) String id
+  ) {
     return this.journeyService.findById(java.util.UUID.fromString(id))
       .map(journey -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
@@ -171,7 +173,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<JourneyDto> byIds(
+  public @Nonnull List<JourneyDto> findJourneysByIds(
     @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 5, allowNil = false) String> ids
   ) {
     // sort ids to prevent cache misses when the same request is sent twice with a different id order
@@ -212,7 +214,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<List<JourneyActiveDto>> active(
+  public @Nonnull ResponseEntity<List<JourneyActiveDto>> listActiveJourneys(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId
   ) {
     var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
@@ -257,7 +259,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byTail(
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByTail(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
@@ -322,7 +324,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byEvent(
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByEvent(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
@@ -396,7 +398,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> byPlayableDeparture(
+  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> findJourneysByPlayableDeparture(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
@@ -475,7 +477,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> byRailcar(
+  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByRailcar(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,

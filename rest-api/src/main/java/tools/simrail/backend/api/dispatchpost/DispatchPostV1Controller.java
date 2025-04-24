@@ -98,7 +98,7 @@ class DispatchPostV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<DispatchPostInfoDto> findById(
+  public @Nonnull ResponseEntity<DispatchPostInfoDto> findDispatchPostById(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id
   ) {
     return this.dispatchPostService.findById(java.util.UUID.fromString(id))
@@ -143,7 +143,7 @@ class DispatchPostV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<DispatchPostInfoDto> find(
+  public @Nonnull PaginatedResponseDto<DispatchPostInfoDto> findDispatchPosts(
     @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "difficulty", required = false) @Min(1) @Max(5) Integer difficulty,
     @RequestParam(name = "pointId", required = false) @UUID(version = 4, allowNil = false) String pointId,

@@ -95,7 +95,9 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<RailcarDto> byId(@PathVariable("id") @UUID(version = 4, allowNil = false) String id) {
+  public @Nonnull Optional<RailcarDto> findRailcarById(
+    @PathVariable("id") @UUID(version = 4, allowNil = false) String id
+  ) {
     return this.railcarProvider.findRailcarById(java.util.UUID.fromString(id)).map(this.railcarConverter);
   }
 
@@ -126,7 +128,7 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<RailcarDto> byApiName(@RequestParam("id") @NotBlank String id) {
+  public @Nonnull Optional<RailcarDto> findRailcarByApiName(@RequestParam("id") @NotBlank String id) {
     return this.railcarProvider.findRailcarByApiId(id).map(this.railcarConverter);
   }
 
@@ -153,7 +155,7 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<RailcarDto> byIds(
+  public @Nonnull List<RailcarDto> findRailcarsByIds(
     @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 4, allowNil = false) String> ids
   ) {
     return ids.stream()

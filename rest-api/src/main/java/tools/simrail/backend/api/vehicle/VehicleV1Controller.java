@@ -94,7 +94,7 @@ class VehicleV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<VehicleCompositionDto> byJourney(
+  public @Nonnull ResponseEntity<VehicleCompositionDto> findVehicleCompositionByJourneyId(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id
   ) {
     return this.vehicleService.findByJourneyId(java.util.UUID.fromString(id))
