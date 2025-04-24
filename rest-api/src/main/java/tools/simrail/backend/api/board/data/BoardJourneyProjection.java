@@ -72,6 +72,14 @@ public interface BoardJourneyProjection {
   boolean isAdditional();
 
   /**
+   * Get the platform at which the journey is scheduled to stop.
+   *
+   * @return the platform at which the journey is scheduled to stop.
+   */
+  @Nullable
+  String getScheduledPlatform();
+
+  /**
    * Get the id of the initially matched event.
    *
    * @return the id of the initially matched event.

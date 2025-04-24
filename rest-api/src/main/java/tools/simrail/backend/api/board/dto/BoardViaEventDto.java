@@ -39,7 +39,9 @@ public record BoardViaEventDto(
   @Schema(description = "If the particular point was cancelled")
   boolean cancelled,
   @Schema(description = "If the particular point is additional")
-  boolean additional
+  boolean additional,
+  @Schema(description = "If a passenger change is scheduled at the point")
+  boolean passengerChange
 ) {
 
 }
