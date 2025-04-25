@@ -40,7 +40,7 @@ public record JourneySummaryWithPlayableEventDto(
   @NotNull UUID serverId,
   @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
   @Nullable OffsetDateTime firstSeenTime,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still active or wasn't active", types = {"null"})
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
   @Nullable OffsetDateTime lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
   @NotNull boolean journeyCancelled,
