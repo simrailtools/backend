@@ -50,6 +50,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
+import tools.simrail.backend.collector.util.CancelOnRejectedExecutionPolicy;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneySignalInfo;
@@ -95,7 +96,8 @@ class SimRailServerTrainCollector {
       30,
       60L,
       TimeUnit.SECONDS,
-      new SynchronousQueue<>());
+      new SynchronousQueue<>(),
+      new CancelOnRejectedExecutionPolicy());
     this.serversDataStorage = new ConcurrentHashMap<>(20, 0.75f, 1);
   }
 
@@ -107,7 +109,7 @@ class SimRailServerTrainCollector {
    * @param task      the task runnable to execute transactional in the train collector executor.
    */
   private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Runnable task) {
-    this.trainCollectExecutor.submit(() -> this.transactionTemplate.execute((_) -> {
+    var future = this.trainCollectExecutor.submit(() -> this.transactionTemplate.execute((_) -> {
       try {
         task.run();
       } catch (Exception exception) {
@@ -118,6 +120,12 @@ class SimRailServerTrainCollector {
 
       return null;
     }));
+
+    // the returned future might get canceled immediately if it is rejected by the executor
+    // ensure that the task count is decreased to prevent unnecessary waits for dead tasks
+    if (future.isCancelled()) {
+      taskLatch.countDown();
+    }
   }
 
   @Scheduled(initialDelay = 0, fixedDelay = 2, timeUnit = TimeUnit.SECONDS, scheduler = "train_collect_scheduler")
