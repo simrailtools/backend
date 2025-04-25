@@ -36,7 +36,7 @@ import jakarta.validation.constraints.NotNull;
 public record JourneySignalDto(
   @Schema(description = "The id (name) of the signal")
   @NotNull @NotBlank String name,
-  @Schema(description = "The allowed speed of passing the signal, null in case it shows a Vmax aspect", nullable = true)
+  @Schema(description = "The allowed speed of passing the signal, null in case it shows a Vmax aspect", types = {"null"})
   @Nullable Short maxSpeed,
   @Schema(description = "The distance of the journey to the signal, in 10 meter steps")
   @NotNull @Min(0) int distance

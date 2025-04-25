@@ -37,9 +37,9 @@ public record JourneyActiveTransportDto(
   @NotNull @NotBlank String category,
   @Schema(description = "The number of the journey")
   @NotNull @NotBlank String number,
-  @Schema(description = "The line of the journey", nullable = true)
+  @Schema(description = "The line of the journey", types = {"null"})
   @Nullable String line,
-  @Schema(description = "The label of the journey", nullable = true)
+  @Schema(description = "The label of the journey", types = {"null"})
   @Nullable String label
 ) {
 

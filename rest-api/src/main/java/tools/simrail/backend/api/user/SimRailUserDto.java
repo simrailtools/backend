@@ -42,7 +42,7 @@ record SimRailUserDto(
   @NotNull @NotBlank String avatarHash,
   @Schema(description = "The url to the profile")
   @NotNull @NotBlank String profileUrl,
-  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set", nullable = true)
+  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set", types = {"null"})
   @Nullable String countryCode,
   @Schema(description = "Indicates if the steam profile page is publicly visible")
   @NotNull boolean profileVisible

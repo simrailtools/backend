@@ -44,7 +44,7 @@ record RailcarDto(
   @NotNull RailcarType type,
   @Schema(description = "The type identifier of the railcar")
   @NotNull @NotBlank String typeIdentifier,
-  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", nullable = true)
+  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", types = {"null"})
   @Nullable String requiredDlcId,
   @Schema(description = "The designation of the railcar")
   @NotNull @NotBlank String designation,

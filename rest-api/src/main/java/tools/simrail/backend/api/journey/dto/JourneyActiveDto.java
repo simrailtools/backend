@@ -40,7 +40,7 @@ public record JourneyActiveDto(
   @NotNull UUID serverId,
   @Schema(description = "Information about the transport at the first event of the journey")
   @NotNull JourneyActiveTransportDto transport,
-  @Schema(description = "The steam id of the current driver", nullable = true)
+  @Schema(description = "The steam id of the current driver", types = {"null"})
   @Nullable String driverSteamId,
   @Schema(minimum = "0", description = "The current, rounded speed of the journey")
   @NotNull @Min(1) int speed,
