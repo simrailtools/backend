@@ -95,7 +95,8 @@ class SimRailServerTrainCollector {
       30,
       60L,
       TimeUnit.SECONDS,
-      new SynchronousQueue<>());
+      new SynchronousQueue<>(),
+      new ThreadPoolExecutor.DiscardPolicy());
     this.serversDataStorage = new ConcurrentHashMap<>(20, 0.75f, 1);
   }
 
