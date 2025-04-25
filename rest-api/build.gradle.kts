@@ -45,9 +45,7 @@ dependencies {
   implementation(libs.feignCore)
   implementation(libs.fuzzywuzzy)
   implementation(libs.springDocOpenApi)
-  implementation("io.grpc:grpc-services")
   implementation("org.postgresql:postgresql")
-  implementation("io.grpc:grpc-servlet-jakarta")
   implementation("com.github.ben-manes.caffeine:caffeine")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
@@ -56,7 +54,7 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   implementation("org.springframework.boot:spring-boot-starter-websocket")
   implementation("org.springframework.boot:spring-boot-starter-validation")
-  implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+  implementation("org.springframework.grpc:spring-grpc-client-spring-boot-starter")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")

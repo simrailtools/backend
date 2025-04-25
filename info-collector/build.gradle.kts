@@ -41,15 +41,12 @@ dependencies {
   implementation(libs.feignCore)
   implementation(projects.common)
   implementation(projects.externalApiClient)
-
-  implementation("io.grpc:grpc-services")
   implementation("org.postgresql:postgresql")
-  implementation("io.grpc:grpc-servlet-jakarta")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springframework.grpc:spring-grpc-spring-boot-starter")
+  implementation("org.springframework.grpc:spring-grpc-server-web-spring-boot-starter")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
