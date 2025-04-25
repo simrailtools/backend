@@ -170,9 +170,40 @@
     ]
   },
   {
-    "name": "Łódź Fabryczna",
+    "name": "Łódź Widzew",
     "ext_point_ids": [
-      "2431"
+      "2457"
+    ]
+  },
+  {
+    "name": "Łódź Olechów",
+    "ext_point_ids": [
+      "2444",
+      "2452"
+    ]
+  },
+  {
+    "name": "Chrusty Nowe",
+    "ext_point_ids": [
+      "521"
+    ]
+  },
+  {
+    "name": "Mikołajów",
+    "ext_point_ids": [
+      "2628"
+    ]
+  },
+  {
+    "name": "Słotwiny",
+    "ext_point_ids": [
+      "3928"
+    ]
+  },
+  {
+    "name": "Puszcza Mariańska",
+    "ext_point_ids": [
+      "3459"
     ]
   }
 ]
