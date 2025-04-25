@@ -25,13 +25,14 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for geo positions.
  */
 public record JourneyGeoPositionDto(
-  @Schema(description = "The latitude of the position") double latitude,
-  @Schema(description = "The longitude of the position") double longitude
+  @Schema(description = "The latitude of the position") @NotNull double latitude,
+  @Schema(description = "The longitude of the position") @NotNull double longitude
 ) {
 
 }

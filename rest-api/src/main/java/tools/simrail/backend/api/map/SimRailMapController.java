@@ -120,7 +120,7 @@ class SimRailMapController {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<?> polylineByJourney(
+  public @Nonnull ResponseEntity<?> findMapPolylineByJourney(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id,
     @RequestParam(value = "includeCancelled", required = false) boolean includeCancelled,
     @RequestParam(value = "includeAdditional", required = false) boolean includeAdditional,

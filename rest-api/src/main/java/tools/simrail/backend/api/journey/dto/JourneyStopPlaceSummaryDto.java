@@ -25,7 +25,8 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -33,11 +34,11 @@ import java.util.UUID;
  */
 public record JourneyStopPlaceSummaryDto(
   @Schema(description = "The id of the stop place")
-  @Nonnull UUID id,
+  @NotNull UUID id,
   @Schema(description = "The name of the stop place")
-  @Nonnull String name,
+  @NotNull @NotBlank String name,
   @Schema(description = "If the stop place is within the playable border of the map")
-  boolean inPlayableBorder
+  @NotNull boolean inPlayableBorder
 ) {
 
 }

@@ -25,20 +25,20 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for live data of a journey.
  */
 public record JourneyLiveDataDto(
   @Schema(minimum = "0", description = "The current, rounded speed of the journey")
-  int speed,
+  @NotNull int speed,
   @Schema(description = "The current position of the journey")
-  @Nonnull JourneyGeoPositionDto position,
-  @Schema(description = "The steam id of the current driver")
+  @NotNull JourneyGeoPositionDto position,
+  @Schema(description = "The steam id of the current driver", types = {"null"})
   @Nullable String driverSteamId,
-  @Schema(description = "The signal in front of the journey, null in case it is too far away or doesn't exist")
+  @Schema(description = "The signal in front of the journey, null in case it is too far away or doesn't exist", types = {"null"})
   @Nullable JourneySignalDto nextSignal
 ) {
 

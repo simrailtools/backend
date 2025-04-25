@@ -51,6 +51,11 @@ public final class BoardViaEventDtoConverter implements Function<BoardJourneyPro
     var point = this.pointProvider
       .findPointByIntId(projection.getPointId())
       .orElseThrow(() -> new NoSuchElementException("missing point for stop " + projection.getPointId()));
-    return new BoardViaEventDto(point.getId(), point.getName(), projection.isCancelled(), projection.isAdditional());
+    return new BoardViaEventDto(
+      point.getId(),
+      point.getName(),
+      projection.isCancelled(),
+      projection.isAdditional(),
+      projection.getScheduledPlatform() != null);
   }
 }

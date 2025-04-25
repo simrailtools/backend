@@ -84,7 +84,7 @@ class SimRailUserV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<SimRailUserDto> bySteamIds(
+  public @Nonnull List<SimRailUserDto> findUsersBySteamIds(
     @RequestBody @Size(min = 1, max = 100) Set<@Pattern(regexp = "^7656119\\d{10}$") String> steamIds
   ) {
     return this.userService.findUsersBySteamIds(steamIds);

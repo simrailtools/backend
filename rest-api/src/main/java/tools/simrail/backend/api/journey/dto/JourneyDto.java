@@ -26,8 +26,8 @@ package tools.simrail.backend.api.journey.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,22 +37,22 @@ import java.util.UUID;
  */
 public record JourneyDto(
   @Schema(description = "The identifier of the journey")
-  @Nonnull UUID journeyId,
+  @NotNull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey takes place")
-  @Nonnull UUID serverId,
+  @NotNull UUID serverId,
   @Schema(description = "The time (ISO-8601 with offset) when the journey data was last updated")
-  @Nonnull OffsetDateTime lastUpdated,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet")
+  @NotNull OffsetDateTime lastUpdated,
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
   @Nullable OffsetDateTime firstSeenTime,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still active or wasn't active")
+  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
   @Nullable OffsetDateTime lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
-  boolean journeyCancelled,
+  @NotNull boolean journeyCancelled,
   @JsonInclude(JsonInclude.Include.NON_NULL)
   @Schema(description = "Current live information about the journey, omitted from the response if the journey is not active")
   @Nullable JourneyLiveDataDto liveData,
   @Schema(description = "The events along the route of the journey")
-  @Nonnull List<JourneyEventDto> events
+  @NotNull List<JourneyEventDto> events
 ) {
 
 }

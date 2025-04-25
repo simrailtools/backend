@@ -25,15 +25,17 @@
 package tools.simrail.backend.api.point.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for platform information at a point.
  */
 public record PointPlatformInfoDto(
-  @Schema(description = "The track where the platform is located", minimum = "1")
-  int track,
+  @Schema(description = "The track where the platform is located")
+  @NotNull @Min(1) int track,
   @Schema(description = "The number of the platform", minimum = "1")
-  int platform
+  @NotNull @Min(1) int platform
 ) {
 
 }

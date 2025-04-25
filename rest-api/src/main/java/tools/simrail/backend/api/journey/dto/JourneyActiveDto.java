@@ -25,8 +25,9 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -34,17 +35,17 @@ import java.util.UUID;
  */
 public record JourneyActiveDto(
   @Schema(description = "The identifier of the journey")
-  @Nonnull UUID journeyId,
+  @NotNull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey is active")
-  @Nonnull UUID serverId,
+  @NotNull UUID serverId,
   @Schema(description = "Information about the transport at the first event of the journey")
-  @Nonnull JourneyActiveTransportDto transport,
-  @Schema(description = "The steam id of the current driver")
+  @NotNull JourneyActiveTransportDto transport,
+  @Schema(description = "The steam id of the current driver", types = {"null"})
   @Nullable String driverSteamId,
   @Schema(minimum = "0", description = "The current, rounded speed of the journey")
-  int speed,
+  @NotNull @Min(1) int speed,
   @Schema(description = "The current position of the journey")
-  @Nonnull JourneyGeoPositionDto position
+  @NotNull JourneyGeoPositionDto position
 ) {
 
 }

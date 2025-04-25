@@ -25,20 +25,21 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 public record JourneyStopPlaceDto(
   @Schema(description = "The id of the stop place")
-  @Nonnull UUID id,
+  @NotNull UUID id,
   @Schema(description = "The name of the stop place")
-  @Nonnull String name,
+  @NotNull @NotBlank String name,
   @Schema(description = "The position where the stop place is located")
-  @Nonnull JourneyGeoPositionDto position,
+  @NotNull JourneyGeoPositionDto position,
   @Schema(description = "Indicates if the point is a stop place (without switches) or a full station")
-  boolean stopPlace,
+  @NotNull boolean stopPlace,
   @Schema(description = "If the stop place is within the playable border of the map")
-  boolean inPlayableBorder
+  @NotNull boolean inPlayableBorder
 ) {
 
 }

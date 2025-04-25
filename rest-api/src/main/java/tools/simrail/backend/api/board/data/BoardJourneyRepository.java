@@ -84,6 +84,7 @@ public interface BoardJourneyRepository extends JourneyRepository {
           e.event_index,
           e.cancelled,
           e.additional,
+          e.scheduled_platform,
           -- initial event data
           ie.id AS initial_event_id,
           ie.additional AS initial_additional,
@@ -170,6 +171,7 @@ public interface BoardJourneyRepository extends JourneyRepository {
           e.event_index,
           e.cancelled,
           e.additional,
+          e.scheduled_platform,
           -- initial event data
           ie.id AS initial_event_id,
           ie.additional AS initial_additional,

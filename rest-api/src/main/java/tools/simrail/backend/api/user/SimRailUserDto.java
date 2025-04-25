@@ -25,25 +25,27 @@
 package tools.simrail.backend.api.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 
 /**
  * DTO for data about a single steam profile.
  */
 record SimRailUserDto(
   @Schema(description = "The id of the steam profile")
-  @Nonnull String id,
+  @NotNull @Pattern(regexp = "^7656119\\d{10}$") String id,
   @Schema(description = "The name of the steam profile")
-  @Nonnull String name,
+  @NotNull @NotBlank String name,
   @Schema(description = "The avatar hash of the profile, can be used to retrieve the image from Steam")
-  @Nonnull String avatarHash,
+  @NotNull @NotBlank String avatarHash,
   @Schema(description = "The url to the profile")
-  @Nonnull String profileUrl,
-  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set")
+  @NotNull @NotBlank String profileUrl,
+  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set", types = {"null"})
   @Nullable String countryCode,
   @Schema(description = "Indicates if the steam profile page is publicly visible")
-  boolean profileVisible
+  @NotNull boolean profileVisible
 ) {
 
 }

@@ -25,13 +25,15 @@
 package tools.simrail.backend.api.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for passenger stop information.
  */
 public record BoardStopInfoDto(
-  @Schema(description = "The platform of the passenger change", minimum = "1") int platform,
-  @Schema(description = "The track of the passenger change", minimum = "1") int track
+  @Schema(description = "The platform of the passenger change") @NotNull @Min(1) int platform,
+  @Schema(description = "The track of the passenger change") @NotNull @Min(1) int track
 ) {
 
 }

@@ -25,8 +25,9 @@
 package tools.simrail.backend.api.server;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
@@ -37,27 +38,27 @@ import tools.simrail.backend.common.server.SimRailServerRegion;
  */
 record SimRailServerDto(
   @Schema(description = "The id of the server")
-  @Nonnull UUID id,
+  @NotNull UUID id,
   @Schema(description = "The code of the server")
-  @Nonnull String code,
+  @NotNull @NotBlank String code,
   @Schema(description = "The timezone id of the server according to the ISO-8601 specification")
-  @Nonnull String timezoneId,
+  @NotNull @NotBlank String timezoneId,
   @Schema(description = "The difference in hours between the UTC time and the time on the server")
-  int utcOffsetHours,
+  @NotNull int utcOffsetHours,
   @Schema(description = "The region where the server is located")
-  @Nonnull SimRailServerRegion region,
+  @NotNull SimRailServerRegion region,
   @Schema(description = "Tags of the server, for example providing detail information about the moderation status")
-  @Nonnull List<String> tags,
-  @Schema(description = "The language spoken on the server, null if the server is international and not specialised")
+  @NotNull List<String> tags,
+  @Schema(description = "The language spoken on the server, null if the server is international and not specialised", types = {"null"})
   @Nullable String spokenLanguage,
   @Schema(description = "The time (ISO-8601 with offset) when the data of the server was last updated")
-  @Nonnull OffsetDateTime lastUpdated,
+  @NotNull OffsetDateTime lastUpdated,
   @Schema(description = "The time (ISO-8601 with offset) when the server was initially registered in the SimRail backend")
-  @Nonnull OffsetDateTime registeredSince,
+  @NotNull OffsetDateTime registeredSince,
   @Schema(description = "If the server was online during the last collection")
-  boolean online,
+  @NotNull boolean online,
   @Schema(description = "If the server is no longer registered in the SimRail backend")
-  boolean deleted
+  @NotNull boolean deleted
 ) {
 
 }

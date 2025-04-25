@@ -24,7 +24,11 @@
 
 package tools.simrail.backend.api.dispatchpost.dto;
 
-import jakarta.annotation.Nonnull;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.time.OffsetDateTime;
 import java.util.Set;
 import java.util.UUID;
@@ -33,17 +37,28 @@ import java.util.UUID;
  * DTO for information about a dispatch post.
  */
 public record DispatchPostInfoDto(
-  @Nonnull UUID id,
-  @Nonnull String name,
-  @Nonnull UUID pointId,
-  @Nonnull UUID serverId,
-  @Nonnull OffsetDateTime lastUpdated,
-  @Nonnull OffsetDateTime registeredSince,
-  @Nonnull DispatchPointGeoPositionDto position,
-  @Nonnull Set<String> images,
-  @Nonnull Set<String> dispatchers,
-  int difficulty,
-  boolean deleted
+  @Schema(description = "The id of the dispatch post")
+  @NotNull UUID id,
+  @Schema(description = "The name of the dispatch post")
+  @NotNull @NotBlank String name,
+  @Schema(description = "The id of the point where the dispatch post is located")
+  @NotNull UUID pointId,
+  @Schema(description = "The id of the server for which the dispatch post info is valid")
+  @NotNull UUID serverId,
+  @Schema(description = "The time (ISO-8601 with offset) when the dispatch post was last updated")
+  @NotNull OffsetDateTime lastUpdated,
+  @Schema(description = "The time (ISO-8601 with offset) when the dispatch post was registered in the SimRail backend")
+  @NotNull OffsetDateTime registeredSince,
+  @Schema(description = "The position where the dispatch post is located")
+  @NotNull DispatchPointGeoPositionDto position,
+  @Schema(description = "A list of image urls displaying the dispatch post")
+  @NotNull Set<String> images,
+  @Schema(description = "A list of steam ids of the users that are currently dispatching the dispatch post")
+  @NotNull Set<String> dispatchers,
+  @Schema(description = "The difficulty rating of the dispatch post, from 1 (easy) to 5 (hard)")
+  @NotNull @Min(1) @Max(5) int difficulty,
+  @Schema(description = "Indicates if the dispatch post was deleted in the SimRail backend")
+  @NotNull boolean deleted
 ) {
 
 }

@@ -25,7 +25,8 @@
 package tools.simrail.backend.api.board.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nonnull;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
 
 /**
@@ -33,13 +34,15 @@ import java.util.UUID;
  */
 public record BoardViaEventDto(
   @Schema(description = "Id of the point")
-  @Nonnull UUID pointId,
+  @NotNull UUID pointId,
   @Schema(description = "Name of the point")
-  @Nonnull String pointName,
+  @NotNull @NotBlank String pointName,
   @Schema(description = "If the particular point was cancelled")
-  boolean cancelled,
+  @NotNull boolean cancelled,
   @Schema(description = "If the particular point is additional")
-  boolean additional
+  @NotNull boolean additional,
+  @Schema(description = "If a passenger change is scheduled at the point")
+  @NotNull boolean passengerChange
 ) {
 
 }

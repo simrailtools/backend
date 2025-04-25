@@ -25,14 +25,15 @@
 package tools.simrail.backend.api.map.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 /**
  * DTO for a single polyline point along a journey route.
  */
 public record MapPolylineEntryDto(
-  @Schema(description = "The latitude of the position") double latitude,
-  @Schema(description = "The longitude of the position") double longitude,
-  @Schema(description = "The elevation of th position") double elevation
+  @Schema(description = "The latitude of the position") @NotNull double latitude,
+  @Schema(description = "The longitude of the position") @NotNull double longitude,
+  @Schema(description = "The elevation of th position") @NotNull double elevation
 ) {
 
 }
