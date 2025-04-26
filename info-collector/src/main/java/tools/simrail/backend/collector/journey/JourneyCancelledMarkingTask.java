@@ -65,10 +65,11 @@ class JourneyCancelledMarkingTask {
         this.journeyRepository.markJourneysAsCancelled(nonSpawnedTrainIds);
         this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
 
+        var firstMarkedJourney = nonSpawnedTrainIds.getFirst();
         var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
         LOGGER.info(
-          "Marked {} journeys on server {} as cancelled in {} seconds",
-          nonSpawnedTrainIds.size(), server.code(), elapsedTime);
+          "Marked {} journeys (1.: {}) on server {} as cancelled in {} seconds",
+          nonSpawnedTrainIds.size(), firstMarkedJourney, server.code(), elapsedTime);
       }
     }
   }
