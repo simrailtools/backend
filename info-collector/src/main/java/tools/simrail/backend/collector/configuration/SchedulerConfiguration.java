@@ -54,6 +54,13 @@ public class SchedulerConfiguration {
     return new ConcurrentTaskScheduler(executor);
   }
 
+  @Bean(name = "train_cancelled_marker_scheduler")
+  public @Nonnull TaskScheduler trainCancelledMarkerTaskScheduler() {
+    var threadFactory = new CustomizableThreadFactory("train-cancelled-marker-thread-");
+    var executor = Executors.newSingleThreadScheduledExecutor(threadFactory);
+    return new ConcurrentTaskScheduler(executor);
+  }
+
   @Bean(name = "dispatch_post_collect_scheduler")
   public @Nonnull TaskScheduler dispatchPostCollectionTaskScheduler() {
     var threadFactory = new CustomizableThreadFactory("dispatch-post-collector-thread-");

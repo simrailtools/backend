@@ -196,6 +196,7 @@ final class JourneyDirtyStateRecorder {
 
     // apply changes to the original model
     if (this.foreignId != null) {
+      this.original.setCancelled(false);
       this.original.setForeignId(this.foreignId.value());
       this.original.setFirstSeenTime(this.server.currentTime());
       this.original.setLastSeenTime(null);
