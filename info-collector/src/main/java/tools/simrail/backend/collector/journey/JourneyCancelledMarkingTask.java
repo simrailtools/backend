@@ -62,7 +62,7 @@ class JourneyCancelledMarkingTask {
       var currentServerTime = server.currentTime();
       var nonSpawnedTrainIds = this.journeyRepository.findJourneysThatDidNotSpawn(currentServerTime, server.id());
       if (!nonSpawnedTrainIds.isEmpty()) {
-        this.journeyRepository.markJourneysAsCancelled(nonSpawnedTrainIds);
+        this.journeyRepository.markJourneysAsCancelled(currentServerTime, nonSpawnedTrainIds);
         this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
 
         var firstMarkedJourney = nonSpawnedTrainIds.getFirst();
