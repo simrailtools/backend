@@ -1,83 +1,38 @@
 Mąkołowiec
-Dąbrowa Górn. Ząbkowice DZA R.4/7
-Gdańsk Wrzeszcz Grupa Tranzytowa
 Sucha Beskidzka Północ PZS
-Gdańsk Główny PZS R7-R510
-Nowy Dwór Mazowiecki GT
 Grabiszyn
 Sosnowiec Gł. pzs R52
-Dąbrowa Górnicza Towarowa DTA
 Warszawa Podskarbińska
-Idzikowice Roz.12
 Ostojow
-Idzikowice Roz.18
 Kamień
 Piaski koło Kielc
-Warszawa Praga WPT C
 Wisła
-Starzyny R5
 Pieczyska
-Czyżew GT
 Przełęk
-Trzebinia TSA
 Żabieniec PZS R24
-Radomsko GT
 Baby GT
-Warszawa Wsch. R.58
 Katowice M. Roz. 233
-Kr.Płaszów pzs KPA
-Łazy R52
+Katowice Much. KMB
+Katowice M. Kmb R234
 Brynów
-Knapówka R2
-Dąbrowa Górnicza Huta Katowice R7
 Szobiszowice
-Iława Główna PZS R1-R2
 Wieprz
-Wrocław Brochów PODG
 Wrocław Świebodzki
 Sucha Beskidzka Południe PZS
 Kozioł R12
-Pruszcz Gdański PZS R73-75
-Dąbrowa Górnicza Ząbkowice GTB
 Gdynia Postojowa
 Kłodnica
-Warszawa Zach. R19
-Sopot Grupa Tranzytowa
-Łódź Chojny R82
-Rokiciny GT
-Psary Roz.40
-Skierniewice R3
 Nowa Wieś
 Stawiska
 Czarków
 Łukanów
-Grodzisk Mazowiecki R64
-Józefinów Roz.2
-Łazy Grupa Węglarkowa ŁGW
-Tunel R13
+Dłubnia
 Dłubnia R2
-Sosnowiec Kazimierz PZS SKZ1
-Sędziszów Towarowy
-Sosnowiec Kazimierz PZS SKZ2
-Rybnik Towarowy pzs RTB11
 Bolko
-Warszawa Gdańska WG
-Katowice M. Kmb R234
-Dąbrowa Górnicza Ząbkowice DZA
 Liswarta
 Katowice Janów
-Dłubnia
 Krupski Młyn
-Zawiercie GT
-Skierniewice GT 201-208
-Malbork Grupa Tranzytowa
-Częstochowa Tow Ctb
 Długoszyn
-Poraj GT
-Warszawa Gdańska GT
-Katowice Much. KMB
-Józefinów
-Tczew PZS R11
 Lekomin
 Jawornica
 Szczukowice
@@ -85,77 +40,47 @@ Kucelinka
 Wyczerpy
 Świebodzice
 Gniewiecin
-Grodzisk Maz. R58
-Warszawa Grochów R5
-Kielce Herbskie Khb
-Kielce Herbskie Kha
-Dąbrowa Górnicza Towarowa DTA R5
 Warszawa Zachodnia Szczęśliwicka
-Żakowice Płd Roz.5
-Czerwionka PZS R20
 Warszawa Czyste
 Katowice Tow. KTC
-Gorzkowice GT
 Podchojny
 Kalina
 Staszic
-Dąbr.Gór.Strzem. R75
 Droniowiczki
-Warszawa Wsch.R.34
-Piotrków Tryb Tow
-Gomunice GT
-Wrocław Główny Wgb
 Most Wisła
 Kozioł
 Kanał
 Olza Olb
 Radziwiłłów Mazowiecki
 Łódź Olechów Łoa
-Gdynia Gł. Roz.84
-Płyćwia GT
 Łódź Olechów Łoc
 Radom Wschodni
-Kraków Przedmieście R3
 Kraków Prokocim Pra
-Brzesko Okocim GT
 Kraków Bieżanów PZS R39
 Tarnów Wschód
 Krak.Prb Gt. Odjazd.
-Podłęże R101
-Kraków Nowa Huta NHEO
-Kraków Olsza R2
 Gajewniki
-Łódź Kaliska R295
 Łódź Dąbrowa PBS
-Poznań Star. pzs Psk2
+Retkinia
 Retkinia R.2
-Łódź Widzew R9
 Franklinów
 Piwonice
-Łódź Kaliska PZS R219-R227
 Stary Staw
-Retkinia
 Gniewięcin APO
 Klimontów APO
 Borowa Górka
-Koluszki R59
-Skierniewice S PZS
 Wrocław Popowice Wp2
-Łódź Widzew PZS R3
+Wrocław Popowice Wp3 PZS
 Koluszki Bęzel.R154
 Warszawa Antoninów
-Wrocław Popowice Wp3 PZS
 Magdalenka
 Kępa Gliniecka
 Żabieniec
-Żakow. Płd Zieleń R7
 Lamowice
 Placencja
 Mińsk Mazowiecki PZS Kędzierak
-Łuków P
 Jaźwiny
 Czarnowąsy PZS
-Koluszki R122
-Koluszki R121
 Żołnierka
 Czachówek Zachodni
+Dąbrowa Górnicza Towarowa DTA R5

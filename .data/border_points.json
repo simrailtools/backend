@@ -38,7 +38,8 @@
   {
     "name": "Dąbrowa Górnicza Towarowa",
     "ext_point_ids": [
-      "728"
+      "728",
+      "729"
     ]
   },
   {
@@ -51,7 +52,8 @@
   {
     "name": "Sędziszów",
     "ext_point_ids": [
-      "3795"
+      "3795",
+      "3797"
     ]
   },
   {
@@ -99,13 +101,15 @@
   {
     "name": "Warszawa Grochów",
     "ext_point_ids": [
-      "4732"
+      "4732",
+      "4734"
     ]
   },
   {
     "name": "Warszawa Praga",
     "ext_point_ids": [
       "4762",
+      "4785",
       "4787",
       "4788"
     ]
@@ -148,7 +152,8 @@
   {
     "name": "Kraków Olsza",
     "ext_point_ids": [
-      "1998"
+      "1998",
+      "1999"
     ]
   },
   {
@@ -172,7 +177,9 @@
   {
     "name": "Łódź Widzew",
     "ext_point_ids": [
-      "2457"
+      "2457",
+      "2458",
+      "2462"
     ]
   },
   {

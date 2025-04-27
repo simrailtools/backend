@@ -45,6 +45,7 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
+      "684",
       "685"
     ],
     "bb": [
@@ -124,6 +125,7 @@
     "stop_place": true,
     "ids": [
       "3305",
+      "3306",
       "5484"
     ],
     "bb": [
@@ -242,7 +244,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "5262"
+      "5262",
+      "5264"
     ],
     "bb": [
       [
@@ -301,7 +304,9 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "2374"
+      "2372",
+      "2374",
+      "2376"
     ],
     "bb": [
       [
@@ -457,7 +462,10 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "734"
+      "713",
+      "734",
+      "735",
+      "736"
     ],
     "bb": [
       [
@@ -1234,10 +1242,11 @@
     "name": "Warszawa Grochów",
     "id": "5e969d1b-9ab5-4d5c-ab17-44166c6b146c",
     "prefix": null,
-    "max_speed": 40,
+    "max_speed": 60,
     "stop_place": false,
     "ids": [
-      "4732"
+      "4732",
+      "4734"
     ],
     "bb": [
       [
@@ -1276,6 +1285,8 @@
     "max_speed": 60,
     "stop_place": false,
     "ids": [
+      "4817",
+      "4820",
       "4824"
     ],
     "bb": [
@@ -1378,6 +1389,7 @@
     "max_speed": 90,
     "stop_place": false,
     "ids": [
+      "4829",
       "4837",
       "4839"
     ],
@@ -1497,6 +1509,7 @@
     "max_speed": 160,
     "stop_place": false,
     "ids": [
+      "1539",
       "3384"
     ],
     "bb": [
@@ -1536,7 +1549,9 @@
     "max_speed": 160,
     "stop_place": false,
     "ids": [
-      "1251"
+      "1250",
+      "1251",
+      "1252"
     ],
     "bb": [
       [
@@ -1731,7 +1746,9 @@
     "max_speed": 160,
     "stop_place": false,
     "ids": [
-      "1349"
+      "1349",
+      "1350",
+      "1351"
     ],
     "bb": [
       [
@@ -1926,7 +1943,8 @@
     "max_speed": 200,
     "stop_place": false,
     "ids": [
-      "1772"
+      "1772",
+      "1773"
     ],
     "bb": [
       [
@@ -1965,7 +1983,8 @@
     "max_speed": 200,
     "stop_place": false,
     "ids": [
-      "3436"
+      "3436",
+      "3437"
     ],
     "bb": [
       [
@@ -2001,10 +2020,11 @@
     "name": "Starzyny",
     "id": "a4cb9d4f-d3ae-4e11-b627-503524fc6a4e",
     "prefix": "Str",
-    "max_speed": 100,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "4092"
+      "4092",
+      "4093"
     ],
     "bb": [
       [
@@ -2121,7 +2141,8 @@
     "max_speed": 110,
     "stop_place": false,
     "ids": [
-      "4595"
+      "4595",
+      "4596"
     ],
     "bb": [
       [
@@ -2823,7 +2844,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "3704"
+      "3704",
+      "3705"
     ],
     "bb": [
       [
@@ -3994,7 +4016,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "5060"
+      "5060",
+      "5068"
     ],
     "bb": [
       [
@@ -4069,10 +4092,12 @@
     "name": "Kielce Herbskie",
     "id": "a93045e7-8d86-4eb5-ad31-2c9f0fd58f8b",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "1704"
+      "1704",
+      "1705",
+      "1706"
     ],
     "bb": [
       [
@@ -4348,7 +4373,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "721"
+      "721",
+      "722"
     ],
     "bb": [
       [
@@ -4972,7 +4998,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "3795"
+      "3795",
+      "3797"
     ],
     "bb": [
       [
@@ -5520,6 +5547,7 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
+      "715",
       "727"
     ],
     "bb": [
@@ -5559,7 +5587,9 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "4003"
+      "4003",
+      "4004",
+      "4005"
     ],
     "bb": [
       [
@@ -7122,7 +7152,9 @@
     "stop_place": false,
     "ids": [
       "3877",
-      "3880"
+      "3878",
+      "3880",
+      "3892"
     ],
     "bb": [
       [
@@ -7786,7 +7818,9 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "2457"
+      "2457",
+      "2458",
+      "2462"
     ],
     "bb": [
       [
@@ -8022,7 +8056,10 @@
     "ids": [
       "1803",
       "1806",
-      "1807"
+      "1807",
+      "1808",
+      "1809",
+      "1811"
     ],
     "bb": [
       [
@@ -8256,7 +8293,8 @@
     "max_speed": 150,
     "stop_place": false,
     "ids": [
-      "3251"
+      "3251",
+      "3252"
     ],
     "bb": [
       [
@@ -10790,11 +10828,12 @@
     "name": "Kraków Nowa Huta",
     "id": "8e64173d-e9ad-484e-95fb-3932135cd942",
     "prefix": null,
-    "max_speed": 30,
+    "max_speed": 40,
     "stop_place": true,
     "ids": [
       "1983",
-      "1984"
+      "1984",
+      "1990"
     ],
     "bb": [
       [
@@ -11184,6 +11223,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
+      "5374",
+      "5376",
       "5377"
     ],
     "bb": [
@@ -11301,7 +11342,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "2425"
+      "2425",
+      "2426"
     ],
     "bb": [
       [
@@ -11652,7 +11694,8 @@
     "max_speed": 50,
     "stop_place": false,
     "ids": [
-      "4569"
+      "4569",
+      "4578"
     ],
     "bb": [
       [
@@ -12240,7 +12283,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "728"
+      "728",
+      "729"
     ],
     "bb": [
       [
@@ -13293,6 +13337,7 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
+      "3346",
       "3348"
     ],
     "bb": [
@@ -13761,7 +13806,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "693"
+      "693",
+      "694"
     ],
     "bb": [
       [
@@ -14110,10 +14156,11 @@
     "name": "Warszawa Praga",
     "id": "b0d84d5d-574d-457e-9157-5ddd4d55b6ff",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "ids": [
       "4762",
+      "4785",
       "4787",
       "4788"
     ],
@@ -14193,7 +14240,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "3594"
+      "3594",
+      "3595"
     ],
     "bb": [
       [
@@ -14232,7 +14280,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "60"
+      "60",
+      "61"
     ],
     "bb": [
       [
@@ -14271,6 +14320,7 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
+      "3221",
       "3223"
     ],
     "bb": [
@@ -14349,7 +14399,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "1153"
+      "1153",
+      "1154"
     ],
     "bb": [
       [
@@ -14388,7 +14439,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "1140"
+      "1140",
+      "1141"
     ],
     "bb": [
       [
@@ -14427,7 +14479,8 @@
     "max_speed": 120,
     "stop_place": false,
     "ids": [
-      "3509"
+      "3509",
+      "3510"
     ],
     "bb": [
       [
@@ -15793,7 +15846,8 @@
     "max_speed": 60,
     "stop_place": false,
     "ids": [
-      "2432"
+      "2432",
+      "5703"
     ],
     "bb": [
       [
@@ -16573,7 +16627,8 @@
     "max_speed": 60,
     "stop_place": false,
     "ids": [
-      "952"
+      "952",
+      "5443"
     ],
     "bb": [
       [
@@ -17197,7 +17252,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "2504"
+      "2504",
+      "2505"
     ],
     "bb": [
       [
@@ -17236,7 +17292,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "3983"
+      "3983",
+      "3984"
     ],
     "bb": [
       [
@@ -18130,10 +18187,11 @@
     "name": "Czerwionka",
     "id": "832c4dc3-ec6b-46d6-942d-d4945c2eeabe",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 110,
     "stop_place": false,
     "ids": [
-      "661"
+      "661",
+      "5439"
     ],
     "bb": [
       [
@@ -19085,7 +19143,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "4494"
+      "4494",
+      "5440"
     ],
     "bb": [
       [
@@ -19124,7 +19183,8 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
-      "995"
+      "995",
+      "996"
     ],
     "bb": [
       [
@@ -19600,6 +19660,7 @@
     "max_speed": 60,
     "stop_place": false,
     "ids": [
+      "1012",
       "1013"
     ],
     "bb": [
@@ -19795,7 +19856,8 @@
     "max_speed": 160,
     "stop_place": false,
     "ids": [
-      "2894"
+      "2894",
+      "2895"
     ],
     "bb": [
       [
@@ -20107,6 +20169,7 @@
     "max_speed": 100,
     "stop_place": false,
     "ids": [
+      "1927",
       "2003"
     ],
     "bb": [
@@ -20185,7 +20248,8 @@
     "max_speed": 160,
     "stop_place": false,
     "ids": [
-      "3376"
+      "3376",
+      "5442"
     ],
     "bb": [
       [
@@ -20338,10 +20402,11 @@
     "name": "Iława Główna",
     "id": "8fdcbe95-7882-4fb9-945b-7773d4f4ba26",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 110,
     "stop_place": false,
     "ids": [
-      "1354"
+      "1354",
+      "5441"
     ],
     "bb": [
       [
@@ -20419,7 +20484,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "3268"
+      "3268",
+      "3269"
     ],
     "bb": [
       [
@@ -20536,7 +20602,8 @@
     "max_speed": 60,
     "stop_place": false,
     "ids": [
-      "1998"
+      "1998",
+      "1999"
     ],
     "bb": [
       [
@@ -20653,7 +20720,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "341"
+      "341",
+      "342"
     ],
     "bb": [
       [
@@ -20926,7 +20994,8 @@
     "max_speed": 110,
     "stop_place": false,
     "ids": [
-      "2020"
+      "2020",
+      "2021"
     ],
     "bb": [
       [
@@ -22572,7 +22641,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "2473"
+      "2473",
+      "2475"
     ],
     "bb": [
       [
@@ -22608,9 +22678,10 @@
     "name": "Wrocław Brochów",
     "id": "9e3a7c15-40ef-43e4-9887-37fedf14b5af",
     "prefix": null,
-    "max_speed": 40,
+    "max_speed": 120,
     "stop_place": false,
     "ids": [
+      "5044",
       "5047",
       "5049",
       "5051",
