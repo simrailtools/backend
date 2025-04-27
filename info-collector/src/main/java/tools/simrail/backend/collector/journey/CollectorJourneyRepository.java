@@ -56,22 +56,27 @@ interface CollectorJourneyRepository extends JourneyRepository {
    * @param serverId   the id of the server to return the journeys of.
    */
   @Query(value = """
-    WITH first_playable_events AS (
+    WITH second_departures_in_border AS (
       SELECT
         e.journey_id
       FROM sit_journey_event e
       WHERE
         e.event_index = (
-          SELECT MIN(e2.event_index) + 1 -- select next event after after border to be absolutely sure
+          SELECT e2.event_index
           FROM sit_journey_event e2
-          WHERE e2.journey_id = e.journey_id AND e2.point_playable = TRUE
+          WHERE e2.journey_id = e.journey_id
+            AND e2.event_type = 1 -- departure event
+            AND e2.point_playable = TRUE
+          ORDER BY event_index
+          OFFSET 1
+          LIMIT 1
         )
         AND e.cancelled = false
         AND e.scheduled_time < :time
     )
     SELECT j.id
     FROM sit_journey j
-    JOIN first_playable_events fe ON fe.journey_id = j.id
+    JOIN second_departures_in_border ib ON ib.journey_id = j.id
     WHERE
       -- no need to select lastSeenTime here, but this way an index can be used more effectively
       j.server_id = :serverId
