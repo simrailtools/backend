@@ -56,7 +56,7 @@ public record DispatchPostInfoDto(
   @Schema(description = "A list of steam ids of the users that are currently dispatching the dispatch post")
   @NotNull Set<String> dispatchers,
   @Schema(description = "The difficulty rating of the dispatch post, from 1 (easy) to 5 (hard)")
-  @NotNull @Min(1) @Max(5) int difficulty,
+  @NotNull @Min(0) @Max(5) int difficulty,
   @Schema(description = "Indicates if the dispatch post was deleted in the SimRail backend")
   @NotNull boolean deleted
 ) {
