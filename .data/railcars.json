@@ -255,6 +255,21 @@
     "max_speed": 110
   },
   {
+    "id": "28ee5e14-78f7-47e9-9846-f50feeab0b70",
+    "api_name": "EN57/EN57-919",
+    "display_name": "EN57-919",
+    "required_dlc_id": "3583200",
+    "type": "ELECTRIC_MULTIPLE_UNIT",
+    "type_id": "5B+6B+5B",
+    "designation": "EN57",
+    "producer": "Pafawag Wroclaw",
+    "production_years": "1961-1993",
+    "weight": 126.5,
+    "length": 64.475,
+    "width": 3,
+    "max_speed": 110
+  },
+  {
     "id": "616bf6d4-b8bd-4b77-b242-4ad9c1410a7c",
     "api_name": "EN57/EN57-1000",
     "display_name": "EN57-1000",
