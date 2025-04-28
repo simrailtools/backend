@@ -86,12 +86,6 @@
     ]
   },
   {
-    "name": "Żyrardów",
-    "ext_point_ids": [
-      "5431"
-    ]
-  },
-  {
     "name": "Warszawa Główna",
     "ext_point_ids": [
       "4718",
@@ -175,6 +169,12 @@
     ]
   },
   {
+    "name": "Bełchów",
+    "ext_point_ids": [
+      "113"
+    ]
+  },
+  {
     "name": "Łódź Widzew",
     "ext_point_ids": [
       "2457",
@@ -193,6 +193,21 @@
     "name": "Chrusty Nowe",
     "ext_point_ids": [
       "521"
+    ]
+  },
+  {
+    "name": "Rokiciny",
+    "ext_point_ids": [
+      "3594",
+      "3595"
+    ],
+    "in_border_if_next": [
+      "1803",
+      "1806",
+      "1807",
+      "1808",
+      "1809",
+      "1811"
     ]
   },
   {
