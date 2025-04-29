@@ -63,7 +63,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(614, points.size());
+    Assertions.assertEquals(664, points.size());
   }
 
   @Test
