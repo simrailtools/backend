@@ -7069,7 +7069,7 @@
   {
     "name": "Radziwiłłów Mazowiecki",
     "id": "5e957536-1246-4913-a594-bae12b5a61cd",
-    "prefix": null,
+    "prefix": "3531_RM",
     "max_speed": 160,
     "stop_place": false,
     "ids": [
@@ -7148,7 +7148,7 @@
   {
     "name": "Skierniewice",
     "id": "61094bf5-cd95-4685-a32c-ae0fded54bed",
-    "prefix": null,
+    "prefix": "3877_Sk",
     "max_speed": 160,
     "stop_place": false,
     "ids": [
@@ -7815,7 +7815,7 @@
   {
     "name": "Łódź Widzew",
     "id": "c9c9774f-a552-42c2-aff2-98dc89d9d108",
-    "prefix": null,
+    "prefix": "2457_LW",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -7973,7 +7973,7 @@
   {
     "name": "Gałkówek",
     "id": "f1f2c08d-1416-473c-b88d-73d4104d41d8",
-    "prefix": null,
+    "prefix": "924_G",
     "max_speed": 150,
     "stop_place": false,
     "ids": [
@@ -8051,7 +8051,7 @@
   {
     "name": "Koluszki",
     "id": "1620faed-498a-49df-bb19-6da1aa97a079",
-    "prefix": null,
+    "prefix": "1803_KO",
     "max_speed": 150,
     "stop_place": false,
     "ids": [
@@ -8134,7 +8134,7 @@
   {
     "name": "Rogów",
     "id": "c59e34c5-bea8-4919-9f87-d0e8da65ae85",
-    "prefix": null,
+    "prefix": "3590_Rg",
     "max_speed": 160,
     "stop_place": false,
     "ids": [
@@ -8290,7 +8290,7 @@
   {
     "name": "Płyćwia",
     "id": "731ef571-e45b-4732-a083-deb6544927e6",
-    "prefix": null,
+    "prefix": "3251_Pl",
     "max_speed": 150,
     "stop_place": false,
     "ids": [
@@ -11221,7 +11221,7 @@
   {
     "name": "Żakowice Południowe",
     "id": "935a61f8-d810-43fa-9f00-bcbffacf57d5",
-    "prefix": null,
+    "prefix": "5377_ZP",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -21852,7 +21852,7 @@
   {
     "name": "Bełchów",
     "id": "8b600a48-2a02-4bd2-95cb-f3275c5dadb8",
-    "prefix": null,
+    "prefix": "113_Be",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -22367,7 +22367,7 @@
   {
     "name": "Słotwiny",
     "id": "92e95c7b-aa91-4a8c-b624-70a08999352e",
-    "prefix": null,
+    "prefix": "3928_Sl",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -23191,7 +23191,7 @@
   {
     "name": "Puszcza Mariańska",
     "id": "af128e8f-2b43-408d-9adb-11b636adfff3",
-    "prefix": null,
+    "prefix": "3459_PM",
     "max_speed": 70,
     "stop_place": false,
     "ids": [
