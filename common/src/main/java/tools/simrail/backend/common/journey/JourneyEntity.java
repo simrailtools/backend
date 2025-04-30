@@ -60,7 +60,7 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Entity(name = "sit_journey")
 @Table(indexes = {
   @Index(columnList = "serverId"),
-  @Index(columnList = "serverId, foreignRunId"),
+  @Index(columnList = "foreignRunId"),
   @Index(columnList = "firstSeenTime, lastSeenTime"),
   @Index(columnList = "serverId, firstSeenTime, lastSeenTime"),
 })

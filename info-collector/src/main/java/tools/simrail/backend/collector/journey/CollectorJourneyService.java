@@ -56,6 +56,7 @@ class CollectorJourneyService {
   private final EntityManager entityManager;
   private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
+  private final CollectorJourneyVehicleRepository journeyVehicleRepository;
 
   private final Map<UUID, Map<UUID, JourneyEntity>> activeJourneysByServer;
 
@@ -63,11 +64,13 @@ class CollectorJourneyService {
   public CollectorJourneyService(
     @Nonnull EntityManager entityManager,
     @Nonnull CollectorJourneyRepository journeyRepository,
-    @Nonnull JourneyEventRepository journeyEventRepository
+    @Nonnull JourneyEventRepository journeyEventRepository,
+    @Nonnull CollectorJourneyVehicleRepository journeyVehicleRepository
   ) {
     this.entityManager = entityManager;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
+    this.journeyVehicleRepository = journeyVehicleRepository;
     this.activeJourneysByServer = new ConcurrentHashMap<>();
   }
 
@@ -92,8 +95,8 @@ class CollectorJourneyService {
    * @return the journeys on the given server and one of the given run ids.
    */
   @Nonnull
-  public List<JourneyEntity> retrieveJourneysOfServerByRunIds(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
-    return this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds);
+  public List<JourneyEntity> retrieveJourneysByRunIds(@Nonnull List<UUID> runIds) {
+    return this.journeyRepository.findAllByForeignRunIdIn(runIds);
   }
 
   /**
@@ -142,7 +145,7 @@ class CollectorJourneyService {
     var cachedJourneys = this.activeJourneysByServer.get(serverId);
     if (cachedJourneys == null) {
       // there are no journeys cached for the server currently, retrieve them from the database
-      var journeysOfServer = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds)
+      var journeysOfServer = this.journeyRepository.findAllByForeignRunIdIn(runIds)
         .stream()
         .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
       this.activeJourneysByServer.put(serverId, journeysOfServer);
@@ -153,7 +156,7 @@ class CollectorJourneyService {
       var missingRunIds = new ArrayList<>(runIds);
       cachedJourneys.forEach((_, journey) -> missingRunIds.remove(journey.getForeignRunId()));
       if (!missingRunIds.isEmpty()) {
-        var remainingRuns = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, missingRunIds);
+        var remainingRuns = this.journeyRepository.findAllByForeignRunIdIn(missingRunIds);
         remainingRuns.forEach(journey -> cachedJourneys.put(journey.getId(), journey));
       }
 
@@ -224,6 +227,16 @@ class CollectorJourneyService {
         this.journeyEventRepository.save(event);
       }
     }
+  }
+
+  /**
+   *
+   * @param journey
+   */
+  public void wipeJourney(@Nonnull JourneyEntity journey) {
+    this.journeyEventRepository.deleteAllByJourneyId(journey.getId());
+    this.journeyRepository.deleteById(journey.getId());
+    this.journeyVehicleRepository.deleteAllByJourneyId(journey.getId());
   }
 
   /**

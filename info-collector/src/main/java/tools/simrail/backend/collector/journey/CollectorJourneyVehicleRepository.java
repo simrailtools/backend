@@ -22,36 +22,13 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.util;
+package tools.simrail.backend.collector.journey;
 
-import java.util.stream.Stream;
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.Arguments;
-import org.junit.jupiter.params.provider.MethodSource;
+import jakarta.annotation.Nonnull;
+import java.util.UUID;
+import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
 
-public class RomanNumberConverterTest {
+interface CollectorJourneyVehicleRepository extends JourneyVehicleRepository {
 
-  static Stream<Arguments> romanInputSource() {
-    return Stream.of(
-      Arguments.of("I", 1),
-      Arguments.of("Ia", 1),
-      Arguments.of("III", 3),
-      Arguments.of("IV", 4),
-      Arguments.of("VII", 7),
-      Arguments.of("IX", 9),
-      Arguments.of("XI", 11),
-      Arguments.of("XL", 40),
-      Arguments.of("XbbLa", 40),
-      Arguments.of("LXXXVIII", 88),
-      Arguments.of("DLXXXV", 585)
-    );
-  }
-
-  @ParameterizedTest
-  @MethodSource("romanInputSource")
-  void testRomanNumberConvert(String roman, int expectedResult) {
-    var decodedValue = RomanNumberConverter.decodeRomanNumber(roman);
-    Assertions.assertEquals(expectedResult, decodedValue);
-  }
+  void deleteAllByJourneyId(@Nonnull UUID journeyId);
 }

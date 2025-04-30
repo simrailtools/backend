@@ -47,7 +47,7 @@ interface CollectorJourneyRepository extends JourneyRepository {
   List<JourneyEntity> findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(@Nonnull UUID serverId);
 
   @Nonnull
-  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, Collection<UUID> foreignRunIds);
+  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
 
   /**
    * Finds all journeys on the specified server whose first playable event was not reached before the given time.
