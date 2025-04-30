@@ -61,6 +61,7 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Table(indexes = {
   @Index(columnList = "serverId"),
   @Index(columnList = "foreignRunId"),
+  @Index(columnList = "serverId, foreignRunId"),
   @Index(columnList = "firstSeenTime, lastSeenTime"),
   @Index(columnList = "serverId, firstSeenTime, lastSeenTime"),
 })

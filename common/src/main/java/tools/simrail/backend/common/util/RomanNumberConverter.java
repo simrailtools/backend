@@ -37,7 +37,8 @@ public final class RomanNumberConverter {
   }
 
   /**
-   * Converts the given roman number string into an integer.
+   * Converts the given roman number string into an integer. Any extra chars that cannot be mapped to a number are
+   * ignored.
    *
    * @param romanNumber the romain number string to convert.
    * @return the integer representation of the given roman number string.

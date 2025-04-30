@@ -41,13 +41,16 @@ import tools.simrail.backend.common.journey.JourneyRepository;
 interface CollectorJourneyRepository extends JourneyRepository {
 
   @Nonnull
+  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
+
+  @Nonnull
   List<JourneyEntity> findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
 
   @Nonnull
   List<JourneyEntity> findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(@Nonnull UUID serverId);
 
   @Nonnull
-  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
+  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, Collection<UUID> foreignRunIds);
 
   /**
    * Finds all journeys on the specified server whose first playable event was not reached before the given time.

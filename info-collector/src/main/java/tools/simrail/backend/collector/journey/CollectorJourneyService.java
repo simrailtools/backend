@@ -87,12 +87,10 @@ class CollectorJourneyService {
   }
 
   /**
-   * Retrieves all journeys that are running on the given server and use one of the given run ids directly from the
-   * database without using the cache.
+   * Retrieves all journeys by the given run id from the database.
    *
-   * @param serverId the id of the server where the journeys are.
-   * @param runIds   the ids of the runs to get the associated journey of.
-   * @return the journeys on the given server and one of the given run ids.
+   * @param runIds the ids of the runs to get the associated journey of.
+   * @return the journeys that are associated with one of the given run ids.
    */
   @Nonnull
   public List<JourneyEntity> retrieveJourneysByRunIds(@Nonnull List<UUID> runIds) {
@@ -145,7 +143,7 @@ class CollectorJourneyService {
     var cachedJourneys = this.activeJourneysByServer.get(serverId);
     if (cachedJourneys == null) {
       // there are no journeys cached for the server currently, retrieve them from the database
-      var journeysOfServer = this.journeyRepository.findAllByForeignRunIdIn(runIds)
+      var journeysOfServer = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds)
         .stream()
         .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
       this.activeJourneysByServer.put(serverId, journeysOfServer);
@@ -156,7 +154,7 @@ class CollectorJourneyService {
       var missingRunIds = new ArrayList<>(runIds);
       cachedJourneys.forEach((_, journey) -> missingRunIds.remove(journey.getForeignRunId()));
       if (!missingRunIds.isEmpty()) {
-        var remainingRuns = this.journeyRepository.findAllByForeignRunIdIn(missingRunIds);
+        var remainingRuns = this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, missingRunIds);
         remainingRuns.forEach(journey -> cachedJourneys.put(journey.getId(), journey));
       }
 
@@ -230,13 +228,14 @@ class CollectorJourneyService {
   }
 
   /**
+   * Wipes the given journey completely from the database, removing all references to it.
    *
-   * @param journey
+   * @param journeyId the id of the journey to wipe from the database.
    */
-  public void wipeJourney(@Nonnull JourneyEntity journey) {
-    this.journeyEventRepository.deleteAllByJourneyId(journey.getId());
-    this.journeyRepository.deleteById(journey.getId());
-    this.journeyVehicleRepository.deleteAllByJourneyId(journey.getId());
+  public void wipeJourney(@Nonnull UUID journeyId) {
+    this.journeyEventRepository.deleteAllByJourneyId(journeyId);
+    this.journeyRepository.deleteById(journeyId);
+    this.journeyVehicleRepository.deleteAllByJourneyId(journeyId);
   }
 
   /**

@@ -30,5 +30,10 @@ import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
 
 interface CollectorJourneyVehicleRepository extends JourneyVehicleRepository {
 
+  /**
+   * Delete all vehicle entries that are associated with the given journey id.
+   *
+   * @param journeyId the id of the journey to remove the vehicle info of.
+   */
   void deleteAllByJourneyId(@Nonnull UUID journeyId);
 }

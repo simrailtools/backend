@@ -150,7 +150,8 @@ class SimRailServerTimetableCollector {
       if (existingRun != null) {
         // another journey was already recorded with a different journey id,
         // remove the old journey in favor of the new journey
-        this.journeyService.wipeJourney(existingRun);
+        //noinspection DataFlowIssue - id won't be null in this case
+        this.journeyService.wipeJourney(existingRun.getId());
       }
 
       journey = new JourneyEntity();
