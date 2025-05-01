@@ -164,7 +164,7 @@ public class PlatformSignalProviderTest {
       }
     }
 
-    Assertions.assertEquals(162, missingPoints.size(), () -> {
+    Assertions.assertEquals(160, missingPoints.size(), () -> {
       var joinedStationNames = String.join(", ", missingPoints);
       return "Found unexpected count of stations without platform signal info: " + joinedStationNames;
     });
