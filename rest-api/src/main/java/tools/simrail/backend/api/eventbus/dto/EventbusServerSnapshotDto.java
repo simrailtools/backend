@@ -34,6 +34,7 @@ import lombok.ToString;
 import tools.simrail.backend.common.rpc.ServerUpdateFrame;
 import tools.simrail.backend.common.server.SimRailServerEntity;
 import tools.simrail.backend.common.server.SimRailServerRegion;
+import tools.simrail.backend.common.server.SimRailServerScenery;
 
 /**
  * DTO with changing field for server updates.
@@ -50,6 +51,7 @@ public final class EventbusServerSnapshotDto {
   private final List<String> tags;
   private final String spokenLanguage;
   private final SimRailServerRegion region;
+  private final SimRailServerScenery scenery;
 
   // changing fields
   private boolean online;
@@ -62,6 +64,7 @@ public final class EventbusServerSnapshotDto {
     this.tags = entity.getTags();
     this.spokenLanguage = entity.getSpokenLanguage();
     this.region = entity.getRegion();
+    this.scenery = entity.getScenery();
     this.online = entity.isOnline();
     this.timezoneId = entity.getTimezone();
     this.utcOffsetHours = entity.getUtcOffsetHours();
