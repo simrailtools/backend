@@ -89,7 +89,9 @@ public final class SimRailServerCollector implements SimRailServerService {
   public void collectServerInformation() throws Exception {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
+    var errorDuringCollect = false;
     var fullCollection = this.collectionRuns++ % 2 == 0;
+    var collectionRequired = this.collectedServers.isEmpty();
 
     var response = this.panelApiClient.getServers();
     var servers = response.getEntries();
@@ -172,11 +174,8 @@ public final class SimRailServerCollector implements SimRailServerService {
         var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
         serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
 
-        // only continue the full collection cycle (which will consequently update the servers)
-        // if a valid time was found for the server. if we didn't find a valid time, the server
-        // will not be added to `foundServers` causing it to be removed from the available
-        // server list which will hinder the data collection
-        fullCollection = serverZoneOffsetSeconds != null;
+        // mark if an error was encountered loading the server time
+        errorDuringCollect |= serverZoneOffsetSeconds != null;
 
         // convert the collected utc offset seconds to utc offset hours and update it in the server entity
         if (serverZoneOffsetSeconds != null) {
@@ -211,7 +210,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    if (fullCollection) {
+    if (fullCollection && !errorDuringCollect) {
       // mark all servers which are not included in the response as deleted
       var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
       var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
@@ -221,8 +220,12 @@ public final class SimRailServerCollector implements SimRailServerService {
         this.serverRepository.save(missingServer);
         this.serverUpdateHandler.handleServerRemove(missingServer);
       }
+    }
 
+    if (collectionRequired || !errorDuringCollect) {
       // update the found servers during the run to make them available to readers
+      // only do this if no error was encountered during collection or collection
+      // being necessary due to no servers being found previously
       this.collectedServers = foundServers;
     }
   }
