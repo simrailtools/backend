@@ -11340,7 +11340,7 @@
   {
     "name": "Łódź Chojny",
     "id": "f02c98b9-56b3-4c11-bcf9-1299db8a2720",
-    "prefix": null,
+    "prefix": "2426_LCH",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -25257,7 +25257,7 @@
   {
     "name": "Łódź Dąbrowa",
     "id": "a710e0ae-9dac-4abd-bb92-17c4ad48c728",
-    "prefix": null,
+    "prefix": "2427_LD",
     "max_speed": 100,
     "stop_place": true,
     "ids": [
