@@ -31,6 +31,7 @@ import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -484,6 +485,10 @@ class SimRailServerTimetableCollector {
     var fixedEvents = new ArrayList<SimRailAwsTimetableEntry>();
     fixedEvents.add(firstEvent);
 
+    // list of points that were already encountered. used to prevent duplicate
+    // points, which is unsupported by the realtime collector.
+    var seenPointIds = new HashSet<UUID>();
+
     var currentEvent = firstEvent;
     for (var index = 1; index < timetable.size(); index++) {
       // check if the point of the event is known if not just add it as fixed
@@ -499,8 +504,11 @@ class SimRailServerTimetableCollector {
       // check if the point of the current event and the checking event are the same in our mapping
       // if that is not the case just continue as there is nothing to merge
       if (!point.getSimRailPointIds().contains(currentEvent.getPointId())) {
-        currentEvent = entry;
-        fixedEvents.add(entry);
+        if (seenPointIds.add(point.getId())) {
+          currentEvent = entry;
+          fixedEvents.add(entry);
+        }
+
         continue;
       }
 
