@@ -29,6 +29,8 @@ import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Index;
@@ -117,6 +119,13 @@ public final class SimRailServerEntity {
   @Column
   @Nullable
   private String spokenLanguage;
+  /**
+   * Scenery (map part) of the server.
+   */
+  @Nonnull
+  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  private SimRailServerScenery scenery;
 
   /**
    * If this server is currently online.

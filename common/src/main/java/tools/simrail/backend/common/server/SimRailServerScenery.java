@@ -22,34 +22,23 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.server;
-
-import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.common.server.SimRailServerEntity;
+package tools.simrail.backend.common.server;
 
 /**
- * A converter for server entities to server DTOs.
+ * The possible sceneries that can be available on a server.
  */
-@Component
-final class SimRailServerDtoConverter implements Function<SimRailServerEntity, SimRailServerDto> {
+public enum SimRailServerScenery {
 
-  @Override
-  public @Nonnull SimRailServerDto apply(@Nonnull SimRailServerEntity server) {
-    return new SimRailServerDto(
-      server.getId(),
-      server.getCode(),
-      server.getTimezone(),
-      server.getUtcOffsetHours(),
-      server.getRegion(),
-      server.getTags(),
-      server.getSpokenLanguage(),
-      server.getScenery(),
-      server.getUpdateTime(),
-      server.getRegisteredSince(),
-      server.isOnline(),
-      server.isDeleted()
-    );
-  }
+  /**
+   * Map between Warsaw-Lodz and Warsaw-Psary.
+   */
+  WARSAW_LODZ_PSARY,
+  /**
+   * Map between Warsaw-Lodz and Warsaw-Krakow.
+   */
+  WARSAW_LODZ_KRAKOW,
+  /**
+   * Map between Warsaw-Katowice and Warsaw-Krakow.
+   */
+  WARSAW_KATOWICE_KRAKOW,
 }

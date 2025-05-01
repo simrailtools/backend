@@ -32,6 +32,7 @@ import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import tools.simrail.backend.common.server.SimRailServerRegion;
+import tools.simrail.backend.common.server.SimRailServerScenery;
 
 /**
  * DTO for SimRail servers.
@@ -51,6 +52,8 @@ record SimRailServerDto(
   @NotNull List<String> tags,
   @Schema(description = "The language spoken on the server, null if the server is international and not specialised", types = {"null"})
   @Nullable String spokenLanguage,
+  @Schema(description = "The scenery (map part) that is available on the server")
+  @NotNull SimRailServerScenery scenery,
   @Schema(description = "The time (ISO-8601 with offset) when the data of the server was last updated")
   @NotNull OffsetDateTime lastUpdated,
   @Schema(description = "The time (ISO-8601 with offset) when the server was initially registered in the SimRail backend")

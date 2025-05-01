@@ -39,9 +39,11 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.common.scenery.SimRailServerSceneryProvider;
 import tools.simrail.backend.common.server.SimRailServerEntity;
 import tools.simrail.backend.common.server.SimRailServerRegion;
 import tools.simrail.backend.common.server.SimRailServerRepository;
+import tools.simrail.backend.common.server.SimRailServerScenery;
 import tools.simrail.backend.common.util.MongoIdDecodeUtil;
 import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
@@ -59,6 +61,7 @@ public final class SimRailServerCollector implements SimRailServerService {
   private final SimRailPanelApiClient panelApiClient;
   private final ServerUpdateHandler serverUpdateHandler;
   private final SimRailServerRepository serverRepository;
+  private final SimRailServerSceneryProvider sceneryProvider;
 
   private long collectionRuns = 0;
   private volatile List<SimRailServerDescriptor> collectedServers = List.of();
@@ -68,12 +71,14 @@ public final class SimRailServerCollector implements SimRailServerService {
     @Nonnull SimRailAwsApiClient awsApiClient,
     @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull SimRailServerRepository serverRepository,
-    @Nonnull ServerUpdateHandler serverUpdateHandler
+    @Nonnull ServerUpdateHandler serverUpdateHandler,
+    @Nonnull SimRailServerSceneryProvider sceneryProvider
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
     this.serverRepository = serverRepository;
     this.serverUpdateHandler = serverUpdateHandler;
+    this.sceneryProvider = sceneryProvider;
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
   }
 
@@ -113,6 +118,12 @@ public final class SimRailServerCollector implements SimRailServerService {
       serverEntity.setDeleted(false);
       serverEntity.setCode(server.getCode());
       serverEntity.setOnline(server.isOnline());
+
+      // update the scenery used on the server
+      var scenery = this.sceneryProvider
+        .findSceneryByServerId(server.getId())
+        .orElse(SimRailServerScenery.WARSAW_KATOWICE_KRAKOW);
+      serverEntity.setScenery(scenery);
 
       // update the time when the server was initially registered in the SimRail backend
       var registeredSince = MongoIdDecodeUtil.parseMongoId(server.getId());
