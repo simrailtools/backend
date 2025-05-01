@@ -41,6 +41,9 @@ import tools.simrail.backend.common.journey.JourneyRepository;
 interface CollectorJourneyRepository extends JourneyRepository {
 
   @Nonnull
+  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
+
+  @Nonnull
   List<JourneyEntity> findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
 
   @Nonnull

@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.util;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 
 /**
  * A utility to convert roman numbers to integers.
@@ -36,7 +37,8 @@ public final class RomanNumberConverter {
   }
 
   /**
-   * Converts the given roman number string into an integer.
+   * Converts the given roman number string into an integer. Any extra chars that cannot be mapped to a number are
+   * ignored.
    *
    * @param romanNumber the romain number string to convert.
    * @return the integer representation of the given roman number string.
@@ -52,6 +54,11 @@ public final class RomanNumberConverter {
     for (var index = lastStringIndex; index >= 0; index--) {
       var c = romanNumber.charAt(index);
       var currValue = convertRomanChar(c);
+      if (currValue == null) {
+        // might happen if non-roman char is encountered, e.g. 'Ia' should just be read as 'I'
+        continue;
+      }
+
       if (currValue < prevValue) {
         result -= currValue;
       } else {
@@ -70,7 +77,7 @@ public final class RomanNumberConverter {
    * @param roman the roman character to convert to an integer.
    * @return the integer representation of the given roman character.
    */
-  private static int convertRomanChar(char roman) {
+  private static @Nullable Integer convertRomanChar(char roman) {
     return switch (roman) {
       case 'I' -> 1;
       case 'V' -> 5;
@@ -79,9 +86,7 @@ public final class RomanNumberConverter {
       case 'C' -> 100;
       case 'D' -> 500;
       case 'M' -> 1000;
-      default -> {
-        throw new IllegalArgumentException("Invalid roman number character: " + roman);
-      }
+      default -> null;
     };
   }
 }

@@ -38,7 +38,8 @@
   {
     "name": "Dąbrowa Górnicza Towarowa",
     "ext_point_ids": [
-      "728"
+      "728",
+      "729"
     ]
   },
   {
@@ -51,14 +52,8 @@
   {
     "name": "Sędziszów",
     "ext_point_ids": [
-      "3795"
-    ]
-  },
-  {
-    "name": "Żelisławice",
-    "ext_point_ids": [
-      "5392",
-      "5393"
+      "3795",
+      "3797"
     ]
   },
   {
@@ -91,12 +86,6 @@
     ]
   },
   {
-    "name": "Żyrardów",
-    "ext_point_ids": [
-      "5431"
-    ]
-  },
-  {
     "name": "Warszawa Główna",
     "ext_point_ids": [
       "4718",
@@ -106,13 +95,15 @@
   {
     "name": "Warszawa Grochów",
     "ext_point_ids": [
-      "4732"
+      "4732",
+      "4734"
     ]
   },
   {
     "name": "Warszawa Praga",
     "ext_point_ids": [
       "4762",
+      "4785",
       "4787",
       "4788"
     ]
@@ -155,7 +146,8 @@
   {
     "name": "Kraków Olsza",
     "ext_point_ids": [
-      "1998"
+      "1998",
+      "1999"
     ]
   },
   {
@@ -168,6 +160,72 @@
     "name": "Marków",
     "ext_point_ids": [
       "2547"
+    ]
+  },
+  {
+    "name": "Warszawa Podskarbińska",
+    "ext_point_ids": [
+      "4758"
+    ]
+  },
+  {
+    "name": "Bełchów",
+    "ext_point_ids": [
+      "113"
+    ]
+  },
+  {
+    "name": "Łódź Widzew",
+    "ext_point_ids": [
+      "2457",
+      "2458",
+      "2462"
+    ]
+  },
+  {
+    "name": "Łódź Olechów",
+    "ext_point_ids": [
+      "2444",
+      "2452"
+    ]
+  },
+  {
+    "name": "Chrusty Nowe",
+    "ext_point_ids": [
+      "521"
+    ]
+  },
+  {
+    "name": "Rokiciny",
+    "ext_point_ids": [
+      "3594",
+      "3595"
+    ],
+    "in_border_if_next": [
+      "1803",
+      "1806",
+      "1807",
+      "1808",
+      "1809",
+      "1811"
+    ]
+  },
+  {
+    "name": "Mikołajów",
+    "ext_point_ids": [
+      "2628"
+    ]
+  },
+  {
+    "name": "Słotwiny",
+    "ext_point_ids": [
+      "3928"
+    ]
+  },
+  {
+    "name": "Puszcza Mariańska",
+    "ext_point_ids": [
+      "3459"
     ]
   }
 ]

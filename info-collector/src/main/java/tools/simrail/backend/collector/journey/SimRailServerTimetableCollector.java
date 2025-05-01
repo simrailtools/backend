@@ -96,7 +96,7 @@ class SimRailServerTimetableCollector {
   }
 
   @Scheduled(
-    initialDelay = 15,
+    initialDelay = 30,
     fixedRate = 15 * 60,
     timeUnit = TimeUnit.SECONDS,
     scheduler = "timetable_collect_scheduler"
@@ -110,9 +110,12 @@ class SimRailServerTimetableCollector {
       var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
 
       // collect the scheduled journeys based on the timetable information
-      var existingJourneys = this.journeyService.retrieveJourneysOfServerByRunIds(server.id(), runIds)
+      var existingJourneys = this.journeyService.retrieveJourneysByRunIds(runIds)
         .stream()
         .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
+      var existingRuns = existingJourneys.values()
+        .stream()
+        .collect(Collectors.toMap(JourneyEntity::getForeignRunId, Function.identity()));
       var existingEvents = this.journeyService.retrieveInactiveJourneyEventsOfServerByRunIds(server.id(), runIds)
         .stream()
         .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
@@ -122,7 +125,7 @@ class SimRailServerTimetableCollector {
             return events;
           }
         )));
-      trainRuns.forEach(run -> this.collectJourney(server, run, existingJourneys, existingEvents));
+      trainRuns.forEach(run -> this.collectJourney(server, run, existingRuns, existingJourneys, existingEvents));
 
       // print information about the collection run
       var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
@@ -133,6 +136,7 @@ class SimRailServerTimetableCollector {
   private void collectJourney(
     @Nonnull SimRailServerDescriptor server,
     @Nonnull SimRailAwsTrainRun run,
+    @Nonnull Map<UUID, JourneyEntity> existingRuns,
     @Nonnull Map<UUID, JourneyEntity> existingJourneys,
     @Nonnull Map<UUID, List<JourneyEventEntity>> existingJourneyEvents
   ) {
@@ -142,6 +146,14 @@ class SimRailServerTimetableCollector {
     var journeyId = this.journeyIdFactory.create(trainNumber + runId + server.id());
     var journey = existingJourneys.get(journeyId);
     if (journey == null) {
+      var existingRun = existingRuns.get(runId);
+      if (existingRun != null) {
+        // another journey was already recorded with a different journey id,
+        // remove the old journey in favor of the new journey
+        //noinspection DataFlowIssue - id won't be null in this case
+        this.journeyService.wipeJourney(existingRun.getId());
+      }
+
       journey = new JourneyEntity();
       journey.setNew(true);
       journey.setId(journeyId);

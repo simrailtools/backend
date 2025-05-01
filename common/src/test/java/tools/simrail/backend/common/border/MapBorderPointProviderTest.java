@@ -54,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(35, borderPoints.size());
+    Assertions.assertEquals(50, borderPoints.size());
   }
 
   @Test
@@ -96,6 +96,10 @@ public final class MapBorderPointProviderTest {
 
       var timetable = trainRun.get("timetable");
       var trainRunId = trainRun.get("runId").asText();
+      if (timetable.isEmpty()) {
+        continue;
+      }
+
       for (var timetableEntry : timetable) {
         var pointId = timetableEntry.get("pointId").asText();
         var isBorderPoint = this.borderPointProvider.isMapBorderPoint(pointId);

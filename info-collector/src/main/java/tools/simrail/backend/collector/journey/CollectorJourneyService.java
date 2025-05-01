@@ -56,6 +56,7 @@ class CollectorJourneyService {
   private final EntityManager entityManager;
   private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
+  private final CollectorJourneyVehicleRepository journeyVehicleRepository;
 
   private final Map<UUID, Map<UUID, JourneyEntity>> activeJourneysByServer;
 
@@ -63,11 +64,13 @@ class CollectorJourneyService {
   public CollectorJourneyService(
     @Nonnull EntityManager entityManager,
     @Nonnull CollectorJourneyRepository journeyRepository,
-    @Nonnull JourneyEventRepository journeyEventRepository
+    @Nonnull JourneyEventRepository journeyEventRepository,
+    @Nonnull CollectorJourneyVehicleRepository journeyVehicleRepository
   ) {
     this.entityManager = entityManager;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
+    this.journeyVehicleRepository = journeyVehicleRepository;
     this.activeJourneysByServer = new ConcurrentHashMap<>();
   }
 
@@ -84,16 +87,14 @@ class CollectorJourneyService {
   }
 
   /**
-   * Retrieves all journeys that are running on the given server and use one of the given run ids directly from the
-   * database without using the cache.
+   * Retrieves all journeys by the given run id from the database.
    *
-   * @param serverId the id of the server where the journeys are.
-   * @param runIds   the ids of the runs to get the associated journey of.
-   * @return the journeys on the given server and one of the given run ids.
+   * @param runIds the ids of the runs to get the associated journey of.
+   * @return the journeys that are associated with one of the given run ids.
    */
   @Nonnull
-  public List<JourneyEntity> retrieveJourneysOfServerByRunIds(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
-    return this.journeyRepository.findAllByServerIdAndForeignRunIdIn(serverId, runIds);
+  public List<JourneyEntity> retrieveJourneysByRunIds(@Nonnull List<UUID> runIds) {
+    return this.journeyRepository.findAllByForeignRunIdIn(runIds);
   }
 
   /**
@@ -224,6 +225,17 @@ class CollectorJourneyService {
         this.journeyEventRepository.save(event);
       }
     }
+  }
+
+  /**
+   * Wipes the given journey completely from the database, removing all references to it.
+   *
+   * @param journeyId the id of the journey to wipe from the database.
+   */
+  public void wipeJourney(@Nonnull UUID journeyId) {
+    this.journeyEventRepository.deleteAllByJourneyId(journeyId);
+    this.journeyRepository.deleteById(journeyId);
+    this.journeyVehicleRepository.deleteAllByJourneyId(journeyId);
   }
 
   /**

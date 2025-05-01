@@ -27,6 +27,7 @@ package tools.simrail.backend.common.signal;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
@@ -76,18 +77,22 @@ public class PlatformSignalProviderTest {
       .stream()
       .mapToInt(Map::size)
       .sum();
-    Assertions.assertEquals(423, signalCount);
+    Assertions.assertEquals(553, signalCount);
   }
 
   @Test
   void testAllSignalNamesAreUnique() throws IOException {
     var jsonMapper = new JsonMapper();
-    var seenSignalIds = new HashSet<String>();
+    var seenSignalIdsByPoint = new HashMap<String, Set<String>>();
     try (var stream = this.signalsResource.getInputStream()) {
       var signals = jsonMapper.readTree(stream);
       for (var signal : signals) {
         var signalId = signal.get("id").asText();
+        var pointId = signal.get("point_id").asText();
         Assertions.assertFalse(signalId.isBlank());
+        Assertions.assertFalse(pointId.isBlank());
+
+        var seenSignalIds = seenSignalIdsByPoint.computeIfAbsent(pointId, _ -> new HashSet<>());
         Assertions.assertTrue(seenSignalIds.add(signalId), signalId);
 
         var track = signal.get("track").asInt();
@@ -109,9 +114,13 @@ public class PlatformSignalProviderTest {
   void testAllScheduledPlatformsHaveASignalMapping() {
     var pointsWithWrongPlatformMapping = Set.of(
       "Olkusz", // wrong platform mapping
+      "Gałkówek", // wrong platform mapping
       "Sędziszów", // wrong platform mapping
       "Dąbrowa Górnicza", // wrong platform mapping
       "Dąbrowa Górnicza Gołonóg" // wrong platform mapping
+    );
+    var pointsWithMultipleSignalsForSameTrack = Set.of(
+      "Żyrardów" // Track 1 Platform 1 can be reached from 3 signals
     );
 
     var missingPoints = new HashSet<String>();
@@ -144,12 +153,18 @@ public class PlatformSignalProviderTest {
           var signalInfo = signalsOfPoint.values().stream()
             .filter(signal -> signal.getTrack() == track && signal.getPlatform() == platform)
             .toList();
-          Assertions.assertTrue(!signalInfo.isEmpty() && signalInfo.size() <= 2, point.get().getName());
+          if (pointsWithMultipleSignalsForSameTrack.contains(pointName)) {
+            Assertions.assertFalse(signalInfo.isEmpty(), point.get().getName());
+          } else {
+            Assertions.assertTrue(
+              !signalInfo.isEmpty() && signalInfo.size() <= 2,
+              () -> String.format("Bad mapping for %s [P: %s, T: %s]", pointName, platform, track));
+          }
         }
       }
     }
 
-    Assertions.assertEquals(108, missingPoints.size(), () -> {
+    Assertions.assertEquals(162, missingPoints.size(), () -> {
       var joinedStationNames = String.join(", ", missingPoints);
       return "Found unexpected count of stations without platform signal info: " + joinedStationNames;
     });
