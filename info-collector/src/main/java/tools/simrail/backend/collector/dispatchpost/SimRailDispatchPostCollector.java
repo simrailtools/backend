@@ -123,6 +123,11 @@ final class SimRailDispatchPostCollector {
           postEntity.setId(this.dispatchPostIdFactory.create(idName));
         }
 
+        // store if the post was deleted before, and then remove the marking
+        // this can happen if a posts gets removed and then re-added
+        var postWasDeleted = postEntity.isDeleted();
+        postEntity.setDeleted(false);
+
         // update the base information
         postEntity.setName(dispatchPost.getStationName());
         postEntity.setDifficultyLevel(dispatchPost.getDifficulty());
@@ -174,7 +179,7 @@ final class SimRailDispatchPostCollector {
 
         // save the updated post entity, send out and info if the post is newly registered
         var savedEntity = this.dispatchPostRepository.save(postEntity);
-        if (postEntity.isNew()) {
+        if (postEntity.isNew() || postWasDeleted) {
           this.dispatchPostUpdateHandler.handleDispatchPostAdd(savedEntity);
         }
       }
