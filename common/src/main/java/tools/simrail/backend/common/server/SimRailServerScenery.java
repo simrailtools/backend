@@ -30,6 +30,10 @@ package tools.simrail.backend.common.server;
 public enum SimRailServerScenery {
 
   /**
+   * Full map including all map parts.
+   */
+  FULL,
+  /**
    * Map between Warsaw-Lodz and Warsaw-Psary.
    */
   WARSAW_LODZ_PSARY,
@@ -37,6 +41,10 @@ public enum SimRailServerScenery {
    * Map between Warsaw-Lodz and Warsaw-Krakow.
    */
   WARSAW_LODZ_KRAKOW,
+  /**
+   * Map between Warsaw-Lodz and Warsaw-Katowice.
+   */
+  WARSAW_LODZ_KATOWICE,
   /**
    * Map between Warsaw-Katowice and Warsaw-Krakow.
    */
