@@ -222,7 +222,7 @@ public final class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    if (collectionRequired || !errorDuringCollect) {
+    if (fullCollection && (collectionRequired || !errorDuringCollect)) {
       // update the found servers during the run to make them available to readers
       // only do this if no error was encountered during collection or collection
       // being necessary due to no servers being found previously
