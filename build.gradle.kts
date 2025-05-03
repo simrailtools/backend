@@ -121,6 +121,9 @@ subprojects {
       "--enable-preview", // enable preview features in tests as well
       "-XX:+EnableDynamicAgentLoading", // allow mockito to dynamically attach to the jvm
     )
+
+    // forces the re-run of tests everytime the task is executed
+    outputs.upToDateWhen { false }
   }
 
   tasks.withType<BootRun> {
