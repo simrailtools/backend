@@ -106,7 +106,7 @@ public final class SimRailPanelApiClientTest {
       Assertions.assertNotNull(entry.getDispatchers());
       Assertions.assertNotNull(entry.getStationName());
       Assertions.assertNotNull(entry.getStationPrefix());
-      Assertions.assertTrue(entry.getDifficulty() > 0);
+      Assertions.assertTrue(entry.getDifficulty() >= 0 && entry.getDifficulty() <= 5);
 
       Assertions.assertNotNull(entry.getImage1Url());
       Assertions.assertNotNull(entry.getImage2Url());
