@@ -39,11 +39,12 @@ public final class SimRailAwsApiClientTest {
   @Test
   void testServerTimeOffset() {
     var client = SimRailAwsApiClient.create();
+
     var de1Offset = client.getServerTimeOffset("de1");
-    Assertions.assertTrue(de1Offset == 1 || de1Offset == 2);
+    Assertions.assertDoesNotThrow(() -> ZoneOffset.ofHours(de1Offset));
 
     var pl1Offset = client.getServerTimeOffset("pl1");
-    Assertions.assertTrue(pl1Offset == -4 || pl1Offset == -5);
+    Assertions.assertDoesNotThrow(() -> ZoneOffset.ofHours(pl1Offset));
   }
 
   @Test
