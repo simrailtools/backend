@@ -186,6 +186,7 @@ class CollectorJourneyService {
    *
    * @param journey the journey to persist.
    */
+  @Transactional
   public @Nonnull JourneyEntity persistJourney(@Nonnull JourneyEntity journey) {
     return this.journeyRepository.save(journey);
   }
@@ -232,6 +233,7 @@ class CollectorJourneyService {
    *
    * @param journeyId the id of the journey to wipe from the database.
    */
+  @Transactional
   public void wipeJourney(@Nonnull UUID journeyId) {
     this.journeyEventRepository.deleteAllByJourneyId(journeyId);
     this.journeyRepository.deleteById(journeyId);
