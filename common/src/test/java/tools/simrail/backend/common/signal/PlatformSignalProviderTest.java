@@ -116,6 +116,7 @@ public class PlatformSignalProviderTest {
       "Olkusz", // wrong platform mapping
       "Gałkówek", // wrong platform mapping
       "Sędziszów", // wrong platform mapping
+      "Opoczno Południe", // wrong platform mapping
       "Dąbrowa Górnicza", // wrong platform mapping
       "Dąbrowa Górnicza Gołonóg" // wrong platform mapping
     );
