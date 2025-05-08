@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 30s
+  scrape_protocols: [ 'OpenMetricsText1.0.0' ]
+
+scrape_configs:
+  - job_name: 'sit_collector'
+    scheme: 'http'
+    metrics_path: '/admin/prometheus'
+    enable_http2: true
+    body_size_limit: 0
+    follow_redirects: false
+    static_configs:
+      - targets: [ 'host.docker.internal:8080' ]

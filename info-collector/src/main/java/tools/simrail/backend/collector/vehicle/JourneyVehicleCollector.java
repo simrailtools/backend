@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.collector.vehicle;
 
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -40,6 +40,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -68,6 +69,9 @@ class JourneyVehicleCollector {
   private final SimRailServerService serverService;
   private final CollectorVehicleRepository vehicleRepository;
 
+  private final Meter.MeterProvider<Timer> actualCompositionCollectTimer;
+  private final Meter.MeterProvider<Timer> predictedCompositionCollectTimer;
+
   @Autowired
   public JourneyVehicleCollector(
     @Nonnull SimRailAwsApiClient awsApiClient,
@@ -75,7 +79,9 @@ class JourneyVehicleCollector {
     @Nonnull EntityManager entityManager,
     @Nonnull RailcarProvider railcarProvider,
     @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorVehicleRepository vehicleRepository
+    @Nonnull CollectorVehicleRepository vehicleRepository,
+    @Nonnull @Qualifier("actual_vc_collect_duration") Meter.MeterProvider<Timer> actualCompositionCollectTimer,
+    @Nonnull @Qualifier("predicted_vc_collect_duration") Meter.MeterProvider<Timer> predictedCompositionCollectTimer
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
@@ -83,6 +89,8 @@ class JourneyVehicleCollector {
     this.railcarProvider = railcarProvider;
     this.serverService = serverService;
     this.vehicleRepository = vehicleRepository;
+    this.actualCompositionCollectTimer = actualCompositionCollectTimer;
+    this.predictedCompositionCollectTimer = predictedCompositionCollectTimer;
   }
 
   @Transactional
@@ -91,16 +99,15 @@ class JourneyVehicleCollector {
     // collect the scheduled/predicted vehicle compositions first
     var servers = this.serverService.getServers();
     for (var server : servers) {
-      var startTime = Instant.now();
+      var span = Timer.start();
       var runs = this.awsApiClient.getTrainRuns(server.code());
       this.collectVehiclesFromTimetable(server, runs);
-      var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-      LOGGER.info("Collected predicted vehicle information for server {} in {}s", server.code(), elapsedTime);
+      span.stop(this.predictedCompositionCollectTimer.withTag("server_code", server.code()));
     }
 
     // collect the real vehicle compositions
     for (var server : servers) {
-      var startTime = Instant.now();
+      var span = Timer.start();
       var response = this.panelApiClient.getTrains(server.code(), null).body();
       var activeTrains = response == null ? null : response.getEntries();
       if (activeTrains == null || activeTrains.isEmpty()) {
@@ -109,8 +116,7 @@ class JourneyVehicleCollector {
       }
 
       this.collectVehiclesFromLiveData(server, activeTrains);
-      var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-      LOGGER.info("Collected actual vehicle information for server {} in {}s", server.code(), elapsedTime);
+      span.stop(this.actualCompositionCollectTimer.withTag("server_code", server.code()));
     }
   }
 

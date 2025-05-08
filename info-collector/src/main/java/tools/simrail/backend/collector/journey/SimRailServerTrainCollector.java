@@ -24,9 +24,11 @@
 
 package tools.simrail.backend.collector.journey;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
@@ -44,6 +46,7 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
@@ -75,6 +78,10 @@ class SimRailServerTrainCollector {
   // storage for collect information per server
   private final Map<UUID, CollectorRequestDataStorage> serversDataStorage;
 
+  private final Meter.MeterProvider<Timer> collectionDurationTimer;
+  private final Meter.MeterProvider<Counter> updatedJourneysCounter;
+  private final Meter.MeterProvider<Counter> runsWithoutJourneyCounter;
+
   @Autowired
   public SimRailServerTrainCollector(
     @Nonnull SimRailServerService serverService,
@@ -82,13 +89,20 @@ class SimRailServerTrainCollector {
     @Nonnull CollectorJourneyService journeyService,
     @Nonnull JourneyUpdateHandler journeyUpdateHandler,
     @Nonnull TransactionTemplate transactionTemplate,
-    @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory
+    @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
+    @Nonnull @Qualifier("active_journeys_updated_total") Meter.MeterProvider<Counter> updatedJourneysCounter,
+    @Nonnull @Qualifier("active_journey_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer,
+    @Nonnull @Qualifier("active_trains_without_journey_total") Meter.MeterProvider<Counter> runsWithoutJourneyCounter
   ) {
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
     this.journeyUpdateHandler = journeyUpdateHandler;
     this.journeyEventRealtimeUpdaterFactory = journeyEventRealtimeUpdaterFactory;
+
+    this.updatedJourneysCounter = updatedJourneysCounter;
+    this.collectionDurationTimer = collectionDurationTimer;
+    this.runsWithoutJourneyCounter = runsWithoutJourneyCounter;
 
     this.transactionTemplate = transactionTemplate;
     this.trainCollectExecutor = new ThreadPoolExecutor(
@@ -134,11 +148,12 @@ class SimRailServerTrainCollector {
     var taskCountLatch = new CountDownLatch(servers.size());
     for (var server : servers) {
       this.executeCollectionTask(taskCountLatch, () -> {
-        var startTime = Instant.now();
+        var span = Timer.start();
+        var now = Instant.now();
         var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
 
         var dataStorage = this.serversDataStorage.computeIfAbsent(server.id(), _ -> new CollectorRequestDataStorage());
-        var fullCollection = dataStorage.shouldDoTrainsCollection(startTime);
+        var fullCollection = dataStorage.shouldDoTrainsCollection(now);
 
         // keeps track of the dirty journeys without retaining duplicates
         var dirtyRecorders = new HashMap<UUID, JourneyDirtyStateRecorder>();
@@ -156,7 +171,7 @@ class SimRailServerTrainCollector {
             activeServerJourneys,
             dirtyRecorderFactory);
           if (fullCollection) {
-            dataStorage.updateLastTrainCollect(startTime);
+            dataStorage.updateLastTrainCollect(now);
           }
         }
 
@@ -191,8 +206,8 @@ class SimRailServerTrainCollector {
           // publish the updated journey information to listeners
           this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
 
-          var elapsedTime = Duration.between(startTime, Instant.now()).toMillis();
-          LOGGER.info("Updated {} trains on {} in {}ms", updatedJourneys.size(), server.code(), elapsedTime);
+          span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
+          this.updatedJourneysCounter.withTag("server_code", server.code()).increment(updatedJourneys.size());
         }
       });
     }
@@ -229,12 +244,11 @@ class SimRailServerTrainCollector {
     var journeysByRunId = this.journeyService.resolveCachedJourneysOfServer(server.id(), activeTrainRuns)
       .stream()
       .collect(Collectors.toMap(JourneyEntity::getForeignRunId, Function.identity()));
-    LOGGER.debug("Got {} trains for {} (cache size: {})", activeTrains.size(), server.code(), activeJourneys.size());
     for (var activeTrain : activeTrains) {
       // find the journey that is associated with the train run
       var journey = journeysByRunId.remove(activeTrain.getRunId());
       if (journey == null) {
-        LOGGER.warn("Found train with no associated journey {} on {}", activeTrain.getRunId(), server.code());
+        this.runsWithoutJourneyCounter.withTag("server_code", server.code()).increment();
         continue;
       }
 
@@ -293,7 +307,6 @@ class SimRailServerTrainCollector {
       // get the journey associated with the train position
       var journey = journeysByForeignId.get(trainPosition.getId());
       if (journey == null) {
-        LOGGER.debug("Position data {} has no associated active journey", trainPosition.getId());
         continue;
       }
 
