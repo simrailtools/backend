@@ -51,6 +51,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
+import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.collector.util.CancelOnRejectedExecutionPolicy;
@@ -78,8 +79,8 @@ class SimRailServerTrainCollector {
   // storage for collect information per server
   private final Map<UUID, CollectorRequestDataStorage> serversDataStorage;
 
+  private final PerServerGauge updatedJourneysCounter;
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
-  private final Meter.MeterProvider<Counter> updatedJourneysCounter;
   private final Meter.MeterProvider<Counter> runsWithoutJourneyCounter;
 
   @Autowired
@@ -90,7 +91,7 @@ class SimRailServerTrainCollector {
     @Nonnull JourneyUpdateHandler journeyUpdateHandler,
     @Nonnull TransactionTemplate transactionTemplate,
     @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
-    @Nonnull @Qualifier("active_journeys_updated_total") Meter.MeterProvider<Counter> updatedJourneysCounter,
+    @Nonnull @Qualifier("active_journeys_updated_total") PerServerGauge updatedJourneysCounter,
     @Nonnull @Qualifier("active_journey_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer,
     @Nonnull @Qualifier("active_trains_without_journey_total") Meter.MeterProvider<Counter> runsWithoutJourneyCounter
   ) {
@@ -206,8 +207,8 @@ class SimRailServerTrainCollector {
           // publish the updated journey information to listeners
           this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
 
+          this.updatedJourneysCounter.setValue(server, updatedJourneys.size());
           span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
-          this.updatedJourneysCounter.withTag("server_code", server.code()).increment(updatedJourneys.size());
         }
       });
     }

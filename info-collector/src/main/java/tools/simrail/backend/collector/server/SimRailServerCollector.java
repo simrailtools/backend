@@ -53,7 +53,7 @@ import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 
 @Service
-public final class SimRailServerCollector implements SimRailServerService {
+public class SimRailServerCollector implements SimRailServerService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerCollector.class);
   // https://regex101.com/r/8kPxyF/2
@@ -85,7 +85,7 @@ public final class SimRailServerCollector implements SimRailServerService {
     this.sceneryProvider = sceneryProvider;
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
 
-    Gauge.builder("cached_active_servers_total", this.collectedServers::size)
+    Gauge.builder("cached_active_servers_total", () -> this.collectedServers.size())
       .description("Total number of cached active SimRail servers")
       .register(meterRegistry);
   }

@@ -1,5 +1,6 @@
 package tools.simrail.backend.collector.configuration;
 
+import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
@@ -14,6 +15,14 @@ import tools.simrail.backend.collector.metric.PerServerGauge;
  */
 @Configuration
 public class MetricsConfiguration {
+
+  /**
+   *
+   */
+  @Bean
+  public TimedAspect timedAspect(@Nonnull MeterRegistry registry) {
+    return new TimedAspect(registry);
+  }
 
   /**
    *
@@ -115,10 +124,12 @@ public class MetricsConfiguration {
    *
    */
   @Bean("active_journeys_updated_total")
-  public @Nonnull Meter.MeterProvider<Counter> updatedActiveJourneysCounter(@Nonnull MeterRegistry registry) {
-    return Counter.builder("active_journeys_updated_total")
-      .description("Total number of active journeys updated")
-      .withRegistry(registry);
+  public @Nonnull PerServerGauge updatedActiveJourneysCounter(@Nonnull MeterRegistry registry) {
+    return new PerServerGauge(
+      registry,
+      "active_journeys_updated_total",
+      null,
+      "Total number of active journeys updated");
   }
 
   /**
