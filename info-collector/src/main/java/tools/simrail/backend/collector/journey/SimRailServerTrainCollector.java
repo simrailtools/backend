@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.collector.journey;
 
-import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
@@ -80,8 +79,8 @@ class SimRailServerTrainCollector {
   private final Map<UUID, CollectorRequestDataStorage> serversDataStorage;
 
   private final PerServerGauge updatedJourneysCounter;
+  private final PerServerGauge runsWithoutJourneyCounter;
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
-  private final Meter.MeterProvider<Counter> runsWithoutJourneyCounter;
 
   @Autowired
   public SimRailServerTrainCollector(
@@ -92,8 +91,8 @@ class SimRailServerTrainCollector {
     @Nonnull TransactionTemplate transactionTemplate,
     @Nonnull JourneyEventRealtimeUpdater.Factory journeyEventRealtimeUpdaterFactory,
     @Nonnull @Qualifier("active_journeys_updated_total") PerServerGauge updatedJourneysCounter,
-    @Nonnull @Qualifier("active_journey_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer,
-    @Nonnull @Qualifier("active_trains_without_journey_total") Meter.MeterProvider<Counter> runsWithoutJourneyCounter
+    @Nonnull @Qualifier("active_trains_without_journey_total") PerServerGauge runsWithoutJourneyCounter,
+    @Nonnull @Qualifier("active_journey_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer
   ) {
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
@@ -241,6 +240,7 @@ class SimRailServerTrainCollector {
       return false;
     }
 
+    var trainsWithoutJourney = 0;
     var activeTrainRuns = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
     var journeysByRunId = this.journeyService.resolveCachedJourneysOfServer(server.id(), activeTrainRuns)
       .stream()
@@ -249,7 +249,7 @@ class SimRailServerTrainCollector {
       // find the journey that is associated with the train run
       var journey = journeysByRunId.remove(activeTrain.getRunId());
       if (journey == null) {
-        this.runsWithoutJourneyCounter.withTag("server_code", server.code()).increment();
+        trainsWithoutJourney++;
         continue;
       }
 
@@ -274,6 +274,7 @@ class SimRailServerTrainCollector {
       activeJourneys.remove(journey.getId()); // also updates the cache
     }
 
+    this.runsWithoutJourneyCounter.setValue(server, trainsWithoutJourney);
     return true;
   }
 

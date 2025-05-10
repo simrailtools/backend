@@ -24,6 +24,7 @@
 
 package tools.simrail.backend.collector.configuration;
 
+import io.micrometer.core.aop.CountedAspect;
 import io.micrometer.core.aop.TimedAspect;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Meter;
@@ -41,15 +42,23 @@ import tools.simrail.backend.collector.metric.PerServerGauge;
 public class MetricsConfiguration {
 
   /**
-   *
+   * Aspect for intercepting methods annotated with timed.
    */
   @Bean
-  public TimedAspect timedAspect(@Nonnull MeterRegistry registry) {
+  public @Nonnull TimedAspect timedAspect(@Nonnull MeterRegistry registry) {
     return new TimedAspect(registry);
   }
 
   /**
-   *
+   * Aspect for intercepting methods annotated with counted.
+   */
+  @Bean
+  public @Nonnull CountedAspect countedAspect(@Nonnull MeterRegistry registry) {
+    return new CountedAspect(registry);
+  }
+
+  /**
+   * Metric displaying the number of rows that were deleted in the last database cleanup.
    */
   @Bean("db_cleanup_deletions_total")
   public @Nonnull Counter dbCleanupDeletionsTotalCounter(@Nonnull MeterRegistry registry) {
@@ -59,7 +68,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for db cleanup runs.
    */
   @Bean("db_cleanup_duration_seconds")
   public @Nonnull Timer dbCleanupDurationTimer(@Nonnull MeterRegistry registry) {
@@ -69,7 +78,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Gauge for the count of dispatch posts that were collected.
    */
   @Bean("dispatch_post_collected_total")
   public @Nonnull PerServerGauge dispatchPostCollectedTotalCounter(@Nonnull MeterRegistry registry) {
@@ -81,7 +90,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for the dispatch posts collections.
    */
   @Bean("dispatch_post_collection_duration")
   public @Nonnull Meter.MeterProvider<Timer> dispatchPostCollectionDurationTimer(@Nonnull MeterRegistry registry) {
@@ -91,7 +100,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Gauge for the count of journeys that were marked as canceled.
    */
   @Bean("journey_cancelled_marked_total")
   public @Nonnull PerServerGauge journeysMarkedAsCancelledCounter(@Nonnull MeterRegistry registry) {
@@ -103,7 +112,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for the cancellation marking task.
    */
   @Bean("journey_cancellation_mark_duration")
   public @Nonnull Meter.MeterProvider<Timer> journeyCancellationMarkingTimer(@Nonnull MeterRegistry registry) {
@@ -113,7 +122,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Gauge for the number of runs that were collected in the last timetable collection.
    */
   @Bean("timetable_collected_runs_total")
   public @Nonnull PerServerGauge timetableCollectedRunsCounter(@Nonnull MeterRegistry registry) {
@@ -125,7 +134,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for the train run collection task.
    */
   @Bean("timetable_run_collect_duration")
   public @Nonnull Meter.MeterProvider<Timer> timetableRunCollectTimer(@Nonnull MeterRegistry registry) {
@@ -135,7 +144,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for the active train collection task.
    */
   @Bean("active_journey_collect_duration")
   public @Nonnull Meter.MeterProvider<Timer> activeJourneyCollectTimer(@Nonnull MeterRegistry registry) {
@@ -145,7 +154,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Gauge for the count of journeys that were updated during train data collection.
    */
   @Bean("active_journeys_updated_total")
   public @Nonnull PerServerGauge updatedActiveJourneysCounter(@Nonnull MeterRegistry registry) {
@@ -157,17 +166,19 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Counter for the number of active trains without an associated journey.
    */
   @Bean("active_trains_without_journey_total")
-  public @Nonnull Meter.MeterProvider<Counter> activeTrainsWithoutJourneyCounter(@Nonnull MeterRegistry registry) {
-    return Counter.builder("active_trains_without_journey_total")
-      .description("Total number of active trains without an associated journey")
-      .withRegistry(registry);
+  public @Nonnull PerServerGauge activeTrainsWithoutJourneyCounter(@Nonnull MeterRegistry registry) {
+    return new PerServerGauge(
+      registry,
+      "active_trains_without_journey_total",
+      null,
+      "Total number of active trains without an associated journey");
   }
 
   /**
-   *
+   * Timer for the time taken to collect the predicted vehicle compositions.
    */
   @Bean("predicted_vc_collect_duration")
   public @Nonnull Meter.MeterProvider<Timer> predictedCompositionCollectTimer(@Nonnull MeterRegistry registry) {
@@ -177,7 +188,7 @@ public class MetricsConfiguration {
   }
 
   /**
-   *
+   * Timer for the time taken to collect the actual vehicle compositions.
    */
   @Bean("actual_vc_collect_duration")
   public @Nonnull Meter.MeterProvider<Timer> actualCompositionCollectTimer(@Nonnull MeterRegistry registry) {
