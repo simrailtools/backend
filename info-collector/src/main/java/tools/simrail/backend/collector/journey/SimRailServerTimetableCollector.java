@@ -24,10 +24,11 @@
 
 package tools.simrail.backend.collector.journey;
 
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.time.Duration;
-import java.time.Instant;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -39,11 +40,11 @@ import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.border.MapBorderPointProvider;
@@ -67,7 +68,6 @@ import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
 class SimRailServerTimetableCollector {
 
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerTimetableCollector.class);
 
   private final UuidV5Factory journeyIdFactory;
   private final UuidV5Factory journeyEventIdFactory;
@@ -78,13 +78,18 @@ class SimRailServerTimetableCollector {
   private final CollectorJourneyService journeyService;
   private final MapBorderPointProvider borderPointProvider;
 
+  private final PerServerGauge collectedJourneyCounter;
+  private final Meter.MeterProvider<Timer> collectionDurationTimer;
+
   @Autowired
   public SimRailServerTimetableCollector(
     @Nonnull SimRailAwsApiClient awsApiClient,
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
     @Nonnull CollectorJourneyService journeyService,
-    @Nonnull MapBorderPointProvider borderPointProvider
+    @Nonnull MapBorderPointProvider borderPointProvider,
+    @Nonnull @Qualifier("timetable_collected_runs_total") PerServerGauge collectedJourneyCounter,
+    @Nonnull @Qualifier("timetable_run_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer
   ) {
     this.awsApiClient = awsApiClient;
     this.pointProvider = pointProvider;
@@ -94,6 +99,9 @@ class SimRailServerTimetableCollector {
 
     this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
     this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
+
+    this.collectedJourneyCounter = collectedJourneyCounter;
+    this.collectionDurationTimer = collectionDurationTimer;
   }
 
   @Scheduled(
@@ -106,7 +114,7 @@ class SimRailServerTimetableCollector {
     var servers = this.serverService.getServers();
     for (var server : servers) {
       // get the trains running on the server and their associated run ids
-      var startTime = Instant.now();
+      var span = Timer.start();
       var trainRuns = this.awsApiClient.getTrainRuns(server.code());
       var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
 
@@ -129,8 +137,8 @@ class SimRailServerTimetableCollector {
       trainRuns.forEach(run -> this.collectJourney(server, run, existingRuns, existingJourneys, existingEvents));
 
       // print information about the collection run
-      var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-      LOGGER.info("Collected {} journeys for server {} in {}s", trainRuns.size(), server.code(), elapsedTime);
+      this.collectedJourneyCounter.setValue(server, trainRuns.size());
+      span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
     }
   }
 

@@ -24,14 +24,13 @@
 
 package tools.simrail.backend.collector.cleanup;
 
+import io.micrometer.core.instrument.Counter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
-import java.time.Duration;
-import java.time.Instant;
 import java.time.LocalDate;
 import java.time.ZoneOffset;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -42,38 +41,43 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 class DatabaseCleanupTask {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(DatabaseCleanupTask.class);
-
   private final CleanupJourneyRepository journeyRepository;
   private final CleanupJourneyEventRepository journeyEventRepository;
   private final CleanupJourneyVehicleRepository journeyVehicleRepository;
+
+  private final Timer cleanupDurationTimer;
+  private final Counter cleanupDeletionsTotalCounter;
 
   @Autowired
   public DatabaseCleanupTask(
     @Nonnull CleanupJourneyRepository journeyRepository,
     @Nonnull CleanupJourneyEventRepository journeyEventRepository,
-    @Nonnull CleanupJourneyVehicleRepository journeyVehicleRepository
+    @Nonnull CleanupJourneyVehicleRepository journeyVehicleRepository,
+    @Nonnull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
+    @Nonnull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter
   ) {
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyVehicleRepository = journeyVehicleRepository;
+
+    this.cleanupDurationTimer = cleanupDurationTimer;
+    this.cleanupDeletionsTotalCounter = cleanupDeletionsTotalCounter;
   }
 
   @Transactional
   @Scheduled(scheduler = "database_cleanup_scheduler", cron = "0 0 5 * * *")
   public void cleanupDatabase() {
-    var jobStartTime = Instant.now();
+    this.cleanupDurationTimer.record(() -> {
+      // find the journeys without a data update in the last three months, remove all associated events & vehicles as well
+      var cleanupStartDate = LocalDate.now(ZoneOffset.UTC).minusDays(90);
+      var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
+      if (!journeyIdsToRemove.isEmpty()) {
+        this.journeyEventRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
+        this.journeyVehicleRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
+        this.journeyRepository.deleteAllById(journeyIdsToRemove);
+      }
 
-    // find the journeys without a data update in the last three months, remove all associated events & vehicles as well
-    var cleanupStartDate = LocalDate.now(ZoneOffset.UTC).minusDays(90);
-    var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
-    if (!journeyIdsToRemove.isEmpty()) {
-      this.journeyEventRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
-      this.journeyVehicleRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
-      this.journeyRepository.deleteAllById(journeyIdsToRemove);
-    }
-
-    var elapsedTime = Duration.between(jobStartTime, Instant.now()).toSeconds();
-    LOGGER.info("Cleaned {} journeys from database in {}s", journeyIdsToRemove.size(), elapsedTime);
+      this.cleanupDeletionsTotalCounter.increment(journeyIdsToRemove.size());
+    });
   }
 }

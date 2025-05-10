@@ -5,10 +5,34 @@ services:
     restart: unless-stopped
     shm_size: 128mb
     ports:
-      - "5432:5432"
+      - "127.0.0.1:5432:5432"
     volumes:
       - "./volumes/postgres-data:/var/lib/postgresql/data"
     environment:
       POSTGRES_USER: "stb"
       POSTGRES_PASSWORD: "stb_very_secu1e_passw0rd"
       POSTGRES_DB: "simrailtools"
+
+  prometheus:
+    image: docker.io/prom/prometheus:latest
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:9090:9090"
+    volumes:
+      - "./volumes/prometheus-data:/prometheus"
+      - "./conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
+
+  grafana:
+    image: docker.io/grafana/grafana-oss:latest
+    restart: unless-stopped
+    depends_on:
+      - prometheus
+    ports:
+      - "127.0.0.1:9091:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: "stb"
+      GF_SECURITY_ADMIN_PASSWORD: "stb_very_secu1e_passw0rd"
+    volumes:
+      - "./volumes/grafana-data:/var/lib/grafana"
+      - "./conf/grafana/dashboards:/etc/grafana/dashboards"
+      - "./conf/grafana/provisioning:/etc/grafana/provisioning"
