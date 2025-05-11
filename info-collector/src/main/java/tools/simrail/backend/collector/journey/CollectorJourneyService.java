@@ -24,6 +24,8 @@
 
 package tools.simrail.backend.collector.journey;
 
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.PostConstruct;
 import jakarta.persistence.EntityManager;
@@ -65,13 +67,19 @@ class CollectorJourneyService {
     @Nonnull EntityManager entityManager,
     @Nonnull CollectorJourneyRepository journeyRepository,
     @Nonnull JourneyEventRepository journeyEventRepository,
-    @Nonnull CollectorJourneyVehicleRepository journeyVehicleRepository
+    @Nonnull CollectorJourneyVehicleRepository journeyVehicleRepository,
+    @Nonnull MeterRegistry meterRegistry
   ) {
     this.entityManager = entityManager;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyVehicleRepository = journeyVehicleRepository;
+
     this.activeJourneysByServer = new ConcurrentHashMap<>();
+    Gauge.builder("local_journey_cache_size", () -> this.activeJourneysByServer.values()
+      .stream()
+      .mapToInt(Map::size)
+      .sum()).description("The number of journeys cached locally for train collection").register(meterRegistry);
   }
 
   /**

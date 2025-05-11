@@ -24,6 +24,8 @@
 
 package tools.simrail.backend.collector.dispatchpost;
 
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -36,10 +38,12 @@ import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
 import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostRepository;
@@ -63,13 +67,18 @@ final class SimRailDispatchPostCollector {
   private final DispatchPostUpdateHandler dispatchPostUpdateHandler;
   private final SimRailDispatchPostRepository dispatchPostRepository;
 
+  private final PerServerGauge collectedDispatchPostCounter;
+  private final Meter.MeterProvider<Timer> collectionDurationTimer;
+
   @Autowired
   public SimRailDispatchPostCollector(
     @Nonnull SimRailPointProvider pointProvider,
     @Nonnull SimRailServerService serverService,
     @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull DispatchPostUpdateHandler dispatchPostUpdateHandler,
-    @Nonnull SimRailDispatchPostRepository dispatchPostRepository
+    @Nonnull SimRailDispatchPostRepository dispatchPostRepository,
+    @Nonnull @Qualifier("dispatch_post_collected_total") PerServerGauge collectedDispatchPostCounter,
+    @Nonnull @Qualifier("dispatch_post_collection_duration") Meter.MeterProvider<Timer> collectionDurationTimer
   ) {
     this.pointProvider = pointProvider;
     this.serverService = serverService;
@@ -78,6 +87,9 @@ final class SimRailDispatchPostCollector {
     this.dispatchPostRepository = dispatchPostRepository;
     this.dispatchPostUpdateHandler = dispatchPostUpdateHandler;
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
+
+    this.collectionDurationTimer = collectionDurationTimer;
+    this.collectedDispatchPostCounter = collectedDispatchPostCounter;
   }
 
   @Scheduled(
@@ -90,6 +102,7 @@ final class SimRailDispatchPostCollector {
     var servers = this.serverService.getServers();
     for (var server : servers) {
       // get the train positions from upstream api, don't do anything if data didn't change
+      var sample = Timer.start();
       var etag = this.postDataEtagByServer.get(server.id());
       var responseTuple = this.panelApiClient.getDispatchPosts(server.code(), etag);
       responseTuple
@@ -193,6 +206,9 @@ final class SimRailDispatchPostCollector {
         });
         this.dispatchPostRepository.saveAll(remainingRegisteredPosts);
       }
+
+      this.collectedDispatchPostCounter.setValue(server, dispatchPosts.size());
+      sample.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
     }
   }
 }

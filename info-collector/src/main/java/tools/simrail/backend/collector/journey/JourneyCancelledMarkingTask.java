@@ -24,15 +24,15 @@
 
 package tools.simrail.backend.collector.journey;
 
+import io.micrometer.core.instrument.Meter;
+import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
-import java.time.Duration;
-import java.time.Instant;
 import java.util.concurrent.TimeUnit;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
+import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerService;
 
 /**
@@ -41,35 +41,37 @@ import tools.simrail.backend.collector.server.SimRailServerService;
 @Component
 class JourneyCancelledMarkingTask {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(JourneyCancelledMarkingTask.class);
-
   private final SimRailServerService serverService;
   private final CollectorJourneyRepository journeyRepository;
 
+  private final PerServerGauge cancelledJourneysCounter;
+  private final Meter.MeterProvider<Timer> collectionDurationTimer;
+
   public JourneyCancelledMarkingTask(
     @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorJourneyRepository journeyRepository
+    @Nonnull CollectorJourneyRepository journeyRepository,
+    @Nonnull @Qualifier("journey_cancelled_marked_total") PerServerGauge cancelledJourneysCounter,
+    @Nonnull @Qualifier("journey_cancellation_mark_duration") Meter.MeterProvider<Timer> collectionDurationTimer
   ) {
     this.serverService = serverService;
     this.journeyRepository = journeyRepository;
+    this.cancelledJourneysCounter = cancelledJourneysCounter;
+    this.collectionDurationTimer = collectionDurationTimer;
   }
 
   @Transactional
   @Scheduled(initialDelay = 2, fixedDelay = 2, timeUnit = TimeUnit.MINUTES, scheduler = "train_cancelled_marker_scheduler")
   public void markJourneysAsCancelled() {
     for (var server : this.serverService.getServers()) {
-      var startTime = Instant.now();
+      var span = Timer.start();
       var currentServerTime = server.currentTime();
       var nonSpawnedTrainIds = this.journeyRepository.findJourneysThatDidNotSpawn(currentServerTime, server.id());
       if (!nonSpawnedTrainIds.isEmpty()) {
         this.journeyRepository.markJourneysAsCancelled(currentServerTime, nonSpawnedTrainIds);
         this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
 
-        var firstMarkedJourney = nonSpawnedTrainIds.getFirst();
-        var elapsedTime = Duration.between(startTime, Instant.now()).toSeconds();
-        LOGGER.info(
-          "Marked {} journeys (1.: {}) on server {} as cancelled in {} seconds",
-          nonSpawnedTrainIds.size(), firstMarkedJourney, server.code(), elapsedTime);
+        this.cancelledJourneysCounter.setValue(server, nonSpawnedTrainIds.size());
+        span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
       }
     }
   }

@@ -24,6 +24,9 @@
 
 package tools.simrail.backend.collector.server;
 
+import io.micrometer.core.annotation.Timed;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
 import jakarta.annotation.Nonnull;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
@@ -50,7 +53,7 @@ import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 
 @Service
-public final class SimRailServerCollector implements SimRailServerService {
+public class SimRailServerCollector implements SimRailServerService {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerCollector.class);
   // https://regex101.com/r/8kPxyF/2
@@ -72,7 +75,8 @@ public final class SimRailServerCollector implements SimRailServerService {
     @Nonnull SimRailPanelApiClient panelApiClient,
     @Nonnull SimRailServerRepository serverRepository,
     @Nonnull ServerUpdateHandler serverUpdateHandler,
-    @Nonnull SimRailServerSceneryProvider sceneryProvider
+    @Nonnull SimRailServerSceneryProvider sceneryProvider,
+    @Nonnull MeterRegistry meterRegistry
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
@@ -80,11 +84,16 @@ public final class SimRailServerCollector implements SimRailServerService {
     this.serverUpdateHandler = serverUpdateHandler;
     this.sceneryProvider = sceneryProvider;
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
+
+    Gauge.builder("cached_active_servers_total", () -> this.collectedServers.size())
+      .description("Total number of cached active SimRail servers")
+      .register(meterRegistry);
   }
 
   /**
    * Collects the information of all SimRail servers every 30 seconds.
    */
+  @Timed(value = "server_collect_seconds", description = "Elapsed time while collecting active server")
   @Scheduled(initialDelay = 0, fixedRate = 30, timeUnit = TimeUnit.SECONDS, scheduler = "server_collect_scheduler")
   public void collectServerInformation() throws Exception {
     // collect further information about the server, such as the timezone

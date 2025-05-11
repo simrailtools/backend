@@ -42,6 +42,7 @@ dependencies {
   implementation(projects.common)
   implementation(projects.externalApiClient)
   implementation("org.postgresql:postgresql")
+  implementation("io.micrometer:micrometer-registry-prometheus")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-actuator")

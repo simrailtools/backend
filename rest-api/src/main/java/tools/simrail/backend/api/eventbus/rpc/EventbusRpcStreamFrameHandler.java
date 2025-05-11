@@ -73,9 +73,11 @@ public final class EventbusRpcStreamFrameHandler {
    * @param frame the journey update frame that was received.
    */
   public void handleJourneyUpdate(@Nonnull JourneyUpdateFrame frame) {
-    var journeySnapshot = this.snapshotCache.handleJourneyUpdateFrame(frame);
-    if (journeySnapshot != null) {
-      this.eventBusListeners.forEach(listener -> listener.handleJourneyUpdate(frame, journeySnapshot));
+    var frameSnapshotPair = this.snapshotCache.handleJourneyUpdateFrame(frame);
+    if (frameSnapshotPair != null) {
+      var updateFrame = frameSnapshotPair.getFirst();
+      var journeySnapshot = frameSnapshotPair.getSecond();
+      this.eventBusListeners.forEach(listener -> listener.handleJourneyUpdate(updateFrame, journeySnapshot));
     }
   }
 
