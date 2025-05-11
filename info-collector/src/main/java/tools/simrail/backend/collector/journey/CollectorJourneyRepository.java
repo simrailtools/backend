@@ -91,13 +91,13 @@ interface CollectorJourneyRepository extends JourneyRepository {
   /**
    * Marks the journeys with the given journey ids as canceled.
    *
-   * @param serverTime the current server time to set as the last updated time of the journey.
-   * @param journeyIds the ids of the journeys to mark as canceled.
+   * @param currentTime the current time to set as the last updated time of the journey.
+   * @param journeyIds  the ids of the journeys to mark as canceled.
    */
   @Modifying
   @Query("UPDATE sit_journey j SET j.cancelled = TRUE, j.updateTime = :time WHERE j.id IN :journeyIds")
   void markJourneysAsCancelled(
-    @Param("time") OffsetDateTime serverTime,
+    @Param("time") OffsetDateTime currentTime,
     @Param("journeyIds") Collection<UUID> journeyIds);
 
   /**

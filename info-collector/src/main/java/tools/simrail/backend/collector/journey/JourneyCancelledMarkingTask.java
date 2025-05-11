@@ -27,6 +27,7 @@ package tools.simrail.backend.collector.journey;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
+import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -67,7 +68,7 @@ class JourneyCancelledMarkingTask {
       var currentServerTime = server.currentTime();
       var nonSpawnedTrainIds = this.journeyRepository.findJourneysThatDidNotSpawn(currentServerTime, server.id());
       if (!nonSpawnedTrainIds.isEmpty()) {
-        this.journeyRepository.markJourneysAsCancelled(currentServerTime, nonSpawnedTrainIds);
+        this.journeyRepository.markJourneysAsCancelled(OffsetDateTime.now(), nonSpawnedTrainIds);
         this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
 
         this.cancelledJourneysCounter.setValue(server, nonSpawnedTrainIds.size());
