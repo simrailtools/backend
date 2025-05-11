@@ -38,9 +38,11 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.eventbus.dto.EventbusDispatchPostSnapshotDto;
 import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
@@ -198,42 +200,57 @@ public final class SitSnapshotCache {
    * @param frame the update frame to apply to a journey.
    * @return the locally cached snapshot of the journey that was updated.
    */
-  public @Nullable EventbusJourneySnapshotDto handleJourneyUpdateFrame(@Nonnull JourneyUpdateFrame frame) {
+  public @Nullable Pair<JourneyUpdateFrame, EventbusJourneySnapshotDto> handleJourneyUpdateFrame(
+    @Nonnull JourneyUpdateFrame frame
+  ) {
     // handle the remove of a journey
     var updateType = frame.getUpdateType();
     if (updateType == UpdateType.REMOVE) {
       this.markIdAsRemoved(frame.getJourneyId());
       var registration = this.journeySnapshots.remove(frame.getJourneyId());
-      return registration == null ? null : registration.snapshot();
+      return registration == null ? null : Pair.of(frame, registration.snapshot());
     }
 
-    // remove the removal marking for the id of the given journey if the action is an add
     if (updateType == UpdateType.ADD) {
+      // remove the removal marking for the id of the given journey is added newly
       this.unmarkIdAsRemoved(frame.getJourneyId());
+    } else if (this.isIdMarkedAsRemoved(frame.getJourneyId())) {
+      // in all other cases: if the id is marked as removed, there is nothing to do
+      return null;
     }
 
     // resolve the journey with the provided journey id and cache it
     // apply the frame as an update in case the journey was updated
-    var registration = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), _ -> {
-      var journeyId = UUID.fromString(frame.getJourneyId());
+    var registration = this.journeySnapshots.computeIfAbsent(frame.getJourneyId(), jid -> {
+      var journeyId = UUID.fromString(jid);
       return this.journeyRepository.findJourneySnapshotById(journeyId)
-        .filter(_ -> !this.isIdMarkedAsRemoved(frame.getJourneyId()))
+        .filter(_ -> !this.isIdMarkedAsRemoved(jid))
         .map(SnapshotRegistration::new)
         .orElse(null);
     });
-    var journeyToUpdate = registration == null ? null : registration.snapshot();
-    if (journeyToUpdate != null) {
-      journeyToUpdate.applyUpdateFrame(frame);
+    if (registration == null) {
+      return null;
     }
+
+    // if the registration was computed for the first time, this frame should be sent as
+    // an ADD frame rather than an update to ensure that all clients have the relevant data
+    var expectedUpdateType = registration.isFirstUse() ? UpdateType.ADD : UpdateType.UPDATE;
+    if (frame.getUpdateType() != expectedUpdateType) {
+      frame = frame.toBuilder().setUpdateType(expectedUpdateType).build();
+    }
+
+    // apply the received frame to the stored journey snapshot
+    var journeyToUpdate = registration.snapshot();
+    journeyToUpdate.applyUpdateFrame(frame);
 
     // check if the id was marked as removed while the update/add was applied
     // to prevent caching something that will never receive an update again
-    if (registration != null && this.isIdMarkedAsRemoved(frame.getJourneyId())) {
+    if (this.isIdMarkedAsRemoved(frame.getJourneyId())) {
       this.journeySnapshots.remove(frame.getJourneyId());
       return null;
     }
 
-    return journeyToUpdate;
+    return Pair.of(frame, journeyToUpdate);
   }
 
   /**
@@ -370,7 +387,11 @@ public final class SitSnapshotCache {
    * @param snapshot     the snapshot.
    * @param <S>          the type of the snapshot.
    */
-  private record SnapshotRegistration<S>(@Nonnull Instant registeredAt, @Nonnull S snapshot) {
+  private record SnapshotRegistration<S>(
+    @Nonnull Instant registeredAt,
+    @Nonnull S snapshot,
+    @Nonnull AtomicBoolean isNew
+  ) {
 
     /**
      * Creates a new snapshot registration instance with the current timestamp.
@@ -378,7 +399,16 @@ public final class SitSnapshotCache {
      * @param snapshot the snapshot.
      */
     private SnapshotRegistration(@Nonnull S snapshot) {
-      this(Instant.now(), snapshot);
+      this(Instant.now(), snapshot, new AtomicBoolean(true));
+    }
+
+    /**
+     * Get if this registration was used before, changing the value to false.
+     *
+     * @return true if this is the first call to the method, false otherwise.
+     */
+    public boolean isFirstUse() {
+      return this.isNew.compareAndSet(true, false);
     }
   }
 }
