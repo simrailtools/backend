@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.collector.cleanup;
 
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
@@ -34,11 +34,11 @@ import tools.simrail.backend.common.journey.JourneyRepository;
 interface CleanupJourneyRepository extends JourneyRepository {
 
   /**
-   * Finds the ids of all journeys that received their last update before the given start date.
+   * Finds the ids of all journeys that received their last update before the given start time.
    *
-   * @param cleanupStartDate the start date to find journeys without a data update from.
-   * @return the ids of the journeys that didn't receive an update after the given date.
+   * @param cleanupStartTime the start time to find journeys without a data update from.
+   * @return the ids of the journeys that didn't receive an update after the given time.
    */
-  @Query(value = "SELECT j.id FROM sit_journey j WHERE j.update_time < CAST(:date AS TIMESTAMP)", nativeQuery = true)
-  List<UUID> findJourneyIdsByCleanupStartDate(@Param("date") LocalDate cleanupStartDate);
+  @Query(value = "SELECT j.id FROM sit_journey j WHERE j.update_time < CAST(:time AS TIMESTAMP)", nativeQuery = true)
+  List<UUID> findJourneyIdsByCleanupStartDate(@Param("time") OffsetDateTime cleanupStartTime);
 }

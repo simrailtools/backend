@@ -27,8 +27,9 @@ package tools.simrail.backend.collector.cleanup;
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
-import java.time.LocalDate;
+import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -69,7 +70,7 @@ class DatabaseCleanupTask {
   public void cleanupDatabase() {
     this.cleanupDurationTimer.record(() -> {
       // find the journeys without a data update in the last three months, remove all associated events & vehicles as well
-      var cleanupStartDate = LocalDate.now(ZoneOffset.UTC).minusDays(90);
+      var cleanupStartDate = OffsetDateTime.now(ZoneOffset.UTC).minusDays(90).truncatedTo(ChronoUnit.DAYS);
       var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
       if (!journeyIdsToRemove.isEmpty()) {
         this.journeyEventRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
