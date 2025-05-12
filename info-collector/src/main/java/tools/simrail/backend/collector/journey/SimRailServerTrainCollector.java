@@ -120,20 +120,24 @@ class SimRailServerTrainCollector {
    * when the task did complete in any way.
    *
    * @param taskLatch the task latch to count down once the given task runnable completed.
+   * @param timer     timer to use to measure the time elapsed for executing the given collection task.
    * @param task      the task runnable to execute transactional in the train collector executor.
    */
-  private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Runnable task) {
-    var future = this.trainCollectExecutor.submit(() -> this.transactionTemplate.execute((_) -> {
+  private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Timer timer, @Nonnull Runnable task) {
+    var future = this.trainCollectExecutor.submit(() -> {
+      var span = Timer.start();
       try {
-        task.run();
+        this.transactionTemplate.execute((_) -> {
+          task.run();
+          return null;
+        });
       } catch (Exception exception) {
         LOGGER.error("Caught exception while executing journey collection task", exception);
       } finally {
+        span.stop(timer);
         taskLatch.countDown();
       }
-
-      return null;
-    }));
+    });
 
     // the returned future might get canceled immediately if it is rejected by the executor
     // ensure that the task count is decreased to prevent unnecessary waits for dead tasks
@@ -147,8 +151,8 @@ class SimRailServerTrainCollector {
     var servers = this.serverService.getServers();
     var taskCountLatch = new CountDownLatch(servers.size());
     for (var server : servers) {
-      this.executeCollectionTask(taskCountLatch, () -> {
-        var span = Timer.start();
+      var collectionTimer = this.collectionDurationTimer.withTag("server_code", server.code());
+      this.executeCollectionTask(taskCountLatch, collectionTimer, () -> {
         var now = Instant.now();
         var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
 
@@ -203,11 +207,9 @@ class SimRailServerTrainCollector {
             this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
           }
 
-          // publish the updated journey information to listeners
+          // publish the updated journey information to listeners, update count of updated journeys for metrics
           this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
-
           this.updatedJourneysCounter.setValue(server, updatedJourneys.size());
-          span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
         }
       });
     }
