@@ -24,40 +24,39 @@
 
 package tools.simrail.backend.external.feign;
 
-import feign.InvocationContext;
-import feign.Response;
-import feign.ResponseInterceptor;
-import feign.Util;
+import feign.RetryableException;
+import feign.Retryer;
+import java.net.SocketException;
+import java.net.http.HttpTimeoutException;
+import javax.net.ssl.SSLException;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
- * Response interceptor that always calls request decoder in context.
+ * Exception handler that prevents specific connection-related exceptions (e.g., timeouts or ssl issues) from printing
+ * huge stacktraces.
  */
-public final class FeignResponseInterceptor implements ResponseInterceptor {
+public final class ExceptionHandlingRetryer implements Retryer {
+
+  public static final ExceptionHandlingRetryer INSTANCE = new ExceptionHandlingRetryer();
+
+  private ExceptionHandlingRetryer() {
+  }
 
   @Override
-  public @Nullable Object intercept(@NotNull InvocationContext context, @NotNull Chain chain) {
-    var decoder = context.decoder();
-    var response = context.response();
-    var returnType = context.returnType();
-
-    // can quit early if response is requested as method return type
-    if (returnType == Response.class) {
-      return response;
+  public void continueOrPropagate(@NotNull RetryableException exception) {
+    var cause = exception.getCause();
+    if (cause instanceof HttpTimeoutException
+      || cause instanceof SocketException
+      || cause instanceof SSLException) {
+      throw new StacklessRequestException(exception.request(), cause);
     }
 
-    try {
-      return decoder.decode(response, returnType);
-    } catch (StacklessRequestException exception) {
-      // pass-through - no need to re-wrap
-      throw exception;
-    } catch (Exception exception) {
-      // remove stacktraces from all exceptions, request info should be enough
-      throw new StacklessRequestException(response.request(), exception);
-    } finally {
-      Util.ensureClosed(response.body());
-    }
+    throw exception;
+  }
+
+  @Override
+  public @NotNull Retryer clone() {
+    return INSTANCE;
   }
 }

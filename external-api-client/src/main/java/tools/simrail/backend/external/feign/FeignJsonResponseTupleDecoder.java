@@ -32,6 +32,7 @@ import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
  * Response decoder that can decode a FeignJsonResponseTuple or pass the request to the given downstream decoder.
@@ -54,7 +55,8 @@ public record FeignJsonResponseTupleDecoder(@NotNull Decoder downstream) impleme
       return this.downstream.decode(response, type);
     } else {
       var methodKey = response.request().requestTemplate().methodMetadata().configKey();
-      throw FeignException.errorStatus(methodKey, response);
+      var originalException = FeignException.errorStatus(methodKey, response);
+      throw new StacklessRequestException(response.request(), originalException);
     }
   }
 }
