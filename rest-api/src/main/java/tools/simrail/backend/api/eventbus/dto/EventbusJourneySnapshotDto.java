@@ -123,7 +123,7 @@ public final class EventbusJourneySnapshotDto {
           var nextSignalInfo = nextSignal.getSignalInfo();
           this.nextSignalId = nextSignalInfo.getName();
           this.nextSignalDistance = nextSignalInfo.getDistance();
-          this.nextSignalMaxSpeed = nextSignalInfo.getMaxSpeed();
+          this.nextSignalMaxSpeed = nextSignalInfo.hasMaxSpeed() ? nextSignalInfo.getMaxSpeed() : null;
         } else {
           this.nextSignalId = null;
           this.nextSignalDistance = null;
