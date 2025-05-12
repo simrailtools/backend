@@ -28,7 +28,6 @@ import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import java.time.Duration;
 import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
@@ -127,7 +126,6 @@ class SimRailServerTrainCollector {
   private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Timer timer, @Nonnull Runnable task) {
     var future = this.trainCollectExecutor.submit(() -> {
       var span = Timer.start();
-      var now = Instant.now();
       try {
         this.transactionTemplate.execute((_) -> {
           task.run();
@@ -136,10 +134,6 @@ class SimRailServerTrainCollector {
       } catch (Exception exception) {
         LOGGER.error("Caught exception while executing journey collection task", exception);
       } finally {
-        var dur = Duration.between(now, Instant.now()).toSeconds();
-        if (dur > 20) {
-          LOGGER.warn("Journey collection task took {} seconds to complete", dur);
-        }
         span.stop(timer);
         taskLatch.countDown();
       }
