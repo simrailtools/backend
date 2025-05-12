@@ -34,16 +34,13 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.railcar.RailcarProvider;
@@ -67,7 +64,7 @@ class JourneyVehicleCollector {
   private final EntityManager entityManager;
   private final RailcarProvider railcarProvider;
   private final SimRailServerService serverService;
-  private final CollectorVehicleRepository vehicleRepository;
+  private final CollectorJourneyVehicleService journeyVehicleService;
 
   private final Meter.MeterProvider<Timer> actualCompositionCollectTimer;
   private final Meter.MeterProvider<Timer> predictedCompositionCollectTimer;
@@ -79,7 +76,7 @@ class JourneyVehicleCollector {
     @Nonnull EntityManager entityManager,
     @Nonnull RailcarProvider railcarProvider,
     @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorVehicleRepository vehicleRepository,
+    @Nonnull CollectorJourneyVehicleService journeyVehicleService,
     @Nonnull @Qualifier("actual_vc_collect_duration") Meter.MeterProvider<Timer> actualCompositionCollectTimer,
     @Nonnull @Qualifier("predicted_vc_collect_duration") Meter.MeterProvider<Timer> predictedCompositionCollectTimer
   ) {
@@ -88,12 +85,11 @@ class JourneyVehicleCollector {
     this.entityManager = entityManager;
     this.railcarProvider = railcarProvider;
     this.serverService = serverService;
-    this.vehicleRepository = vehicleRepository;
+    this.journeyVehicleService = journeyVehicleService;
     this.actualCompositionCollectTimer = actualCompositionCollectTimer;
     this.predictedCompositionCollectTimer = predictedCompositionCollectTimer;
   }
 
-  @Transactional
   @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES, scheduler = "vehicle_collect_scheduler")
   public void collectJourneyVehicles() {
     // collect the scheduled/predicted vehicle compositions first
@@ -132,12 +128,7 @@ class JourneyVehicleCollector {
   ) {
     // resolve the journeys that already have a vehicle mapping
     var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
-    var journeysWithoutComposition = this.vehicleRepository.findJourneyRunsWithoutVehicleComposition(
-      server.id(),
-      runIds);
-    var runIdToJourneyIdMapping = journeysWithoutComposition
-      .stream()
-      .collect(Collectors.toMap(entry -> (UUID) entry[1], entry -> (UUID) entry[0]));
+    var runIdToJourneyIdMapping = this.journeyVehicleService.findRunsWithoutComposition(server.id(), runIds);
 
     // create predicated journey vehicle entry for each run without a stored composition
     var runsWithoutComposition = trainRuns.stream()
@@ -167,7 +158,7 @@ class JourneyVehicleCollector {
         unknownVehicle.setIndexInGroup(0);
         unknownVehicle.setJourneyId(journeyId);
         unknownVehicle.setStatus(JourneyVehicleStatus.UNKNOWN);
-        this.saveJourneyVehicles(journeyId, List.of(unknownVehicle));
+        this.journeyVehicleService.saveJourneyVehicles(journeyId, List.of(unknownVehicle));
       } else {
         var currentEventVehicles = previousVehicles.stream()
           .map(vehicle -> {
@@ -181,7 +172,7 @@ class JourneyVehicleCollector {
             return newVehicle;
           })
           .toList();
-        this.saveJourneyVehicles(journeyId, currentEventVehicles);
+        this.journeyVehicleService.saveJourneyVehicles(journeyId, currentEventVehicles);
       }
     }
   }
@@ -285,12 +276,7 @@ class JourneyVehicleCollector {
     @Nonnull List<SimRailPanelTrain> activeTrains
   ) {
     var runIds = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
-    var runsWithoutConfirmedComposition = this.vehicleRepository.findJourneyRunsWithoutConfirmedVehicleComposition(
-      server.id(),
-      runIds);
-    var runIdToJourneyIdMapping = runsWithoutConfirmedComposition
-      .stream()
-      .collect(Collectors.toMap(entry -> (UUID) entry[1], entry -> (UUID) entry[0]));
+    var runIdToJourneyIdMapping = this.journeyVehicleService.findRunsWithoutConfirmedComposition(server.id(), runIds);
     for (var activeTrain : activeTrains) {
       // resolve the journey id associated with the run, if the run id is not present in the
       // mapping it either means that the journey is not yet registered or a composition is already stored
@@ -364,18 +350,7 @@ class JourneyVehicleCollector {
       }
 
       // register the vehicles for the journey
-      this.saveJourneyVehicles(journeyId, convertedVehicles);
+      this.journeyVehicleService.saveJourneyVehicles(journeyId, convertedVehicles);
     }
-  }
-
-  /**
-   * Saves the vehicles for the given journey, deleting the previously stored vehicle data.
-   *
-   * @param journeyId the id of the journey for which the vehicles should be stored.
-   * @param vehicles  the new vehicle information for the journey.
-   */
-  private void saveJourneyVehicles(@Nonnull UUID journeyId, @Nonnull List<JourneyVehicle> vehicles) {
-    this.vehicleRepository.deleteAllByJourneyId(journeyId);
-    this.vehicleRepository.saveAll(vehicles);
   }
 }
