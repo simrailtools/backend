@@ -970,7 +970,7 @@
               },
               "disableTextWrap": false,
               "editorMode": "code",
-              "expr": "rate(server_collect_seconds_sum{job=~\"$job\"}[$__rate_interval]) / rate(server_collect_seconds_count{job=~\"$job\"}[$__rate_interval])",
+              "expr": "rate(server_collect_seconds_sum{job=~\"$job\",exception=\"none\"}[$__rate_interval]) / rate(server_collect_seconds_count{job=~\"$job\",exception=\"none\"}[$__rate_interval])",
               "fullMetaSearch": false,
               "includeNullMetadata": true,
               "legendFormat": "__auto",
@@ -2388,6 +2388,6 @@
   "timezone": "browser",
   "title": "SIT-Collector",
   "uid": "0b9eda15-78d7-4946-8236-fc1a88b0a988",
-  "version": 1,
+  "version": 2,
   "weekStart": "monday"
 }
