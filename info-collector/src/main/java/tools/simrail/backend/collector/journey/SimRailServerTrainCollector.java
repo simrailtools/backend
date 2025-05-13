@@ -41,6 +41,7 @@ import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -120,20 +121,28 @@ class SimRailServerTrainCollector {
    * when the task did complete in any way.
    *
    * @param taskLatch the task latch to count down once the given task runnable completed.
+   * @param timer     timer to use to measure the time elapsed for executing the given collection task.
    * @param task      the task runnable to execute transactional in the train collector executor.
    */
-  private void executeCollectionTask(@Nonnull CountDownLatch taskLatch, @Nonnull Runnable task) {
-    var future = this.trainCollectExecutor.submit(() -> this.transactionTemplate.execute((_) -> {
+  private void executeCollectionTask(
+    @Nonnull CountDownLatch taskLatch,
+    @Nonnull Timer timer,
+    @Nonnull Supplier<Runnable> task
+  ) {
+    var future = this.trainCollectExecutor.submit(() -> {
+      var span = Timer.start();
       try {
-        task.run();
+        var cleanupAction = this.transactionTemplate.execute((_) -> task.get());
+        if (cleanupAction != null) {
+          cleanupAction.run();
+        }
       } catch (Exception exception) {
         LOGGER.error("Caught exception while executing journey collection task", exception);
       } finally {
+        span.stop(timer);
         taskLatch.countDown();
       }
-
-      return null;
-    }));
+    });
 
     // the returned future might get canceled immediately if it is rejected by the executor
     // ensure that the task count is decreased to prevent unnecessary waits for dead tasks
@@ -147,8 +156,8 @@ class SimRailServerTrainCollector {
     var servers = this.serverService.getServers();
     var taskCountLatch = new CountDownLatch(servers.size());
     for (var server : servers) {
-      this.executeCollectionTask(taskCountLatch, () -> {
-        var span = Timer.start();
+      var collectionTimer = this.collectionDurationTimer.withTag("server_code", server.code());
+      this.executeCollectionTask(taskCountLatch, collectionTimer, () -> {
         var now = Instant.now();
         var activeServerJourneys = this.journeyService.resolveCachedActiveJourneysOfServer(server.id());
 
@@ -168,7 +177,6 @@ class SimRailServerTrainCollector {
           fullCollection = this.fetchFullTrainInformation(
             server,
             dataStorage,
-            activeServerJourneys,
             dirtyRecorderFactory);
           if (fullCollection) {
             dataStorage.updateLastTrainCollect(now);
@@ -203,12 +211,21 @@ class SimRailServerTrainCollector {
             this.updateJourneyEvents(server, relevantJourneys.values(), journeyEvents);
           }
 
-          // publish the updated journey information to listeners
+          // publish the updated journey information to listeners, update count of updated journeys for metrics
           this.journeyUpdateHandler.publishJourneyUpdates(updatedJourneys);
-
           this.updatedJourneysCounter.setValue(server, updatedJourneys.size());
-          span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
         }
+
+        // remove journeys from the local cache if they were removed
+        // after the database transaction was successfully commited
+        return () -> {
+          for (var dirtyRecorder : dirtyRecorders.values()) {
+            if (dirtyRecorder.wasRemoved()) {
+              var journeyId = dirtyRecorder.getOriginal().getId();
+              activeServerJourneys.remove(journeyId);
+            }
+          }
+        };
       });
     }
 
@@ -221,7 +238,6 @@ class SimRailServerTrainCollector {
   private boolean fetchFullTrainInformation(
     @Nonnull SimRailServerDescriptor server,
     @Nonnull CollectorRequestDataStorage eTagStorage,
-    @Nonnull Map<UUID, JourneyEntity> activeJourneys,
     @Nonnull Function<JourneyEntity, JourneyDirtyStateRecorder> dirtyRecorderFactory
   ) {
     // get the train positions from upstream api, don't do anything if data didn't change
@@ -271,7 +287,6 @@ class SimRailServerTrainCollector {
     for (var journey : journeysByRunId.values()) {
       var dirtyRecorder = dirtyRecorderFactory.apply(journey);
       dirtyRecorder.markRemoved();
-      activeJourneys.remove(journey.getId()); // also updates the cache
     }
 
     this.runsWithoutJourneyCounter.setValue(server, trainsWithoutJourney);

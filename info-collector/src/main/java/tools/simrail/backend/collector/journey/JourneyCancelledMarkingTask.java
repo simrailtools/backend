@@ -32,7 +32,6 @@ import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerService;
 
@@ -60,7 +59,6 @@ class JourneyCancelledMarkingTask {
     this.collectionDurationTimer = collectionDurationTimer;
   }
 
-  @Transactional
   @Scheduled(initialDelay = 2, fixedDelay = 2, timeUnit = TimeUnit.MINUTES, scheduler = "train_cancelled_marker_scheduler")
   public void markJourneysAsCancelled() {
     for (var server : this.serverService.getServers()) {
