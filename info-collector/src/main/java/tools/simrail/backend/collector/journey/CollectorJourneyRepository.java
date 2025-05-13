@@ -32,6 +32,7 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyRepository;
 
@@ -95,6 +96,7 @@ interface CollectorJourneyRepository extends JourneyRepository {
    * @param journeyIds  the ids of the journeys to mark as canceled.
    */
   @Modifying
+  @Transactional
   @Query("UPDATE sit_journey j SET j.cancelled = TRUE, j.updateTime = :time WHERE j.id IN :journeyIds")
   void markJourneysAsCancelled(
     @Param("time") OffsetDateTime currentTime,
@@ -106,6 +108,7 @@ interface CollectorJourneyRepository extends JourneyRepository {
    * @param journeyIds the ids of the journeys whose events should be marked as canceled.
    */
   @Modifying
+  @Transactional
   @Query("UPDATE sit_journey_event je SET je.cancelled = TRUE WHERE je.journeyId IN :journeyIds")
   void markJourneyEventsAsCancelled(@Param("journeyIds") Collection<UUID> journeyIds);
 }
