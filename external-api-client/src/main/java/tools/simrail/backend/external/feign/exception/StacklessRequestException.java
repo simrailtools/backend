@@ -41,8 +41,8 @@ public final class StacklessRequestException extends RuntimeException {
    */
   public StacklessRequestException(@NotNull Request request, @NotNull Throwable originalException) {
     var message = String.format(
-      "Caught %s[message=%s] while executing %s[uri=%s; ver=%s]",
-      originalException.getClass().getSimpleName(), originalException.getMessage(),
+      "Caught %s[message=%s] while executing Request[method=%s; uri=%s; ver=%s]",
+      originalException.getClass().getSimpleName(), originalException.getMessage().replace("\n", " "),
       request.httpMethod(), request.url(), request.protocolVersion());
     super(message);
   }
