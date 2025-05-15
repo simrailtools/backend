@@ -99,8 +99,8 @@ public class SimRailServerCollector implements SimRailServerService {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
     var errorDuringCollect = false;
+    var oldServerCount = this.collectedServers.size();
     var fullCollection = this.collectionRuns++ % 2 == 0;
-    var collectionRequired = this.collectedServers.isEmpty();
 
     var response = this.panelApiClient.getServers();
     var servers = response.getEntries();
@@ -231,7 +231,8 @@ public class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    if (fullCollection && (collectionRequired || !errorDuringCollect)) {
+    var collectedServerCount = foundServers.size();
+    if (fullCollection && (collectedServerCount > oldServerCount || !errorDuringCollect)) {
       // update the found servers during the run to make them available to readers
       // only do this if no error was encountered during collection or collection
       // being necessary due to no servers being found previously
