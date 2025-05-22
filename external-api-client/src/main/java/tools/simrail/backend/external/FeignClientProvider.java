@@ -43,6 +43,7 @@ import feign.slf4j.Slf4jLogger;
 import java.util.Set;
 import org.jetbrains.annotations.NotNull;
 import tools.simrail.backend.external.feign.CustomFieldQueryMapEncoder;
+import tools.simrail.backend.external.feign.ExceptionHandlingRetryer;
 import tools.simrail.backend.external.feign.FeignJava11Client;
 import tools.simrail.backend.external.feign.FeignJsonResponseTupleDecoder;
 import tools.simrail.backend.external.feign.FeignResponseInterceptor;
@@ -90,6 +91,7 @@ public final class FeignClientProvider {
       .logger(new Slf4jLogger(callingClass))
       .encoder(new JacksonEncoder(bodyMapper))
       .decoder(new FeignJsonResponseTupleDecoder(new JacksonDecoder(bodyMapper)))
+      .retryer(ExceptionHandlingRetryer.INSTANCE)
       .queryMapEncoder(new CustomFieldQueryMapEncoder())
       .responseInterceptor(new FeignResponseInterceptor())
       .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);

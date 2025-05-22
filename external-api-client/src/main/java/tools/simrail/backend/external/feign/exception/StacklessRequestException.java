@@ -22,42 +22,44 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.external.feign;
+package tools.simrail.backend.external.feign.exception;
 
-import feign.InvocationContext;
-import feign.Response;
-import feign.ResponseInterceptor;
-import feign.Util;
+import feign.Request;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
- * Response interceptor that always calls request decoder in context.
+ * Stackless exception to throw when an http request fails.
  */
-public final class FeignResponseInterceptor implements ResponseInterceptor {
+public final class StacklessRequestException extends RuntimeException {
+
+  /**
+   * Constructs a stackless request exception with a message based on the given request and original exception.
+   *
+   * @param request           the request that failed.
+   * @param originalException the original exception that was thrown.
+   */
+  public StacklessRequestException(@NotNull Request request, @NotNull Throwable originalException) {
+    var origExMsg = originalException.getMessage();
+    var origExMsgCleaned = origExMsg != null ? origExMsg.replace('\n', ' ') : null;
+    var message = String.format(
+      "Caught %s[message=%s] while executing Request[method=%s; uri=%s; ver=%s]",
+      originalException.getClass().getSimpleName(), origExMsgCleaned,
+      request.httpMethod(), request.url(), request.protocolVersion());
+    super(message);
+  }
 
   @Override
-  public @Nullable Object intercept(@NotNull InvocationContext context, @NotNull Chain chain) {
-    var decoder = context.decoder();
-    var response = context.response();
-    var returnType = context.returnType();
+  public @NotNull Throwable initCause(@Nullable Throwable cause) {
+    return this;
+  }
 
-    // can quit early if response is requested as method return type
-    if (returnType == Response.class) {
-      return response;
-    }
+  @Override
+  public @NotNull Throwable fillInStackTrace() {
+    return this;
+  }
 
-    try {
-      return decoder.decode(response, returnType);
-    } catch (StacklessRequestException exception) {
-      // pass-through - no need to re-wrap
-      throw exception;
-    } catch (Exception exception) {
-      // remove stacktraces from all exceptions, request info should be enough
-      throw new StacklessRequestException(response.request(), exception);
-    } finally {
-      Util.ensureClosed(response.body());
-    }
+  @Override
+  public void setStackTrace(@NotNull StackTraceElement[] stackTrace) {
   }
 }
