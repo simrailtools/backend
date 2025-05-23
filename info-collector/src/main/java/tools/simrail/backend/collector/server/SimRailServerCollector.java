@@ -167,8 +167,8 @@ public class SimRailServerCollector implements SimRailServerService {
           serverEntity.setTags(tagList);
         }
       } else {
-        LOGGER.warn("Cannot parse language and/or tags from server name {}", server.getName());
-        continue;
+        serverEntity.setTags(List.of());
+        LOGGER.warn("Couldn't parse lang/tags from {}, assuming international server without tags", server.getName());
       }
 
       ZoneOffset serverZoneOffset = null;
