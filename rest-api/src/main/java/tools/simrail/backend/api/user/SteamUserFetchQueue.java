@@ -48,6 +48,7 @@ class SteamUserFetchQueue {
 
   private static final int MAX_FETCH_TRIES = 5;
   private static final Pattern RESPONSE_STATUS_PATTERN = Pattern.compile(".*status=([1-5]\\d{2});.*");
+  private static final SimRailUserFetchResult.Failure<SteamUserSummary> FETCH_FAILURE = new SimRailUserFetchResult.Failure<>();
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SteamUserFetchQueue.class);
 
@@ -77,8 +78,14 @@ class SteamUserFetchQueue {
       var userSummaries = fetchResponse.response().players();
       for (var userSummary : userSummaries) {
         var fetchRequest = fetchBatch.remove(userSummary.getId());
-        var fetchResult = new UserFetchResult(fetchRequest.userId, userSummary);
+        var fetchResult = new SimRailUserFetchResult.Success<>(userSummary);
         fetchRequest.future.complete(fetchResult);
+      }
+
+      // mark the remaining users that weren't included in the response as not found
+      for (var remaining : fetchBatch.values()) {
+        var fetchResult = new SimRailUserFetchResult.NotFound<SteamUserSummary>(remaining.userId);
+        remaining.future.complete(fetchResult);
       }
     } catch (Exception exception) {
       LOGGER.warn("Exception while fetching steam users", exception);
@@ -89,7 +96,7 @@ class SteamUserFetchQueue {
         request.fetchTries++;
         if (request.fetchTries > MAX_FETCH_TRIES) {
           fetchBatch.remove(entry.getKey());
-          request.future.complete(null); // null to indicate the request timeout
+          request.future.complete(FETCH_FAILURE);
         }
       }
 
@@ -106,12 +113,11 @@ class SteamUserFetchQueue {
           }
         }
       }
-    }
 
-    // complete the future with null for all remaining requests
-    for (var remaining : fetchBatch.values()) {
-      var fetchResult = new UserFetchResult(remaining.userId, null);
-      remaining.future.complete(fetchResult);
+      // complete the remaining entries in the batch with a failure result
+      for (var remaining : fetchBatch.values()) {
+        remaining.future.complete(FETCH_FAILURE);
+      }
     }
   }
 
@@ -171,11 +177,11 @@ class SteamUserFetchQueue {
    *   <li>{@code (userId, userSummary)} when the fetch of the user data was successful.
    * </ol>
    */
-  public @Nonnull CompletableFuture<UserFetchResult> queueUserFetch(@Nonnull String userId) {
+  public @Nonnull CompletableFuture<SimRailUserFetchResult<SteamUserSummary>> queueUserFetch(@Nonnull String userId) {
     this.fetchQueueLock.lock();
     try {
       var fetchRequest = this.userFetchQueue.computeIfAbsent(userId, uid -> {
-        var resultFuture = new CompletableFuture<UserFetchResult>();
+        var resultFuture = new CompletableFuture<SimRailUserFetchResult<SteamUserSummary>>();
         return new UserFetchRequest(uid, resultFuture);
       });
       return fetchRequest.future;
@@ -193,16 +199,8 @@ class SteamUserFetchQueue {
   private static final class UserFetchRequest {
 
     private final String userId;
-    private final CompletableFuture<UserFetchResult> future;
+    private final CompletableFuture<SimRailUserFetchResult<SteamUserSummary>> future;
 
     private int fetchTries;
-  }
-
-  /**
-   * Holder for steam user fetch result. Holds the id of the user that was fetched and optionally the steam user data,
-   * if the user exists.
-   */
-  public record UserFetchResult(@Nonnull String userId, @Nullable SteamUserSummary userSummary) {
-
   }
 }

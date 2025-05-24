@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.external.steam.model.SteamUserSummary;
 
 @Service
 class SimRailUserService {
@@ -93,15 +94,17 @@ class SimRailUserService {
       // their converted user information or just that they do not exist
       for (var future : fetchFutures) {
         if (future.state() == Future.State.SUCCESS) {
-          var fetchResult = (SteamUserFetchQueue.UserFetchResult) future.resultNow();
-          if (fetchResult != null) {
-            var steamUser = fetchResult.userSummary();
-            if (steamUser != null) {
+          //noinspection unchecked
+          var fetchResult = (SimRailUserFetchResult<SteamUserSummary>) future.resultNow();
+          switch (fetchResult) {
+            case SimRailUserFetchResult.Success(var steamUser) -> {
               var user = this.userConverter.apply(steamUser);
               this.userCache.put(user.id(), user);
               users.add(user);
-            } else {
-              this.userCache.put(fetchResult.userId(), null);
+            }
+            case SimRailUserFetchResult.NotFound(var userId) -> this.userCache.put(userId, null);
+            case null, default -> {
+              // ignore - nothing we can do about this
             }
           }
         }
