@@ -25,6 +25,7 @@
 package tools.simrail.backend.external.feign.exception;
 
 import feign.Request;
+import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -32,6 +33,8 @@ import org.jetbrains.annotations.Nullable;
  * Stackless exception to throw when an http request fails.
  */
 public final class StacklessRequestException extends RuntimeException {
+
+  private static final Pattern CONTROL_CHARS_PATTERN = Pattern.compile("\\p{C}");
 
   /**
    * Constructs a stackless request exception with a message based on the given request and original exception.
@@ -41,12 +44,26 @@ public final class StacklessRequestException extends RuntimeException {
    */
   public StacklessRequestException(@NotNull Request request, @NotNull Throwable originalException) {
     var origExMsg = originalException.getMessage();
-    var origExMsgCleaned = origExMsg != null ? origExMsg.replace('\n', ' ') : null;
+    var origExMsgCleaned = cleanExceptionMessage(origExMsg);
     var message = String.format(
       "Caught %s[message=%s] while executing Request[method=%s; uri=%s; ver=%s]",
       originalException.getClass().getSimpleName(), origExMsgCleaned,
       request.httpMethod(), request.url(), request.protocolVersion());
     super(message);
+  }
+
+  /**
+   * Removes all control chars from the given string.
+   *
+   * @param message the string to remove all control chars from.
+   * @return the string with all control chars removed, or {@code null} if the given string was {@code null}.
+   */
+  private static @Nullable String cleanExceptionMessage(@Nullable String message) {
+    if (message == null || message.isBlank()) {
+      return null;
+    }
+
+    return CONTROL_CHARS_PATTERN.matcher(message).replaceAll("");
   }
 
   @Override
