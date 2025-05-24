@@ -25,8 +25,10 @@
 package tools.simrail.backend.external.simkol;
 
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
+@Disabled("simkol.pl is currently offline, so this test cannot pass")
 public final class SimKolApiClientTest {
 
   @Test
