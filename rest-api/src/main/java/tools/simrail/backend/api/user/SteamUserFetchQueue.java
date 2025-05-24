@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.api.user;
 
-import feign.FeignException;
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
 import java.util.HashMap;
@@ -34,6 +33,7 @@ import java.util.Map;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
+import java.util.regex.Pattern;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,6 +47,8 @@ import tools.simrail.backend.external.steam.model.SteamUserSummary;
 class SteamUserFetchQueue {
 
   private static final int MAX_FETCH_TRIES = 5;
+  private static final Pattern RESPONSE_STATUS_PATTERN = Pattern.compile(".*status=([1-5]\\d{2});.*");
+
   private static final Logger LOGGER = LoggerFactory.getLogger(SteamUserFetchQueue.class);
 
   private final SteamApiClient steamApiClient;
@@ -78,20 +80,8 @@ class SteamUserFetchQueue {
         var fetchResult = new UserFetchResult(fetchRequest.userId, userSummary);
         fetchRequest.future.complete(fetchResult);
       }
-
-      // complete the future with null for all users without a summary in the response
-      for (var remaining : fetchBatch.values()) {
-        var fetchResult = new UserFetchResult(remaining.userId, null);
-        remaining.future.complete(fetchResult);
-      }
     } catch (Exception exception) {
-      // 429 is a common exception that only spams the console, don't
-      // log the exception to prevent spamming with unnecessary stacktraces
-      if (exception instanceof FeignException.TooManyRequests) {
-        LOGGER.warn("Received status 429 (Too Many Requests) while fetching user info from steam");
-      } else {
-        LOGGER.warn("Exception while fetching steam users", exception);
-      }
+      LOGGER.warn("Exception while fetching steam users", exception);
 
       // remove and complete all requests that have been retried too many times
       for (var entry : fetchBatch.entrySet()) {
@@ -105,9 +95,23 @@ class SteamUserFetchQueue {
 
       // retry all remaining requests when receiving a 429 (too many requests)
       // or internal server error (>=500) as the http response code
-      if (exception instanceof FeignException fe && (fe.status() == 429 || fe.status() >= 500)) {
-        this.requeueUserFetchBatch(fetchBatch);
+      var exceptionMessage = exception.getMessage();
+      if (exceptionMessage != null) {
+        var matcher = RESPONSE_STATUS_PATTERN.matcher(exceptionMessage);
+        if (matcher.matches()) {
+          var statusCode = Integer.parseInt(matcher.group(1));
+          if (statusCode == 429 || statusCode >= 500) {
+            this.requeueUserFetchBatch(fetchBatch);
+            return;
+          }
+        }
       }
+    }
+
+    // complete the future with null for all remaining requests
+    for (var remaining : fetchBatch.values()) {
+      var fetchResult = new UserFetchResult(remaining.userId, null);
+      remaining.future.complete(fetchResult);
     }
   }
 
