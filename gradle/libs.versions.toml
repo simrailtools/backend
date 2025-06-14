@@ -19,7 +19,7 @@ springGrpc = "0.8.0"
 
 # testing
 junit = "5.13.1"
-mockito = "5.17.0"
+mockito = "5.18.0"
 junitLauncher = "1.13.1"
 testcontainers = "1.21.0"
 
