@@ -87,6 +87,8 @@ message ServerUpdateFrame {
   optional string zone_offset = 5;
   // The utc offset of the server in hours, not given in case the offset didn't change.
   optional sint32 utc_offset_hours = 6;
+  // The scenery of the server, string representation of the ServerScenery enum
+  optional string server_scenery = 7;
 }
 
 // A single update frame for a single dispatch post holding all fields that can be updated.

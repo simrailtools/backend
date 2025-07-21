@@ -51,12 +51,12 @@ public final class EventbusServerSnapshotDto {
   private final List<String> tags;
   private final String spokenLanguage;
   private final SimRailServerRegion region;
-  private final SimRailServerScenery scenery;
 
   // changing fields
   private boolean online;
   private String timezoneId;
   private int utcOffsetHours;
+  private SimRailServerScenery scenery;
 
   public EventbusServerSnapshotDto(@Nonnull SimRailServerEntity entity) {
     this.serverId = entity.getId();
@@ -64,10 +64,10 @@ public final class EventbusServerSnapshotDto {
     this.tags = entity.getTags();
     this.spokenLanguage = entity.getSpokenLanguage();
     this.region = entity.getRegion();
-    this.scenery = entity.getScenery();
     this.online = entity.isOnline();
     this.timezoneId = entity.getTimezone();
     this.utcOffsetHours = entity.getUtcOffsetHours();
+    this.scenery = entity.getScenery();
   }
 
   /**
@@ -86,6 +86,10 @@ public final class EventbusServerSnapshotDto {
 
     if (frame.hasUtcOffsetHours()) {
       this.utcOffsetHours = frame.getUtcOffsetHours();
+    }
+
+    if (frame.hasServerScenery()) {
+      this.scenery = SimRailServerScenery.valueOf(frame.getServerScenery());
     }
   }
 }

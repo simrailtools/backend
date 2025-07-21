@@ -25,6 +25,7 @@
 package tools.simrail.backend.collector.server;
 
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.collector.rpc.InternalRpcEventBusService;
@@ -51,17 +52,20 @@ final class ServerUpdateHandler {
    *
    * @param originalOnline    the original online state of the given updated server entity.
    * @param originalUtcOffset the original utc offset hours id of the given updated server entity.
+   * @param originalScenery   the original scenery of the given updated server entity.
    * @param server            the updated server entity.
    */
   public void handleServerUpdate(
     boolean originalOnline,
     int originalUtcOffset,
+    @Nullable String originalScenery,
     @Nonnull SimRailServerEntity server
   ) {
     // check if the given server entity is actually dirty
     var newOnline = server.isOnline();
     var newUtcOffset = server.getUtcOffsetHours();
-    var dirty = newOnline != originalOnline || originalUtcOffset != newUtcOffset;
+    var newScenery = server.getScenery().name();
+    var dirty = newOnline != originalOnline || originalUtcOffset != newUtcOffset || !newScenery.equals(originalScenery);
     if (dirty) {
       var frameBuilder = ServerUpdateFrame.newBuilder()
         .setUpdateType(UpdateType.UPDATE)
@@ -74,6 +78,9 @@ final class ServerUpdateHandler {
       if (originalUtcOffset != newUtcOffset) {
         frameBuilder.setUtcOffsetHours(newUtcOffset);
         frameBuilder.setZoneOffset(server.getTimezone());
+      }
+      if (!newScenery.equals(originalScenery)) {
+        frameBuilder.setServerScenery(newScenery);
       }
 
       this.internalRpcEventBusService.publishServerUpdate(frameBuilder.build());

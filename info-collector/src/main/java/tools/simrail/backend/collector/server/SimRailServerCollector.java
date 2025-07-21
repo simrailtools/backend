@@ -124,6 +124,7 @@ public class SimRailServerCollector implements SimRailServerService {
       var originalOnline = serverEntity.isOnline();
       var originalDeleted = serverEntity.isDeleted();
       var originalUtcOffset = serverEntity.getUtcOffsetHours();
+      var originalScenery = serverEntity.getScenery() != null ? serverEntity.getScenery().name() : null;
 
       // update the base information
       serverEntity.setDeleted(false);
@@ -209,7 +210,7 @@ public class SimRailServerCollector implements SimRailServerService {
       if (serverEntity.isNew() || originalDeleted) {
         this.serverUpdateHandler.handleServerAdd(savedEntity);
       } else {
-        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, savedEntity);
+        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, originalScenery, savedEntity);
       }
 
       // add a small delay every 5 servers to prevent exceeding api quota limits

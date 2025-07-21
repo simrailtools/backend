@@ -36,7 +36,8 @@ import tools.simrail.backend.common.rpc.ServerUpdateFrame;
 public record EventServerUpdateDto(
   @Nonnull String serverId,
   @Nullable String timezoneId,
-  @Nullable Boolean online
+  @Nullable Boolean online,
+  @Nullable String scenery
 ) {
 
   /**
@@ -48,6 +49,7 @@ public record EventServerUpdateDto(
   public static @Nonnull EventServerUpdateDto fromServerUpdateFrame(@Nonnull ServerUpdateFrame frame) {
     var online = frame.hasOnline() ? frame.getOnline() : null;
     var timezoneId = frame.hasZoneOffset() ? frame.getZoneOffset() : null;
-    return new EventServerUpdateDto(frame.getServerId(), timezoneId, online);
+    var scenery = frame.hasServerScenery() ? frame.getServerScenery() : null;
+    return new EventServerUpdateDto(frame.getServerId(), timezoneId, online, scenery);
   }
 }
