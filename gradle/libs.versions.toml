@@ -15,7 +15,7 @@ jackson = "2.19.2"
 fuzzywuzzy = "1.4.0"
 annotations = "26.0.2"
 springDocOpenApi = "2.8.9"
-springGrpc = "0.8.0"
+springGrpc = "0.9.0"
 
 # testing
 junit = "5.13.4"
