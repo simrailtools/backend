@@ -42,6 +42,8 @@ import org.springframework.transaction.annotation.Transactional;
 @Component
 class DatabaseCleanupTask {
 
+  private static final short DELETE_BATCH_SIZE = 30_000; // must be less than 65.535 (psql limit)
+
   private final CleanupJourneyRepository journeyRepository;
   private final CleanupJourneyEventRepository journeyEventRepository;
   private final CleanupJourneyVehicleRepository journeyVehicleRepository;
@@ -73,9 +75,13 @@ class DatabaseCleanupTask {
       var cleanupStartDate = OffsetDateTime.now(ZoneOffset.UTC).minusDays(90).truncatedTo(ChronoUnit.DAYS);
       var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
       if (!journeyIdsToRemove.isEmpty()) {
-        this.journeyEventRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
-        this.journeyVehicleRepository.deleteAllByJourneyIdIn(journeyIdsToRemove);
-        this.journeyRepository.deleteAllById(journeyIdsToRemove);
+        for (var batchStart = 0; batchStart < journeyIdsToRemove.size(); batchStart += DELETE_BATCH_SIZE) {
+          var batchEnd = Math.min(journeyIdsToRemove.size(), batchStart + DELETE_BATCH_SIZE);
+          var batch = journeyIdsToRemove.subList(batchStart, batchEnd);
+          this.journeyEventRepository.deleteAllByJourneyIdIn(batch);
+          this.journeyVehicleRepository.deleteAllByJourneyIdIn(batch);
+          this.journeyRepository.deleteAllByJourneyIdIn(batch);
+        }
       }
 
       this.cleanupDeletionsTotalCounter.increment(journeyIdsToRemove.size());

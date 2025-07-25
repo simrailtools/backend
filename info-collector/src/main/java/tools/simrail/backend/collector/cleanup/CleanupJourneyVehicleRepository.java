@@ -24,9 +24,11 @@
 
 package tools.simrail.backend.collector.cleanup;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Modifying;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
 
 interface CleanupJourneyVehicleRepository extends JourneyVehicleRepository {
@@ -36,5 +38,7 @@ interface CleanupJourneyVehicleRepository extends JourneyVehicleRepository {
    *
    * @param journeyIds the journey ids to delete the associated vehicles of.
    */
-  void deleteAllByJourneyIdIn(@Nonnull Collection<UUID> journeyIds);
+  @Modifying
+  @Query(value = "DELETE FROM sit_vehicle v WHERE v.journey_id IN :journeyIds", nativeQuery = true)
+  void deleteAllByJourneyIdIn(@Param("journeyIds") Collection<UUID> journeyIds);
 }

@@ -25,8 +25,10 @@
 package tools.simrail.backend.collector.cleanup;
 
 import java.time.OffsetDateTime;
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.journey.JourneyRepository;
@@ -41,4 +43,13 @@ interface CleanupJourneyRepository extends JourneyRepository {
    */
   @Query(value = "SELECT j.id FROM sit_journey j WHERE j.update_time < CAST(:time AS TIMESTAMP)", nativeQuery = true)
   List<UUID> findJourneyIdsByCleanupStartDate(@Param("time") OffsetDateTime cleanupStartTime);
+
+  /**
+   * Deletes all journeys with one of the given ids.
+   *
+   * @param journeyIds the ids of the journeys to delete.
+   */
+  @Modifying
+  @Query(value = "DELETE FROM sit_journey j WHERE j.id IN :journeyIds", nativeQuery = true)
+  void deleteAllByJourneyIdIn(@Param("journeyIds") Collection<UUID> journeyIds);
 }
