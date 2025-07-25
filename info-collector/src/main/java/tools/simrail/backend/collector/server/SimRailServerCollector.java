@@ -31,9 +31,11 @@ import jakarta.annotation.Nonnull;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
@@ -65,6 +67,9 @@ public class SimRailServerCollector implements SimRailServerService {
   private final ServerUpdateHandler serverUpdateHandler;
   private final SimRailServerRepository serverRepository;
   private final SimRailServerSceneryProvider sceneryProvider;
+
+  // tracks servers whose language/tags couldn't be parsed to only log a warning about this once
+  private final Set<UUID> warnedUnparsableServers = new HashSet<>();
 
   private long collectionRuns = 0;
   private volatile List<SimRailServerDescriptor> collectedServers = List.of();
@@ -169,7 +174,9 @@ public class SimRailServerCollector implements SimRailServerService {
         }
       } else {
         serverEntity.setTags(List.of());
-        LOGGER.warn("Couldn't parse lang/tags from {}, assuming international server without tags", server.getName());
+        if (this.warnedUnparsableServers.add(serverEntity.getId())) {
+          LOGGER.warn("Couldn't parse lang/tags from {}, assuming international server without tags", server.getName());
+        }
       }
 
       ZoneOffset serverZoneOffset = null;
