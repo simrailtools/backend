@@ -49,7 +49,7 @@ public final class MapJourneyRouteDtoConverter {
       var data = (ArrayNode) node;
       var lon = data.get(0).asDouble();
       var lat = data.get(1).asDouble();
-      var elevation = data.get(2).asDouble();
+      var elevation = data.path(2).asDouble();
       polyline.add(new MapPolylineEntryDto(lat, lon, elevation));
     }
 
