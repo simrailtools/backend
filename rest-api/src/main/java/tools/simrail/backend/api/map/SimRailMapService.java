@@ -81,16 +81,18 @@ class SimRailMapService {
   /**
    * Resolve the stops and polyline for a single journey.
    *
-   * @param journeyId         the id of the journey to resolve the information for.
-   * @param includeCancelled  if cancelled events should be included in the polyline
-   * @param includeAdditional if additional events should be included in the polyline.
+   * @param journeyId                the id of the journey to resolve the information for.
+   * @param includeCancelled         if canceled events should be included in the polyline
+   * @param includeAdditional        if additional events should be included in the polyline.
+   * @param allowFallbackComputation if a fallback polyline should be computed if a nice one is unavailable.
    * @return an optional DTO for the journey polyline, empty if some info cannot be resolved.
    */
   @Cacheable(cacheNames = "journey_polyline_cache")
   public @Nonnull Optional<MapJourneyRouteDto> polylineByJourneyId(
     @Nonnull UUID journeyId,
     boolean includeCancelled,
-    boolean includeAdditional
+    boolean includeAdditional,
+    boolean allowFallbackComputation
   ) {
     // resolve the events along the journey route
     var eventsAlongRoute = this.journeyEventRepository
@@ -119,7 +121,19 @@ class SimRailMapService {
     // resolve the journey polyline
     var polyline = this.resolveJourneyPolyline(stopsAlongRoute);
     if (polyline == null) {
-      return Optional.empty();
+      if (allowFallbackComputation) {
+        // fallback to a polyline that just plainly connects all stops along the route
+        polyline = this.objectMapper.createArrayNode();
+        var stopPositions = stopsAlongRoute.stream().map(stop -> {
+          var node = this.objectMapper.createArrayNode();
+          node.add(stop.position().longitude());
+          node.add(stop.position().latitude());
+          return node;
+        }).toList();
+        polyline.addAll(stopPositions);
+      } else {
+        return Optional.empty();
+      }
     }
 
     // convert & combine the information into a DTO
@@ -132,36 +146,41 @@ class SimRailMapService {
    * BRouter api (using the rail profile).
    *
    * @param stopsAlongRoute the stops long the journey route to convert to a polyline.
-   * @return the coordinates array for the polyline of the journey.
+   * @return the coordinate array for the polyline of the journey.
    */
   private @Nullable ArrayNode resolveJourneyPolyline(@Nonnull List<JourneyStopPlaceDto> stopsAlongRoute) {
-    var pointsHash = stopsAlongRoute.stream()
-      .map(JourneyStopPlaceDto::id)
-      .mapToInt(UUID::hashCode)
-      .reduce(0, (left, right) -> 31 * left + right);
-    var pointsCacheKey = "points_" + pointsHash;
-    return this.polylineCache.get(pointsCacheKey, () -> {
-      // request the geojson data for the stops along the route
-      var positionsAlongRoute = stopsAlongRoute.stream()
-        .filter(place -> !place.stopPlace())
-        .map(JourneyStopPlaceDto::position)
-        .map(pos -> new BRouterRouteRequest.GeoPosition(pos.latitude(), pos.longitude()))
-        .toList();
-      var routeRequest = BRouterRouteRequest.create()
-        .withProfile("rail")
-        .withPositions(positionsAlongRoute)
-        .withOutputFormat(BRouterRouteRequest.OutputFormat.GEOJSON)
-        .withAlternativeMode(BRouterRouteRequest.AlternativeMode.DEFAULT);
-      var rawRouteGeoJson = this.bRouterApiClient.route(routeRequest);
-      var routeGeoJson = this.objectMapper.readTree(rawRouteGeoJson);
+    try {
+      var pointsHash = stopsAlongRoute.stream()
+        .map(JourneyStopPlaceDto::id)
+        .mapToInt(UUID::hashCode)
+        .reduce(0, (left, right) -> 31 * left + right);
+      var pointsCacheKey = "points_" + pointsHash;
+      return this.polylineCache.get(pointsCacheKey, () -> {
+        // request the geojson data for the stops along the route
+        var positionsAlongRoute = stopsAlongRoute.stream()
+          .filter(place -> !place.stopPlace())
+          .map(JourneyStopPlaceDto::position)
+          .map(pos -> new BRouterRouteRequest.GeoPosition(pos.latitude(), pos.longitude()))
+          .toList();
+        var routeRequest = BRouterRouteRequest.create()
+          .withProfile("rail")
+          .withPositions(positionsAlongRoute)
+          .withOutputFormat(BRouterRouteRequest.OutputFormat.GEOJSON)
+          .withAlternativeMode(BRouterRouteRequest.AlternativeMode.DEFAULT);
+        var rawRouteGeoJson = this.bRouterApiClient.route(routeRequest);
+        var routeGeoJson = this.objectMapper.readTree(rawRouteGeoJson);
 
-      // extract the geo positions
-      var lineCoordinates = routeGeoJson
-        .path("features")
-        .path(0)
-        .path("geometry")
-        .path("coordinates");
-      return lineCoordinates instanceof ArrayNode an ? an : null;
-    });
+        // extract the geo positions
+        var lineCoordinates = routeGeoJson
+          .path("features")
+          .path(0)
+          .path("geometry")
+          .path("coordinates");
+        return lineCoordinates instanceof ArrayNode an ? an : null;
+      });
+    } catch (Cache.ValueRetrievalException _) {
+      // can happen if the value loader throws, most likely due to an upstream issue with the BRouter api
+      return null;
+    }
   }
 }

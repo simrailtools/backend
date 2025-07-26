@@ -83,6 +83,7 @@ class SimRailMapController {
       @Parameter(name = "id", description = "The id of the journey to get the polyline for"),
       @Parameter(name = "includeCancelled", description = "If cancelled events should be included in the polyline"),
       @Parameter(name = "includeAdditional", description = "If additional events should be included in the polyline"),
+      @Parameter(name = "allowFallbackComputation", description = "If a fallback polyline should be returned if a proper one is unavailable"),
       @Parameter(
         in = ParameterIn.HEADER,
         name = "Accept",
@@ -124,10 +125,11 @@ class SimRailMapController {
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id,
     @RequestParam(value = "includeCancelled", required = false) boolean includeCancelled,
     @RequestParam(value = "includeAdditional", required = false) boolean includeAdditional,
+    @RequestParam(value = "allowFallbackComputation", required = false) boolean allowFallbackComputation,
     @RequestHeader(value = "Accept", defaultValue = "application/json") String acceptHeader
   ) {
     var journeyId = java.util.UUID.fromString(id);
-    return this.mapService.polylineByJourneyId(journeyId, includeCancelled, includeAdditional)
+    return this.mapService.polylineByJourneyId(journeyId, includeCancelled, includeAdditional, allowFallbackComputation)
       .map(routeInfo -> {
         // if geojson was requested instead of normal json
         var geoJsonRequested = acceptHeader.equalsIgnoreCase("application/geo+json");
