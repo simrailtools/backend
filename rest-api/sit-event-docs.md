@@ -110,7 +110,7 @@ Add frames hold the following data:
     "spokenLanguage": "Deutsch",
     // the region where the server is located (enum, not null, `ASIA`, `EUROPE`, `US_NORTH`)
     "region": "EUROPE",
-    // the scenery (map part) of the server (enum, not null, `WARSAW_KATOWICE_KRAKOW`, `WARSAW_LODZ_PSARY`, `WARSAW_LODZ_KRAKOW`)
+    // the scenery (map part) of the server (enum, not null, `FULL`, `WARSAW_KATOWICE_KRAKOW`, `WARSAW_LODZ_PSARY`, `WARSAW_LODZ_KRAKOW`, `WARSAW_LODZ_KATOWICE`)
     "scenery": "WARSAW_KATOWICE_KRAKOW",
     // if the server is online (boolean, not null)
     "online": true,
@@ -135,6 +135,8 @@ Update and delete frames hold the following data:
     "online": true,
     // the id of the timezone where the server is located (string, not present if unchanged)
     "timezoneId": "+02:00",
+    // the new scenery of the server (enum [see definition above], not present if unchanged)
+    "scenery": "WARSAW_KATOWICE_KRAKOW",
   }
 }
 ```
