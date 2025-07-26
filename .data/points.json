@@ -1469,10 +1469,7 @@
     "prefix": null,
     "max_speed": 80,
     "stop_place": false,
-    "ids": [
-      "4718",
-      "4723"
-    ],
+    "ids": [],
     "bb": [
       [
         20.979379335,
@@ -11710,10 +11707,12 @@
     "name": "Warszawa Główna Towarowa",
     "id": "60e231c2-85c3-44ab-9684-8fd8ef66561d",
     "prefix": null,
-    "max_speed": 40,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "4719"
+      "4718",
+      "4719",
+      "4723"
     ],
     "bb": [
       [
