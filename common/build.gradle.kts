@@ -29,12 +29,9 @@ dependencies {
   testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
-tasks.register<Copy>("copyDataFiles") {
-  from("../.data/")
-  include("**/*.json", "**/*.json5")
-  into(layout.buildDirectory.dir("resources/main/data"))
-}
-
-tasks.withType<ProcessResources>().configureEach {
-  dependsOn("copyDataFiles")
+tasks.withType<ProcessResources> {
+  from(rootProject.layout.projectDirectory.dir(".data")) {
+    into("data")
+    include("*.json", "*.json5")
+  }
 }
