@@ -88,9 +88,11 @@ tasks.withType<ProcessResources> {
 // From StackOverflow: https://stackoverflow.com/a/53087407
 tasks.register<Copy>("buildForDocker") {
   from(tasks.getByName("bootJar"))
-  into("build/libs/docker")
+  into(layout.buildDirectory.dir("libs/docker"))
+
+  val projectVersion = version.toString()
   rename { fileName ->
-    fileName.replace("-$version", "")
+    fileName.replace("-$projectVersion", "")
   }
 }
 
