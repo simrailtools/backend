@@ -23,6 +23,7 @@
  */
 
 import com.google.protobuf.gradle.id
+import de.undercouch.gradle.tasks.download.Download
 
 plugins {
   alias(libs.plugins.protobuf)
@@ -81,8 +82,13 @@ protobuf {
   }
 }
 
+// copy over downloaded rapidoc into resources/docs folder
 tasks.withType<ProcessResources> {
-  finalizedBy("downloadRapiDoc")
+  dependsOn("downloadRapiDoc")
+  from(layout.buildDirectory.dir("download")) {
+    into("resources/docs")
+    include("rapidoc-min.js")
+  }
 }
 
 // From StackOverflow: https://stackoverflow.com/a/53087407
@@ -97,12 +103,10 @@ tasks.register<Copy>("buildForDocker") {
 }
 
 // downloads rapidoc for displaying the rest api documentation
-tasks.register("downloadRapiDoc") {
-  download.run {
-    overwrite(true)
-    onlyIfModified(true)
-    useETag("strongOnly")
-    src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
-    dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
-  }
+tasks.register<Download>("downloadRapiDoc") {
+  overwrite(true)
+  onlyIfModified(true)
+  useETag("strongOnly")
+  src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
+  dest(layout.buildDirectory.file("download/rapidoc-min.js"))
 }
