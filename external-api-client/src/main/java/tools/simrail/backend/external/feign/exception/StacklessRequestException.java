@@ -25,6 +25,7 @@
 package tools.simrail.backend.external.feign.exception;
 
 import feign.Request;
+import java.io.Serial;
 import java.util.regex.Pattern;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -33,6 +34,9 @@ import org.jetbrains.annotations.Nullable;
  * Stackless exception to throw when an http request fails.
  */
 public final class StacklessRequestException extends RuntimeException {
+
+  @Serial
+  private static final long serialVersionUID = 5818614088289966585L;
 
   private static final Pattern CONTROL_CHARS_PATTERN = Pattern.compile("\\p{C}");
 

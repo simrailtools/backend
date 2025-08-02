@@ -32,7 +32,7 @@ dependencies {
 tasks.register<Copy>("copyDataFiles") {
   from("../.data/")
   include("**/*.json", "**/*.json5")
-  into(project.layout.buildDirectory.dir("resources/main/data"))
+  into(layout.buildDirectory.dir("resources/main/data"))
 }
 
 tasks.withType<ProcessResources>().configureEach {

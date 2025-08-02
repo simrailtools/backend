@@ -25,11 +25,15 @@
 package tools.simrail.backend.api.exception;
 
 import jakarta.annotation.Nonnull;
+import java.io.Serial;
 
 /**
  * An exception that indicates that a http request parameter is invalid, holding a descriptive message.
  */
 public final class IllegalRequestParameterException extends RuntimeException {
+
+  @Serial
+  private static final long serialVersionUID = 8873870848823453191L;
 
   /**
    * Constructs a new illegal parameter exception.

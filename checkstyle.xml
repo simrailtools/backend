@@ -45,7 +45,7 @@
   </module>
   <module name="TreeWalker">
     <property name="skipFileOnJavaParseException" value="true"/>
-    <property name="javaParseExceptionSeverity" value="info"/>
+    <property name="javaParseExceptionSeverity" value="ignore"/>
     <module name="SuppressionCommentFilter">
       <property name="offCommentFormat" value="CHECKSTYLE.OFF\: ([\w\|]+)"/>
       <property name="onCommentFormat" value="CHECKSTYLE.ON"/>

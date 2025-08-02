@@ -75,7 +75,7 @@ class SimRailUserService {
           users.add(user);
         }
       } else {
-        // no entry was already cached for the user, needs to be resolved
+        // no entry was cached for the user yet, needs to be resolved
         missingIds.add(steamId);
       }
     }
@@ -84,17 +84,17 @@ class SimRailUserService {
       // queue the resolving of the missing non-cached steam users
       var fetchFutures = missingIds.stream()
         .map(this.userFetchQueue::queueUserFetch)
-        .toArray(CompletableFuture[]::new);
+        .toArray(CompletableFuture<?>[]::new);
       CompletableFuture.allOf(fetchFutures)
         .orTimeout(5, TimeUnit.SECONDS)
         .exceptionally(_ -> null)
         .join();
 
       // cache all users that were fetched successfully from steam, either
-      // their converted user information or just that they do not exist
+      // their converted user information, or just that they do not exist
       for (var future : fetchFutures) {
         if (future.state() == Future.State.SUCCESS) {
-          //noinspection unchecked
+          @SuppressWarnings("unchecked")
           var fetchResult = (SimRailUserFetchResult<SteamUserSummary>) future.resultNow();
           switch (fetchResult) {
             case SimRailUserFetchResult.Success(var steamUser) -> {

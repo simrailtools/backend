@@ -33,5 +33,20 @@ pluginManagement {
   }
 }
 
+dependencyResolutionManagement {
+  repositoriesMode = RepositoriesMode.FAIL_ON_PROJECT_REPOS
+  repositories {
+    mavenCentral()
+    maven {
+      name = "Spring Milestones"
+      url = uri("https://repo.spring.io/milestone")
+    }
+    maven {
+      name = "Spring Snapshots"
+      url = uri("https://repo.spring.io/snapshot")
+    }
+  }
+}
+
 rootProject.name = "simrail-information-tools-backend"
 include("external-api-client", "common", "info-collector", "rest-api")

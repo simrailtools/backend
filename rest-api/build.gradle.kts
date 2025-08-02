@@ -81,17 +81,8 @@ protobuf {
   }
 }
 
-// downloads rapidoc for displaying the rest api documentation
 tasks.withType<ProcessResources> {
-  doLast {
-    download.run {
-      overwrite(true)
-      onlyIfModified(true)
-      useETag("strongOnly")
-      src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
-      dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
-    }
-  }
+  finalizedBy("downloadRapiDoc")
 }
 
 // From StackOverflow: https://stackoverflow.com/a/53087407
@@ -100,5 +91,16 @@ tasks.register<Copy>("buildForDocker") {
   into("build/libs/docker")
   rename { fileName ->
     fileName.replace("-$version", "")
+  }
+}
+
+// downloads rapidoc for displaying the rest api documentation
+tasks.register("downloadRapiDoc") {
+  download.run {
+    overwrite(true)
+    onlyIfModified(true)
+    useETag("strongOnly")
+    src("https://cdn.jsdelivr.net/npm/rapidoc/dist/rapidoc-min.js")
+    dest(layout.buildDirectory.dir("resources/main/resources/docs/"))
   }
 }

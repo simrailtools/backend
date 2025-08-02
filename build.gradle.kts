@@ -44,7 +44,7 @@ allprojects {
   // generates a TimeVer version for release builds (determined by gradle property 'version.release')
   // TimeVer specification: https://gist.github.com/twolfson/de1b004dd22536b8e668
   // if it is not a release build just use 'dev-SNAPSHOT' as the version
-  val releaseBuild = project.findProperty("version.release") ?: "false"
+  val releaseBuild = findProperty("version.release") ?: "false"
   if (releaseBuild == "true") {
     val timeVerFormatter = DateTimeFormatter.ofPattern("yyyyMMdd.HHmmss.n").withZone(ZoneOffset.UTC)
     version = timeVerFormatter.format(Instant.now())
@@ -62,18 +62,6 @@ subprojects {
   // nothing to boot in shared
   if (name in arrayOf("rest-api", "info-collector")) {
     apply(plugin = "org.springframework.boot")
-  }
-
-  repositories {
-    mavenCentral()
-    maven {
-      name = "Spring Milestones"
-      url = uri("https://repo.spring.io/milestone")
-    }
-    maven {
-      name = "Spring Snapshots"
-      url = uri("https://repo.spring.io/snapshot")
-    }
   }
 
   dependencies {
@@ -98,15 +86,23 @@ subprojects {
 
     options.compilerArgs.add("-proc:full")
     options.compilerArgs.add("-parameters")
-    options.compilerArgs.add("-Xlint:-preview")
     options.compilerArgs.add("--enable-preview")
+    options.compilerArgs.addAll(
+      listOf(
+        "-Xlint:all",         // enable all warnings
+        "-Xlint:-preview",    // reduce warning size for the following warning types
+        "-Xlint:-unchecked",
+        "-Xlint:-classfile",
+        "-Xlint:-processing",
+        "-Xlint:-deprecation",
+      )
+    )
   }
 
   tasks.withType<ProcessResources> {
+    val tokens = mapOf("project.version" to version)
+    inputs.properties(tokens)
     filesMatching("*.properties") {
-      val tokens = mapOf(
-        "project.version" to project.version,
-      )
       filter(ReplaceTokens::class, mapOf("tokens" to tokens))
     }
   }
