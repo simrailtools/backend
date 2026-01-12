@@ -69,7 +69,7 @@ public class SimRailServerSceneryProviderTest {
     for (var server : servers) {
       var serverId = server.get("id").asText();
       var scenery = this.sceneryProvider.findSceneryByServerId(serverId);
-      Assertions.assertTrue(scenery.isPresent());
+      Assertions.assertTrue(scenery.isPresent(), "missing scenery for " + serverId);
     }
   }
 }

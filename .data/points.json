@@ -18925,7 +18925,7 @@
     "name": "Ożarów Mazowiecki",
     "id": "b44999ba-9fa2-4b17-b09e-5cf0d12983ef",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "ids": [
       "3092"
@@ -22337,7 +22337,7 @@
     "name": "Biała Podlaska Rozrządowa",
     "id": "4b397ef0-145b-4061-9c7e-ac8546e769af",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 80,
     "stop_place": true,
     "ids": [
       "137"
@@ -22579,7 +22579,7 @@
     "name": "Sokule",
     "id": "3f64f977-bab1-4e0d-abb9-aedac50bd63d",
     "prefix": null,
-    "max_speed": 125,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
       "3976"
@@ -22974,7 +22974,7 @@
     "name": "Szaniawy",
     "id": "9b209380-18c8-436d-96a6-c6f1c7eb7cf0",
     "prefix": null,
-    "max_speed": 125,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
       "4247"
@@ -23052,7 +23052,7 @@
     "name": "Międzyrzec Podlaski",
     "id": "0ea17ab6-1d6f-4f7f-bcb3-5391b5b764c3",
     "prefix": null,
-    "max_speed": 125,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
       "2619"
@@ -23169,7 +23169,7 @@
     "name": "Chotyłów",
     "id": "8f457c5e-edbb-4354-ab45-c9a7513a0a73",
     "prefix": null,
-    "max_speed": 125,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
       "511"
@@ -23286,7 +23286,7 @@
     "name": "Biała Podlaska",
     "id": "7d2c1082-430c-4dbf-98cb-617ee91c2766",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 80,
     "stop_place": false,
     "ids": [
       "136"

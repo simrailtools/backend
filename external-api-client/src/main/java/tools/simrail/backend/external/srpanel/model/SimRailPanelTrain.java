@@ -98,10 +98,15 @@ public final class SimRailPanelTrain {
   public static final class DetailData {
 
     /**
-     * The steam id of the player that is controlling the train, null if controlled by a bot.
+     * The steam id of the player that is controlling the train, possibly null.
      */
     @JsonProperty("ControlledBySteamID")
     private String driverSteamId;
+    /**
+     * The xbox id of the player that is controlling the train, possibly null.
+     */
+    @JsonProperty("ControlledByXboxID")
+    private String diverXBoxId;
 
     /**
      * The current speed of the train.

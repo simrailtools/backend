@@ -27,6 +27,8 @@ package tools.simrail.backend.common.signal;
 import com.fasterxml.jackson.databind.json.JsonMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
@@ -111,7 +113,7 @@ public class PlatformSignalProviderTest {
   }
 
   @Test
-  void testAllScheduledPlatformsHaveASignalMapping() {
+  void testAllScheduledPlatformsHaveASignalMapping() throws IOException {
     var pointsWithWrongPlatformMapping = Set.of(
       "Olkusz", // wrong platform mapping
       "Gałkówek", // wrong platform mapping
@@ -165,7 +167,9 @@ public class PlatformSignalProviderTest {
       }
     }
 
-    Assertions.assertEquals(160, missingPoints.size(), () -> {
+    var knownMissingMappings = Files.readAllLines(Path.of("src/test/resources/missing_signal_mappings.txt"));
+    knownMissingMappings.forEach(missingPoints::remove);
+    Assertions.assertTrue(missingPoints.isEmpty(), () -> {
       var joinedStationNames = String.join(", ", missingPoints);
       return "Found unexpected count of stations without platform signal info: " + joinedStationNames;
     });
