@@ -107,5 +107,10 @@ public final class SimRailPanelDispatchPost {
      */
     @JsonProperty("SteamId")
     private String steamId;
+    /**
+     * The xbox user identifier of the player that is dispatching the station.
+     */
+    @JsonProperty("XboxId")
+    private String xboxId;
   }
 }
