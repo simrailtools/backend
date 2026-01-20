@@ -22,29 +22,19 @@
  * SOFTWARE.
  */
 
-import com.google.protobuf.gradle.id
 import de.undercouch.gradle.tasks.download.Download
 
 plugins {
-  alias(libs.plugins.protobuf)
   alias(libs.plugins.downloadTask)
 }
 
-dependencyManagement {
-  imports {
-    mavenBom("org.springframework.grpc:spring-grpc-dependencies:${libs.versions.springGrpc.get()}")
-  }
-}
-
 dependencies {
-  // include protobuf files from <project root>/.proto folder
-  protobuf(rootProject.files(".proto"))
-
   implementation(projects.common)
   implementation(projects.externalApiClient)
 
   implementation(libs.feignCore)
   implementation(libs.fuzzywuzzy)
+  implementation(libs.protobufJava)
   implementation(libs.springDocOpenApi)
   implementation("org.postgresql:postgresql")
   implementation("com.github.ben-manes.caffeine:caffeine")
@@ -53,33 +43,10 @@ dependencies {
   implementation("org.springframework.boot:spring-boot-starter-cache")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springframework.boot:spring-boot-starter-websocket")
   implementation("org.springframework.boot:spring-boot-starter-validation")
-  implementation("org.springframework.grpc:spring-grpc-client-spring-boot-starter")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
-}
-
-protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:${dependencyManagement.importedProperties["protobuf-java.version"]}"
-  }
-  plugins {
-    id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java:${dependencyManagement.importedProperties["grpc.version"]}"
-    }
-  }
-  generateProtoTasks {
-    ofSourceSet("main").forEach {
-      it.plugins {
-        id("grpc") {
-          option("jakarta_omit")
-          option("@generated=omit")
-        }
-      }
-    }
-  }
 }
 
 // copy over downloaded rapidoc into resources/docs folder

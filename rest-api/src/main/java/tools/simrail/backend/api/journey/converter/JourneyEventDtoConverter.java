@@ -59,7 +59,7 @@ public final class JourneyEventDtoConverter implements Function<JourneyEventEnti
   public @Nonnull JourneyEventDto apply(@Nonnull JourneyEventEntity event) {
     var stopPlace = this.stopPlaceDtoConverter.apply(event.getStopDescriptor());
     var scheduledStopInfo = this.convertStopInfo(event.getScheduledPassengerStopInfo());
-    var realtimeStopInfo = this.convertStopInfo(event.getRealtimePassengerStopInfo());
+    var realtimeStopInfo = this.convertStopInfo(event.getActualPassengerStopInfo());
     var transport = this.transportDtoConverter.apply(event.getTransport());
     return new JourneyEventDto(
       event.getId(),
@@ -68,7 +68,7 @@ public final class JourneyEventDtoConverter implements Function<JourneyEventEnti
       event.isAdditional(),
       stopPlace,
       event.getScheduledTime(),
-      event.getRealtimeTime(),
+      event.getActualTime(),
       event.getRealtimeTimeType(),
       event.getStopType(),
       scheduledStopInfo,

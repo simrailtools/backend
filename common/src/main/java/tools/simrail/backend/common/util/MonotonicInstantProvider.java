@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,29 +22,28 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.concurrent;
-
-import jakarta.annotation.Nonnull;
-import java.util.function.Supplier;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-import org.springframework.transaction.support.TransactionTemplate;
+package tools.simrail.backend.common.util;
 
 /**
- * A factory for {@link TransactionalFailShutdownTaskScope} task scopes.
+ * Provides the current timestamp in a monotonic fashion. Note that the returned timestamp might not correspond to wall
+ * time, it's strictly monotonic.
  */
-@Component
-public final class TransactionalFailShutdownTaskScopeFactory implements Supplier<TransactionalFailShutdownTaskScope> {
+public final class MonotonicInstantProvider {
 
-  private final TransactionTemplate transactionTemplate;
+  private static final long ORIGIN_NANOS = System.nanoTime();
+  private static final long ORIGIN_MILLIS = System.currentTimeMillis();
 
-  @Autowired
-  public TransactionalFailShutdownTaskScopeFactory(@Nonnull TransactionTemplate transactionTemplate) {
-    this.transactionTemplate = transactionTemplate;
+  private MonotonicInstantProvider() {
+    throw new UnsupportedOperationException();
   }
 
-  @Override
-  public @Nonnull TransactionalFailShutdownTaskScope get() {
-    return new TransactionalFailShutdownTaskScope(this.transactionTemplate);
+  /**
+   *
+   * @return
+   */
+  public static long monotonicTimeMillis() {
+    var nanoTime = System.nanoTime();
+    var elapsedNanos = nanoTime - ORIGIN_NANOS;
+    return ORIGIN_MILLIS + (elapsedNanos / 1_000_000);
   }
 }

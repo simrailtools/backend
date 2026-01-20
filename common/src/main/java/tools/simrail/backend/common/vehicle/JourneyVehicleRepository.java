@@ -29,6 +29,6 @@ import org.springframework.data.repository.ListCrudRepository;
 /**
  * Repository for journey vehicles.
  */
-public interface JourneyVehicleRepository extends ListCrudRepository<JourneyVehicle, Long> {
+public interface JourneyVehicleRepository extends ListCrudRepository<JourneyVehicleEntity, Long> {
 
 }

@@ -24,34 +24,22 @@
 
 package tools.simrail.backend.collector.journey;
 
-import jakarta.annotation.Nonnull;
 import java.time.OffsetDateTime;
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
-import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyRepository;
 
 /**
  * Extension of the default journey repository with collector-specific methods.
  */
 interface CollectorJourneyRepository extends JourneyRepository {
-
-  @Nonnull
-  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
-
-  @Nonnull
-  List<JourneyEntity> findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
-
-  @Nonnull
-  List<JourneyEntity> findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(@Nonnull UUID serverId);
-
-  @Nonnull
-  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, Collection<UUID> foreignRunIds);
 
   /**
    * Finds all journeys on the specified server whose first playable event was not reached before the given time.
@@ -81,13 +69,18 @@ interface CollectorJourneyRepository extends JourneyRepository {
     SELECT j.id
     FROM sit_journey j
     JOIN second_departures_in_border ib ON ib.journey_id = j.id
-    WHERE
-      -- no need to select lastSeenTime here, but this way an index can be used more effectively
-      j.server_id = :serverId
-      AND j.first_seen_time IS NULL
-      AND j.last_seen_time IS NULL
+    WHERE j.server_id = :serverId AND j.first_seen_time IS NULL
     """, nativeQuery = true)
   List<UUID> findJourneysThatDidNotSpawn(@Param("time") OffsetDateTime serverTime, @Param("serverId") UUID serverId);
+
+  @NonNull
+  @Modifying
+  @Query(value = """
+    DELETE FROM sit_journey j
+    WHERE j.foreign_run_id IN :runIds AND j.first_seen_time IS NULL
+    RETURNING j.foreign_run_id
+    """, nativeQuery = true)
+  Set<UUID> deleteUnstartedJourneysByRunIds(@Param(":runIds") Collection<UUID> runIds);
 
   /**
    * Marks the journeys with the given journey ids as canceled.

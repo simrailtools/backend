@@ -22,15 +22,30 @@
  * SOFTWARE.
  */
 
+plugins {
+  alias(libs.plugins.protobuf)
+}
+
 dependencies {
   implementation(libs.jts)
+  implementation(libs.redisson)
+  implementation(libs.protobufJava)
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
   testImplementation("org.springframework.boot:spring-boot-starter-test")
+
+  // include protobuf files from <project root>/.proto folder
+  protobuf(project.isolated.rootProject.projectDirectory.files(".proto"))
+}
+
+protobuf {
+  protoc {
+    artifact = "com.google.protobuf:protoc:${libs.versions.protobufJava.get()}"
+  }
 }
 
 tasks.withType<ProcessResources> {
-  from(rootProject.layout.projectDirectory.dir(".data")) {
+  from(project.isolated.rootProject.projectDirectory.dir(".data")) {
     into("data")
     include("*.json", "*.json5")
   }

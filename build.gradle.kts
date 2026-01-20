@@ -78,8 +78,8 @@ subprojects {
   }
 
   tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.VERSION_24.toString()
-    targetCompatibility = JavaVersion.VERSION_24.toString()
+    sourceCompatibility = JavaVersion.VERSION_25.toString()
+    targetCompatibility = JavaVersion.VERSION_25.toString()
 
     options.encoding = "UTF-8"
     options.isIncremental = true
@@ -141,7 +141,7 @@ subprojects {
       lineEndings = LineEnding.UNIX
       encoding = StandardCharsets.UTF_8
       licenseHeaderFile(rootProject.file("license_header.txt"))
-      targetExclude("**/backend/common/rpc/**")
+      targetExclude("**/backend/common/proto/**")
     }
   }
 

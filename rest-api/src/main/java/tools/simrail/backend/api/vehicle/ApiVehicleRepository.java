@@ -27,7 +27,7 @@ package tools.simrail.backend.api.vehicle;
 import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
-import tools.simrail.backend.common.vehicle.JourneyVehicle;
+import tools.simrail.backend.common.vehicle.JourneyVehicleEntity;
 import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
 
 interface ApiVehicleRepository extends JourneyVehicleRepository {
@@ -39,5 +39,5 @@ interface ApiVehicleRepository extends JourneyVehicleRepository {
    * @return the vehicles that are associated with the given journey id.
    */
   @Nonnull
-  List<JourneyVehicle> findJourneyVehiclesByJourneyIdOrderByIndexInGroup(@Nonnull UUID journeyId);
+  List<JourneyVehicleEntity> findJourneyVehiclesByJourneyIdOrderByIndexInGroup(@Nonnull UUID journeyId);
 }

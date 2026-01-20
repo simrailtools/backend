@@ -32,7 +32,7 @@ import java.util.stream.Collectors;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import tools.simrail.backend.common.vehicle.JourneyVehicle;
+import tools.simrail.backend.common.vehicle.JourneyVehicleEntity;
 
 /**
  * Service for handling collection-relevant vehicle data for journeys.
@@ -87,7 +87,7 @@ class CollectorJourneyVehicleService {
    * @param vehicles  the new vehicle information for the journey.
    */
   @Transactional
-  public void saveJourneyVehicles(@Nonnull UUID journeyId, @Nonnull List<JourneyVehicle> vehicles) {
+  public void saveJourneyVehicles(@Nonnull UUID journeyId, @Nonnull List<JourneyVehicleEntity> vehicles) {
     this.vehicleRepository.deleteAllByJourneyId(journeyId);
     this.vehicleRepository.saveAll(vehicles);
   }

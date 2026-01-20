@@ -45,7 +45,7 @@ import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.railcar.RailcarProvider;
 import tools.simrail.backend.common.util.StringUtils;
-import tools.simrail.backend.common.vehicle.JourneyVehicle;
+import tools.simrail.backend.common.vehicle.JourneyVehicleEntity;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
@@ -154,7 +154,7 @@ class JourneyVehicleCollector {
       var previousJourneyKey = String.format("%s_%s", firstEvent.getTrainType(), firstEvent.getTrainNumber());
       var previousVehicles = previousCompositions.get(previousJourneyKey);
       if (previousVehicles == null || previousVehicles.isEmpty()) {
-        var unknownVehicle = new JourneyVehicle();
+        var unknownVehicle = new JourneyVehicleEntity();
         unknownVehicle.setIndexInGroup(0);
         unknownVehicle.setJourneyId(journeyId);
         unknownVehicle.setStatus(JourneyVehicleStatus.UNKNOWN);
@@ -162,7 +162,7 @@ class JourneyVehicleCollector {
       } else {
         var currentEventVehicles = previousVehicles.stream()
           .map(vehicle -> {
-            var newVehicle = new JourneyVehicle();
+            var newVehicle = new JourneyVehicleEntity();
             newVehicle.setJourneyId(journeyId);
             newVehicle.setStatus(JourneyVehicleStatus.PREDICTION);
             newVehicle.setIndexInGroup(vehicle.indexInGroup());
@@ -293,7 +293,7 @@ class JourneyVehicleCollector {
       // "408S/408S:P:50" - wagon, brake setting P, 50 tons loaded (unknown load)
       // "441V/441V_31516635283-3:P:43@Coal" - wagon, brake setting P, 43 tons of coal loaded
       var vehicles = activeTrain.getVehicles();
-      var convertedVehicles = new ArrayList<JourneyVehicle>();
+      var convertedVehicles = new ArrayList<JourneyVehicleEntity>();
       for (var index = 0; index < vehicles.size(); index++) {
         // get the railcar associated with the vehicle, skip the vehicle if the railcar is unknown
         var vehicleData = vehicles.get(index);
@@ -305,7 +305,7 @@ class JourneyVehicleCollector {
         }
 
         // create base information about the vehicle & register it
-        var vehicle = new JourneyVehicle();
+        var vehicle = new JourneyVehicleEntity();
         vehicle.setIndexInGroup(index);
         vehicle.setJourneyId(journeyId);
         vehicle.setStatus(JourneyVehicleStatus.REAL);

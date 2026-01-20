@@ -26,6 +26,8 @@ package tools.simrail.backend.common.journey;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -42,17 +44,18 @@ public final class JourneyTransport {
   /**
    * Category of the transport used for the journey.
    */
-  @Column(nullable = false)
+  @Column
   private String category;
   /**
    * Number of the transport used for the journey.
    */
-  @Column(nullable = false)
+  @Column
   private String number;
   /**
    * A higher-level category of the transport.
    */
-  @Column(nullable = false)
+  @Column
+  @Enumerated(EnumType.STRING)
   private JourneyTransportType type;
   /**
    * Line information for repeating transports, null if no line is associated with the transport.

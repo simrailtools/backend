@@ -37,8 +37,4 @@ public enum JourneyVehicleStatus {
    * The vehicle composition of the journey is predicated based on data from previous journeys.
    */
   PREDICTION,
-  /**
-   * The vehicle composition cannot be predicated and is not yet confirmed.
-   */
-  UNKNOWN,
 }

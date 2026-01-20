@@ -1,5 +1,3 @@
-import com.google.protobuf.gradle.id
-
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
@@ -24,53 +22,28 @@ import com.google.protobuf.gradle.id
  * SOFTWARE.
  */
 
-plugins {
-  alias(libs.plugins.protobuf)
-}
-
-dependencyManagement {
-  imports {
-    mavenBom("org.springframework.grpc:spring-grpc-dependencies:${libs.versions.springGrpc.get()}")
-  }
-}
-
 dependencies {
-  // include protobuf files from <project root>/.proto folder
-  protobuf(rootProject.files(".proto"))
-
-  implementation(libs.feignCore)
   implementation(projects.common)
   implementation(projects.externalApiClient)
+
+  implementation(libs.feignCore)
+  implementation(libs.protobufJava)
   implementation("org.postgresql:postgresql")
   implementation("io.micrometer:micrometer-registry-prometheus")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
+  implementation("org.springframework.boot:spring-boot-starter-flyway")
   implementation("org.springframework.boot:spring-boot-starter-actuator")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  implementation("org.springframework.grpc:spring-grpc-server-web-spring-boot-starter")
 
   developmentOnly("org.springframework.boot:spring-boot-devtools")
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
-protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:${dependencyManagement.importedProperties["protobuf-java.version"]}"
-  }
-  plugins {
-    id("grpc") {
-      artifact = "io.grpc:protoc-gen-grpc-java:${dependencyManagement.importedProperties["grpc.version"]}"
-    }
-  }
-  generateProtoTasks {
-    ofSourceSet("main").forEach {
-      it.plugins {
-        id("grpc") {
-          option("jakarta_omit")
-          option("@generated=omit")
-        }
-      }
-    }
+tasks.withType<ProcessResources> {
+  from(project.isolated.rootProject.projectDirectory.dir(".flyway")) {
+    into("db/migration")
+    include("*.sql")
   }
 }
 

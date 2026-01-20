@@ -25,6 +25,7 @@
 package tools.simrail.backend.collector.server;
 
 import jakarta.annotation.Nonnull;
+import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -52,7 +53,7 @@ public record SimRailServerDescriptor(
    *
    * @return the current date and time on this server.
    */
-  public @Nonnull OffsetDateTime currentTime() {
+  public @Nonnull LocalDateTime currentTime() {
     return ZonedDateTime.now(ZoneOffset.UTC)
       .plusSeconds(this.serverTimeOffsetSeconds)
       .withZoneSameLocal(this.timezoneOffset)

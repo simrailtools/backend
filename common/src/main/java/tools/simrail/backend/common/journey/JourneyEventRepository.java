@@ -38,20 +38,13 @@ import org.springframework.data.repository.query.Param;
 public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity, UUID> {
 
   /**
-   * Deletes all journey events that are associated with the given journey id.
+   * Get all events of the given journey.
    *
-   * @param journeyId the journey id to delete the associated events of.
-   */
-  void deleteAllByJourneyId(@Nonnull UUID journeyId);
-
-  /**
-   * Finds all event entities that are associated with one of the given journey ids.
-   *
-   * @param journeyIds the journey ids to get the events of.
-   * @return all journey entities that are associated with one of the given journey ids.
+   * @param journeyId the id of the journey to get the events of.
+   * @return all events of the given journey.
    */
   @Nonnull
-  List<JourneyEventEntity> findAllByJourneyIdIn(@Nonnull Collection<UUID> journeyIds);
+  List<JourneyEventEntity> findAllByJourneyId(@Nonnull UUID journeyId);
 
   /**
    * Retrieves all journey events that are associated with a journey on the given server and with one of the run ids.

@@ -32,14 +32,14 @@ import java.util.function.Function;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.common.railcar.RailcarProvider;
-import tools.simrail.backend.common.vehicle.JourneyVehicle;
+import tools.simrail.backend.common.vehicle.JourneyVehicleEntity;
 import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
 
 /**
  * Converter for vehicle information to DTO.
  */
 @Component
-public final class VehicleCompositionDtoConverter implements Function<List<JourneyVehicle>, VehicleCompositionDto> {
+public final class VehicleCompositionDtoConverter implements Function<List<JourneyVehicleEntity>, VehicleCompositionDto> {
 
   private static final Comparator<VehicleDto> VEHICLE_INDEX_COMPARATOR =
     Comparator.comparingInt(VehicleDto::indexInGroup);
@@ -52,7 +52,7 @@ public final class VehicleCompositionDtoConverter implements Function<List<Journ
   }
 
   @Override
-  public @Nullable VehicleCompositionDto apply(@Nonnull List<JourneyVehicle> vehicles) {
+  public @Nullable VehicleCompositionDto apply(@Nonnull List<JourneyVehicleEntity> vehicles) {
     // get the base information from the first vehicle in the group, return null if
     // the vehicle status is completely unknown and no data can be provided
     var firstVehicle = vehicles.getFirst();

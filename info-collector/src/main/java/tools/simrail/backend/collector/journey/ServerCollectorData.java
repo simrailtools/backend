@@ -24,16 +24,42 @@
 
 package tools.simrail.backend.collector.journey;
 
-import jakarta.annotation.Nonnull;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
-import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
+import lombok.Getter;
+import org.jspecify.annotations.NonNull;
+import org.springframework.http.HttpHeaders;
+import tools.simrail.backend.external.feign.FeignJsonResponseTuple;
 
-interface CollectorJourneyVehicleRepository extends JourneyVehicleRepository {
+/**
+ * Data storage for requests sent to the SimRail api during journey data collection.
+ */
+@Getter
+final class ServerCollectorData {
+
+  // mapping for the runs to the foreign id and vice-vera on this server
+  final Map<String, UUID> foreignIdToRunId = new HashMap<>();
+  final Map<UUID, JourneyUpdateHolder> updateHoldersByRunId = new HashMap<>();
+
+  private String trainsEtag;
+  private String trainPositionsEtag;
 
   /**
-   * Delete all vehicle entries that are associated with the given journey id.
+   * Update the stored etag for the trains' endpoint.
    *
-   * @param journeyId the id of the journey to remove the vehicle info of.
+   * @param responseTuple the response tuple to extract the etag from.
    */
-  void deleteAllByJourneyId(@Nonnull UUID journeyId);
+  public void updateTrainsEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
+    this.trainsEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
+  }
+
+  /**
+   * Update the stored etag for the train positions endpoint.
+   *
+   * @param responseTuple the response tuple to extract the etag from.
+   */
+  public void updateTrainPositionsEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
+    this.trainPositionsEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
+  }
 }

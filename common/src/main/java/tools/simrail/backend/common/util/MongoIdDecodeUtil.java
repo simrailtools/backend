@@ -29,8 +29,6 @@ import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.ByteOrder;
 import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
 import java.util.HexFormat;
 
 /**
@@ -51,10 +49,9 @@ public final class MongoIdDecodeUtil {
    * @param mongoId the mongo id to extract the timestamp of.
    * @return the timestamp embedded in the given mongo id.
    */
-  public static @Nonnull OffsetDateTime parseMongoId(@Nonnull String mongoId) {
+  public static @Nonnull Instant parseMongoId(@Nonnull String mongoId) {
     var decodedTimePart = HexFormat.of().parseHex(mongoId, 0, 8);
     var secondsSinceEpoch = (int) BYTE_ARRAY_INT_VIEW_HANDLE.get(decodedTimePart, 0);
-    var timestampInstant = Instant.ofEpochSecond(secondsSinceEpoch);
-    return OffsetDateTime.ofInstant(timestampInstant, ZoneOffset.UTC);
+    return Instant.ofEpochSecond(secondsSinceEpoch);
   }
 }

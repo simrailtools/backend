@@ -38,7 +38,7 @@ public enum SimRailServerRegion {
    */
   EUROPE,
   /**
-   * North america region.
+   * North America region.
    */
   US_NORTH,
 }

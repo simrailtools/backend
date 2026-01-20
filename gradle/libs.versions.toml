@@ -1,27 +1,27 @@
 [versions]
 # plugins
-protobuf = "0.9.5"
-springBoot = "3.5.4"
+protobuf = "0.9.6"
+spotless = "8.1.0"
+springBoot = "4.0.1"
 downloadTask = "5.6.0"
-spotless = "7.2.1"
-checkstyleTools = "10.26.1"
+checkstyleTools = "13.0.0"
 springDependencyManagement = "1.1.7"
 
 # direct dependencies
 jts = "1.20.0"
 feign = "13.6"
-lombok = "1.18.38"
+lombok = "1.18.42"
 jackson = "2.19.2"
+redisson = "4.1.0"
 fuzzywuzzy = "1.4.0"
-annotations = "26.0.2"
-springDocOpenApi = "2.8.9"
-springGrpc = "0.9.0"
+protobufJava = "4.33.4"
+annotations = "26.0.2-1"
+springDocOpenApi = "3.0.1"
 
 # testing
-junit = "5.13.4"
-mockito = "5.18.0"
-junitLauncher = "1.13.4"
-testcontainers = "1.21.3"
+junit = "6.0.2"
+mockito = "5.21.0"
+testcontainers = "2.0.3"
 
 [libraries]
 # jackson
@@ -38,26 +38,27 @@ feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", vers
 # general
 jts = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
+redisson = { group = "org.redisson", name = "redisson", version.ref = "redisson" }
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
 annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
+protobufJava = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobufJava" }
 springDocOpenApi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "springDocOpenApi" }
 
 # junit
 junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
 junitParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
 junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
-junitLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junitLauncher" }
+junitLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
 
 # general testing
 mockito = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
 
 # testcontainers
 testContainers = { group = "org.testcontainers", name = "testcontainers", version.ref = "testcontainers" }
-testContainersJunit = { group = "org.testcontainers", name = "junit-jupiter", version.ref = "testcontainers" }
+testContainersJunit = { group = "org.testcontainers", name = "testcontainers-junit-jupiter", version.ref = "testcontainers" }
 
 # dummy versions, just here for renovate to detect that there is something to update
 checkstyleTools = { group = "com.puppycrawl.tools", name = "checkstyle", version.ref = "checkstyleTools" }
-springGrpcDependencies = { group = "org.springframework.grpc", name = "spring-grpc-dependencies", version.ref = "springGrpc" }
 
 [plugins]
 protobuf = { id = "com.google.protobuf", version.ref = "protobuf" }

@@ -31,11 +31,15 @@ import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
-import java.time.OffsetDateTime;
+import java.time.Instant;
+import java.time.LocalDateTime;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -53,19 +57,6 @@ import org.springframework.data.domain.Persistable;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity(name = "sit_journey_event")
-@Table(indexes = {
-  // single column indexes are used for searching in api
-  @Index(columnList = "journeyId"),
-  @Index(name = "idx_point_id", columnList = "point_id"),
-  @Index(name = "idx_scheduled_time", columnList = "scheduledTime"),
-  @Index(name = "idx_transport_line", columnList = "transport_line"),
-  @Index(name = "idx_transport_type", columnList = "transport_type"),
-  @Index(name = "idx_transport_number", columnList = "transport_number"),
-  @Index(name = "idx_transport_category", columnList = "transport_category"),
-  @Index(columnList = "journeyId, eventIndex, point_playable"),
-  @Index(columnList = "journeyId, eventIndex, transport_category, transport_number, scheduledTime"),
-  @Index(name = "idx_board_filter", columnList = "eventType, point_id, transport_type, realtimeTime, scheduledTime")
-})
 public final class JourneyEventEntity implements Persistable<UUID> {
 
   /**
@@ -77,82 +68,60 @@ public final class JourneyEventEntity implements Persistable<UUID> {
    * The id of this event.
    */
   @Id
+  @Column(name = "id")
   private UUID id;
   /**
    * The id of the journey which is related to this event.
    */
-  @Column(nullable = false)
-  private UUID journeyId;
+  @JoinColumn(name = "journey_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  private JourneyEntity journey;
+  /**
+   * The index of this event along the journey route.
+   */
+  @Column(name = "event_index")
+  private int eventIndex;
+
   /**
    * The time when this event was created.
    */
   @CreationTimestamp
-  private OffsetDateTime createdAt;
+  @Column(name = "created_at")
+  private Instant createdAt;
   /**
    * The type of this event.
    */
-  @Column(nullable = false)
+  @Column(name = "event_type")
+  @Enumerated(EnumType.STRING)
   private JourneyEventType eventType;
+
   /**
-   * The index of this event along the journey route.
+   * The id of the point where the event is scheduled to happen.
    */
-  @Column
-  private int eventIndex;
+  @Column(name = "point_id")
+  private UUID pointId;
   /**
-   * The descriptor of the stop where the event is scheduled to happen.
+   * Indicates if the event is within the playable map bounds at the time of collection.
    */
-  @Embedded
-  @Column(nullable = false)
-  @AttributeOverrides({
-    @AttributeOverride(name = "id", column = @Column(name = "point_id", nullable = false)),
-    @AttributeOverride(name = "name", column = @Column(name = "point_name", nullable = false)),
-    @AttributeOverride(name = "playable", column = @Column(name = "point_playable", nullable = false)),
-  })
-  private JourneyStopDescriptor stopDescriptor;
+  @Column(name = "in_playable_border")
+  private boolean inPlayableBorder;
 
   /**
    * The time when this event was scheduled to happen.
    */
-  @Column(nullable = false)
-  private OffsetDateTime scheduledTime;
+  @Column(name = "scheduled_time")
+  private LocalDateTime scheduledTime;
   /**
-   * The current best realtime time information providable for this event.
+   * The actual time when the journey reached this event.
    */
-  @Column(nullable = false)
-  private OffsetDateTime realtimeTime;
+  @Column(name = "realtime_time")
+  private LocalDateTime realtimeTime;
   /**
    * Information about the precision of the current realtime time.
    */
-  @Column(nullable = false)
+  @Enumerated(EnumType.STRING)
+  @Column(name = "realtime_time_type")
   private JourneyTimeType realtimeTimeType;
-
-  /**
-   * The type of stop that is scheduled at this event.
-   */
-  @Column(nullable = false)
-  private JourneyStopType stopType;
-  /**
-   * The information about the platform where the journey is scheduled to stop. Only present if the journey is scheduled
-   * to stop with a passenger change at the stop.
-   */
-  @Column
-  @Embedded
-  @AttributeOverrides({
-    @AttributeOverride(name = "track", column = @Column(name = "scheduled_track")),
-    @AttributeOverride(name = "platform", column = @Column(name = "scheduled_platform")),
-  })
-  private JourneyPassengerStopInfo scheduledPassengerStopInfo;
-  /**
-   * The information about the platform where the journey actually stopped. Only present if the journey is scheduled to
-   * stop with a passenger change at the stop and the journey already arrived at the station and stopped at a platform.
-   */
-  @Column
-  @Embedded
-  @AttributeOverrides({
-    @AttributeOverride(name = "track", column = @Column(name = "realtime_track")),
-    @AttributeOverride(name = "platform", column = @Column(name = "realtime_platform")),
-  })
-  private JourneyPassengerStopInfo realtimePassengerStopInfo;
 
   /**
    * Get the transport that is used for the journey at this event.
@@ -170,14 +139,41 @@ public final class JourneyEventEntity implements Persistable<UUID> {
   private JourneyTransport transport;
 
   /**
-   * Indicates if this event was cancelled.
+   * The type of stop that is scheduled at this event.
    */
-  @Column
+  @Column(name = "stop_type")
+  @Enumerated(EnumType.STRING)
+  private JourneyStopType stopType;
+  /**
+   * The information about the platform where the journey is scheduled to stop. Only present if the journey is scheduled
+   * to stop with a passenger change at the stop.
+   */
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "track", column = @Column(name = "scheduled_track")),
+    @AttributeOverride(name = "platform", column = @Column(name = "scheduled_platform")),
+  })
+  private JourneyPassengerStopInfo scheduledPassengerStopInfo;
+  /**
+   * The information about the platform where the journey actually stopped. Only present if the journey is scheduled to
+   * stop with a passenger change at the stop and the journey already arrived at the station and stopped at a platform.
+   */
+  @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "track", column = @Column(name = "realtime_track")),
+    @AttributeOverride(name = "platform", column = @Column(name = "realtime_platform")),
+  })
+  private JourneyPassengerStopInfo realtimePassengerStopInfo;
+
+  /**
+   * Indicates if this event was canceled.
+   */
+  @Column(name = "cancelled")
   private boolean cancelled;
   /**
    * Indicates if this event was added to the schedule due to a route change.
    */
-  @Column
+  @Column(name = "additional")
   private boolean additional;
 
   /**
@@ -185,24 +181,6 @@ public final class JourneyEventEntity implements Persistable<UUID> {
    */
   @Transient
   private boolean isNew;
-
-  /**
-   * Checks if one of the scheduled data fields differs from the given other entity.
-   *
-   * @param other the other entity to compare against.
-   * @return true if the scheduled data of this and the other entity is equal, false otherwise.
-   */
-  public boolean scheduledDataEquals(@Nonnull JourneyEventEntity other) {
-    return this.eventIndex == other.eventIndex
-      && this.stopType == other.stopType
-      && this.eventType == other.eventType
-      && Objects.equals(this.id, other.id)
-      && Objects.equals(this.journeyId, other.journeyId)
-      && Objects.equals(this.stopDescriptor, other.stopDescriptor)
-      && Objects.equals(this.scheduledTime, other.scheduledTime)
-      && Objects.equals(this.scheduledPassengerStopInfo, other.scheduledPassengerStopInfo)
-      && Objects.equals(this.transport, other.transport);
-  }
 
   /**
    * {@inheritDoc}
@@ -234,5 +212,3 @@ public final class JourneyEventEntity implements Persistable<UUID> {
     return "JourneyEvent{id=" + this.id + "}";
   }
 }
-
-

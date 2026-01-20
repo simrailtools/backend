@@ -26,30 +26,23 @@ package tools.simrail.backend.common.journey;
 
 import jakarta.annotation.Nonnull;
 import jakarta.annotation.Nullable;
-import jakarta.persistence.AttributeOverride;
-import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.OrderBy;
-import jakarta.persistence.Table;
 import jakarta.persistence.Transient;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.Instant;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.springframework.data.domain.Persistable;
-import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
  * Represents information about the complete journey of a train.
@@ -58,13 +51,6 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Setter
 @NoArgsConstructor
 @Entity(name = "sit_journey")
-@Table(indexes = {
-  @Index(columnList = "serverId"),
-  @Index(columnList = "foreignRunId"),
-  @Index(columnList = "serverId, foreignRunId"),
-  @Index(columnList = "firstSeenTime, lastSeenTime"),
-  @Index(columnList = "serverId, firstSeenTime, lastSeenTime"),
-})
 public final class JourneyEntity implements Persistable<UUID> {
 
   /**
@@ -76,86 +62,55 @@ public final class JourneyEntity implements Persistable<UUID> {
    * The id of this journey.
    */
   @Id
+  @Column(name = "id")
   private UUID id;
-  /**
-   * The foreign identifier of the train provided by the SimRail api, this one repeats itself every day.
-   */
-  @Column
-  private String foreignId;
   /**
    * The foreign run id provided by the SimRail api.
    */
-  @Column(nullable = false, unique = true)
+  @Column(name = "foreign_run_id")
   private UUID foreignRunId;
 
   /**
    * The internal id of the server on which the associated journey is happening.
    */
-  @Column(nullable = false)
+  @Column(name = "server_id")
   private UUID serverId;
 
   /**
    * The last time when this journey was last updated.
    */
   @UpdateTimestamp
-  private OffsetDateTime updateTime;
+  @Column(name = "update_time")
+  private Instant updateTime;
   /**
    * The time when the journey was first seen as active on the associated server.
    */
-  @Column
-  private OffsetDateTime firstSeenTime;
+  @Column(name = "first_seen_time")
+  private Instant firstSeenTime;
   /**
    * The time when the journey was last seen as active on the associated server.
    */
-  @Column
-  private OffsetDateTime lastSeenTime;
+  @Column(name = "last_seen_time")
+  private Instant lastSeenTime;
 
   /**
-   * Indicates if the journey is cancelled (did not spawn after a fixed period of time).
+   * Indicates if the journey is canceled (did not spawn after a fixed period of time).
    */
+  @Column(name = "cancelled")
   private boolean cancelled;
   /**
    * The id of the journey that this train transitions into at the final stop.
    */
-  @Column
+  @Column(name = "continuation_journey_id")
   private UUID continuationJourneyId;
+
   /**
    * The events that are along the route of this journey.
    */
-  @BatchSize(size = 100)
   @OrderBy("eventIndex")
+  @JoinColumn(name = "journey_id")
   @OneToMany(fetch = FetchType.LAZY)
-  @JoinColumn(name = "journeyId", insertable = false, updatable = false)
-  private List<JourneyEventEntity> events;
-
-  /**
-   * The current speed of the train, null if the train is currently not active.
-   */
-  @Column
-  private Integer speed;
-  /**
-   * The current position of the train, null if the train is currently not active.
-   */
-  @Column
-  @Embedded
-  private GeoPositionEntity position;
-  /**
-   * The signal that is in front of this journey, null if the train is not active or the signal is too far away.
-   */
-  @Column
-  @Embedded
-  @AttributeOverrides({
-    @AttributeOverride(name = "name", column = @Column(name = "next_signal_name")),
-    @AttributeOverride(name = "distance", column = @Column(name = "next_signal_distance")),
-    @AttributeOverride(name = "maxAllowedSpeed", column = @Column(name = "next_signal_max_speed")),
-  })
-  private JourneySignalInfo nextSignal;
-  /**
-   * The steam id of the player that currently controls the train, null if the train is currently not active or not
-   * driven by a player.
-   */
-  @Column(length = 20)
-  private String driverSteamId;
+  private Set<JourneyEventEntity> events;
 
   /**
    * Indicates if this entity is now or already persisted in the database.

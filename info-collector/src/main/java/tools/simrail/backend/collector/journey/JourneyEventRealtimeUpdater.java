@@ -24,214 +24,287 @@
 
 package tools.simrail.backend.collector.journey;
 
-import jakarta.annotation.Nonnull;
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import io.micrometer.core.instrument.Timer;
+import jakarta.annotation.PostConstruct;
 import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Collection;
-import java.util.HashMap;
+import java.util.Comparator;
 import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.Objects;
 import java.util.UUID;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import org.springframework.beans.factory.annotation.Autowired;
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingQueue;
+import org.jspecify.annotations.NonNull;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
+import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.journey.JourneyEventType;
 import tools.simrail.backend.common.journey.JourneyPassengerStopInfo;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
 import tools.simrail.backend.common.journey.JourneyStopType;
 import tools.simrail.backend.common.journey.JourneyTimeType;
 import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.point.SimRailPoint;
-import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.common.signal.PlatformSignalProvider;
 import tools.simrail.backend.common.util.UuidV5Factory;
 
+@Component
 final class JourneyEventRealtimeUpdater {
 
-  // services provided externally
-  private final SimRailPointProvider pointProvider;
-  private final UuidV5Factory journeyEventIdFactory;
+  private static final Comparator<JourneyEventEntity> EVENT_COMPARATOR =
+    Comparator.comparingInt(JourneyEventEntity::getEventIndex);
+  private static final Logger LOGGER = LoggerFactory.getLogger(JourneyEventRealtimeUpdater.class);
+
   private final PlatformSignalProvider signalProvider;
+  private final TransactionTemplate transactionTemplate;
+  private final JourneyEventRepository journeyEventRepository;
 
-  // state provided externally
-  private final JourneyEntity journey;
-  private final SimRailServerDescriptor server;
-  private final List<JourneyEventEntity> journeyEvents;
+  private final UuidV5Factory journeyEventIdFactory;
+  private final BlockingQueue<JourneyEventUpdateRequest> pendingUpdates;
 
-  // state maintained internally
-  private final Map<UUID, JourneyEventEntity> updatedJourneyEvents;
+  private final Timer eventUpdateTimer;
 
-  private JourneyEventRealtimeUpdater(
-    @Nonnull JourneyEntity journey,
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<JourneyEventEntity> journeyEvents,
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull UuidV5Factory journeyEventIdFactory,
-    @Nonnull PlatformSignalProvider signalProvider
+  JourneyEventRealtimeUpdater(
+    @NonNull PlatformSignalProvider signalProvider,
+    @NonNull TransactionTemplate transactionTemplate,
+    @NonNull JourneyEventRepository journeyEventRepository,
+    @NonNull MeterRegistry meterRegistry
   ) {
-    this.journey = journey;
-    this.server = server;
-    this.journeyEvents = journeyEvents;
-
-    this.pointProvider = pointProvider;
     this.signalProvider = signalProvider;
-    this.journeyEventIdFactory = journeyEventIdFactory;
+    this.transactionTemplate = transactionTemplate;
+    this.journeyEventRepository = journeyEventRepository;
 
-    this.updatedJourneyEvents = new HashMap<>();
+    this.pendingUpdates = new LinkedBlockingQueue<>();
+    this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
+
+    // init metrics
+    this.eventUpdateTimer = Timer.builder("journey_event_update_time_seconds")
+      .description("Elapsed seconds while processing event updates for a single journey")
+      .register(meterRegistry);
+    Gauge.builder("journey_event_update_queue_size", this.pendingUpdates::size)
+      .description("The updates that are pending processing by the event realtime updater")
+      .register(meterRegistry);
   }
 
-  /**
-   * Update the times of all events due to a position change of the journey.
-   */
-  public void updateEventsDueToPositionChange() {
-    Optional.ofNullable(this.journey.getPosition())
-      .flatMap(pos -> this.pointProvider.findPointWherePosInBounds(pos.getLongitude(), pos.getLatitude()))
-      .ifPresentOrElse(this::updateEventTimesDueToArrivalAtPoint, this::updateEventTimesDueToDepartureFromPoint);
-  }
-
-  private void updateEventTimesDueToArrivalAtPoint(@Nonnull SimRailPoint currentPoint) {
-    // journey is currently at a point along the route, find the point
-    var eventsOfPoint = this.journeyEvents.stream()
-      .filter(event -> event.getStopDescriptor().getId().equals(currentPoint.getId()))
-      .collect(Collectors.toMap(JourneyEventEntity::getEventType, Function.identity()));
-    if (eventsOfPoint.isEmpty()) {
-      // if the current point has no prefix it is a stopping point - these can
-      // be passed without being scheduled so we don't want to record these
-      var prefix = currentPoint.getPrefix();
-      if (prefix == null) {
-        return;
-      }
-
-      // find the last confirmed event along the route and validate that it was a departure
-      // to not insert an arrival event after another arrival event
-      var lastConfirmedEvent = this.journeyEvents.reversed()
-        .stream()
-        .filter(event -> event.getRealtimeTimeType() == JourneyTimeType.REAL)
-        .findFirst()
-        .orElse(null);
-      if (lastConfirmedEvent == null || lastConfirmedEvent.getEventType() != JourneyEventType.DEPARTURE) {
-        return;
-      }
-
-      // create a JIT additional event for the point and mark them as updated
-      var additionalEventPair = this.createJitAdditionalEvent(currentPoint, lastConfirmedEvent);
-      this.markEventAsUpdated(additionalEventPair.getFirst());
-      this.markEventAsUpdated(additionalEventPair.getSecond());
-      return;
-    }
-
-    // get the arrival event of the point, if no arrival event is scheduled we can skip the process
-    var arrivalEvent = eventsOfPoint.get(JourneyEventType.ARRIVAL);
-    if (arrivalEvent == null) {
-      return;
-    }
-
-    // update the passenger stop info if the journey has a passenger stop at the point and the next signal is known
-    var nextSignal = this.journey.getNextSignal();
-    if (arrivalEvent.getStopType() == JourneyStopType.PASSENGER
-      && arrivalEvent.getRealtimePassengerStopInfo() == null
-      && nextSignal != null) {
-      this.signalProvider.findSignalInfo(currentPoint.getId(), nextSignal.getName()).ifPresent(platformInfo -> {
-        // found the associated platform, update the passenger stop info
-        var realtimeStopInfo = new JourneyPassengerStopInfo(platformInfo.getTrack(), platformInfo.getPlatform());
-        arrivalEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
-        this.markEventAsUpdated(arrivalEvent);
-
-        // set the info in the departure event as well, if one exists
-        var departureEvent = eventsOfPoint.get(JourneyEventType.DEPARTURE);
-        if (departureEvent != null) {
-          departureEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
-          this.markEventAsUpdated(departureEvent);
+  @PostConstruct
+  public void startEventUpdates() {
+    Thread.ofPlatform()
+      .daemon()
+      .stackSize(32)
+      .name("Journey-Event-RT-Updater")
+      .start(() -> {
+        var currentThread = Thread.currentThread();
+        while (!currentThread.isInterrupted()) {
+          try {
+            var nextRequest = this.pendingUpdates.take();
+            var sample = Timer.start();
+            try {
+              LOGGER.debug("Processing journey event update request: {}", nextRequest);
+              this.transactionTemplate.executeWithoutResult(_ -> this.processUpdateRequest(nextRequest));
+            } finally {
+              sample.stop(this.eventUpdateTimer);
+            }
+          } catch (InterruptedException exception) {
+            // interrupt signal received, exit
+            Thread.currentThread().interrupt();
+            break;
+          } catch (Exception exception) {
+            LOGGER.error("Caught exception while processing event realtime updates", exception);
+          }
         }
       });
-    }
+  }
 
-    // check if the time of the event has already been updated, this must be done after the
-    // passenger stop info update as the signal might change after the first arrival,
-    // but the time should not
-    if (arrivalEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
+  public void requestEventUpdate(@NonNull JourneyEventUpdateRequest request) {
+    this.pendingUpdates.add(request);
+  }
+
+  // this method runs in a transaction
+  private void processUpdateRequest(@NonNull JourneyEventUpdateRequest request) {
+    var events = this.journeyEventRepository.findAllByJourneyId(request.journeyId());
+    events.sort(EVENT_COMPARATOR);
+    if (events.isEmpty()) {
       return;
     }
 
-    // update the realtime time info of the event and
-    // predict the times of the subsequent journey events based on this arrival
-    var eventIndex = this.journeyEvents.indexOf(arrivalEvent);
-    this.updateEventTimeAndMarkPreviousEventsAsCancelled(arrivalEvent, eventIndex);
-    this.updateSubsequentJourneyEventTimes(arrivalEvent, eventIndex);
+    var eventUpdated = false;
+    if (request.wasRemoved()) {
+      // journey was removed from the map
+      eventUpdated |= this.updateEventsDueToRemoval(events);
+    } else {
+      // the journey departed from a point or arrived at a point or both
+      // first, process the departure, then process the arrival at the next point
+      // to keep the event time updating in order
+      if (request.departedFromPoint()) {
+        eventUpdated |= this.updateEventsDueToDeparture(request, events);
+      }
+      if (request.arrivedAtPoint()) {
+        eventUpdated |= this.updateEventsDueToArrival(request, events);
+      }
+    }
+
+    // re-persist the journey events if some were updated
+    if (eventUpdated) {
+      this.journeyEventRepository.saveAll(events);
+    }
   }
 
-  private void updateEventTimesDueToDepartureFromPoint() {
-    // the last event of a journey is always an arrival event. as we only want to look at pairs of events
-    // (arrival and departure), we need to skip the last event (only an arrival event) and the first event
-    // (only a departure event). also the loop only looks at the departure event indexes, therefore we skip
-    // every second index as it would be an arrival event
-    JourneyEventEntity departureEvent = null;
-    var lastDepartureIndex = this.journeyEvents.size() - 2;
-    for (var index = lastDepartureIndex; index >= 2; index -= 2) {
-      var currentEvent = this.journeyEvents.get(index);
-      var arrivalEvent = this.journeyEvents.get(index - 1);
-      if (arrivalEvent.getRealtimeTimeType() == JourneyTimeType.REAL
-        && currentEvent.getRealtimeTimeType() != JourneyTimeType.REAL) {
-        departureEvent = currentEvent;
+  private boolean updateEventsDueToRemoval(@NonNull List<JourneyEventEntity> events) {
+    // find the last event that was confirmed
+    var lastConfirmedEventIdx = -1;
+    var eventCount = events.size();
+    for (var index = eventCount - 1; index >= 0; index--) {
+      var event = events.get(index);
+      if (event.getRealtimeTimeType() == JourneyTimeType.REAL) {
+        lastConfirmedEventIdx = index;
         break;
       }
     }
 
-    if (departureEvent == null) {
-      // assume that the journey is at the first playable point along the route if no previous
-      // arrival event was recorded for the journey. however, this check is only relevant if the
-      // first playable event is also the first event along the route, as we can record an arrival
-      // at the first point using the journey position anyway
-      departureEvent = this.journeyEvents.getFirst();
-      if (departureEvent.getEventType() != JourneyEventType.DEPARTURE
-        || !departureEvent.getStopDescriptor().isPlayable()
-        || departureEvent.getRealtimeTimeType() == JourneyTimeType.REAL) {
-        return;
-      }
+    // no events that weren't confirmed before, nothing to do
+    if (lastConfirmedEventIdx == -1 || lastConfirmedEventIdx == (eventCount - 1)) {
+      return false;
+    }
+
+    // mark all events after the last confirmed one canceled
+    for (var index = lastConfirmedEventIdx; index < eventCount; index++) {
+      var event = events.get(index);
+      event.setCancelled(true);
+    }
+    return true;
+  }
+
+  private boolean updateEventsDueToArrival(
+    @NonNull JourneyEventUpdateRequest request,
+    @NonNull List<JourneyEventEntity> events
+  ) {
+    var currentPoint = request.currentPoint();
+    Objects.requireNonNull(currentPoint, "BUG! updateEventsDueToArrival() called, but not an arrival at point");
+
+    // find the scheduled arrival event for the point or create an additional JIT event if required
+    var arrivalEventOfPoint = events.stream()
+      .filter(event -> event.getEventType() == JourneyEventType.ARRIVAL)
+      .filter(event -> event.getPointId().equals(currentPoint.getId()))
+      .findFirst()
+      .orElseGet(() -> {
+        // journey was not scheduled to stop at the point, we possibly want to add a JIT
+        // event for the journey and the point. however, we don't do this for stopping
+        // points, as journeys can pass them on the scheduled route without them actually
+        // appearing in the timetable - we don't want to do it either
+        var pointPrefix = currentPoint.getPrefix();
+        if (pointPrefix == null) {
+          return null;
+        }
+
+        // find the last confirmed event of the journey, ensure that it is a departure event
+        var lastConfirmedEvent = events.reversed().stream()
+          .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
+          .findFirst()
+          .orElse(null);
+        if (lastConfirmedEvent == null || lastConfirmedEvent.getEventType() != JourneyEventType.DEPARTURE) {
+          return null;
+        }
+
+        var jitEventPair = this.createJitAdditionalEvent(currentPoint, lastConfirmedEvent, events, request.server());
+        events.add(jitEventPair.getFirst()); // arrival event
+        events.add(jitEventPair.getSecond()); // departure event
+        events.sort(EVENT_COMPARATOR); // ensure stable ordering of list
+        return jitEventPair.getFirst();
+      });
+    if (arrivalEventOfPoint == null || arrivalEventOfPoint.getRealtimeTimeType() == JourneyTimeType.REAL) {
+      return false;
+    }
+
+    // compute the index where the journey is located in the list once
+    var eventIndex = events.indexOf(arrivalEventOfPoint);
+    var hasMoreEvents = events.size() > (eventIndex + 1);
+
+    // update the information where the journey actually stopped
+    var nextSignal = request.nextSignal();
+    if (arrivalEventOfPoint.getStopType() == JourneyStopType.PASSENGER && nextSignal != null) {
+      this.signalProvider.findSignalInfo(currentPoint.getId(), nextSignal.getName()).ifPresent(signal -> {
+        var realtimeStopInfo = new JourneyPassengerStopInfo(signal.getTrack(), signal.getPlatform());
+        arrivalEventOfPoint.setRealtimePassengerStopInfo(realtimeStopInfo);
+
+        // check if an associated departure event exists for the journey, update the signal info of it too
+        if (hasMoreEvents) {
+          var departureEvent = events.get(eventIndex + 1);
+          departureEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+        }
+      });
     }
 
     // update the realtime time info of the event and
     // predict the times of the subsequent journey events based on this arrival
-    var eventIndex = this.journeyEvents.indexOf(departureEvent);
-    this.updateEventTimeAndMarkPreviousEventsAsCancelled(departureEvent, eventIndex);
-    this.updateSubsequentJourneyEventTimes(departureEvent, eventIndex);
+    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.server(), events);
+    this.updateSubsequentJourneyEventTimes(eventIndex, events);
+    return true;
   }
 
-  private void updateEventTimeAndMarkPreviousEventsAsCancelled(@Nonnull JourneyEventEntity event, int eventIndex) {
+  private boolean updateEventsDueToDeparture(
+    @NonNull JourneyEventUpdateRequest request,
+    @NonNull List<JourneyEventEntity> events
+  ) {
+    var prevPointId = request.prevPointId();
+    Objects.requireNonNull(prevPointId, "BUG! updateEventTimesDueToDepartureFromPoint() called without prev point");
+
+    // find the scheduled departure event for the point
+    var departureEventOfPoint = events.stream()
+      .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
+      .filter(event -> event.getPointId().equals(prevPointId))
+      .findFirst()
+      .orElse(null);
+    if (departureEventOfPoint == null) {
+      return false;
+    }
+
+    // update the realtime time information of the event and
+    // predict the times of the subsequent journey events based on this departure
+    var eventIndex = events.indexOf(departureEventOfPoint);
+    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.server(), events);
+    this.updateSubsequentJourneyEventTimes(eventIndex, events);
+    return true;
+  }
+
+  private void updateEventTimeAndMarkPreviousEventsAsCancelled(
+    int eventIndex,
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<JourneyEventEntity> events
+  ) {
     // update the realtime time information of the event,
-    // remove the marking as cancelled as it actually happened
+    // remove the marking as canceled as it actually happened
+    var event = events.get(eventIndex);
     event.setCancelled(false);
     event.setRealtimeTimeType(JourneyTimeType.REAL);
-    event.setRealtimeTime(this.server.currentTime());
-    this.markEventAsUpdated(event);
+    event.setRealtimeTime(server.currentTime());
 
-    // mark all previous unconfirmed events as cancelled as they can no longer happen
+    // mark all previous unconfirmed events as canceled as they can no longer happen
     for (var index = (eventIndex - 1); index >= 0; index--) {
-      var previousEvent = this.journeyEvents.get(index);
+      var previousEvent = events.get(index);
       if (previousEvent.getRealtimeTimeType() != JourneyTimeType.REAL) {
         previousEvent.setCancelled(true);
-        this.markEventAsUpdated(previousEvent);
       }
     }
   }
 
-  private void updateSubsequentJourneyEventTimes(@Nonnull JourneyEventEntity event, int eventIndex) {
+  private void updateSubsequentJourneyEventTimes(int eventIndex, @NonNull List<JourneyEventEntity> events) {
     var nextEventIndex = eventIndex + 1;
-    var maxEventIndex = this.journeyEvents.size() - 1;
+    var maxEventIndex = events.size() - 1;
     if (nextEventIndex <= maxEventIndex) {
       // update all events after the current one with a predicated time. note that the event
       // is never the first in the list, so we can assume that we're always pulling event tuples
       // (arrival, departure) from the collection, aside from the last event which is only an arrival
-      var lastEvent = event;
+      var lastEvent = events.get(eventIndex);
       for (var index = nextEventIndex; index <= maxEventIndex; index++) {
-        var currentEvent = this.journeyEvents.get(index);
+        var currentEvent = events.get(index);
         var predictedTime = switch (currentEvent.getEventType()) {
           // at arrival events we can just add the scheduled driving time from the last departure
           // event to the current event to the realtime departure time of the last event
@@ -293,7 +366,7 @@ final class JourneyEventRealtimeUpdater {
           };
         };
 
-        // ensure that the event is not marked as cancelled as
+        // ensure that the event is not marked as canceled as
         // this method predicts the time when an event might happen
         // and is called due to an event happening. therefore the
         // subsequent event will (maybe) happen as well
@@ -304,7 +377,6 @@ final class JourneyEventRealtimeUpdater {
         var normalizedPredictedTime = this.roundAndTruncatePredictedTime(predictedTime);
         currentEvent.setRealtimeTime(normalizedPredictedTime);
         currentEvent.setRealtimeTimeType(JourneyTimeType.PREDICTION);
-        this.markEventAsUpdated(currentEvent);
         lastEvent = currentEvent;
 
         // if the scheduled time is now equal to the realtime time again we can
@@ -317,7 +389,7 @@ final class JourneyEventRealtimeUpdater {
     }
   }
 
-  private @Nonnull OffsetDateTime roundAndTruncatePredictedTime(@Nonnull OffsetDateTime time) {
+  private @NonNull LocalDateTime roundAndTruncatePredictedTime(@NonNull LocalDateTime time) {
     var truncated = time.truncatedTo(ChronoUnit.SECONDS);
     if (truncated.getSecond() >= 30) {
       // round the predicted time up as we're after the half minute mark
@@ -330,25 +402,23 @@ final class JourneyEventRealtimeUpdater {
     }
   }
 
-  private @Nonnull Pair<JourneyEventEntity, JourneyEventEntity> createJitAdditionalEvent(
-    @Nonnull SimRailPoint currentPoint,
-    @Nonnull JourneyEventEntity previousEvent
+  private @NonNull Pair<JourneyEventEntity, JourneyEventEntity> createJitAdditionalEvent(
+    @NonNull SimRailPoint currPoint,
+    @NonNull JourneyEventEntity prevEvent,
+    @NonNull List<JourneyEventEntity> events,
+    @NonNull SimRailServerDescriptor server
   ) {
-    // build information about the current stop, assume that this new stop is playable
-    // if the previous stop was playable as well
-    var previousStop = previousEvent.getStopDescriptor();
-    var currentStop = new JourneyStopDescriptor(
-      currentPoint.getId(),
-      currentPoint.getName(),
-      previousStop.isPlayable());
+    // generate a scheduled time info based on the current server time
+    var currentServerTime = server.currentTime();
+    var eventScheduledTime = this.roundAndTruncatePredictedTime(currentServerTime);
 
     // build the transport info
-    var maxSpeedAtCurrentPoint = this.journeyEvents.stream()
+    var maxSpeedAtCurrentPoint = events.stream()
       .map(event -> event.getTransport().getMaxSpeed())
       .max(Integer::compare)
-      .map(maxJourneySpeed -> Math.min(maxJourneySpeed, currentPoint.getMaxSpeed()))
-      .orElse(currentPoint.getMaxSpeed());
-    var previousTransport = previousEvent.getTransport();
+      .map(maxJourneySpeed -> Math.min(maxJourneySpeed, currPoint.getMaxSpeed()))
+      .orElse(currPoint.getMaxSpeed());
+    var previousTransport = prevEvent.getTransport();
     var currentTransport = new JourneyTransport(
       previousTransport.getCategory(),
       previousTransport.getNumber(),
@@ -359,114 +429,52 @@ final class JourneyEventRealtimeUpdater {
 
     // create the jit arrival and departure event
     var jitArrivalEvent = this.createJitAdditionalEvent(
-      previousEvent.getEventIndex() + 1,
-      previousEvent.getJourneyId(),
-      previousEvent.getId(),
+      prevEvent.getEventIndex() + 1,
+      currPoint.getId(),
+      prevEvent.getJourney(),
       JourneyEventType.ARRIVAL,
-      currentStop,
-      currentTransport);
+      currentTransport,
+      eventScheduledTime,
+      prevEvent);
     var jitDepartureEvent = this.createJitAdditionalEvent(
-      previousEvent.getEventIndex() + 2,
-      previousEvent.getJourneyId(),
-      previousEvent.getId(),
+      prevEvent.getEventIndex() + 2,
+      currPoint.getId(),
+      prevEvent.getJourney(),
       JourneyEventType.DEPARTURE,
-      currentStop,
-      currentTransport);
+      currentTransport,
+      eventScheduledTime,
+      prevEvent);
     return Pair.of(jitArrivalEvent, jitDepartureEvent);
   }
 
-  private @Nonnull JourneyEventEntity createJitAdditionalEvent(
+  private @NonNull JourneyEventEntity createJitAdditionalEvent(
     int index,
-    @Nonnull UUID journeyId,
-    @Nonnull UUID previousEventId,
-    @Nonnull JourneyEventType type,
-    @Nonnull JourneyStopDescriptor stop,
-    @Nonnull JourneyTransport transport
+    @NonNull UUID pointId,
+    @NonNull JourneyEntity journey,
+    @NonNull JourneyEventType type,
+    @NonNull JourneyTransport transport,
+    @NonNull LocalDateTime scheduledTime,
+    @NonNull JourneyEventEntity prevEvent
   ) {
-    var eventId = this.journeyEventIdFactory.create(journeyId.toString() + stop.getId() + previousEventId + type);
+    @SuppressWarnings("DataFlowIssue") // journey id is not null here
+    var jid = journey.getId().toString();
+    var eventId = this.journeyEventIdFactory.create("JIT_" + jid + pointId + prevEvent.getId() + type);
+
     var journeyEvent = new JourneyEventEntity();
     journeyEvent.setNew(true);
     journeyEvent.setId(eventId);
-    journeyEvent.setEventType(type);
-    journeyEvent.setAdditional(true);
+    journeyEvent.setJourney(journey);
     journeyEvent.setEventIndex(index);
-    journeyEvent.setJourneyId(journeyId);
+    journeyEvent.setEventType(type);
+    journeyEvent.setPointId(pointId);
     journeyEvent.setTransport(transport);
-    journeyEvent.setStopDescriptor(stop);
+    journeyEvent.setAdditional(true);
     journeyEvent.setStopType(JourneyStopType.NONE);
-
-    // get the time information for the event, as this method is used to build events
-    // when a journey arrived at an unknown point, the arrival events can directly
-    // use the REAL time type, while departure events will update when the journey left
-    var realtimeTime = this.server.currentTime();
-    var normalizedScheduledTime = this.roundAndTruncatePredictedTime(realtimeTime);
-    journeyEvent.setScheduledTime(normalizedScheduledTime);
-    switch (type) {
-      case ARRIVAL -> {
-        journeyEvent.setRealtimeTime(realtimeTime);
-        journeyEvent.setRealtimeTimeType(JourneyTimeType.REAL);
-      }
-      case DEPARTURE -> {
-        journeyEvent.setRealtimeTime(normalizedScheduledTime);
-        journeyEvent.setRealtimeTimeType(JourneyTimeType.PREDICTION);
-      }
-    }
+    journeyEvent.setScheduledTime(scheduledTime);
+    journeyEvent.setRealtimeTime(scheduledTime);
+    journeyEvent.setRealtimeTimeType(JourneyTimeType.PREDICTION);
+    journeyEvent.setInPlayableBorder(prevEvent.isInPlayableBorder());
 
     return journeyEvent;
-  }
-
-  /**
-   * Updates all events after the last confirmed event and marks them as cancelled if the journey was removed (e.g.
-   * because it reached the end of the playable map, derailed, ...).
-   */
-  public void updateEventsDueToRemoval() {
-    for (var index = this.journeyEvents.size() - 1; index >= 0; index--) {
-      // get the current event, break in case it was confirmed and happened or if it was already cancelled
-      var currentEvent = this.journeyEvents.get(index);
-      if (currentEvent.getRealtimeTimeType() == JourneyTimeType.REAL || currentEvent.isCancelled()) {
-        break;
-      }
-
-      // cancel the event as it cannot happen anymore
-      currentEvent.setCancelled(true);
-      this.markEventAsUpdated(currentEvent);
-    }
-  }
-
-  private void markEventAsUpdated(@Nonnull JourneyEventEntity event) {
-    this.updatedJourneyEvents.putIfAbsent(event.getId(), event);
-  }
-
-  public @Nonnull Collection<JourneyEventEntity> getUpdatedJourneyEvents() {
-    return this.updatedJourneyEvents.values();
-  }
-
-  @Component
-  static final class Factory {
-
-    private final SimRailPointProvider pointProvider;
-    private final UuidV5Factory journeyEventIdFactory;
-    private final PlatformSignalProvider signalProvider;
-
-    @Autowired
-    public Factory(@Nonnull SimRailPointProvider pointProvider, @Nonnull PlatformSignalProvider signalProvider) {
-      this.pointProvider = pointProvider;
-      this.signalProvider = signalProvider;
-      this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
-    }
-
-    public @Nonnull JourneyEventRealtimeUpdater create(
-      @Nonnull JourneyEntity journey,
-      @Nonnull SimRailServerDescriptor server,
-      @Nonnull List<JourneyEventEntity> journeyEvents
-    ) {
-      return new JourneyEventRealtimeUpdater(
-        journey,
-        server,
-        journeyEvents,
-        this.pointProvider,
-        this.journeyEventIdFactory,
-        this.signalProvider);
-    }
   }
 }
