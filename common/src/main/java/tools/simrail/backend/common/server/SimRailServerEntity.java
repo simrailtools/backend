@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.server;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -41,6 +39,8 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The entity that holds all information about a single server registered in the SimRail api.
@@ -146,7 +146,7 @@ public final class SimRailServerEntity {
    * {@inheritDoc}
    */
   @Override
-  public @Nonnull String toString() {
+  public @NonNull String toString() {
     return "ServerEntity{id=" + this.id + ", code=" + this.code + "}";
   }
 }

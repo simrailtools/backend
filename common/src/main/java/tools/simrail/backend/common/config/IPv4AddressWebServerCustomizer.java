@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.common.config;
 
-import jakarta.annotation.Nonnull;
 import java.net.Inet4Address;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
 import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 import org.springframework.core.annotation.Order;
@@ -42,7 +42,7 @@ public class IPv4AddressWebServerCustomizer implements WebServerFactoryCustomize
    * {@inheritDoc}
    */
   @Override
-  public void customize(@Nonnull ConfigurableServletWebServerFactory factory) {
+  public void customize(@NonNull ConfigurableServletWebServerFactory factory) {
     var address = Inet4Address.ofLiteral("0.0.0.0");
     factory.setAddress(address);
   }

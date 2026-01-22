@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.common.dispatchpost;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.repository.ListCrudRepository;
 
 /**
@@ -41,8 +41,8 @@ public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRai
    * @param pointId the point id of the dispatch post to get.
    * @return an optional holding the dispatch post entity if an entity with the given point id exists.
    */
-  @Nonnull
-  Optional<SimRailDispatchPostEntity> findByPointId(@Nonnull UUID pointId);
+  @NonNull
+  Optional<SimRailDispatchPostEntity> findByPointId(@NonNull UUID pointId);
 
   /**
    * Finds a single dispatch post by the given foreign id.
@@ -51,8 +51,8 @@ public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRai
    * @param serverId the server id of the server to get the dispatch post on.
    * @return an optional holding the dispatch post entity if an entity with the given foreign id exists.
    */
-  @Nonnull
-  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerId(@Nonnull String id, @Nonnull UUID serverId);
+  @NonNull
+  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerId(@NonNull String id, @NonNull UUID serverId);
 
   /**
    * Finds all dispatch post entities for the given server code.
@@ -60,6 +60,6 @@ public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRai
    * @param serverId the id of the server to get the dispatch posts of.
    * @return all dispatch posts that are registered for the given server code.
    */
-  @Nonnull
-  List<SimRailDispatchPostEntity> findAllByServerId(@Nonnull UUID serverId);
+  @NonNull
+  List<SimRailDispatchPostEntity> findAllByServerId(@NonNull UUID serverId);
 }

@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -42,6 +40,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.data.domain.Persistable;
 
 /**
@@ -144,7 +144,7 @@ public final class JourneyEntity implements Persistable<UUID> {
    * {@inheritDoc}
    */
   @Override
-  public @Nonnull String toString() {
+  public @NonNull String toString() {
     return "Journey{id=" + this.id + "}";
   }
 }

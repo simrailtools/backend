@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -43,8 +43,8 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
    * @param journeyId the id of the journey to get the events of.
    * @return all events of the given journey.
    */
-  @Nonnull
-  List<JourneyEventEntity> findAllByJourneyId(@Nonnull UUID journeyId);
+  @NonNull
+  List<JourneyEventEntity> findAllByJourneyId(@NonNull UUID journeyId);
 
   /**
    * Retrieves all journey events that are associated with a journey on the given server and with one of the run ids.
@@ -53,7 +53,7 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
    * @param runIds   the ids of the runs to get the associated journey events of.
    * @return the journey events associated with a journey on the given server and with one of the run ids.
    */
-  @Nonnull
+  @NonNull
   @Query("SELECT e FROM sit_journey_event e WHERE e.journeyId IN ("
     + "  SELECT j.id FROM sit_journey j"
     + "  WHERE j.serverId = :serverId"
@@ -61,6 +61,6 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
     + "  AND j.firstSeenTime IS NULL"
     + ")")
   List<JourneyEventEntity> findAllInactiveByServerIdAndRunId(
-    @Nonnull @Param("serverId") UUID serverId,
-    @Nonnull @Param("runIds") Collection<UUID> runIds);
+    @NonNull @Param("serverId") UUID serverId,
+    @NonNull @Param("runIds") Collection<UUID> runIds);
 }

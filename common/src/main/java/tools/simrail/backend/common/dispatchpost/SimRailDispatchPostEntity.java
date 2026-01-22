@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.dispatchpost;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -43,6 +41,8 @@ import lombok.Setter;
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
@@ -156,7 +156,7 @@ public final class SimRailDispatchPostEntity {
    * {@inheritDoc}
    */
   @Override
-  public @Nonnull String toString() {
+  public @NonNull String toString() {
     return "DispatchPostEntity{id=" + this.id + ", name=" + this.name + "}";
   }
 }

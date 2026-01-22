@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.common.point;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.locationtech.jts.geom.Envelope;
 import org.locationtech.jts.geom.Point;
 import org.locationtech.jts.geom.Polygon;
@@ -45,7 +45,7 @@ final class OptimizedBoundingBox {
    *
    * @param boundingBox the polygon to base this bounding box on.
    */
-  public OptimizedBoundingBox(@Nonnull Polygon boundingBox) {
+  public OptimizedBoundingBox(@NonNull Polygon boundingBox) {
     this.boundingBox = boundingBox;
     this.rectangle = boundingBox.isRectangle();
     this.boxEnvelope = boundingBox.getEnvelopeInternal();
@@ -57,7 +57,7 @@ final class OptimizedBoundingBox {
    * @param other the point to check.
    * @return true if this bounding box contains the given point, false otherwise.
    */
-  public boolean contains(@Nonnull Point other) {
+  public boolean contains(@NonNull Point other) {
     // optimization for rectangle
     if (this.rectangle) {
       return RectangleContains.contains(this.boundingBox, other);

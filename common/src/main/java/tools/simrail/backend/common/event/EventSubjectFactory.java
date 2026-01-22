@@ -66,10 +66,22 @@ public final class EventSubjectFactory {
     return ALL_FRAMES_PREFIX + DELIM + "journey-removals" + DELIM + "v1" + DELIM + serverId + DELIM + journeyId;
   }
 
+  /**
+   * Constructs a subject for publishing/listening to server updates.
+   *
+   * @param serverId the id of the server.
+   * @return a subject to publish/listen to server updates.
+   */
   public static @NonNull String createServerUpdateSubjectV1(@NonNull String serverId) {
     return ALL_FRAMES_PREFIX + DELIM + "server-updates" + DELIM + "v1" + DELIM + serverId;
   }
 
+  /**
+   * Constructs a subject for publishing/listening to server removals.
+   *
+   * @param serverId the id of the server.
+   * @return a subject to publish/listen to server removals.
+   */
   public static @NonNull String createServerRemoveSubjectV1(@NonNull String serverId) {
     return ALL_FRAMES_PREFIX + DELIM + "server-removals" + DELIM + "v1" + DELIM + serverId;
   }

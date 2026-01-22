@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A list of higher-level categories for a journey transport.
@@ -101,7 +101,7 @@ public enum JourneyTransportType {
    * @return the mapped transport type.
    * @throws IllegalArgumentException if the given train type cannot be mapped.
    */
-  public static @Nonnull JourneyTransportType fromTrainType(@Nonnull String trainType) {
+  public static @NonNull JourneyTransportType fromTrainType(@NonNull String trainType) {
     // train types must be 3 characters long
     Objects.checkIndex(2, trainType.length());
     var trainTypeIdentifier = trainType.substring(0, 2);

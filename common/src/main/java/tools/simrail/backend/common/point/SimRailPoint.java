@@ -25,14 +25,14 @@
 package tools.simrail.backend.common.point;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Set;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import tools.jackson.databind.annotation.JsonDeserialize;
 
 /**
  * A single SimRail point information.
@@ -45,19 +45,19 @@ public final class SimRailPoint {
   /**
    * The name of the point.
    */
-  @Nonnull
+  @NonNull
   @JsonProperty("name")
   private String name;
   /**
    * The internal id of the point.
    */
-  @Nonnull
+  @NonNull
   @JsonProperty("id")
   private UUID id;
   /**
    * The SimRail point ids that are associated with this point.
    */
-  @Nonnull
+  @NonNull
   @JsonProperty("ids")
   private Set<String> simRailPointIds;
 
@@ -80,6 +80,7 @@ public final class SimRailPoint {
   /**
    * The ISO 3166-1 alpha-3 country code where the point is located.
    */
+  @NonNull
   @JsonProperty("country")
   private String country;
   /**
@@ -97,12 +98,14 @@ public final class SimRailPoint {
   /**
    * The center position (or similar) of the point.
    */
+  @NonNull
   @JsonProperty("position")
   private SimRailPointPosition position;
   /**
    * The bounding box of the point. Each inner list element is a tuple of the longitude (first element) and the latitude
    * (second element) of one point of the bounding box.
    */
+  @NonNull
   @JsonProperty("bb")
   @JsonDeserialize(using = SimRailPointBBDeserializer.class)
   private OptimizedBoundingBox boundingBox;
