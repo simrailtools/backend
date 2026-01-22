@@ -36,7 +36,7 @@ import tools.simrail.backend.common.update.UpdatableFieldGroup;
 final class JourneyUpdateHolder {
 
   final UUID runId;
-  final String foreignId;
+  final UUID journeyId;
 
   // the run id as a string, optimization to not call "toString()" on runId every time
   final String runIdString;
@@ -48,9 +48,9 @@ final class JourneyUpdateHolder {
   final UpdatableField<EventBusProto.GeoPosition> position;
   final UpdatableField<EventBusProto.SignalInfo> nextSignal;
 
-  public JourneyUpdateHolder(@NonNull UUID runId, @NonNull String foreignId) {
+  public JourneyUpdateHolder(@NonNull UUID runId, @NonNull UUID journeyId) {
     this.runId = runId;
-    this.foreignId = foreignId;
+    this.journeyId = journeyId;
     this.runIdString = runId.toString();
 
     this.fieldGroup = new UpdatableFieldGroup();

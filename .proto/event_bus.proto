@@ -35,6 +35,13 @@ message User {
   UserPlatform platform = 2;
 }
 
+// Holder for ids for a data element.
+message IdHolder {
+  string data_id = 1;
+  string server_id = 2;
+  string foreign_id = 3;
+}
+
 // Data about a journey that is active on a server.
 message JourneyData {
   uint32 speed = 1;
@@ -52,18 +59,18 @@ message DispatchPostData {
 // Data about a registered sever.
 message ServerData {
   bool online = 1;
-  sint32 utc_offset_hours = 2;
-  string scenery = 3;
+  string scenery = 2;
+  sint32 utc_offset_hours = 3;
+  optional string spoken_language = 4;
+  repeated string tags = 5;
 }
 
-// Base data carried by all update frames. Carries the timestamp when the frame was generated
-// as well as the id of the object that was updated. Note: the timestamp is generated using
+// Base data carried by all update frames. Note: the timestamp is generated using
 // a monotonic clock to ensure that the timestamp of frames always increases (and are not
 // influenced by system clock changes). However, this also means that the timestamp does
 // NOT correlate to wall time and might be ahead or behind.
 message BaseFrameData {
   uint64 timestamp = 1;
-  string target_data_id = 2;
 }
 
 // An update frame for a journey. This frame is used to indicate that a journey was either
@@ -71,12 +78,14 @@ message BaseFrameData {
 // the frame was stored locally already).
 message JourneyUpdateFrame {
   BaseFrameData base_data = 1;
-  JourneyData journey_data = 2;
+  IdHolder ids = 2;
+  JourneyData journey_data = 3;
 }
 
 // A remove frame sent for a journey, indicating that the journey is no longer active.
 message JourneyRemoveFrame {
   BaseFrameData base_data = 1;
+  string journey_id = 2;
 }
 
 // An update frame for a dispatch post. This frame is used to indicate that a dispatch post
@@ -84,12 +93,14 @@ message JourneyRemoveFrame {
 // carried in the frame was stored locally already).
 message DispatchPostUpdateFrame {
   BaseFrameData base_data = 1;
-  DispatchPostData dispatch_post_data = 2;
+  IdHolder ids = 2;
+  DispatchPostData dispatch_post_data = 3;
 }
 
 // A remove frame sent for a dispatch post, indicating that the dispatch post no longer exists.
 message DispatchPostRemoveFrame {
   BaseFrameData base_data = 1;
+  string post_id = 2;
 }
 
 // An update frame for a server. This frame is used to indicate that a server was either
@@ -97,10 +108,12 @@ message DispatchPostRemoveFrame {
 // the frame was stored locally already).
 message ServerUpdateFrame {
   BaseFrameData base_data = 1;
-  ServerData server_data = 2;
+  IdHolder ids = 2;
+  ServerData server_data = 3;
 }
 
 // A remove frame sent for a server, indicating that the server no longer exists.
 message ServerRemoveFrame {
   BaseFrameData base_data = 1;
+  string server_id = 2;
 }

@@ -38,8 +38,9 @@ public final class MonotonicInstantProvider {
   }
 
   /**
+   * Get the current monotonic timestamp. It might not correlate with wall time.
    *
-   * @return
+   * @return the current monotonic timestamp.
    */
   public static long monotonicTimeMillis() {
     var nanoTime = System.nanoTime();

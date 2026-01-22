@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,32 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.cleanup;
+package tools.simrail.backend.collector.configuration;
 
-import java.util.Collection;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.common.journey.JourneyEventRepository;
+import java.time.Duration;
+import org.jspecify.annotations.NonNull;
+import org.redisson.api.RedissonClient;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.proto.CacheProto;
 
-interface CleanupJourneyEventRepository extends JourneyEventRepository {
+/**
+ * Configures everything related to data caching.
+ */
+@Configuration
+public class DataCacheConfiguration {
 
-  /**
-   * Deletes all journey events that are associated with one of the given journey ids.
-   *
-   * @param journeyIds the journey ids to delete the associated events of.
-   */
-  @Modifying
-  @Query(value = "DELETE FROM sit_journey_event j WHERE j.journey_id IN :journeyIds", nativeQuery = true)
-  void deleteAllByJourneyIdIn(@Param("journeyIds") Collection<UUID> journeyIds);
+  @Bean(name = "journey_checksum_cache")
+  public @NonNull DataCache<CacheProto.JourneyChecksumData> checksumDataDataCache(@NonNull RedissonClient redisson) {
+    var dataCache = new DataCache<>(
+      "journey_checksum_cache",
+      Duration.ofDays(5),
+      redisson,
+      CacheProto.JourneyChecksumData.parser(),
+      _ -> System.nanoTime(), // only written to by collector, version is not relevant
+      CacheProto.JourneyChecksumData::getForeignRunId);
+    dataCache.pullCacheFromStorage(); // restore state from storage
+    return dataCache;
+  }
 }

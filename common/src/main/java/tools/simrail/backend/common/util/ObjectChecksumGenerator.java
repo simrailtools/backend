@@ -72,9 +72,10 @@ public final class ObjectChecksumGenerator {
   }
 
   /**
+   * Generates a checksum for the given object.
    *
-   * @param value
-   * @return
+   * @param value the object to generate the checksum for.
+   * @return the checksum for the given object.
    */
   public static @NonNull String generateChecksum(@NonNull Object value) {
     try {

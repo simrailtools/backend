@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.common.util;
 
-import jakarta.annotation.Nonnull;
 import java.lang.invoke.MethodHandles;
 import java.lang.invoke.VarHandle;
 import java.nio.ByteOrder;
@@ -32,6 +31,7 @@ import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A utility to generate universally unique identifiers version 5. A UUIDv5 consists of a namespace uuid and an SHA-1
@@ -49,7 +49,7 @@ public final class UuidV5Factory {
    *
    * @param namespace the uuid to use for namespacing.
    */
-  public UuidV5Factory(@Nonnull UUID namespace) {
+  public UuidV5Factory(@NonNull UUID namespace) {
     this.namespace = encodeUuid(namespace);
   }
 
@@ -60,7 +60,7 @@ public final class UuidV5Factory {
    * @param uuid the uuid to encode into a byte array.
    * @return the given uuid encoded into a byte array.
    */
-  public static byte[] encodeUuid(@Nonnull UUID uuid) {
+  public static byte[] encodeUuid(@NonNull UUID uuid) {
     var result = new byte[16];
     BYTE_ARRAY_LONG_VIEW_HANDLE.set(result, 0, uuid.getMostSignificantBits());
     BYTE_ARRAY_LONG_VIEW_HANDLE.set(result, 8, uuid.getLeastSignificantBits());
@@ -74,7 +74,7 @@ public final class UuidV5Factory {
    * @param bytes the byte array to decode the uuid from.
    * @return the decoded byte array.
    */
-  public static @Nonnull UUID decodeUuid(@Nonnull byte[] bytes) {
+  public static @NonNull UUID decodeUuid(byte[] bytes) {
     var msb = (long) BYTE_ARRAY_LONG_VIEW_HANDLE.get(bytes, 0);
     var lsb = (long) BYTE_ARRAY_LONG_VIEW_HANDLE.get(bytes, 8);
     return new UUID(msb, lsb);
@@ -86,7 +86,7 @@ public final class UuidV5Factory {
    * @return a new SHA-1 message digest instance.
    * @throws IllegalStateException if the SHA-1 algorithm is unavailable.
    */
-  private static @Nonnull MessageDigest createSha1MessageDigest() {
+  private static @NonNull MessageDigest createSha1MessageDigest() {
     try {
       return MessageDigest.getInstance("SHA-1");
     } catch (NoSuchAlgorithmException exception) {
@@ -100,7 +100,7 @@ public final class UuidV5Factory {
    * @param name the name to embed into the creates uuid.
    * @return an encoded uuid v5 based on the provided namespace and given name.
    */
-  public @Nonnull UUID create(@Nonnull String name) {
+  public @NonNull UUID create(@NonNull String name) {
     var nameBytes = name.getBytes(StandardCharsets.UTF_8);
     return this.createInternal(nameBytes);
   }
@@ -111,7 +111,7 @@ public final class UuidV5Factory {
    * @param nameBytes the name bytes to embed into the uuid.
    * @return an encoded uuid v5 based on the provided namespace and given name bytes.
    */
-  private @Nonnull UUID createInternal(byte[] nameBytes) {
+  private @NonNull UUID createInternal(byte[] nameBytes) {
     // put in namespace and name
     var digest = createSha1MessageDigest();
     digest.update(this.namespace);

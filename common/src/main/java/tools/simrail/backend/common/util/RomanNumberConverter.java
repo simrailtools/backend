@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.common.util;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A utility to convert roman numbers to integers.
@@ -43,7 +43,7 @@ public final class RomanNumberConverter {
    * @param romanNumber the romain number string to convert.
    * @return the integer representation of the given roman number string.
    */
-  public static int decodeRomanNumber(@Nonnull String romanNumber) {
+  public static int decodeRomanNumber(@NonNull String romanNumber) {
     var result = 0;
     var prevValue = 0;
 

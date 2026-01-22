@@ -27,7 +27,7 @@ package tools.simrail.backend.common.config;
 import jakarta.annotation.Nonnull;
 import java.net.Inet4Address;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 

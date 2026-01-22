@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,32 +24,41 @@
 
 package tools.simrail.backend.collector.server;
 
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
+import java.util.List;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
+import tools.simrail.backend.common.server.SimRailServerScenery;
+import tools.simrail.backend.common.update.UpdatableField;
+import tools.simrail.backend.common.update.UpdatableFieldGroup;
 
 /**
- * A descriptor of a server that was retrieved on the last collection run.
- *
- * @param id                       our id of the server.
- * @param foreignId                the SimRail backend id of the server.
- * @param code                     the server code.
- * @param serverTimeUtcOffsetHours the offset hours of the server time from UTC.
+ * Holder for the updates to a single server.
  */
-public record SimRailServerDescriptor(
-  @NonNull UUID id,
-  @NonNull String foreignId,
-  @NonNull String code,
-  long serverTimeUtcOffsetHours
-) {
+final class ServerUpdateHolder {
 
-  /**
-   * Get the current date and time on this server.
-   *
-   * @return the current date and time on this server.
-   */
-  public @NonNull LocalDateTime currentTime() {
-    return LocalDateTime.now(ZoneOffset.UTC).plusHours(this.serverTimeUtcOffsetHours);
+  final UUID id;
+  final String foreignId;
+
+  // the updatable fields of a journey
+  final UpdatableFieldGroup fieldGroup;
+  final UpdatableField<Boolean> online;
+  final UpdatableField<Integer> utcOffsetHours;
+  final UpdatableField<String> spokenLanguage;
+  final UpdatableField<List<String>> tags;
+  final UpdatableField<SimRailServerScenery> scenery;
+
+  public ServerUpdateHolder(@NonNull UUID id, @NonNull String foreignId) {
+    this.id = id;
+    this.foreignId = foreignId;
+
+    this.fieldGroup = new UpdatableFieldGroup();
+    this.online = this.fieldGroup.createField();
+    this.scenery = this.fieldGroup.createField();
+    this.tags = this.fieldGroup.createField();
+    this.spokenLanguage = this.fieldGroup.createNullableField();
+
+    // it's important to initialize this field (to utc), as the api to get the offset might fail
+    this.utcOffsetHours = this.fieldGroup.createField();
+    this.utcOffsetHours.forceUpdateValue(0);
   }
 }

@@ -37,8 +37,8 @@ import java.util.stream.Gatherers;
 import java.util.stream.Stream;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import org.redisson.Redisson;
 import org.redisson.api.RBucket;
+import org.redisson.api.RedissonClient;
 import org.redisson.api.options.KeysScanOptions;
 import org.redisson.client.codec.ByteArrayCodec;
 import org.slf4j.Logger;
@@ -64,7 +64,7 @@ public final class DataCache<T extends MessageLite> {
 
   private final String name;
   private final Duration ttl;
-  private final Redisson redisson;
+  private final RedissonClient redisson;
   private final Parser<T> messageParser;
 
   // prefix used for all keys
@@ -79,7 +79,7 @@ public final class DataCache<T extends MessageLite> {
   public DataCache(
     @NonNull String name,
     @NonNull Duration ttl,
-    @NonNull Redisson redisson,
+    @NonNull RedissonClient redisson,
     @NonNull Parser<T> messageParser,
     @NonNull ToLongFunction<T> versionExtractor,
     @NonNull Function<T, String> primaryKeyExtractor
@@ -90,7 +90,7 @@ public final class DataCache<T extends MessageLite> {
   public DataCache(
     @NonNull String name,
     @NonNull Duration ttl,
-    @NonNull Redisson redisson,
+    @NonNull RedissonClient redisson,
     @NonNull Parser<T> messageParser,
     @NonNull ToLongFunction<T> versionExtractor,
     @NonNull Function<T, String> primaryKeyExtractor,

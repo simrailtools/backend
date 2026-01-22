@@ -26,6 +26,8 @@ package tools.simrail.backend.collector.journey;
 
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
+import io.nats.client.Connection;
+import jakarta.annotation.PostConstruct;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
@@ -52,9 +54,10 @@ import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.collector.util.CancelOnRejectedExecutionPolicy;
 import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.event.EventSubjectFactory;
 import tools.simrail.backend.common.point.SimRailPointProvider;
-import tools.simrail.backend.common.proto.CacheProto;
 import tools.simrail.backend.common.proto.EventBusProto;
+import tools.simrail.backend.common.util.MonotonicInstantProvider;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelTrain;
 
@@ -70,9 +73,10 @@ class SimRailServerTrainCollector {
   private final JourneyEventRealtimeUpdater eventRealtimeUpdater;
   private final SimRailServerTimetableCollector timetableCollector;
 
+  private final Connection connection;
   private final ExecutorService trainCollectExecutor;
   private final Map<UUID, ServerCollectorData> serverCollectorData;
-  private final DataCache<CacheProto.ExtendedJourneyData> journeyDataCache;
+  private final DataCache<EventBusProto.JourneyUpdateFrame> journeyDataCache;
 
   private final PerServerGauge updatedJourneysCounter;
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
@@ -85,7 +89,8 @@ class SimRailServerTrainCollector {
     @NonNull CollectorJourneyService journeyService,
     @NonNull JourneyEventRealtimeUpdater eventRealtimeUpdater,
     @NonNull SimRailServerTimetableCollector timetableCollector,
-    @NonNull @Qualifier("active_journey_data") DataCache<CacheProto.ExtendedJourneyData> journeyDataCache,
+    @NonNull Connection natsConnection,
+    @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyDataCache,
     @NonNull @Qualifier("active_journeys_updated_total") PerServerGauge updatedJourneysCounter,
     @Qualifier("active_journey_collect_duration") Meter.@NonNull MeterProvider<Timer> collectionDurationTimer
   ) {
@@ -107,7 +112,37 @@ class SimRailServerTrainCollector {
       new SynchronousQueue<>(),
       new CancelOnRejectedExecutionPolicy());
     this.serverCollectorData = new ConcurrentHashMap<>(20, 0.75f, 1);
+    this.connection = natsConnection;
     this.journeyDataCache = journeyDataCache;
+  }
+
+  @PostConstruct
+  public void reconstructUpdateHoldersFromCache() {
+    this.journeyDataCache.pullCacheFromStorage(); // re-init data cache from underlying storage
+    var cachedValues = this.journeyDataCache.cachedValuesSnapshot();
+    for (var cachedValue : cachedValues) {
+      // ensure a collector data holder is present for the server
+      var idHolder = cachedValue.getIds();
+      var sid = UUID.fromString(idHolder.getServerId());
+      var serverDataHolder = this.serverCollectorData.computeIfAbsent(sid, _ -> new ServerCollectorData());
+
+      // register an update holder for the journey
+      var jid = UUID.fromString(idHolder.getDataId());
+      var runId = UUID.fromString(idHolder.getForeignId());
+      var updateHolder = new JourneyUpdateHolder(runId, jid);
+      serverDataHolder.updateHoldersByRunId.put(runId, updateHolder);
+
+      // reconstruct the update fields state from the journey data
+      var data = cachedValue.getJourneyData();
+      updateHolder.speed.forceUpdateValue(data.getSpeed());
+      updateHolder.position.forceUpdateValue(data.getPosition());
+      if (data.hasDriver()) {
+        updateHolder.driver.forceUpdateValue(data.getDriver());
+      }
+      if (data.hasNextSignal()) {
+        updateHolder.nextSignal.forceUpdateValue(data.getNextSignal());
+      }
+    }
   }
 
   private void executeCollectionTask(@NonNull CountDownLatch taskLatch, @NonNull Timer timer, @NonNull Runnable task) {
@@ -150,44 +185,38 @@ class SimRailServerTrainCollector {
 
         // process the updated journeys
         for (var updatedTrain : updatedTrains) {
-          var cachedData = this.journeyDataCache.findBySecondaryKey(updatedTrain.runIdString);
-          var isNewlyActive = cachedData == null;
-          var cacheDataBuilder = switch (cachedData) {
-            case CacheProto.ExtendedJourneyData data -> data.toBuilder();
+          var prevUpdateFrame = this.journeyDataCache.findBySecondaryKey(updatedTrain.runIdString);
+          var isNewlyActive = prevUpdateFrame == null;
+          var updateFrameBuilder = switch (prevUpdateFrame) {
+            case EventBusProto.JourneyUpdateFrame data -> data.toBuilder();
             case null -> {
-              var journeyId = this.timetableCollector.generateJourneyId(server.id(), updatedTrain.runId);
-              yield CacheProto.ExtendedJourneyData.newBuilder()
-                .setId(journeyId.toString())
-                .setForeignRunId(updatedTrain.runIdString)
-                .setServerId(server.id().toString());
+              var ids = EventBusProto.IdHolder.newBuilder()
+                .setDataId(updatedTrain.journeyId.toString())
+                .setServerId(server.id().toString())
+                .setForeignId(updatedTrain.runIdString)
+                .build();
+              yield EventBusProto.JourneyUpdateFrame.newBuilder().setIds(ids);
             }
           };
 
           // apply the changed fields to the journey data builder
-          var hasNewPosition = updatedTrain.position.consumeDirty();
-          var journeyDataBuilder = cacheDataBuilder.getJourneyData().toBuilder();
-          if (hasNewPosition) {
-            journeyDataBuilder.setPosition(updatedTrain.position.currentValue());
-          }
-          if (updatedTrain.speed.consumeDirty()) {
-            journeyDataBuilder.setSpeed(updatedTrain.speed.currentValue());
-          }
-          if (updatedTrain.driver.consumeDirty()) {
-            var newDriver = updatedTrain.driver.currentValue();
-            if (newDriver == null) {
+          var journeyDataBuilder = updateFrameBuilder.getJourneyData().toBuilder();
+          var hasNewPosition = updatedTrain.position.ifDirty(journeyDataBuilder::setPosition);
+          updatedTrain.speed.ifDirty(journeyDataBuilder::setSpeed);
+          updatedTrain.driver.ifDirty(driver -> {
+            if (driver == null) {
               journeyDataBuilder.clearDriver();
             } else {
-              journeyDataBuilder.setDriver(newDriver);
+              journeyDataBuilder.setDriver(driver);
             }
-          }
-          if (updatedTrain.nextSignal.consumeDirty()) {
-            var nextSignal = updatedTrain.nextSignal.currentValue();
-            if (nextSignal == null) {
+          });
+          updatedTrain.nextSignal.ifDirty(signal -> {
+            if (signal == null) {
               journeyDataBuilder.clearNextSignal();
             } else {
-              journeyDataBuilder.setNextSignal(nextSignal);
+              journeyDataBuilder.setNextSignal(signal);
             }
-          }
+          });
 
           // update the events of the journey, if a new position for the train is known
           if (hasNewPosition) {
@@ -206,7 +235,7 @@ class SimRailServerTrainCollector {
               }
 
               // update the journey events accordingly
-              var jid = UUID.fromString(cacheDataBuilder.getId());
+              var jid = UUID.fromString(updateFrameBuilder.getIds().getDataId());
               var ppid = prevPointId == null ? null : UUID.fromString(prevPointId);
               var nextSignal = journeyDataBuilder.hasNextSignal() ? journeyDataBuilder.getNextSignal() : null;
               var updateRequest = new JourneyEventUpdateRequest(jid, server, ppid, currPoint, nextSignal);
@@ -216,15 +245,25 @@ class SimRailServerTrainCollector {
 
           // mark the first seen time of the journey if it was newly seen
           if (isNewlyActive) {
-            var parsedJourneyId = UUID.fromString(cacheDataBuilder.getId());
+            var parsedJourneyId = UUID.fromString(updateFrameBuilder.getIds().getDataId());
             this.journeyService.markJourneyAsFirstSeen(parsedJourneyId);
           }
 
           // insert the journey data into the cache
-          var journeyData = journeyDataBuilder.build();
-          var journeyCacheData = cacheDataBuilder.setJourneyData(journeyData).build();
-          this.journeyDataCache.setCachedValue(journeyCacheData);
-          // TODO: send update frame
+          var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+            .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+            .build();
+          var updateFrame = updateFrameBuilder
+            .setBaseData(baseFrameData)
+            .setJourneyData(journeyDataBuilder.build())
+            .build();
+          this.journeyDataCache.setCachedValue(updateFrame);
+
+          // send out journey update frame
+          var subject = EventSubjectFactory.createJourneyUpdateSubjectV1(
+            updateFrame.getIds().getServerId(),
+            updateFrame.getIds().getDataId());
+          this.connection.publish(subject, updateFrame.toByteArray());
         }
 
         // mark the journey as removed that are no longer active
@@ -232,17 +271,39 @@ class SimRailServerTrainCollector {
         if (!activeRunIds.isEmpty()) {
           var runIdStrings = activeRunIds.stream().map(UUID::toString).collect(Collectors.toSet());
           var removedJourneysOnServer = this.journeyDataCache.findBySecondaryKeyNotIn(runIdStrings)
-            .filter(data -> data.getServerId().equals(server.id().toString()))
-            .map(data -> UUID.fromString(data.getId()))
+            .filter(data -> data.getIds().getServerId().equals(server.id().toString()))
+            .map(data -> UUID.fromString(data.getIds().getDataId()))
             .collect(Collectors.toSet());
           this.journeyService.markJourneyAsLastSeen(removedJourneysOnServer);
           updatedJourneyCount += removedJourneysOnServer.size();
-          // TODO: send remove frame
+
+          // clear the removed journey journeys from the collector data cache
+          for (var entry : collectorData.foreignIdToRunId.entrySet()) {
+            var foreignId = entry.getKey();
+            var runId = entry.getValue();
+            if (!activeRunIds.contains(runId)) {
+              collectorData.foreignIdToRunId.remove(foreignId, runId);
+              collectorData.updateHoldersByRunId.remove(runId);
+            }
+          }
 
           for (var journeyId : removedJourneysOnServer) {
+            // request an update of the journey events because of the removal
+            var journeyIdString = journeyId.toString();
             var updateRequest = new JourneyEventUpdateRequest(journeyId, server, null, null, null);
             this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
-            this.journeyDataCache.removeByPrimaryKey(journeyId.toString());
+            this.journeyDataCache.removeByPrimaryKey(journeyIdString);
+
+            // send out journey removal frame
+            var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+              .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+              .build();
+            var journeyRemoveFrame = EventBusProto.JourneyRemoveFrame.newBuilder()
+              .setBaseData(baseFrameData)
+              .setJourneyId(journeyIdString)
+              .build();
+            var subject = EventSubjectFactory.createJourneyRemoveSubjectV1(server.id().toString(), journeyIdString);
+            this.connection.publish(subject, journeyRemoveFrame.toByteArray());
           }
         }
 
@@ -293,7 +354,8 @@ class SimRailServerTrainCollector {
         }
 
         // construct a new update holder for the journey, set the required base values
-        journeyUpdateHolder = new JourneyUpdateHolder(activeTrain.getRunId(), activeTrain.getId());
+        var journeyId = this.timetableCollector.generateJourneyId(server.id(), activeTrain.getRunId());
+        journeyUpdateHolder = new JourneyUpdateHolder(activeTrain.getRunId(), journeyId);
         journeyUpdateHolder.speed.updateValue(speed);
         journeyUpdateHolder.position.updateValue(position);
 

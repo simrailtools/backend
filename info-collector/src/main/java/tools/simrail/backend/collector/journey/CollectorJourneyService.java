@@ -37,7 +37,7 @@ import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.proto.CacheProto;
-import tools.simrail.backend.common.util.MonotonicInstantProvider;
+import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.util.ObjectChecksumGenerator;
 
 /**
@@ -48,13 +48,13 @@ class CollectorJourneyService {
 
   private final CollectorJourneyRepository journeyRepository;
   private final DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache;
-  private final DataCache<CacheProto.ExtendedJourneyData> journeyRealtimeDataCache;
+  private final DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache;
 
   @Autowired
   public CollectorJourneyService(
     @NonNull CollectorJourneyRepository journeyRepository,
     @NonNull @Qualifier("journey_checksum_cache") DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache,
-    @NonNull @Qualifier("journey_realtime_cache") DataCache<CacheProto.ExtendedJourneyData> journeyRealtimeDataCache
+    @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache
   ) {
     this.journeyRepository = journeyRepository;
     this.journeyChecksumCache = journeyChecksumCache;
@@ -101,7 +101,6 @@ class CollectorJourneyService {
         var checksumData = CacheProto.JourneyChecksumData.newBuilder()
           .setChecksum(journeyChecksum)
           .setForeignRunId(journey.getForeignRunId().toString())
-          .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
           .build();
         this.journeyChecksumCache.setCachedValue(checksumData);
       }

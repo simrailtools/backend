@@ -25,6 +25,7 @@
 package tools.simrail.backend.common.update;
 
 import java.util.Objects;
+import java.util.function.Consumer;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 
@@ -61,6 +62,22 @@ public final class UpdatableField<T> {
   }
 
   /**
+   * Provides the current value of this field to the given consumer if it is dirty. The dirty state of this field is
+   * reset after the invocation.
+   *
+   * @param handler the handler to call if this field is dirty.
+   * @return true if the field was dirty, false otherwise.
+   */
+  public boolean ifDirty(@NonNull Consumer<T> handler) {
+    if (this.consumeDirty()) {
+      handler.accept(this.currentValue());
+      return true;
+    }
+
+    return false;
+  }
+
+  /**
    * Get the current value of this field. Note that the value can only be null if the field wasn't initialized to any
    * value yet or if null values are explicitly allowed.
    *
@@ -83,5 +100,14 @@ public final class UpdatableField<T> {
       this.dirty = true;
       this.group.notifyDirty();
     }
+  }
+
+  /**
+   * Forcibly sets the value of this holder without changing the dirty state.
+   *
+   * @param value the new value to assign.
+   */
+  public void forceUpdateValue(@Nullable T value) {
+    this.value = value;
   }
 }

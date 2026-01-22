@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,23 +22,36 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.cleanup;
+package tools.simrail.backend.common.event;
 
-import java.util.Collection;
-import java.util.UUID;
-import org.springframework.data.jpa.repository.Modifying;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
+import io.nats.client.Connection;
+import io.nats.client.Nats;
+import io.nats.client.Options;
+import java.time.Duration;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 
-interface CleanupJourneyVehicleRepository extends JourneyVehicleRepository {
+/**
+ * Configuration for nats.
+ */
+@Configuration
+public class NatsConfiguration {
 
-  /**
-   * Deletes all journey vehicles that are associated with one of the given journey ids.
-   *
-   * @param journeyIds the journey ids to delete the associated vehicles of.
-   */
-  @Modifying
-  @Query(value = "DELETE FROM sit_vehicle v WHERE v.journey_id IN :journeyIds", nativeQuery = true)
-  void deleteAllByJourneyIdIn(@Param("journeyIds") Collection<UUID> journeyIds);
+  @Bean(destroyMethod = "close")
+  public @NonNull Connection createNatsConnection(@Value("${sit.nats.url}") String natsUrl) throws Exception {
+    var options = Options.builder()
+      .server(natsUrl)
+      .maxReconnects(-1) // infinite reconnect attempts
+      .socketWriteTimeout(5000)
+      .socketReadTimeoutMillis(5000)
+      .reconnectWait(Duration.ofSeconds(1))
+      .connectionTimeout(Duration.ofSeconds(5))
+      .noEcho()
+      .supportUTF8Subjects()
+      .discardMessagesWhenOutgoingQueueFull()
+      .build();
+    return Nats.connect(options);
+  }
 }

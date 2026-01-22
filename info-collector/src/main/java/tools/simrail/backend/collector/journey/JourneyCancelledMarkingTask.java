@@ -61,17 +61,18 @@ class JourneyCancelledMarkingTask {
 
   @Scheduled(initialDelay = 2, fixedDelay = 2, timeUnit = TimeUnit.MINUTES, scheduler = "train_cancelled_marker_scheduler")
   public void markJourneysAsCancelled() {
-    for (var server : this.serverService.getServers()) {
-      var span = Timer.start();
-      var currentServerTime = server.currentTime();
-      var nonSpawnedTrainIds = this.journeyRepository.findJourneysThatDidNotSpawn(currentServerTime, server.id());
-      if (!nonSpawnedTrainIds.isEmpty()) {
-        this.journeyRepository.markJourneysAsCancelled(OffsetDateTime.now(), nonSpawnedTrainIds);
-        this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
-
-        this.cancelledJourneysCounter.setValue(server, nonSpawnedTrainIds.size());
-        span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
-      }
-    }
+    // TODO fix this
+    // for (var server : this.serverService.getServers()) {
+    //   var span = Timer.start();
+    //   var currentServerTime = server.currentTime();
+    //   var nonSpawnedTrainIds = this.journeyRepository.findJourneysThatDidNotSpawn(currentServerTime, server.id());
+    //   if (!nonSpawnedTrainIds.isEmpty()) {
+    //     this.journeyRepository.markJourneysAsCancelled(OffsetDateTime.now(), nonSpawnedTrainIds);
+    //     this.journeyRepository.markJourneyEventsAsCancelled(nonSpawnedTrainIds);
+    //
+    //     this.cancelledJourneysCounter.setValue(server, nonSpawnedTrainIds.size());
+    //     span.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
+    //   }
+    // }
   }
 }

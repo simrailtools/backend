@@ -28,6 +28,7 @@ plugins {
 
 dependencies {
   implementation(libs.jts)
+  implementation(libs.nats)
   implementation(libs.redisson)
   implementation(libs.protobufJava)
   implementation("org.springframework.boot:spring-boot-starter-web")

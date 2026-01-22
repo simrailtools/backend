@@ -166,18 +166,6 @@ public class MetricsConfiguration {
   }
 
   /**
-   * Counter for the number of active trains without an associated journey.
-   */
-  @Bean("active_trains_without_journey_total")
-  public @Nonnull PerServerGauge activeTrainsWithoutJourneyCounter(@Nonnull MeterRegistry registry) {
-    return new PerServerGauge(
-      registry,
-      "active_trains_without_journey_total",
-      null,
-      "Total number of active trains without an associated journey");
-  }
-
-  /**
    * Timer for the time taken to collect the predicted vehicle compositions.
    */
   @Bean("predicted_vc_collect_duration")

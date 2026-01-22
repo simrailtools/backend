@@ -31,7 +31,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
 import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
@@ -68,6 +67,11 @@ public final class SimRailServerEntity {
    */
   @Column(name = "foreign_id")
   private String foreignId;
+  /**
+   * The code of the server (e.g. DE1).
+   */
+  @Column(name = "code")
+  private String code;
 
   /**
    * The timestamp when this server entry was last updated.
@@ -81,11 +85,6 @@ public final class SimRailServerEntity {
   @Column(name = "registered_since")
   private Instant registeredSince;
 
-  /**
-   * The code of the server (e.g. DE1).
-   */
-  @Column(name = "code")
-  private String code;
   /**
    * The region in which the server is located (e.g. Europe).
    */
@@ -120,12 +119,6 @@ public final class SimRailServerEntity {
    */
   @Column(name = "deleted")
   private boolean deleted;
-
-  /**
-   * Internal marker to indicate if the server entity was newly created when being collected.
-   */
-  @Transient
-  private boolean isNew;
 
   /**
    * {@inheritDoc}
