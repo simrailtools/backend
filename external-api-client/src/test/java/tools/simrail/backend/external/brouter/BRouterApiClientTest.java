@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.external.brouter;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 public final class BRouterApiClientTest {
@@ -49,7 +49,7 @@ public final class BRouterApiClientTest {
       .withOutputFormat(BRouterRouteRequest.OutputFormat.GEOJSON);
     var data = Assertions.assertDoesNotThrow(() -> client.route(routeRequest));
     var parsed = Assertions.assertDoesNotThrow(() -> jsonMapper.readTree(data));
-    Assertions.assertEquals("FeatureCollection", parsed.path("type").asText());
+    Assertions.assertEquals("FeatureCollection", parsed.path("type").asString());
     Assertions.assertTrue(parsed.has("features"));
   }
 }

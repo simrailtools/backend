@@ -28,8 +28,7 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import java.util.List;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 import tools.simrail.backend.external.feign.FeignJsonResponseTuple;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
@@ -42,8 +41,7 @@ import tools.simrail.backend.external.srpanel.model.SimRailPanelUserInfo;
 @Headers({"Accept: application/json"})
 public interface SimRailPanelApiClient {
 
-  @Contract(" -> new")
-  static @NotNull SimRailPanelApiClient create() {
+  static @NonNull SimRailPanelApiClient create() {
     return FeignClientProvider.prepareJsonFeignInstance()
       .target(SimRailPanelApiClient.class, "https://panel.simrail.eu:8084");
   }
@@ -53,7 +51,7 @@ public interface SimRailPanelApiClient {
    *
    * @return all official SimRail servers.
    */
-  @NotNull
+  @NonNull
   @RequestLine("GET /servers-open")
   SimRailPanelResponseWrapper<SimRailPanelServer> getServers();
 
@@ -64,7 +62,7 @@ public interface SimRailPanelApiClient {
    * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the trains that are currently active on the server with the given code.
    */
-  @NotNull
+  @NonNull
   @Headers("If-None-Match: {etag}")
   @RequestLine("GET /trains-open?serverCode={serverCode}")
   FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrain>> getTrains(
@@ -78,7 +76,7 @@ public interface SimRailPanelApiClient {
    * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the positions of the trains that are currently active on the server with the given code.
    */
-  @NotNull
+  @NonNull
   @Headers("If-None-Match: {etag}")
   @RequestLine("GET /train-positions-open?serverCode={serverCode}")
   FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelTrainPosition>> getTrainPositions(
@@ -92,7 +90,7 @@ public interface SimRailPanelApiClient {
    * @param etag       optional etag to skip body transmission of content didn't change.
    * @return the dispatch posts that are available on the server with the given code.
    */
-  @NotNull
+  @NonNull
   @Headers("If-None-Match: {etag}")
   @RequestLine("GET /stations-open?serverCode={serverCode}")
   FeignJsonResponseTuple<SimRailPanelResponseWrapper<SimRailPanelDispatchPost>> getDispatchPosts(
@@ -105,7 +103,7 @@ public interface SimRailPanelApiClient {
    * @param userIds the steam ids of the users to get the current state information of.
    * @return the current SimRail state information of the requested users.
    */
-  @NotNull
+  @NonNull
   @RequestLine("GET /users-open/{userIds}?force=true")
   SimRailPanelResponseWrapper<SimRailPanelUserInfo> getUserInfo(@Param("userIds") List<String> userIds);
 }

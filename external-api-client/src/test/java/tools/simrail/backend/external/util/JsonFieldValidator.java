@@ -24,26 +24,23 @@
 
 package tools.simrail.backend.external.util;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
+import tools.jackson.databind.node.ObjectNode;
 
 public final class JsonFieldValidator {
 
   public static void assertContainsAllKeys(ObjectNode node, Set<String> keyNames) {
-    var fieldNames = node.fieldNames();
+    var fieldNames = node.propertyNames();
     var expectedFieldNames = new HashSet<>(keyNames);
-    while (fieldNames.hasNext()) {
-      var fieldName = fieldNames.next();
+    for (var fieldName : fieldNames) {
       if (!expectedFieldNames.remove(fieldName)) {
-        // unknown field found
         Assertions.fail("Found unknown field " + fieldName + " in object");
       }
     }
 
     if (!expectedFieldNames.isEmpty()) {
-      // a field has been removed
       Assertions.fail("Detected removed fields: " + String.join(", ", expectedFieldNames));
     }
   }

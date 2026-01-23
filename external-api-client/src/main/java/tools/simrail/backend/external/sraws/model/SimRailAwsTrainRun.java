@@ -51,7 +51,7 @@ public final class SimRailAwsTrainRun {
   @JsonProperty("trainName")
   private String trainDisplayName;
   /**
-   * The number of the train within poland.
+   * The number of the train within Poland.
    */
   @JsonProperty("trainNoLocal")
   private String trainNumber;

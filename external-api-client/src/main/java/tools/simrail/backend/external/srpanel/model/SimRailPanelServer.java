@@ -81,7 +81,7 @@ public final class SimRailPanelServer {
     @JsonProperty("Europe")
     EUROPE,
     /**
-     * North america region.
+     * North America region.
      */
     @JsonProperty("North_America")
     US_NORTH,

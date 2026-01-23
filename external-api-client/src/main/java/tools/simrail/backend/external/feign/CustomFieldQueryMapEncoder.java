@@ -35,15 +35,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 public final class CustomFieldQueryMapEncoder implements QueryMapEncoder {
 
   private final Map<Class<?>, List<BiConsumer<Object, Map<String, Object>>>> classToResolverCache =
     new ConcurrentHashMap<>(16, 0.9f, 1);
 
-  private static @Nullable Object resolveFieldValue(@NotNull Field field, @NotNull Object instance) {
+  private static @Nullable Object resolveFieldValue(@NonNull Field field, @NonNull Object instance) {
     try {
       return field.get(instance);
     } catch (IllegalAccessException exception) {
@@ -51,7 +51,7 @@ public final class CustomFieldQueryMapEncoder implements QueryMapEncoder {
     }
   }
 
-  private static @Nullable Param.Expander constructExpanderInstance(@NotNull Class<? extends Param.Expander> type) {
+  private static Param.@Nullable Expander constructExpanderInstance(@NonNull Class<? extends Param.Expander> type) {
     try {
       if (type != Param.ToStringExpander.class) {
         // specific expander given, construct the expander
@@ -66,7 +66,7 @@ public final class CustomFieldQueryMapEncoder implements QueryMapEncoder {
   }
 
   @Override
-  public @NotNull Map<String, Object> encode(@NotNull Object object) {
+  public @NonNull Map<String, Object> encode(@NonNull Object object) {
     // get the resolvers for the class and call each of them (if there are any to call)
     var resolvers = this.classToResolverCache.computeIfAbsent(object.getClass(), this::parseResolvers);
     if (!resolvers.isEmpty()) {
@@ -81,7 +81,7 @@ public final class CustomFieldQueryMapEncoder implements QueryMapEncoder {
     }
   }
 
-  private @NotNull List<BiConsumer<Object, Map<String, Object>>> parseResolvers(@NotNull Class<?> type) {
+  private @NonNull List<BiConsumer<Object, Map<String, Object>>> parseResolvers(@NonNull Class<?> type) {
     List<BiConsumer<Object, Map<String, Object>>> resolvers = new LinkedList<>();
 
     // walk down the whole tree of classes until we hit the object class

@@ -26,14 +26,12 @@ package tools.simrail.backend.external.sraws;
 
 import feign.Param;
 import feign.RequestLine;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 
 public interface SimRailIntAwsApiClient {
 
-  @Contract(" -> new")
-  static @NotNull SimRailIntAwsApiClient create() {
+  static @NonNull SimRailIntAwsApiClient create() {
     return FeignClientProvider.prepareFeignInstance()
       .target(SimRailIntAwsApiClient.class, "https://api1.aws.simrail.eu:8083");
   }

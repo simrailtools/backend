@@ -24,10 +24,6 @@
 
 package tools.simrail.backend.external.sraws;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import com.fasterxml.jackson.databind.node.TextNode;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -35,6 +31,10 @@ import java.net.http.HttpResponse;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.ObjectNode;
+import tools.jackson.databind.node.StringNode;
 import tools.simrail.backend.external.util.JsonFieldValidator;
 
 public class SimRailAwsTrainRunValidationTest {
@@ -100,8 +100,8 @@ public class SimRailAwsTrainRunValidationTest {
         JsonFieldValidator.assertContainsAllKeys(entryObject, TIMETABLE_EXPECTED_KEYS);
 
         // special check for stop type
-        var stopTypeNode = Assertions.assertInstanceOf(TextNode.class, entryObject.get("stopType"));
-        Assertions.assertTrue(STOP_TYPES_EXPECTED.contains(stopTypeNode.asText()));
+        var stopTypeNode = Assertions.assertInstanceOf(StringNode.class, entryObject.get("stopType"));
+        Assertions.assertTrue(STOP_TYPES_EXPECTED.contains(stopTypeNode.asString()));
       }
     }
   }

@@ -27,12 +27,12 @@ package tools.simrail.backend.external.steam.feign;
 import feign.RequestInterceptor;
 import feign.RequestTemplate;
 import java.util.List;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 
-public record SteamApiKeyInterceptor(@NotNull String apiKey) implements RequestInterceptor {
+public record SteamApiKeyInterceptor(@NonNull String apiKey) implements RequestInterceptor {
 
   @Override
-  public void apply(@NotNull RequestTemplate template) {
+  public void apply(@NonNull RequestTemplate template) {
     // remove the current value, then set the value again
     template.query("key", List.of());
     template.query("key", this.apiKey);

@@ -28,8 +28,8 @@ import feign.InvocationContext;
 import feign.Response;
 import feign.ResponseInterceptor;
 import feign.Util;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
@@ -38,7 +38,7 @@ import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 public final class FeignResponseInterceptor implements ResponseInterceptor {
 
   @Override
-  public @Nullable Object intercept(@NotNull InvocationContext context, @NotNull Chain chain) {
+  public @Nullable Object intercept(@NonNull InvocationContext context, @NonNull Chain chain) {
     var decoder = context.decoder();
     var response = context.response();
     var returnType = context.returnType();

@@ -29,7 +29,7 @@ import feign.Retryer;
 import java.net.SocketException;
 import java.net.http.HttpTimeoutException;
 import javax.net.ssl.SSLException;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
@@ -44,7 +44,7 @@ public final class ExceptionHandlingRetryer implements Retryer {
   }
 
   @Override
-  public void continueOrPropagate(@NotNull RetryableException exception) {
+  public void continueOrPropagate(@NonNull RetryableException exception) {
     var cause = exception.getCause();
     if (cause instanceof HttpTimeoutException
       || cause instanceof SocketException
@@ -56,7 +56,7 @@ public final class ExceptionHandlingRetryer implements Retryer {
   }
 
   @Override
-  public @NotNull Retryer clone() {
+  public @NonNull Retryer clone() {
     return INSTANCE;
   }
 }

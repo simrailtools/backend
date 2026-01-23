@@ -11,12 +11,12 @@ springDependencyManagement = "1.1.7"
 jts = "1.20.0"
 nats = "2.25.1"
 feign = "13.6"
+jackson = "3.0.4"
 lombok = "1.18.42"
-jackson = "2.19.2"
+jspecify = "1.0.0"
 redisson = "4.1.0"
 fuzzywuzzy = "1.4.0"
 protobufJava = "4.33.4"
-annotations = "26.0.2-1"
 springDocOpenApi = "3.0.1"
 
 # testing
@@ -26,13 +26,10 @@ testcontainers = "2.0.3"
 
 [libraries]
 # jackson
-jacksonCore = { group = "com.fasterxml.jackson.core", name = "jackson-databind", version.ref = "jackson" }
-jacksonDatatypeJdk8 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jdk8", version.ref = "jackson" }
-jacksonDatatypeJsr310 = { group = "com.fasterxml.jackson.datatype", name = "jackson-datatype-jsr310", version.ref = "jackson" }
+jacksonCore = { group = "tools.jackson.core", name = "jackson-databind", version.ref = "jackson" }
 
 # feign
 feignCore = { group = "io.github.openfeign", name = "feign-core", version.ref = "feign" }
-feignJackson = { group = "io.github.openfeign", name = "feign-jackson", version.ref = "feign" }
 feignLoggingSlf4j = { group = "io.github.openfeign", name = "feign-slf4j", version.ref = "feign" }
 feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", version.ref = "feign" }
 
@@ -41,8 +38,8 @@ nats = { group = "io.nats", name = "jnats", version.ref = "nats" }
 jts = { group = "org.locationtech.jts", name = "jts-core", version.ref = "jts" }
 lombok = { group = "org.projectlombok", name = "lombok", version.ref = "lombok" }
 redisson = { group = "org.redisson", name = "redisson", version.ref = "redisson" }
+jspecify = { group = "org.jspecify", name = "jspecify", version.ref = "jspecify" }
 fuzzywuzzy = { group = "me.xdrop", name = "fuzzywuzzy", version.ref = "fuzzywuzzy" }
-annotations = { group = "org.jetbrains", name = "annotations", version.ref = "annotations" }
 protobufJava = { group = "com.google.protobuf", name = "protobuf-java", version.ref = "protobufJava" }
 springDocOpenApi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "springDocOpenApi" }
 

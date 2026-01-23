@@ -27,7 +27,7 @@ package tools.simrail.backend.external.brouter.feign;
 import feign.Param;
 import java.util.List;
 import java.util.StringJoiner;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 /**
@@ -37,11 +37,11 @@ public final class BRouterLonLatExpander implements Param.Expander {
 
   @Override
   @SuppressWarnings("unchecked")
-  public @NotNull String expand(@NotNull Object value) {
+  public @NonNull String expand(@NonNull Object value) {
     var positionsJoiner = new StringJoiner("|");
     var positionsList = (List<BRouterRouteRequest.GeoPosition>) value;
     for (var position : positionsList) {
-      var formattedPosition = String.format("%s,%s", position.longitude(), position.latitude());
+      var formattedPosition = position.longitude() + "," + position.latitude();
       positionsJoiner.add(formattedPosition);
     }
 

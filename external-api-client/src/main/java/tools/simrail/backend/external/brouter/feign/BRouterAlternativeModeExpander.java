@@ -25,7 +25,7 @@
 package tools.simrail.backend.external.brouter.feign;
 
 import feign.Param;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 /**
@@ -34,7 +34,7 @@ import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 public final class BRouterAlternativeModeExpander implements Param.Expander {
 
   @Override
-  public @NotNull String expand(@NotNull Object value) {
+  public @NonNull String expand(@NonNull Object value) {
     var mode = (BRouterRouteRequest.AlternativeMode) value;
     return Integer.toString(mode.ordinal());
   }
