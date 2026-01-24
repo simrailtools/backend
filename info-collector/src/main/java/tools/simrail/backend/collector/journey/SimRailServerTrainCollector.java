@@ -142,6 +142,7 @@ class SimRailServerTrainCollector {
       }
       if (data.hasNextSignal()) {
         updateHolder.nextSignal.forceUpdateValue(data.getNextSignal());
+        updateHolder.nextSignalId.forceUpdateValue(data.getNextSignal().getName());
       }
     }
   }
@@ -202,6 +203,7 @@ class SimRailServerTrainCollector {
 
           // apply the changed fields to the journey data builder
           var journeyDataBuilder = updateFrameBuilder.getJourneyData().toBuilder();
+          var hasNewSignalInFront = updatedTrain.nextSignalId.consumeDirty();
           var hasNewPosition = updatedTrain.position.ifDirty(journeyDataBuilder::setPosition);
           updatedTrain.speed.ifDirty(journeyDataBuilder::setSpeed);
           updatedTrain.driver.ifDirty(driver -> {
@@ -220,6 +222,7 @@ class SimRailServerTrainCollector {
           });
 
           // update the events of the journey, if a new position for the train is known
+          var arrivedAtNewPoint = false;
           if (hasNewPosition) {
             var pos = updatedTrain.position.currentValue();
             var currPoint = this.pointProvider
@@ -227,7 +230,8 @@ class SimRailServerTrainCollector {
               .orElse(null);
             var currPointId = currPoint == null ? null : currPoint.getId().toString();
             var prevPointId = journeyDataBuilder.hasCurrentPointId() ? journeyDataBuilder.getCurrentPointId() : null;
-            if (!Objects.equals(prevPointId, currPointId)) {
+            arrivedAtNewPoint = !Objects.equals(prevPointId, currPointId);
+            if (arrivedAtNewPoint) {
               // set the new point in the cache data (or remove it)
               if (currPointId != null) {
                 journeyDataBuilder.setCurrentPointId(currPointId);
@@ -242,6 +246,21 @@ class SimRailServerTrainCollector {
               var updateRequest = JourneyEventUpdateRequest.forEventUpdate(jid, server, ppid, currPoint, nextSignal);
               this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
             }
+          }
+
+          // if the journey did not arrive at a new point (this triggers an event update anyway)
+          // but has a new signal in front, this could mean that the journey moved to a platform
+          // within the station. this is e.g. relevant for trains to Katowice from Katowice Zawodzie,
+          // as they move through a part of Katowice that already has signals but no platforms. the
+          // arrival at a platform actually happens after passing 2 signals in Katowice
+          if (!arrivedAtNewPoint && hasNewSignalInFront) {
+            var pos = updatedTrain.position.currentValue();
+            this.pointProvider.findPointWherePosInBounds(pos.getLongitude(), pos.getLatitude()).ifPresent(point -> {
+              var jid = UUID.fromString(updateFrameBuilder.getIds().getDataId());
+              var nextSignalId = updatedTrain.nextSignalId.currentValue();
+              var updateRequest = JourneyEventUpdateRequest.forSignalUpdate(jid, server, point, nextSignalId);
+              this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
+            });
           }
 
           // mark the first seen time of the journey if it was newly seen
@@ -308,7 +327,12 @@ class SimRailServerTrainCollector {
           }
         }
 
-        this.updatedJourneysCounter.setValue(server, updatedJourneyCount);
+        // only update the count of updated journeys if we updated more than one journey to prevent
+        // the metric from jumping to 0 if the upstream data did not change (which looks really
+        // weird when plotted on a dashboard)
+        if (updatedJourneyCount > 0) {
+          this.updatedJourneysCounter.setValue(server, updatedJourneyCount);
+        }
       });
     }
 
@@ -378,6 +402,7 @@ class SimRailServerTrainCollector {
 
       var nextSignal = constructNextSignal(trainData);
       journeyUpdateHolder.nextSignal.updateValue(nextSignal);
+      journeyUpdateHolder.nextSignalId.updateValue(nextSignal == null ? null : nextSignal.getName());
     }
 
     return seenRunIds;

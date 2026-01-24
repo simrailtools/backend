@@ -47,6 +47,7 @@ final class JourneyUpdateHolder {
   final UpdatableField<EventBusProto.User> driver;
   final UpdatableField<EventBusProto.GeoPosition> position;
   final UpdatableField<EventBusProto.SignalInfo> nextSignal;
+  final UpdatableField<String> nextSignalId; // internally used only, not stored in cache (derived from next signal)
 
   public JourneyUpdateHolder(@NonNull UUID runId, @NonNull UUID journeyId) {
     this.runId = runId;
@@ -58,5 +59,6 @@ final class JourneyUpdateHolder {
     this.position = this.fieldGroup.createField();
     this.driver = this.fieldGroup.createNullableField();
     this.nextSignal = this.fieldGroup.createNullableField();
+    this.nextSignalId = this.fieldGroup.createNullableField();
   }
 }

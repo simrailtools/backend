@@ -131,7 +131,9 @@ final class SimRailDispatchPostCollector {
       var sample = Timer.start();
       try {
         var collectedDispatchPostCount = this.collectServerDispatchPosts(server);
-        this.collectedDispatchPostCounter.setValue(server, collectedDispatchPostCount);
+        if (collectedDispatchPostCount > 0) {
+          this.collectedDispatchPostCounter.setValue(server, collectedDispatchPostCount);
+        }
       } catch (Exception exception) {
         LOGGER.error("Caught exception while collecting dispatch posts", exception);
       } finally {

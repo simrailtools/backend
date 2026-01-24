@@ -37,6 +37,8 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingQueue;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -134,21 +136,25 @@ final class JourneyEventRealtimeUpdater {
       return;
     }
 
-    var eventUpdated = false;
-    if (request.wasRemoved()) {
-      // journey was removed from the map
-      eventUpdated |= this.updateEventsDueToRemoval(events);
-    } else {
-      // the journey departed from a point or arrived at a point or both
-      // first, process the departure, then process the arrival at the next point
-      // to keep the event time updating in order
-      if (request.departedFromPoint()) {
-        eventUpdated |= this.updateEventsDueToDeparture(request, events);
+    var eventUpdated = switch (request) {
+      case JourneyEventUpdateRequest.ForPointChange fpc -> {
+        // the journey departed from a point or arrived at a point or both.
+        // first, process the departure, then process the arrival at the next point
+        // to keep the event time updating in order
+        var anyUpdated = fpc.departedFromPoint() && this.updateEventsDueToDeparture(fpc, events);
+        anyUpdated |= fpc.arrivedAtPoint() && this.updateEventsDueToArrival(fpc, events);
+        yield anyUpdated;
       }
-      if (request.arrivedAtPoint()) {
-        eventUpdated |= this.updateEventsDueToArrival(request, events);
-      }
-    }
+      case JourneyEventUpdateRequest.ForSignalUpdate fsu ->
+        // the journey is currently at a point but the signal in front
+        // of the journey changed. this might change the platform where
+        // the journey actually stopped at
+        this.updateEventsDueToSignalChange(fsu, events);
+      case JourneyEventUpdateRequest.ForRemoval _ ->
+        // the journey was removed from the server, we need to mark all
+        // subsequent journey events as canceled
+        this.updateEventsDueToRemoval(events);
+    };
 
     // re-persist the journey events if some were updated
     if (eventUpdated) {
@@ -181,8 +187,43 @@ final class JourneyEventRealtimeUpdater {
     return true;
   }
 
+  private boolean updateEventsDueToSignalChange(
+    JourneyEventUpdateRequest.@NonNull ForSignalUpdate request,
+    @NonNull List<JourneyEventEntity> events
+  ) {
+    // find the events that are associated with the point where the journey is currently at.
+    // we filter for passenger stops as technically additional events for the same points might get
+    // added multiple times, but they never have a passenger stop scheduled
+    var pointId = request.currentPoint().getId();
+    var eventOfPointByType = events.stream()
+      .filter(event -> event.getPointId().equals(pointId))
+      .filter(event -> event.getStopType() == JourneyStopType.PASSENGER)
+      .collect(Collectors.toMap(JourneyEventEntity::getEventType, Function.identity()));
+    var arrivalEvent = eventOfPointByType.get(JourneyEventType.ARRIVAL);
+    if (arrivalEvent == null) {
+      return false;
+    }
+
+    // find the information about the signal that the journey is currently at
+    var signalInfo = this.signalProvider.findSignalInfo(pointId, request.nextSignalId()).orElse(null);
+    if (signalInfo == null) {
+      return false;
+    }
+
+    var realtimeStopInfo = new JourneyPassengerStopInfo(signalInfo.getTrack(), signalInfo.getPlatform());
+    arrivalEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+
+    // check if an associated departure event exists for the journey, update the signal info of it too
+    var departureEvent = eventOfPointByType.get(JourneyEventType.DEPARTURE);
+    if (departureEvent != null) {
+      departureEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+    }
+
+    return true;
+  }
+
   private boolean updateEventsDueToArrival(
-    @NonNull JourneyEventUpdateRequest request,
+    JourneyEventUpdateRequest.@NonNull ForPointChange request,
     @NonNull List<JourneyEventEntity> events
   ) {
     var currentPoint = request.currentPoint();
@@ -203,18 +244,28 @@ final class JourneyEventRealtimeUpdater {
           return null;
         }
 
-        // find the last confirmed event of the journey, ensure that it is a departure event
-        var lastConfirmedEvent = events.reversed().stream()
+        // find the last confirmed event of the journey. if the event is missing, this likely
+        // indicates that the journey arrived at the first point, we don't want to add an
+        // event for that case, the known departure event is sufficient
+        var lastConfirmedDepartureEvent = events.reversed().stream()
           .filter(event -> event.getEventType() == JourneyEventType.DEPARTURE)
+          .filter(event -> event.getRealtimeTimeType() == JourneyTimeType.REAL)
           .findFirst()
           .orElse(null);
-        if (lastConfirmedEvent == null || lastConfirmedEvent.getEventType() != JourneyEventType.DEPARTURE) {
+        if (lastConfirmedDepartureEvent == null) {
+          return null;
+        }
+
+        // if the last confirmed departure is at the point where the journey now arrived, we
+        // don't want to register an additional event for that - this can possibly be caused
+        // by a player reversing or by the train respawning after a server restart
+        if (lastConfirmedDepartureEvent.getPointId().equals(currentPoint.getId())) {
           return null;
         }
 
         var jitEventPair = this.createJitAdditionalEvent(
           currentPoint,
-          lastConfirmedEvent,
+          lastConfirmedDepartureEvent,
           events,
           request.serverTime());
         events.add(jitEventPair.getFirst()); // arrival event
@@ -253,7 +304,7 @@ final class JourneyEventRealtimeUpdater {
   }
 
   private boolean updateEventsDueToDeparture(
-    @NonNull JourneyEventUpdateRequest request,
+    JourneyEventUpdateRequest.@NonNull ForPointChange request,
     @NonNull List<JourneyEventEntity> events
   ) {
     var prevPointId = request.prevPointId();

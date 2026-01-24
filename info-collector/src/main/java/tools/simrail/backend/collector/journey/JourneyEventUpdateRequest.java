@@ -35,20 +35,8 @@ import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Request passed to the realtime event updater for a journey.
- *
- * @param journeyId    the id of the journey that should be updated.
- * @param serverTime   the time on the associated server when the request was created.
- * @param prevPointId  the previous point the journey was at, possibly {@code null}.
- * @param currentPoint the current point where the journey is at, possibly {@code null}.
- * @param nextSignal   the signal in front of the journey, possibly {@code null}.
  */
-record JourneyEventUpdateRequest(
-  @NonNull UUID journeyId,
-  @NonNull LocalDateTime serverTime,
-  @Nullable UUID prevPointId,
-  @Nullable SimRailPoint currentPoint,
-  EventBusProto.@Nullable SignalInfo nextSignal
-) {
+sealed interface JourneyEventUpdateRequest {
 
   /**
    * Constructs a new update request to handle the removal of a journey.
@@ -62,7 +50,7 @@ record JourneyEventUpdateRequest(
     @NonNull SimRailServerDescriptor server
   ) {
     var serverTime = server.currentTime();
-    return new JourneyEventUpdateRequest(journeyId, serverTime, null, null, null);
+    return new ForRemoval(journeyId, serverTime);
   }
 
   /**
@@ -83,37 +71,109 @@ record JourneyEventUpdateRequest(
     @Nullable SimRailPoint currentPoint,
     EventBusProto.@Nullable SignalInfo nextSignal
   ) {
-    Assert.isTrue(prevPointId != null || currentPoint != null, "prev or current point must be given");
     var serverTime = server.currentTime();
-    return new JourneyEventUpdateRequest(journeyId, serverTime, prevPointId, currentPoint, nextSignal);
-  }
-
-  static @NonNull JourneyEventUpdateRequest forSignalUpdate()
-
-  /**
-   * Get if the journey arrived at a new point along the route.
-   *
-   * @return true if the journey arrived at a new point, false otherwise.
-   */
-  public boolean arrivedAtPoint() {
-    return this.currentPoint != null;
+    return new ForPointChange(journeyId, serverTime, prevPointId, currentPoint, nextSignal);
   }
 
   /**
-   * Get if the journey departed from any point along the route.
+   * Creates a new request to update the event of the journey at the given current point with the realtime platform
+   * info. If the journey has no passenger stop at the point, the request is ignored.
    *
-   * @return true if the journey departed from a point, false otherwise.
+   * @param journeyId    the id of the journey whose next signal updated.
+   * @param server       the server that the journey is on.
+   * @param currentPoint the point where the journey is currently at.
+   * @param nextSignalId the id of the signal in front of the journey.
+   * @return a new request to update the realtime passenger info for a journey based on the current point and signal id.
    */
-  public boolean departedFromPoint() {
-    return this.prevPointId != null;
+  static @NonNull JourneyEventUpdateRequest forSignalUpdate(
+    @NonNull UUID journeyId,
+    @NonNull SimRailServerDescriptor server,
+    @NonNull SimRailPoint currentPoint,
+    @NonNull String nextSignalId
+  ) {
+    var serverTime = server.currentTime();
+    return new ForSignalUpdate(journeyId, serverTime, currentPoint, nextSignalId);
   }
 
   /**
-   * Get if this journey was removed from a server (which causes all non-confirmed events to get canceled).
+   * Get the id of the journey whose event should get updated.
    *
-   * @return true if the journey was removed, false otherwise.
+   * @return the id of the journey whose event should get updated.
    */
-  public boolean wasRemoved() {
-    return this.prevPointId == null && this.currentPoint == null;
+  @NonNull UUID journeyId();
+
+  /**
+   * Get the time on the server at the time the request was created.
+   *
+   * @return the time on the server at the time the request was created.
+   */
+  @NonNull LocalDateTime serverTime();
+
+  /**
+   * Request to update the events of a journey because the point where the journey is currently at changed.
+   *
+   * @param journeyId    the id of the journey that should be updated.
+   * @param serverTime   the time on the associated server when the request was created.
+   * @param prevPointId  the previous point the journey was at, possibly {@code null}.
+   * @param currentPoint the current point where the journey is at, possibly {@code null}.
+   * @param nextSignal   the signal in front of the journey, possibly {@code null}.
+   */
+  record ForPointChange(
+    @NonNull UUID journeyId,
+    @NonNull LocalDateTime serverTime,
+    @Nullable UUID prevPointId,
+    @Nullable SimRailPoint currentPoint,
+    EventBusProto.@Nullable SignalInfo nextSignal
+  ) implements JourneyEventUpdateRequest {
+
+    public ForPointChange {
+      Assert.isTrue(prevPointId != null || currentPoint != null, "prev or current point must be given");
+    }
+
+    /**
+     * Get if the journey arrived at a new point along the route.
+     *
+     * @return true if the journey arrived at a new point, false otherwise.
+     */
+    public boolean arrivedAtPoint() {
+      return this.currentPoint != null;
+    }
+
+    /**
+     * Get if the journey departed from any point along the route.
+     *
+     * @return true if the journey departed from a point, false otherwise.
+     */
+    public boolean departedFromPoint() {
+      return this.prevPointId != null;
+    }
+  }
+
+  /**
+   * Used to indicate that the signal in front of the journey updated. Only used to record the current platform where
+   * the journey is at, therefore the current point as well as the next signal id are mandatory.
+   *
+   * @param journeyId    the id of the journey that should be updated.
+   * @param serverTime   the time on the associated server when the request was created.
+   * @param currentPoint the current point where the journey is at
+   * @param nextSignalId the id of the signal in front of the journey.
+   */
+  record ForSignalUpdate(
+    @NonNull UUID journeyId,
+    @NonNull LocalDateTime serverTime,
+    @NonNull SimRailPoint currentPoint,
+    @NonNull String nextSignalId
+  ) implements JourneyEventUpdateRequest {
+
+  }
+
+  /**
+   * Request to update the events of a journey because the journey is no longer active on the server.
+   *
+   * @param journeyId  the id of the journey that should be updated.
+   * @param serverTime the time on the associated server when the request was created.
+   */
+  record ForRemoval(@NonNull UUID journeyId, @NonNull LocalDateTime serverTime) implements JourneyEventUpdateRequest {
+
   }
 }
