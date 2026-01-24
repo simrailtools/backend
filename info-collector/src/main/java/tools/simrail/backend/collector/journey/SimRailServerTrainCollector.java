@@ -49,10 +49,11 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.collector.util.CancelOnRejectedExecutionPolicy;
+import tools.simrail.backend.collector.util.PerServerGauge;
+import tools.simrail.backend.collector.util.UserFactory;
 import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.event.EventSubjectFactory;
 import tools.simrail.backend.common.point.SimRailPointProvider;
@@ -238,7 +239,7 @@ class SimRailServerTrainCollector {
               var jid = UUID.fromString(updateFrameBuilder.getIds().getDataId());
               var ppid = prevPointId == null ? null : UUID.fromString(prevPointId);
               var nextSignal = journeyDataBuilder.hasNextSignal() ? journeyDataBuilder.getNextSignal() : null;
-              var updateRequest = new JourneyEventUpdateRequest(jid, server, ppid, currPoint, nextSignal);
+              var updateRequest = JourneyEventUpdateRequest.forEventUpdate(jid, server, ppid, currPoint, nextSignal);
               this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
             }
           }
@@ -290,7 +291,7 @@ class SimRailServerTrainCollector {
           for (var journeyId : removedJourneysOnServer) {
             // request an update of the journey events because of the removal
             var journeyIdString = journeyId.toString();
-            var updateRequest = new JourneyEventUpdateRequest(journeyId, server, null, null, null);
+            var updateRequest = JourneyEventUpdateRequest.forRemoval(journeyId, server);
             this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
             this.journeyDataCache.removeByPrimaryKey(journeyIdString);
 
@@ -358,16 +359,21 @@ class SimRailServerTrainCollector {
         journeyUpdateHolder = new JourneyUpdateHolder(activeTrain.getRunId(), journeyId);
         journeyUpdateHolder.speed.updateValue(speed);
         journeyUpdateHolder.position.updateValue(position);
-
-        // map the train run id to the
-        collectorData.foreignIdToRunId.put(activeTrain.getId(), activeTrain.getRunId());
         collectorData.updateHoldersByRunId.put(activeTrain.getRunId(), journeyUpdateHolder);
       }
+
+      // ensure that the id of the journey is mapped to the foreign run id
+      // this is done separate from the previous if block because reconstruction
+      // from cache cannot register this information, so it has to be done even
+      // if a journey update holder is already registered for the journey
+      collectorData.foreignIdToRunId.putIfAbsent(activeTrain.getId(), activeTrain.getRunId());
 
       // update the full train data (stuff we don't get from the train position api)
       // otherwise, it could result in the train having outdated data compared to the
       // output of the position api
-      var driver = constructUserInfo(trainData);
+      var driver = UserFactory.constructUser(
+        EventBusProto.UserPlatform.STEAM, trainData.getDriverSteamId(),
+        EventBusProto.UserPlatform.XBOX, trainData.getDiverXBoxId());
       journeyUpdateHolder.driver.updateValue(driver);
 
       var nextSignal = constructNextSignal(trainData);
@@ -428,24 +434,6 @@ class SimRailServerTrainCollector {
     }
 
     return EventBusProto.GeoPosition.newBuilder().setLatitude(lat).setLongitude(lon).build();
-  }
-
-  private EventBusProto.@Nullable User constructUserInfo(SimRailPanelTrain.@NonNull DetailData data) {
-    if (data.getDriverSteamId() != null) {
-      return EventBusProto.User.newBuilder()
-        .setId(data.getDriverSteamId())
-        .setPlatform(EventBusProto.UserPlatform.STEAM)
-        .build();
-    }
-
-    if (data.getDiverXBoxId() != null) {
-      return EventBusProto.User.newBuilder()
-        .setId(data.getDiverXBoxId())
-        .setPlatform(EventBusProto.UserPlatform.XBOX)
-        .build();
-    }
-
-    return null;
   }
 
   private EventBusProto.@Nullable SignalInfo constructNextSignal(SimRailPanelTrain.@NonNull DetailData data) {

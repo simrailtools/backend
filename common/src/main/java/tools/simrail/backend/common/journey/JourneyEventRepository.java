@@ -54,7 +54,7 @@ public interface JourneyEventRepository extends JpaRepository<JourneyEventEntity
    * @return the journey events associated with a journey on the given server and with one of the run ids.
    */
   @NonNull
-  @Query("SELECT e FROM sit_journey_event e WHERE e.journeyId IN ("
+  @Query("SELECT e FROM sit_journey_event e WHERE e.journey.id IN ("
     + "  SELECT j.id FROM sit_journey j"
     + "  WHERE j.serverId = :serverId"
     + "  AND j.foreignRunId IN :runIds"

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,10 +22,11 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.journey;
+package tools.simrail.backend.collector.dispatchpost;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Map;
-import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
@@ -33,33 +34,41 @@ import org.springframework.http.HttpHeaders;
 import tools.simrail.backend.external.feign.FeignJsonResponseTuple;
 
 /**
- * Data storage for requests sent to the SimRail api during journey data collection.
+ * Data storage for requests sent to the SimRail api during dispatch post data collection.
  */
 @Getter
 final class ServerCollectorData {
 
-  // mapping for the runs to the foreign id and vice-vera on this server
-  final Map<String, UUID> foreignIdToRunId = new ConcurrentHashMap<>();
-  final Map<UUID, JourneyUpdateHolder> updateHoldersByRunId = new ConcurrentHashMap<>();
+  // mapping of the foreign dispatch post id to the data for post
+  final Map<String, DispatchPostUpdateHolder> updateHoldersByForeignId = new ConcurrentHashMap<>();
 
-  private String trainsEtag;
-  private String trainPositionsEtag;
+  private String dispatchPostEtag;
+  private Instant lastDatabaseUpdate;
 
   /**
-   * Update the stored etag for the trains' endpoint.
+   * Update the stored etag for the dispatch post endpoint.
    *
    * @param responseTuple the response tuple to extract the etag from.
    */
-  public void updateTrainsEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
-    this.trainsEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
+  public void updateDispatchPostEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
+    this.dispatchPostEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
   }
 
   /**
-   * Update the stored etag for the train positions endpoint.
+   * Get if the database should be updated for the server during the current collection. This method calls resets the
+   * timer state if that is the case.
    *
-   * @param responseTuple the response tuple to extract the etag from.
+   * @return true if the collected dispatch post data should be updated in the database, false otherwise.
    */
-  public void updateTrainPositionsEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
-    this.trainPositionsEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
+  public boolean shouldUpdateDatabase() {
+    var now = Instant.now();
+    var lastDbUpdate = this.lastDatabaseUpdate;
+    var shouldUpdate = lastDbUpdate == null || Duration.between(lastDbUpdate, now).abs().toMinutes() >= 5;
+    if (shouldUpdate) {
+      this.lastDatabaseUpdate = now;
+      return true;
+    }
+
+    return false;
   }
 }

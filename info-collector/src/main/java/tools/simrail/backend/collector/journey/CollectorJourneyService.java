@@ -26,6 +26,7 @@ package tools.simrail.backend.collector.journey;
 
 import java.time.Instant;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
@@ -36,6 +37,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.journey.JourneyEntity;
+import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.proto.CacheProto;
 import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.util.ObjectChecksumGenerator;
@@ -47,16 +49,19 @@ import tools.simrail.backend.common.util.ObjectChecksumGenerator;
 class CollectorJourneyService {
 
   private final CollectorJourneyRepository journeyRepository;
+  private final JourneyEventRepository journeyEventRepository;
   private final DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache;
   private final DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache;
 
   @Autowired
   public CollectorJourneyService(
     @NonNull CollectorJourneyRepository journeyRepository,
+    @NonNull JourneyEventRepository journeyEventRepository,
     @NonNull @Qualifier("journey_checksum_cache") DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache,
     @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache
   ) {
     this.journeyRepository = journeyRepository;
+    this.journeyEventRepository = journeyEventRepository;
     this.journeyChecksumCache = journeyChecksumCache;
     this.journeyRealtimeDataCache = journeyRealtimeDataCache;
   }
@@ -89,14 +94,21 @@ class CollectorJourneyService {
     var relevantRunIds = relevantJourneys.stream()
       .map(entry -> entry.getKey().getForeignRunId())
       .toList();
-    var deletedRunIds = this.journeyRepository.deleteUnstartedJourneysByRunIds(relevantRunIds);
+    if (!relevantRunIds.isEmpty()) {
+      this.journeyRepository.deleteUnstartedJourneysByRunIds(relevantRunIds);
+    }
+
+    var remainingRunIds = this.journeyRepository.findAllRunIdsWhereRunIdIn(relevantRunIds);
+    var updatableRunIds = new HashSet<>(relevantRunIds);
+    remainingRunIds.forEach(updatableRunIds::remove);
 
     // re-store all journeys into the db that were actually updated and are not active
     for (var journeyEntry : relevantJourneys) {
       var journey = journeyEntry.getKey();
       var journeyChecksum = journeyEntry.getValue();
-      if (deletedRunIds.contains(journey.getForeignRunId())) {
+      if (updatableRunIds.contains(journey.getForeignRunId())) {
         this.journeyRepository.save(journey);
+        this.journeyEventRepository.saveAll(journey.getEvents());
 
         var checksumData = CacheProto.JourneyChecksumData.newBuilder()
           .setChecksum(journeyChecksum)

@@ -85,4 +85,12 @@ public final class EventSubjectFactory {
   public static @NonNull String createServerRemoveSubjectV1(@NonNull String serverId) {
     return ALL_FRAMES_PREFIX + DELIM + "server-removals" + DELIM + "v1" + DELIM + serverId;
   }
+
+  public static @NonNull String createDispatchPostUpdateSubjectV1(@NonNull String serverId, @NonNull String postId) {
+    return ALL_FRAMES_PREFIX + DELIM + "dispatch-post-updates" + DELIM + "v1" + DELIM + serverId + DELIM + postId;
+  }
+
+  public static @NonNull String createDispatchPostRemoveSubjectV1(@NonNull String serverId, @NonNull String postId) {
+    return ALL_FRAMES_PREFIX + DELIM + "dispatch-post-removals" + DELIM + "v1" + DELIM + serverId + DELIM + postId;
+  }
 }

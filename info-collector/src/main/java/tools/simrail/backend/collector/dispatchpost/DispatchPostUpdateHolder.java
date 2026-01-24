@@ -22,34 +22,37 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.event;
+package tools.simrail.backend.collector.dispatchpost;
 
-import io.nats.client.Connection;
-import io.nats.client.Nats;
-import io.nats.client.Options;
-import java.time.Duration;
+import java.util.UUID;
 import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import tools.simrail.backend.common.proto.EventBusProto;
+import tools.simrail.backend.common.update.UpdatableField;
+import tools.simrail.backend.common.update.UpdatableFieldGroup;
 
 /**
- * Configuration for nats.
+ * Holder for the updates to a single dispatch post.
  */
-@Configuration
-public class NatsConfiguration {
+final class DispatchPostUpdateHolder {
 
-  @Bean(destroyMethod = "close")
-  public @NonNull Connection createNatsConnection(@Value("${sit.nats.url}") String natsUrl) throws Exception {
-    var options = Options.builder()
-      .server(natsUrl)
-      .maxReconnects(-1) // infinite reconnect attempts
-      .reconnectWait(Duration.ofSeconds(1))
-      .connectionTimeout(Duration.ofSeconds(5))
-      .noEcho()
-      .supportUTF8Subjects()
-      .discardMessagesWhenOutgoingQueueFull()
-      .build();
-    return Nats.connect(options);
+  final UUID id;
+  final String foreignId;
+  final String secondaryCacheKey;
+
+  // the updatable fields
+  final UpdatableFieldGroup fieldGroup;
+  final UpdatableField<EventBusProto.User> dispatcher;
+
+  public DispatchPostUpdateHolder(@NonNull UUID id, @NonNull String foreignId, @NonNull String secondaryCacheKey) {
+    this.id = id;
+    this.foreignId = foreignId;
+    this.secondaryCacheKey = secondaryCacheKey;
+
+    this.fieldGroup = new UpdatableFieldGroup();
+    this.dispatcher = this.fieldGroup.createNullableField();
+  }
+
+  public static @NonNull String createSecondaryCacheKey(@NonNull String serverId, @NonNull String foreignId) {
+    return serverId + '_' + foreignId;
   }
 }

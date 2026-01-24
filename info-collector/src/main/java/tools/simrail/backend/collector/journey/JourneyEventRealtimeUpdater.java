@@ -43,7 +43,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
-import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneyEventRepository;
@@ -213,7 +212,11 @@ final class JourneyEventRealtimeUpdater {
           return null;
         }
 
-        var jitEventPair = this.createJitAdditionalEvent(currentPoint, lastConfirmedEvent, events, request.server());
+        var jitEventPair = this.createJitAdditionalEvent(
+          currentPoint,
+          lastConfirmedEvent,
+          events,
+          request.serverTime());
         events.add(jitEventPair.getFirst()); // arrival event
         events.add(jitEventPair.getSecond()); // departure event
         events.sort(EVENT_COMPARATOR); // ensure stable ordering of list
@@ -244,7 +247,7 @@ final class JourneyEventRealtimeUpdater {
 
     // update the realtime time info of the event and
     // predict the times of the subsequent journey events based on this arrival
-    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.server(), events);
+    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.serverTime(), events);
     this.updateSubsequentJourneyEventTimes(eventIndex, events);
     return true;
   }
@@ -269,22 +272,22 @@ final class JourneyEventRealtimeUpdater {
     // update the realtime time information of the event and
     // predict the times of the subsequent journey events based on this departure
     var eventIndex = events.indexOf(departureEventOfPoint);
-    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.server(), events);
+    this.updateEventTimeAndMarkPreviousEventsAsCancelled(eventIndex, request.serverTime(), events);
     this.updateSubsequentJourneyEventTimes(eventIndex, events);
     return true;
   }
 
   private void updateEventTimeAndMarkPreviousEventsAsCancelled(
     int eventIndex,
-    @NonNull SimRailServerDescriptor server,
+    @NonNull LocalDateTime serverTime,
     @NonNull List<JourneyEventEntity> events
   ) {
     // update the realtime time information of the event,
     // remove the marking as canceled as it actually happened
     var event = events.get(eventIndex);
     event.setCancelled(false);
+    event.setRealtimeTime(serverTime);
     event.setRealtimeTimeType(JourneyTimeType.REAL);
-    event.setRealtimeTime(server.currentTime());
 
     // mark all previous unconfirmed events as canceled as they can no longer happen
     for (var index = (eventIndex - 1); index >= 0; index--) {
@@ -406,11 +409,10 @@ final class JourneyEventRealtimeUpdater {
     @NonNull SimRailPoint currPoint,
     @NonNull JourneyEventEntity prevEvent,
     @NonNull List<JourneyEventEntity> events,
-    @NonNull SimRailServerDescriptor server
+    @NonNull LocalDateTime serverTime
   ) {
     // generate a scheduled time info based on the current server time
-    var currentServerTime = server.currentTime();
-    var eventScheduledTime = this.roundAndTruncatePredictedTime(currentServerTime);
+    var eventScheduledTime = this.roundAndTruncatePredictedTime(serverTime);
 
     // build the transport info
     var maxSpeedAtCurrentPoint = events.stream()

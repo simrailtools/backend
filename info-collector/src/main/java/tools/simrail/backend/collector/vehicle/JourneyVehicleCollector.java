@@ -90,7 +90,7 @@ class JourneyVehicleCollector {
     this.predictedCompositionCollectTimer = predictedCompositionCollectTimer;
   }
 
-  @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES, scheduler = "vehicle_collect_scheduler")
+  // @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES, scheduler = "vehicle_collect_scheduler")
   public void collectJourneyVehicles() {
     // collect the scheduled/predicted vehicle compositions first
     var servers = this.serverService.getServers();
@@ -156,14 +156,14 @@ class JourneyVehicleCollector {
       if (previousVehicles == null || previousVehicles.isEmpty()) {
         var unknownVehicle = new JourneyVehicleEntity();
         unknownVehicle.setIndexInGroup(0);
-        unknownVehicle.setJourneyId(journeyId);
-        unknownVehicle.setStatus(JourneyVehicleStatus.UNKNOWN);
+        //unknownVehicle.setJourneyId(journeyId);
+        //unknownVehicle.setStatus(JourneyVehicleStatus.UNKNOWN);
         this.journeyVehicleService.saveJourneyVehicles(journeyId, List.of(unknownVehicle));
       } else {
         var currentEventVehicles = previousVehicles.stream()
           .map(vehicle -> {
             var newVehicle = new JourneyVehicleEntity();
-            newVehicle.setJourneyId(journeyId);
+      //      newVehicle.setJourneyId(journeyId);
             newVehicle.setStatus(JourneyVehicleStatus.PREDICTION);
             newVehicle.setIndexInGroup(vehicle.indexInGroup());
             newVehicle.setRailcarId(vehicle.railcarId());
@@ -227,7 +227,7 @@ class JourneyVehicleCollector {
     var criteriaBuilder = new StringJoiner(" OR ");
     for (var run : relevantTrainRuns) {
       var firstEvent = run.getTimetable().getFirst();
-      var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
+      var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), null /* server.timezoneOffset() */);
       var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
       var formattedCriteria = String.format(
         baseCriteria,
@@ -307,7 +307,7 @@ class JourneyVehicleCollector {
         // create base information about the vehicle & register it
         var vehicle = new JourneyVehicleEntity();
         vehicle.setIndexInGroup(index);
-        vehicle.setJourneyId(journeyId);
+ //       vehicle.setJourneyId(journeyId);
         vehicle.setStatus(JourneyVehicleStatus.REAL);
         vehicle.setRailcarId(vehicleRailcar.getId());
         convertedVehicles.add(vehicle);

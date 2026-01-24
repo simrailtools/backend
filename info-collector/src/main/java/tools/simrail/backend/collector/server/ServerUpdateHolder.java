@@ -39,10 +39,10 @@ final class ServerUpdateHolder {
   final UUID id;
   final String foreignId;
 
-  // the updatable fields of a journey
+  // the updatable fields
   final UpdatableFieldGroup fieldGroup;
   final UpdatableField<Boolean> online;
-  final UpdatableField<Integer> utcOffsetHours;
+  final UpdatableField<Long> utcOffsetSeconds;
   final UpdatableField<String> spokenLanguage;
   final UpdatableField<List<String>> tags;
   final UpdatableField<SimRailServerScenery> scenery;
@@ -58,7 +58,7 @@ final class ServerUpdateHolder {
     this.spokenLanguage = this.fieldGroup.createNullableField();
 
     // it's important to initialize this field (to utc), as the api to get the offset might fail
-    this.utcOffsetHours = this.fieldGroup.createField();
-    this.utcOffsetHours.forceUpdateValue(0);
+    this.utcOffsetSeconds = this.fieldGroup.createField();
+    this.utcOffsetSeconds.forceUpdateValue(0L);
   }
 }

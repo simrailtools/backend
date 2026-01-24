@@ -31,6 +31,7 @@ dependencies {
   implementation(libs.feignCore)
   implementation(libs.protobufJava)
   implementation("org.postgresql:postgresql")
+  implementation("org.flywaydb:flyway-database-postgresql")
   implementation("io.micrometer:micrometer-registry-prometheus")
 
   implementation("org.springframework.boot:spring-boot-starter-web")

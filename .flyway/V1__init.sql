@@ -44,17 +44,17 @@ CREATE TABLE sr_dispatch_post
   id               UUID                        NOT NULL,
   point_id         UUID                        NOT NULL,
   foreign_id       VARCHAR(24)                 NOT NULL,
+  server_id        UUID                        NOT NULL,
   update_time      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   registered_since TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   name             TEXT                        NOT NULL,
-  server_id        UUID                        NOT NULL,
-  deleted          BOOLEAN                     NOT NULL,
   difficulty_level SMALLINT                    NOT NULL,
   pos_latitude     DOUBLE PRECISION            NOT NULL,
   pos_longitude    DOUBLE PRECISION            NOT NULL,
   image_urls       JSONB                       NOT NULL,
+  deleted          BOOLEAN                     NOT NULL,
   CONSTRAINT pk_sr_dispatch_post PRIMARY KEY (id),
-  CONSTRAINT uk_sr_dispatch_post_foreign_id UNIQUE (foreign_id)
+  CONSTRAINT uk_sr_dispatch_post_server_foreign_id UNIQUE (server_id, foreign_id)
 );
 
 CREATE TABLE sit_journey
@@ -63,8 +63,8 @@ CREATE TABLE sit_journey
   foreign_run_id          UUID                        NOT NULL,
   server_id               UUID                        NOT NULL,
   update_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  first_seen_time         TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  last_seen_time          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  first_seen_time         TIMESTAMP WITHOUT TIME ZONE,
+  last_seen_time          TIMESTAMP WITHOUT TIME ZONE,
   cancelled               BOOLEAN                     NOT NULL,
   continuation_journey_id UUID,
   CONSTRAINT pk_sit_journey PRIMARY KEY (id),

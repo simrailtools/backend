@@ -33,7 +33,7 @@ import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tools.simrail.backend.collector.metric.PerServerGauge;
+import tools.simrail.backend.collector.util.PerServerGauge;
 
 /**
  * Configurations for metrics.

@@ -41,7 +41,7 @@ import tools.simrail.backend.common.proto.EventBusProto;
  * Configures everything related to data caching.
  */
 @Configuration
-public class DataCacheConfiguration {
+public class CommonDataCacheConfiguration {
 
   @Bean(destroyMethod = "shutdown")
   public @NonNull RedissonClient createRedissonClient(
@@ -92,5 +92,17 @@ public class DataCacheConfiguration {
       data -> data.getBaseData().getTimestamp(),
       data -> data.getIds().getDataId(),
       data -> data.getIds().getForeignId());
+  }
+
+  @Bean(name = "dispatch_post_cache")
+  public @NonNull DataCache<EventBusProto.DispatchPostUpdateFrame> postDataCache(@NonNull RedissonClient redisson) {
+    return new DataCache<>(
+      "dispatch_post_cache",
+      Duration.ofMinutes(30),
+      redisson,
+      EventBusProto.DispatchPostUpdateFrame.parser(),
+      data -> data.getBaseData().getTimestamp(),
+      data -> data.getIds().getDataId(),
+      data -> data.getIds().getServerId() + '_' + data.getIds().getForeignId());
   }
 }

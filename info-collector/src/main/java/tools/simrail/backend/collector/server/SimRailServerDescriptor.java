@@ -32,16 +32,16 @@ import org.jspecify.annotations.NonNull;
 /**
  * A descriptor of a server that was retrieved on the last collection run.
  *
- * @param id                       our id of the server.
- * @param foreignId                the SimRail backend id of the server.
- * @param code                     the server code.
- * @param serverTimeUtcOffsetHours the offset hours of the server time from UTC.
+ * @param id                         our id of the server.
+ * @param foreignId                  the SimRail backend id of the server.
+ * @param code                       the server code.
+ * @param serverTimeUtcOffsetSeconds the offset seconds of the server time from UTC.
  */
 public record SimRailServerDescriptor(
   @NonNull UUID id,
   @NonNull String foreignId,
   @NonNull String code,
-  long serverTimeUtcOffsetHours
+  long serverTimeUtcOffsetSeconds
 ) {
 
   /**
@@ -50,6 +50,6 @@ public record SimRailServerDescriptor(
    * @return the current date and time on this server.
    */
   public @NonNull LocalDateTime currentTime() {
-    return LocalDateTime.now(ZoneOffset.UTC).plusHours(this.serverTimeUtcOffsetHours);
+    return LocalDateTime.now(ZoneOffset.UTC).plusSeconds(this.serverTimeUtcOffsetSeconds);
   }
 }

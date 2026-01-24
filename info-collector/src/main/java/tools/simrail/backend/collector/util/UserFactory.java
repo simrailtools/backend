@@ -22,34 +22,40 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.common.event;
+package tools.simrail.backend.collector.util;
 
-import io.nats.client.Connection;
-import io.nats.client.Nats;
-import io.nats.client.Options;
-import java.time.Duration;
-import org.jspecify.annotations.NonNull;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Configuration;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
- * Configuration for nats.
+ * Factory to construct a user instance.
  */
-@Configuration
-public class NatsConfiguration {
+public final class UserFactory {
 
-  @Bean(destroyMethod = "close")
-  public @NonNull Connection createNatsConnection(@Value("${sit.nats.url}") String natsUrl) throws Exception {
-    var options = Options.builder()
-      .server(natsUrl)
-      .maxReconnects(-1) // infinite reconnect attempts
-      .reconnectWait(Duration.ofSeconds(1))
-      .connectionTimeout(Duration.ofSeconds(5))
-      .noEcho()
-      .supportUTF8Subjects()
-      .discardMessagesWhenOutgoingQueueFull()
-      .build();
-    return Nats.connect(options);
+  private UserFactory() {
+    throw new UnsupportedOperationException();
+  }
+
+  /**
+   * Constructs a user instance from the given input parameters. The input parameters must be groups of a user platform
+   * and the user id string.
+   *
+   * @param params the input parameters to construct the user from.
+   * @return the constructed user, possibly null.
+   */
+  public static EventBusProto.@Nullable User constructUser(@Nullable Object... params) {
+    if (params.length % 2 != 0) {
+      throw new IllegalArgumentException("Params size must be a power of 2");
+    }
+
+    for (int index = 0; index < params.length; index += 2) {
+      var platform = (EventBusProto.UserPlatform) params[index];
+      var userId = (String) params[index + 1];
+      if (userId != null && !userId.equals("null")) {
+        return EventBusProto.User.newBuilder().setPlatform(platform).setId(userId).build();
+      }
+    }
+
+    return null;
   }
 }

@@ -24,6 +24,7 @@
 
 package tools.simrail.backend.common.journey;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.AttributeOverride;
 import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
@@ -73,6 +74,7 @@ public final class JourneyEventEntity implements Persistable<UUID> {
   /**
    * The id of the journey which is related to this event.
    */
+  @JsonIgnore // used for checksum computation, but this field is irrelevant
   @JoinColumn(name = "journey_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private JourneyEntity journey;

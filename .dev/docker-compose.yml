@@ -31,7 +31,7 @@ services:
       --appendfsync everysec
       --protected-mode yes
       --user default on \>stb_very_secu1e_passw0rd allkeys +@all
-      --user stb on \>stb_very_secu1e_passw0rd allkeys +@all -@admin -@dangerous -@pubsub -@internal
+      --user stb on \>stb_very_secu1e_passw0rd allkeys +@all -@admin -@dangerous -@pubsub
 
   nats:
     image: docker.io/nats:2-scratch

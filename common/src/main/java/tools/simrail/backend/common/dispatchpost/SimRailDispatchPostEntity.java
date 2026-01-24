@@ -30,7 +30,6 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import jakarta.persistence.Transient;
 import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
@@ -75,6 +74,11 @@ public final class SimRailDispatchPostEntity {
    */
   @Column(name = "foreign_id")
   private String foreignId;
+  /**
+   * The server code on which this dispatch post is located.
+   */
+  @Column(name = "server_id")
+  private UUID serverId;
 
   /**
    * The timestamp when this dispatch post was last updated.
@@ -93,16 +97,6 @@ public final class SimRailDispatchPostEntity {
    */
   @Column(name = "name")
   private String name;
-  /**
-   * The server code on which this dispatch post is located.
-   */
-  @Column(name = "server_id")
-  private UUID serverId;
-  /**
-   * If the dispatch post is no longer registered in the SimRail backend.
-   */
-  @Column(name = "deleted")
-  private boolean deleted;
   /**
    * The difficulty level of the station.
    */
@@ -125,10 +119,10 @@ public final class SimRailDispatchPostEntity {
   private Set<String> imageUrls;
 
   /**
-   * Internal marker to indicate if the post entity was newly created when being collected.
+   * If the dispatch post is no longer registered in the SimRail backend.
    */
-  @Transient
-  private boolean isNew;
+  @Column(name = "deleted")
+  private boolean deleted;
 
   /**
    * {@inheritDoc}

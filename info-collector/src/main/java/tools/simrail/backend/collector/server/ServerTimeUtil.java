@@ -71,4 +71,14 @@ final class ServerTimeUtil {
       throw new IllegalStateException("Unable to parse server time response", exception);
     }
   }
+
+  /**
+   * Converts the given second value to the closest hour value.
+   *
+   * @param seconds the seconds to convert to hours.
+   * @return the closest hour value based on the given seconds.
+   */
+  public static int convertToHours(long seconds) {
+    return (int) Math.round(seconds / 3600.0); // 3600 - 1 hour in seconds
+  }
 }

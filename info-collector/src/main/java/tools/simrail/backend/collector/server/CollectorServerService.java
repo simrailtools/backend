@@ -62,8 +62,10 @@ class CollectorServerService {
 
     serverEntity.setTags(serverUpdaterHolder.tags.currentValue());
     serverEntity.setScenery(serverUpdaterHolder.scenery.currentValue());
-    serverEntity.setUtcOffsetHours(serverUpdaterHolder.utcOffsetHours.currentValue());
     serverEntity.setSpokenLanguage(serverUpdaterHolder.spokenLanguage.currentValue());
+
+    var utcOffsetHours = ServerTimeUtil.convertToHours(serverUpdaterHolder.utcOffsetSeconds.currentValue());
+    serverEntity.setUtcOffsetHours(utcOffsetHours);
 
     var region = switch (server.getRegion()) {
       case ASIA -> SimRailServerRegion.ASIA;

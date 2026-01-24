@@ -29,6 +29,8 @@ import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.nats.client.Connection;
 import jakarta.annotation.PostConstruct;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -73,6 +75,7 @@ public class SimRailServerCollector implements SimRailServerService {
   private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   private long collectionRuns = 0;
+  private Instant lastDatabaseUpdate;
   private volatile List<SimRailServerDescriptor> collectedServers = List.of();
 
   @Autowired
@@ -113,7 +116,7 @@ public class SimRailServerCollector implements SimRailServerService {
       // reconstruct the update fields state from the journey data
       var data = cachedValue.getServerData();
       updateHolder.online.forceUpdateValue(data.getOnline());
-      updateHolder.utcOffsetHours.forceUpdateValue(data.getUtcOffsetHours());
+      updateHolder.utcOffsetSeconds.forceUpdateValue(data.getUtcOffsetSeconds());
       updateHolder.tags.forceUpdateValue(data.getTagsList());
       updateHolder.scenery.forceUpdateValue(StringUtils.decodeEnum(data.getScenery(), SimRailServerScenery.FULL));
       if (data.hasSpokenLanguage()) {
@@ -131,6 +134,14 @@ public class SimRailServerCollector implements SimRailServerService {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
     var fullCollection = this.collectionRuns++ % 2 == 0;
+
+    // check if we should update the stored db data
+    var now = Instant.now();
+    var lastDbUpdate = this.lastDatabaseUpdate;
+    var shouldUpdateDatabase = lastDbUpdate == null || Duration.between(lastDbUpdate, now).abs().toMinutes() >= 5;
+    if (shouldUpdateDatabase) {
+      this.lastDatabaseUpdate = now;
+    }
 
     var response = this.panelApiClient.getServers();
     var servers = response.getEntries();
@@ -199,8 +210,7 @@ public class SimRailServerCollector implements SimRailServerService {
 
         // convert the collected utc offset seconds to utc offset hours and update it in the server entity
         if (serverZoneOffsetSeconds != null) {
-          var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
-          updateHolder.utcOffsetHours.updateValue(utcOffsetHours);
+          updateHolder.utcOffsetSeconds.updateValue(serverZoneOffsetSeconds);
         }
       }
 
@@ -222,7 +232,7 @@ public class SimRailServerCollector implements SimRailServerService {
         // apply the changed fields to the server data builder
         var serverDataBuilder = updateFrameBuilder.getServerData().toBuilder();
         updateHolder.online.ifDirty(serverDataBuilder::setOnline);
-        updateHolder.utcOffsetHours.ifDirty(serverDataBuilder::setUtcOffsetHours);
+        updateHolder.utcOffsetSeconds.ifDirty(serverDataBuilder::setUtcOffsetSeconds);
         updateHolder.tags.ifDirty(tags -> serverDataBuilder.clearTags().addAllTags(tags));
         updateHolder.spokenLanguage.ifDirty(language -> {
           if (language == null) {
@@ -244,15 +254,17 @@ public class SimRailServerCollector implements SimRailServerService {
           .build();
         var subject = EventSubjectFactory.createServerUpdateSubjectV1(updateFrame.getIds().getServerId());
         this.connection.publish(subject, updateFrame.toByteArray());
+      }
 
-        // update the server data in the database
+      // update the server data in the database if it's either a new server or for a periodical update
+      if (mightBeNewServer || shouldUpdateDatabase) {
         this.serverService.saveServer(server, updateHolder);
       }
 
       // register a server descriptor for the server during a full collection
       if (fullCollection) {
-        var utcOffsetHours = updateHolder.utcOffsetHours.currentValue();
-        var sc = new SimRailServerDescriptor(updateHolder.id, updateHolder.foreignId, serverCode, utcOffsetHours);
+        var utcOffsetSeconds = updateHolder.utcOffsetSeconds.currentValue();
+        var sc = new SimRailServerDescriptor(updateHolder.id, updateHolder.foreignId, serverCode, utcOffsetSeconds);
         foundServers.add(sc);
       }
 
@@ -263,11 +275,13 @@ public class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    if (fullCollection && !foundServers.isEmpty()) {
+    var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).collect(Collectors.toSet());
+    if (shouldUpdateDatabase) {
       // mark all servers which are not included in the response as deleted
-      var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).collect(Collectors.toSet());
       this.serverService.markUncontainedServersAsDeleted(updatedServerIds);
+    }
 
+    if (fullCollection) {
       // remove the removed servers from the
       var updatedServerIdStrings = updatedServerIds.stream().map(UUID::toString).collect(Collectors.toSet());
       var removedServers = this.serverDataCache.findBySecondaryKeyNotIn(updatedServerIdStrings);

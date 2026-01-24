@@ -73,14 +73,18 @@ interface CollectorJourneyRepository extends JourneyRepository {
     """, nativeQuery = true)
   List<UUID> findJourneysThatDidNotSpawn(@Param("time") OffsetDateTime serverTime, @Param("serverId") UUID serverId);
 
-  @NonNull
   @Modifying
-  @Query(value = """
-    DELETE FROM sit_journey j
-    WHERE j.foreign_run_id IN :runIds AND j.first_seen_time IS NULL
-    RETURNING j.foreign_run_id
-    """, nativeQuery = true)
-  Set<UUID> deleteUnstartedJourneysByRunIds(@Param(":runIds") Collection<UUID> runIds);
+  @Query(value = "DELETE FROM sit_journey j WHERE j.foreign_run_id IN :runIds AND j.first_seen_time IS NULL", nativeQuery = true)
+  void deleteUnstartedJourneysByRunIds(@Param("runIds") Collection<UUID> runIds);
+
+  /**
+   *
+   * @param foreignRunIds
+   * @return
+   */
+  @NonNull
+  @Query(value = "SELECT DISTINCT j.foreign_run_id FROM sit_journey j WHERE j.foreign_run_id IN :runIds", nativeQuery = true)
+  Set<UUID> findAllRunIdsWhereRunIdIn(@Param("runIds") Collection<UUID> foreignRunIds);
 
   /**
    * Marks the journeys with the given journey ids as canceled.
@@ -102,6 +106,6 @@ interface CollectorJourneyRepository extends JourneyRepository {
    */
   @Modifying
   @Transactional
-  @Query("UPDATE sit_journey_event je SET je.cancelled = TRUE WHERE je.journeyId IN :journeyIds")
+  @Query("UPDATE sit_journey_event je SET je.cancelled = TRUE WHERE je.journey.id IN :journeyIds")
   void markJourneyEventsAsCancelled(@Param("journeyIds") Collection<UUID> journeyIds);
 }

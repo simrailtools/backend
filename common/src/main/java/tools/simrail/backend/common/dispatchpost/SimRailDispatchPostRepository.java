@@ -26,6 +26,7 @@ package tools.simrail.backend.common.dispatchpost;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.repository.ListCrudRepository;
@@ -45,16 +46,6 @@ public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRai
   Optional<SimRailDispatchPostEntity> findByPointId(@NonNull UUID pointId);
 
   /**
-   * Finds a single dispatch post by the given foreign id.
-   *
-   * @param id       the foreign id of the dispatch post to get.
-   * @param serverId the server id of the server to get the dispatch post on.
-   * @return an optional holding the dispatch post entity if an entity with the given foreign id exists.
-   */
-  @NonNull
-  Optional<SimRailDispatchPostEntity> findByForeignIdAndServerId(@NonNull String id, @NonNull UUID serverId);
-
-  /**
    * Finds all dispatch post entities for the given server code.
    *
    * @param serverId the id of the server to get the dispatch posts of.
@@ -62,4 +53,16 @@ public interface SimRailDispatchPostRepository extends ListCrudRepository<SimRai
    */
   @NonNull
   List<SimRailDispatchPostEntity> findAllByServerId(@NonNull UUID serverId);
+
+  /**
+   * Finds all dispatch posts on the given server whose foreign id is not in the given set and are not deleted.
+   *
+   * @param serverId   the id of the server the dispatch posts must be located on.
+   * @param foreignIds the foreign ids of the dispatch posts to not return.
+   * @return the dispatch posts on the given server that don't have one of the given foreign ids.
+   */
+  @NonNull
+  List<SimRailDispatchPostEntity> findAllByServerIdAndForeignIdNotInAndDeletedIsFalse(
+    @NonNull UUID serverId,
+    @NonNull Set<String> foreignIds);
 }

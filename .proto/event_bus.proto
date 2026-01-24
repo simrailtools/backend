@@ -60,7 +60,7 @@ message DispatchPostData {
 message ServerData {
   bool online = 1;
   string scenery = 2;
-  sint32 utc_offset_hours = 3;
+  sint64 utc_offset_seconds = 3;
   optional string spoken_language = 4;
   repeated string tags = 5;
 }

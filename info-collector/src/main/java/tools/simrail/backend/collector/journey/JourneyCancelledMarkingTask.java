@@ -27,12 +27,11 @@ package tools.simrail.backend.collector.journey;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
 import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
 import java.util.concurrent.TimeUnit;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.collector.metric.PerServerGauge;
+import tools.simrail.backend.collector.util.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerService;
 
 /**
