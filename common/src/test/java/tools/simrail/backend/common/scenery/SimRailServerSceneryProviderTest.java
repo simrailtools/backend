@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.common.scenery;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -32,8 +31,9 @@ import java.net.http.HttpResponse;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import tools.jackson.databind.ObjectMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
   JacksonAutoConfiguration.class,
@@ -67,7 +67,7 @@ public class SimRailServerSceneryProviderTest {
     Assertions.assertFalse(servers.isEmpty());
 
     for (var server : servers) {
-      var serverId = server.get("id").asText();
+      var serverId = server.get("id").asString();
       var scenery = this.sceneryProvider.findSceneryByServerId(serverId);
       Assertions.assertTrue(scenery.isPresent(), "missing scenery for " + serverId);
     }

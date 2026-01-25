@@ -24,16 +24,16 @@
 
 package tools.simrail.backend.common.border;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
+import tools.jackson.databind.json.JsonMapper;
 import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 
@@ -66,7 +66,7 @@ public final class MapBorderPointProviderTest {
       for (var borderPoint : borderPoints) {
         var pointIds = borderPoint.get("ext_point_ids");
         for (var pointIdNode : pointIds) {
-          var pointId = pointIdNode.asText();
+          var pointId = pointIdNode.asString();
           if (!seenPointIds.add(pointId)) {
             Assertions.fail("Duplicate border point id: " + pointId);
           }
@@ -95,13 +95,13 @@ public final class MapBorderPointProviderTest {
       String endPointId = null;
 
       var timetable = trainRun.get("timetable");
-      var trainRunId = trainRun.get("runId").asText();
+      var trainRunId = trainRun.get("runId").asString();
       if (timetable.isEmpty()) {
         continue;
       }
 
       for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asText();
+        var pointId = timetableEntry.get("pointId").asString();
         var isBorderPoint = this.borderPointProvider.isMapBorderPoint(pointId);
         if (isBorderPoint) {
           if (startPointId == null) {

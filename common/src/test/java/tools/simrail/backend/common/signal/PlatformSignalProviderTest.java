@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.signal;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -42,9 +40,11 @@ import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
+import tools.jackson.databind.json.JsonMapper;
+import tools.jackson.databind.node.ArrayNode;
 import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.common.util.RomanNumberConverter;
@@ -89,8 +89,8 @@ public class PlatformSignalProviderTest {
     try (var stream = this.signalsResource.getInputStream()) {
       var signals = jsonMapper.readTree(stream);
       for (var signal : signals) {
-        var signalId = signal.get("id").asText();
-        var pointId = signal.get("point_id").asText();
+        var signalId = signal.get("id").asString();
+        var pointId = signal.get("point_id").asString();
         Assertions.assertFalse(signalId.isBlank());
         Assertions.assertFalse(pointId.isBlank());
 
@@ -131,17 +131,17 @@ public class PlatformSignalProviderTest {
     for (var trainRun : trainRuns) {
       var timetable = (ArrayNode) trainRun.get("timetable");
       for (var timetableEntry : timetable) {
-        var stopType = timetableEntry.get("stopType").asText();
-        var pointName = timetableEntry.get("nameOfPoint").asText();
-        var platformString = timetableEntry.get("platform").asText();
+        var stopType = timetableEntry.get("stopType").asString();
+        var pointName = timetableEntry.get("nameOfPoint").asString();
+        var platformString = timetableEntry.get("platform").stringValue(null);
         if (stopType.equals("CommercialStop")
-          && !platformString.equals("null")
+          && platformString != null
           && !missingPoints.contains(pointName)
           && !pointsWithWrongPlatformMapping.contains(pointName)) {
           // get the point associated with the stop
-          var pointId = timetableEntry.get("pointId").asText();
+          var pointId = timetableEntry.get("pointId").asString();
           var point = this.pointProvider.findPointByPointId(pointId);
-          Assertions.assertTrue(point.isPresent());
+          Assertions.assertTrue(point.isPresent(), "Missing point " + pointId);
 
           // get the track information of the stop and the signal info for the point
           var track = timetableEntry.get("track").asInt();

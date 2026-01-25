@@ -48,6 +48,6 @@ public class MongoIdDecodeUtilTest {
   @MethodSource("mongoIdSource")
   void testMongoIdDecode(String mongoId, OffsetDateTime expectedDate) {
     var parsedDate = MongoIdDecodeUtil.parseMongoId(mongoId);
-    Assertions.assertEquals(expectedDate, parsedDate);
+    Assertions.assertEquals(expectedDate.toInstant(), parsedDate);
   }
 }

@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.point;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import java.io.IOException;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -43,9 +41,11 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.web.util.UriComponentsBuilder;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
 import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.util.GeoUtil;
 
@@ -199,8 +199,8 @@ public final class SimRailPointProviderTest {
     for (var trainRun : trainRuns) {
       var timetable = (ArrayNode) trainRun.get("timetable");
       for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asText();
-        var pointName = timetableEntry.get("nameOfPoint").asText();
+        var pointId = timetableEntry.get("pointId").asString();
+        var pointName = timetableEntry.get("nameOfPoint").asString();
         var point = this.pointProvider.findPointByPointId(pointId);
         if (point.isEmpty()) {
           missingPoints.add(pointName);
@@ -224,7 +224,7 @@ public final class SimRailPointProviderTest {
     for (var trainRun : trainRuns) {
       var timetable = trainRun.get("timetable");
       for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asText();
+        var pointId = timetableEntry.get("pointId").asString();
         var maxSpeed = timetableEntry.get("maxSpeed").asInt();
         this.pointProvider
           .findPointByPointId(pointId)

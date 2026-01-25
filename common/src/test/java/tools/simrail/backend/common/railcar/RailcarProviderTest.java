@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.common.railcar;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -34,8 +33,9 @@ import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
   RailcarProvider.class,
@@ -146,7 +146,7 @@ public final class RailcarProviderTest {
     for (var activeTrain : activeTrains) {
       var trainRailcars = activeTrain.get("Vehicles");
       for (var trainRailcar : trainRailcars) {
-        var railcarDescriptor = trainRailcar.asText();
+        var railcarDescriptor = trainRailcar.asString();
         var railcardApiId = railcarDescriptor.split(":")[0];
         var railcar = this.railcarProvider.findRailcarByApiId(railcardApiId);
         Assertions.assertTrue(railcar.isPresent(), "Missing railcar " + railcardApiId);
