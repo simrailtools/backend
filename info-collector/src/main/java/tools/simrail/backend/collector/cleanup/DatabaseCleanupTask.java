@@ -26,9 +26,9 @@ package tools.simrail.backend.collector.cleanup;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -49,9 +49,9 @@ class DatabaseCleanupTask {
 
   @Autowired
   public DatabaseCleanupTask(
-    @Nonnull CleanupJourneyRepository journeyRepository,
-    @Nonnull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
-    @Nonnull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter
+    @NonNull CleanupJourneyRepository journeyRepository,
+    @NonNull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
+    @NonNull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter
   ) {
     this.journeyRepository = journeyRepository;
     this.cleanupDurationTimer = cleanupDurationTimer;

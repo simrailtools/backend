@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.collector.server;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 public interface SimRailServerService {
 
@@ -36,7 +36,7 @@ public interface SimRailServerService {
    *
    * @return the server descriptors that were retrieved on the last collection run.
    */
-  @Nonnull
+  @NonNull
   List<SimRailServerDescriptor> getServers();
 
   /**
@@ -45,8 +45,8 @@ public interface SimRailServerService {
    * @param id the internal identifier of the server to get.
    * @return an optional holding the server descriptor with the given internal id if one exists.
    */
-  @Nonnull
-  Optional<SimRailServerDescriptor> findServerByIntId(@Nonnull UUID id);
+  @NonNull
+  Optional<SimRailServerDescriptor> findServerByIntId(@NonNull UUID id);
 
   /**
    * Finds a single server descriptor by the given SimRail identifier.
@@ -54,8 +54,8 @@ public interface SimRailServerService {
    * @param id the SimRail identifier of the server to get.
    * @return an optional holding the server descriptor with the given SimRail id if one exists.
    */
-  @Nonnull
-  Optional<SimRailServerDescriptor> findServerBySimRailId(@Nonnull String id);
+  @NonNull
+  Optional<SimRailServerDescriptor> findServerBySimRailId(@NonNull String id);
 
   /**
    * Finds a single server descriptor by the given server code.
@@ -63,6 +63,6 @@ public interface SimRailServerService {
    * @param code the code of the server to get.
    * @return an optional holding the server descriptor with the given code if one exists.
    */
-  @Nonnull
-  Optional<SimRailServerDescriptor> findServerByCode(@Nonnull String code);
+  @NonNull
+  Optional<SimRailServerDescriptor> findServerByCode(@NonNull String code);
 }

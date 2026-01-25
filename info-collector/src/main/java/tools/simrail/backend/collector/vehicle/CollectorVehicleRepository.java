@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.collector.vehicle;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
@@ -85,5 +85,5 @@ interface CollectorVehicleRepository extends JourneyVehicleRepository {
    *
    * @param journeyId the id of the journey to delete the vehicles of.
    */
-  void deleteAllByJourneyId(@Nonnull UUID journeyId);
+  void deleteAllByJourneyId(@NonNull UUID journeyId);
 }

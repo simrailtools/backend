@@ -26,7 +26,6 @@ package tools.simrail.backend.collector.vehicle;
 
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
 import jakarta.persistence.EntityManager;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
@@ -34,12 +33,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.StringJoiner;
-import java.util.concurrent.TimeUnit;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
@@ -71,14 +69,14 @@ class JourneyVehicleCollector {
 
   @Autowired
   public JourneyVehicleCollector(
-    @Nonnull SimRailAwsApiClient awsApiClient,
-    @Nonnull SimRailPanelApiClient panelApiClient,
-    @Nonnull EntityManager entityManager,
-    @Nonnull RailcarProvider railcarProvider,
-    @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorJourneyVehicleService journeyVehicleService,
-    @Nonnull @Qualifier("actual_vc_collect_duration") Meter.MeterProvider<Timer> actualCompositionCollectTimer,
-    @Nonnull @Qualifier("predicted_vc_collect_duration") Meter.MeterProvider<Timer> predictedCompositionCollectTimer
+    @NonNull SimRailAwsApiClient awsApiClient,
+    @NonNull SimRailPanelApiClient panelApiClient,
+    @NonNull EntityManager entityManager,
+    @NonNull RailcarProvider railcarProvider,
+    @NonNull SimRailServerService serverService,
+    @NonNull CollectorJourneyVehicleService journeyVehicleService,
+    @Qualifier("actual_vc_collect_duration") Meter.@NonNull MeterProvider<Timer> actualCompositionCollectTimer,
+    @Qualifier("predicted_vc_collect_duration") Meter.@NonNull MeterProvider<Timer> predictedCompositionCollectTimer
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
@@ -123,8 +121,8 @@ class JourneyVehicleCollector {
    * @param trainRuns the runs that are planned on the given server.
    */
   private void collectVehiclesFromTimetable(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailAwsTrainRun> trainRuns
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<SimRailAwsTrainRun> trainRuns
   ) {
     // resolve the journeys that already have a vehicle mapping
     var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
@@ -186,9 +184,9 @@ class JourneyVehicleCollector {
    * @return a mapping between a journey identifier and the previous vehicle composition, as described above.
    */
   @SuppressWarnings("unchecked")
-  private @Nonnull Map<String, List<CollectorJourneyVehicleProjection>> findPreviousVehicleCompositions(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailAwsTrainRun> trainRuns
+  private @NonNull Map<String, List<CollectorJourneyVehicleProjection>> findPreviousVehicleCompositions(
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<SimRailAwsTrainRun> trainRuns
   ) {
     // if no train runs are given there is nothing to select
     var relevantTrainRuns = trainRuns.stream().filter(run -> !run.getTimetable().isEmpty()).toList();
@@ -272,8 +270,8 @@ class JourneyVehicleCollector {
    * @param activeTrains the trains that are actively running on the given server.
    */
   private void collectVehiclesFromLiveData(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailPanelTrain> activeTrains
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<SimRailPanelTrain> activeTrains
   ) {
     var runIds = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
     var runIdToJourneyIdMapping = this.journeyVehicleService.findRunsWithoutConfirmedComposition(server.id(), runIds);

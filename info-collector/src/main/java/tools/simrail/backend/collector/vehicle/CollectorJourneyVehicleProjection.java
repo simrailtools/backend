@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.collector.vehicle;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 
 /**
@@ -37,10 +37,10 @@ record CollectorJourneyVehicleProjection(
   @Nullable Integer loadWeight,
   @Nullable JourneyVehicleLoad load,
   @Nullable UUID railcarId,
-  @Nonnull UUID associatedJourneyId
+  @NonNull UUID associatedJourneyId
 ) {
 
-  public static @Nonnull CollectorJourneyVehicleProjection fromSqlTuple(@Nonnull Object[] tuple) {
+  public static @NonNull CollectorJourneyVehicleProjection fromSqlTuple(@NonNull Object[] tuple) {
     // tuple input: <id>, <index_in_group>, <load>, <load_weight>, <railcar_id>, <more, irrelevant entries...>
     var load = tuple[2] != null ? JourneyVehicleLoad.valueOf(tuple[2].toString()) : null;
     return new CollectorJourneyVehicleProjection(

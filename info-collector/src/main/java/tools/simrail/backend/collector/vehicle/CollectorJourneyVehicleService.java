@@ -24,11 +24,11 @@
 
 package tools.simrail.backend.collector.vehicle;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -43,7 +43,7 @@ class CollectorJourneyVehicleService {
   private final CollectorVehicleRepository vehicleRepository;
 
   @Autowired
-  public CollectorJourneyVehicleService(@Nonnull CollectorVehicleRepository vehicleRepository) {
+  public CollectorJourneyVehicleService(@NonNull CollectorVehicleRepository vehicleRepository) {
     this.vehicleRepository = vehicleRepository;
   }
 
@@ -54,7 +54,7 @@ class CollectorJourneyVehicleService {
    * @param runIds   the ids of the runs to search for missing vehicle compositions.
    * @return a mapping of run ids to journeys ids without a stored vehicle composition.
    */
-  public @Nonnull Map<UUID, UUID> findRunsWithoutComposition(@Nonnull UUID serverId, @Nonnull List<UUID> runIds) {
+  public @NonNull Map<UUID, UUID> findRunsWithoutComposition(@NonNull UUID serverId, @NonNull List<UUID> runIds) {
     var journeysWithoutComposition = this.vehicleRepository
       .findJourneyRunsWithoutVehicleComposition(serverId, runIds);
     return journeysWithoutComposition
@@ -69,9 +69,9 @@ class CollectorJourneyVehicleService {
    * @param runIds   the ids of the runs to search for missing vehicle compositions.
    * @return a mapping of run ids to journeys ids without a confirmed vehicle composition.
    */
-  public @Nonnull Map<UUID, UUID> findRunsWithoutConfirmedComposition(
-    @Nonnull UUID serverId,
-    @Nonnull List<UUID> runIds
+  public @NonNull Map<UUID, UUID> findRunsWithoutConfirmedComposition(
+    @NonNull UUID serverId,
+    @NonNull List<UUID> runIds
   ) {
     var journeysWithoutComposition = this.vehicleRepository
       .findJourneyRunsWithoutConfirmedVehicleComposition(serverId, runIds);
@@ -87,7 +87,7 @@ class CollectorJourneyVehicleService {
    * @param vehicles  the new vehicle information for the journey.
    */
   @Transactional
-  public void saveJourneyVehicles(@Nonnull UUID journeyId, @Nonnull List<JourneyVehicleEntity> vehicles) {
+  public void saveJourneyVehicles(@NonNull UUID journeyId, @NonNull List<JourneyVehicleEntity> vehicles) {
     this.vehicleRepository.deleteAllByJourneyId(journeyId);
     this.vehicleRepository.saveAll(vehicles);
   }

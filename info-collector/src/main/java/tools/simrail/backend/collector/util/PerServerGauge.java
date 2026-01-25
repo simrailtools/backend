@@ -26,12 +26,12 @@ package tools.simrail.backend.collector.util;
 
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicInteger;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 
 /**
@@ -47,8 +47,8 @@ public final class PerServerGauge {
   private final String metricDescription;
 
   public PerServerGauge(
-    @Nonnull MeterRegistry meterRegistry,
-    @Nonnull String metricName,
+    @NonNull MeterRegistry meterRegistry,
+    @NonNull String metricName,
     @Nullable String metricBaseUnit,
     @Nullable String metricDescription
   ) {
@@ -65,7 +65,7 @@ public final class PerServerGauge {
    * @param server the server for which the state should be set.
    * @param value  the value to set for the gauge associated with the server.
    */
-  public void setValue(@Nonnull SimRailServerDescriptor server, int value) {
+  public void setValue(@NonNull SimRailServerDescriptor server, int value) {
     var serverGaugeState = this.gaugeStateByServer.computeIfAbsent(server.id(), _ -> {
       var state = new AtomicInteger();
       Gauge.builder(this.metricName, state::get)

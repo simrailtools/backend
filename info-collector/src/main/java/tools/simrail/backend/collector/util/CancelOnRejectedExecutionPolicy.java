@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.collector.util;
 
-import jakarta.annotation.Nonnull;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Rejected execution handler that cancels futures to indicate the rejection.
@@ -38,7 +38,7 @@ public final class CancelOnRejectedExecutionPolicy implements RejectedExecutionH
    * {@inheritDoc}
    */
   @Override
-  public void rejectedExecution(@Nonnull Runnable task, @Nonnull ThreadPoolExecutor executor) {
+  public void rejectedExecution(@NonNull Runnable task, @NonNull ThreadPoolExecutor executor) {
     if (task instanceof Future<?> future) {
       future.cancel(true);
     }
