@@ -54,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(47, borderPoints.size());
+    Assertions.assertEquals(50, borderPoints.size());
   }
 
   @Test
@@ -91,30 +91,29 @@ public final class MapBorderPointProviderTest {
   void testAllTimetableEntriesHaveBorderPoints() {
     var trainRuns = TimetableHolder.getDefaultServerTimetable();
     for (var trainRun : trainRuns) {
-      String startPointId = null;
-      String endPointId = null;
-
       var timetable = trainRun.get("timetable");
       var trainRunId = trainRun.get("runId").asString();
       if (timetable.isEmpty()) {
         continue;
       }
 
+      MapBorderPoint start = null;
+      MapBorderPoint end = null;
       for (var timetableEntry : timetable) {
         var pointId = timetableEntry.get("pointId").asString();
-        var isBorderPoint = this.borderPointProvider.isMapBorderPoint(pointId);
-        if (isBorderPoint) {
-          if (startPointId == null) {
-            startPointId = pointId;
+        var borderPoint = this.borderPointProvider.findMapBorderPoint(pointId).orElse(null);
+        if (borderPoint != null) {
+          if (start == null) {
+            start = borderPoint;
           } else {
-            endPointId = pointId;
+            end = borderPoint;
           }
         }
       }
 
-      Assertions.assertNotNull(startPointId, trainRunId);
-      Assertions.assertNotNull(endPointId, trainRunId);
-      Assertions.assertNotEquals(startPointId, endPointId, trainRunId);
+      Assertions.assertNotNull(start, trainRunId);
+      Assertions.assertNotNull(end, trainRunId);
+      Assertions.assertNotEquals(start, end, trainRunId);
     }
   }
 }

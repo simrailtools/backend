@@ -102,9 +102,17 @@
     ]
   },
   {
-    "name": "Warszawa Ursus Północny",
+    "name": "Warszawa Gołąbki",
     "ext_point_ids": [
-      "4804"
+      "4727"
+    ]
+  },
+  {
+    "name": "Warszawa Główna Towarowa",
+    "ext_point_ids": [
+      "4718",
+      "4719",
+      "4723"
     ]
   },
   {
