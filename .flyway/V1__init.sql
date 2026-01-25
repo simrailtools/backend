@@ -105,15 +105,6 @@ CREATE TABLE sit_journey_event
   CONSTRAINT pk_sit_journey_event PRIMARY KEY (id)
 );
 
-CREATE TABLE sit_journey_checksum
-(
-  id         BIGSERIAL NOT NULL,
-  journey_id UUID      NOT NULL,
-  checksum   TEXT      NOT NULL,
-  CONSTRAINT pk_sit_journey_checksum PRIMARY KEY (id),
-  CONSTRAINT uk_sit_journey_checksum_journey UNIQUE (journey_id)
-);
-
 CREATE TABLE sit_journey_vehicle
 (
   id             UUID                        NOT NULL,
@@ -144,6 +135,7 @@ ALTER TABLE sit_journey
   REFERENCES sr_server (id)
   ON DELETE CASCADE;
 CREATE INDEX idx_sit_journey_foreign_run_id ON sit_journey (foreign_run_id);
+CREATE INDEX idx_sit_journey_server_id_server ON sit_journey (server_id, id);
 
 ALTER TABLE sit_journey_event
   ADD CONSTRAINT fk_sit_journey_event_journey
@@ -151,6 +143,10 @@ ALTER TABLE sit_journey_event
   REFERENCES sit_journey (id)
   ON DELETE CASCADE;
 CREATE INDEX idx_sit_journey_event_journey ON sit_journey_event (journey_id);
+CREATE INDEX idx_sit_journey_event_cancellation_search
+  ON sit_journey_event (journey_id, event_index)
+  INCLUDE (id, scheduled_time, cancelled, realtime_time_type)
+  WHERE in_playable_border = TRUE;
 
 ALTER TABLE sit_journey_checksum
   ADD CONSTRAINT fk_sit_journey_checksum_journey

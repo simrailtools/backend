@@ -74,7 +74,7 @@ public final class JourneyEventEntity implements Persistable<UUID> {
   /**
    * The id of the journey which is related to this event.
    */
-  @JsonIgnore // used for checksum computation, but this field is irrelevant
+  @JsonIgnore // JSON is used to create a checksum, but JourneyEvent -> Journey -> Set<JourneyEvent> is a circular ref
   @JoinColumn(name = "journey_id")
   @ManyToOne(fetch = FetchType.LAZY)
   private JourneyEntity journey;

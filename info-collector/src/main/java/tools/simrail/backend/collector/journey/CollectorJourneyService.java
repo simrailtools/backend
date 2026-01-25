@@ -24,22 +24,20 @@
 
 package tools.simrail.backend.collector.journey;
 
-import java.time.Instant;
 import java.util.Collection;
-import java.util.HashSet;
 import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.proto.CacheProto;
-import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.util.ObjectChecksumGenerator;
 
 /**
@@ -48,96 +46,94 @@ import tools.simrail.backend.common.util.ObjectChecksumGenerator;
 @Service
 class CollectorJourneyService {
 
+  private static final int JOURNEY_INSERT_BATCH_SIZE = 100;
+
+  private final JdbcTemplate jdbcTemplate;
   private final CollectorJourneyRepository journeyRepository;
   private final JourneyEventRepository journeyEventRepository;
   private final DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache;
-  private final DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache;
 
   @Autowired
   public CollectorJourneyService(
+    @NonNull JdbcTemplate jdbcTemplate,
     @NonNull CollectorJourneyRepository journeyRepository,
     @NonNull JourneyEventRepository journeyEventRepository,
-    @NonNull @Qualifier("journey_checksum_cache") DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache,
-    @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyRealtimeDataCache
+    @NonNull @Qualifier("journey_checksum_cache") DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache
   ) {
+    this.jdbcTemplate = jdbcTemplate;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyChecksumCache = journeyChecksumCache;
-    this.journeyRealtimeDataCache = journeyRealtimeDataCache;
   }
 
   @Transactional
   @SuppressWarnings("DataFlowIssue") // just for IJ to shut up
   public void persistScheduledUpdatedJourneys(@NonNull Collection<JourneyEntity> journeys) {
     var relevantJourneys = journeys.stream()
-      .filter(journey -> {
-        // check if the journey is not already active on a server, in this case
-        // we should not update the journey to prevent losing realtime event data.
-        // note that this check is only a quick check for active journeys, we later
-        // do an additional check for past journeys, they shouldn't be updated either...
-        var realtimeData = this.journeyRealtimeDataCache.findByPrimaryKey(journey.getId().toString());
-        return realtimeData == null;
-      })
       .map(journey -> {
-        // first find the journeys that actually changed since the last collection
+        // find the journeys that actually changed since the last collection
         var journeyChecksum = ObjectChecksumGenerator.generateChecksum(journey);
         var cachedChecksumData = this.journeyChecksumCache.findByPrimaryKey(journey.getForeignRunId().toString());
-        return cachedChecksumData != null && cachedChecksumData.getChecksum().equals(journeyChecksum)
-          ? null
-          : Map.entry(journey, journeyChecksum);
+        if (cachedChecksumData == null || !cachedChecksumData.getChecksum().equals(journeyChecksum)) {
+          return Map.entry(journey, journeyChecksum);
+        }
+
+        return null;
       })
       .filter(Objects::nonNull)
       .toList();
-
-    // delete all the journeys from the database which did not spawn yet.
-    // the db returns the run ids of the journeys that were actually removed
-    var relevantRunIds = relevantJourneys.stream()
-      .map(entry -> entry.getKey().getForeignRunId())
-      .toList();
-    if (!relevantRunIds.isEmpty()) {
-      this.journeyRepository.deleteUnstartedJourneysByRunIds(relevantRunIds);
+    if (relevantJourneys.isEmpty()) {
+      return;
     }
 
-    var remainingRunIds = this.journeyRepository.findAllRunIdsWhereRunIdIn(relevantRunIds);
-    var updatableRunIds = new HashSet<>(relevantRunIds);
-    remainingRunIds.forEach(updatableRunIds::remove);
+    for (var startIdx = 0; startIdx < relevantJourneys.size(); startIdx += JOURNEY_INSERT_BATCH_SIZE) {
+      var endIdx = Math.min(startIdx + JOURNEY_INSERT_BATCH_SIZE, relevantJourneys.size());
+      var journeyBatch = relevantJourneys.subList(startIdx, endIdx);
 
-    // re-store all journeys into the db that were actually updated and are not active
-    for (var journeyEntry : relevantJourneys) {
-      var journey = journeyEntry.getKey();
-      var journeyChecksum = journeyEntry.getValue();
-      if (updatableRunIds.contains(journey.getForeignRunId())) {
-        this.journeyRepository.save(journey);
-        this.journeyEventRepository.saveAll(journey.getEvents());
+      // delete all the journeys from the database which did not spawn yet
+      var batchRunIds = journeyBatch.stream().map(entry -> entry.getKey().getForeignRunId()).toList();
+      this.journeyRepository.deleteUnstartedJourneysByRunIds(batchRunIds);
 
-        var checksumData = CacheProto.JourneyChecksumData.newBuilder()
-          .setChecksum(journeyChecksum)
-          .setForeignRunId(journey.getForeignRunId().toString())
-          .build();
-        this.journeyChecksumCache.setCachedValue(checksumData);
+      // re-store all journeys into the db that either do not exist or did not spawn yet
+      var updatableRunIds = this.journeyRepository.findMissingRunIds(batchRunIds.toArray(UUID[]::new));
+      for (var journeyEntry : journeyBatch) {
+        var journey = journeyEntry.getKey();
+        var journeyChecksum = journeyEntry.getValue();
+        if (updatableRunIds.contains(journey.getForeignRunId())) {
+          this.journeyRepository.save(journey);
+          this.journeyEventRepository.saveAll(journey.getEvents());
+
+          var checksumData = CacheProto.JourneyChecksumData.newBuilder()
+            .setChecksum(journeyChecksum)
+            .setForeignRunId(journey.getForeignRunId().toString())
+            .build();
+          this.journeyChecksumCache.setCachedValue(checksumData);
+        }
       }
     }
   }
 
+  // impl note: called within train collect, should execute as fast as possible
   @Transactional
   public void markJourneyAsFirstSeen(@NonNull UUID journeyId) {
-    this.journeyRepository.findById(journeyId)
-      .filter(journey -> journey.getFirstSeenTime() == null)
-      .ifPresent(journey -> {
-        journey.setFirstSeenTime(Instant.now());
-        journey.setLastSeenTime(null);
-        journey.setCancelled(false);
-        this.journeyRepository.save(journey);
-      });
+    // language=sql
+    var updateSql = """
+      UPDATE sit_journey j
+      SET update_time = CURRENT_TIMESTAMP, first_seen_time = CURRENT_TIMESTAMP, last_seen_time = NULL, cancelled = FALSE
+      WHERE j.id = ?
+      """;
+    this.jdbcTemplate.update(updateSql, journeyId);
   }
 
+  // impl note: called within train collect, should execute as fast as possible
   @Transactional
   public void markJourneyAsLastSeen(@NonNull Collection<UUID> journeyIds) {
-    var now = Instant.now();
-    var journeys = this.journeyRepository.findAllById(journeyIds);
-    for (var journey : journeys) {
-      journey.setLastSeenTime(now);
-      this.journeyRepository.save(journey);
-    }
+    // language=sql
+    var updateSql = """
+      UPDATE sit_journey j
+      SET update_time = CURRENT_TIMESTAMP, last_seen_time = CURRENT_TIMESTAMP
+      WHERE j.id = ANY(?)
+      """;
+    this.jdbcTemplate.update(updateSql, (Object) journeyIds.toArray(UUID[]::new));
   }
 }
