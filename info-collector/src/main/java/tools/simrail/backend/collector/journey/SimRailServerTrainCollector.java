@@ -371,8 +371,8 @@ class SimRailServerTrainCollector {
       var trainData = activeTrain.getDetailData();
       var journeyUpdateHolder = collectorData.updateHoldersByRunId.get(activeTrain.getRunId());
       if (journeyUpdateHolder == null) {
-        var speed = roundCurrentSpeed(trainData.getCurrentSpeed());
-        var position = constructGeoPosition(trainData.getPositionLatitude(), trainData.getPositionLongitude());
+        var speed = this.roundCurrentSpeed(trainData.getCurrentSpeed());
+        var position = this.constructGeoPosition(trainData.getPositionLatitude(), trainData.getPositionLongitude());
         if (position == null) {
           // can happen if the api is broken... ignore the journey until it's fixed
           continue;
@@ -400,7 +400,7 @@ class SimRailServerTrainCollector {
         EventBusProto.UserPlatform.XBOX, trainData.getDiverXBoxId());
       journeyUpdateHolder.driver.updateValue(driver);
 
-      var nextSignal = constructNextSignal(trainData);
+      var nextSignal = this.constructNextSignal(trainData);
       journeyUpdateHolder.nextSignal.updateValue(nextSignal);
       journeyUpdateHolder.nextSignalId.updateValue(nextSignal == null ? null : nextSignal.getName());
     }
@@ -427,8 +427,8 @@ class SimRailServerTrainCollector {
       return;
     }
 
-    for (var trainPosition : trainPositions) {
-      var runId = collectorData.foreignIdToRunId.get(trainPosition.getId());
+    for (var trainPos : trainPositions) {
+      var runId = collectorData.foreignIdToRunId.get(trainPos.getId());
       if (runId == null) {
         // id is not yet mapped to run, ignore the train for now
         continue;
@@ -441,10 +441,10 @@ class SimRailServerTrainCollector {
         continue;
       }
 
-      var speed = roundCurrentSpeed(trainPosition.getCurrentSpeed());
+      var speed = this.roundCurrentSpeed(trainPos.getCurrentSpeed());
       journeyUpdateHolder.speed.updateValue(speed);
 
-      var position = constructGeoPosition(trainPosition.getPositionLatitude(), trainPosition.getPositionLongitude());
+      var position = this.constructGeoPosition(trainPos.getPositionLatitude(), trainPos.getPositionLongitude());
       journeyUpdateHolder.position.updateValue(position);
     }
   }
