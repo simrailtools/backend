@@ -208,7 +208,12 @@ class JourneyVehicleCollector {
       // try to resolve the previous vehicle sequences by the resolved resolve keys
       var previousSequences = this.vehicleRepository.findAllBySequenceResolveKeyIn(journeyByPreviousResolveKey.keySet())
         .stream()
-        .collect(Collectors.toMap(JourneyVehicleSequenceEntity::getSequenceResolveKey, Function.identity()));
+        .collect(Collectors.toMap(JourneyVehicleSequenceEntity::getSequenceResolveKey, Function.identity(), (l, r) -> {
+          var leftUpdateTime = l.getUpdateTime();
+          var rightUpdateTime = r.getUpdateTime();
+          var leftIsNewer = leftUpdateTime.compareTo(rightUpdateTime) >= 0;
+          return leftIsNewer ? l : r;
+        }));
       for (var entry : journeyByPreviousResolveKey.entrySet()) {
         var journeyId = entry.getValue().getKey();
         var resolveKey = entry.getValue().getValue();

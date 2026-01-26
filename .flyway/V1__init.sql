@@ -113,8 +113,7 @@ CREATE TABLE sit_journey_vehicle_sequence
   updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
   status               TEXT                        NOT NULL,
   vehicles             JSONB                       NOT NULL,
-  CONSTRAINT pk_sit_journey_vehicle_sequence PRIMARY KEY (id),
-  CONSTRAINT uk_sit_journey_vehicle_sequence_resolve_key UNIQUE (sequence_resolve_key)
+  CONSTRAINT pk_sit_journey_vehicle_sequence PRIMARY KEY (id)
 );
 
 CREATE INDEX idx_sr_server_code ON sr_server (code);
