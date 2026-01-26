@@ -39,6 +39,7 @@ import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Transient;
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.Objects;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -64,6 +65,12 @@ public final class JourneyEventEntity implements Persistable<UUID> {
    * The namespace used to generate UUIDv5 ids for event entities.
    */
   public static final UUID ID_NAMESPACE = UUID.fromString("e869adba-bca7-485f-8c0c-edc61582b4f4");
+
+  /**
+   * Comparator to sort based on the index of each event, ascending.
+   */
+  public static final Comparator<JourneyEventEntity> BY_EVENT_INDEX_COMPARATOR =
+    Comparator.comparingInt(JourneyEventEntity::getEventIndex);
 
   /**
    * The id of this event.

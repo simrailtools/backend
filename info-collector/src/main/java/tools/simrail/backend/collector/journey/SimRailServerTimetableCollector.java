@@ -43,9 +43,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.collector.util.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
+import tools.simrail.backend.collector.util.PerServerGauge;
 import tools.simrail.backend.common.border.MapBorderPointProvider;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
@@ -57,7 +57,6 @@ import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.common.util.RomanNumberConverter;
-import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTimetableEntry;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
@@ -67,10 +66,8 @@ class SimRailServerTimetableCollector {
 
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
 
-  private final UuidV5Factory journeyIdFactory;
-  private final UuidV5Factory journeyEventIdFactory;
-
   private final SimRailAwsApiClient awsApiClient;
+  private final JourneyIdService journeyIdService;
   private final SimRailPointProvider pointProvider;
   private final SimRailServerService serverService;
   private final CollectorJourneyService journeyService;
@@ -82,6 +79,7 @@ class SimRailServerTimetableCollector {
   @Autowired
   public SimRailServerTimetableCollector(
     @NonNull SimRailAwsApiClient awsApiClient,
+    @NonNull JourneyIdService journeyIdService,
     @NonNull SimRailPointProvider pointProvider,
     @NonNull SimRailServerService serverService,
     @NonNull CollectorJourneyService journeyService,
@@ -90,13 +88,11 @@ class SimRailServerTimetableCollector {
     @Qualifier("timetable_run_collect_duration") Meter.@NonNull MeterProvider<Timer> collectionDurationTimer
   ) {
     this.awsApiClient = awsApiClient;
+    this.journeyIdService = journeyIdService;
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.journeyService = journeyService;
     this.borderPointProvider = borderPointProvider;
-
-    this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
-    this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
 
     this.collectedJourneyCounter = collectedJourneyCounter;
     this.collectionDurationTimer = collectionDurationTimer;
@@ -135,7 +131,7 @@ class SimRailServerTimetableCollector {
     }
 
     var runId = run.getRunId();
-    var journeyId = this.generateJourneyId(server.id(), runId);
+    var journeyId = this.journeyIdService.generateJourneyId(server.id(), runId);
 
     // construct the base journey data
     var journey = new JourneyEntity();
@@ -387,8 +383,11 @@ class SimRailServerTimetableCollector {
     };
 
     @SuppressWarnings("DataFlowIssue") // journey id is not null here as it's not set by the persistence provider
-    var journeyId = journey.getId().toString();
-    var id = this.journeyEventIdFactory.create(journeyId + point.getId() + originalScheduledTime + eventType);
+    var id = this.journeyIdService.generateJourneyEventId(
+      journey.getId(),
+      point.getId(),
+      originalScheduledTime,
+      eventType);
     var eventEntity = new JourneyEventEntity();
     eventEntity.setId(id);
     eventEntity.setNew(true);
@@ -488,16 +487,5 @@ class SimRailServerTimetableCollector {
     }
 
     return fixedEvents;
-  }
-
-  /**
-   * Creates a new uuid for a journey based on the given server and run id.
-   *
-   * @param serverId the id of the server the train run will take place on.
-   * @param runId    the id of the run to generate the journey id for.
-   * @return the generated journey id based on the given server and run id.
-   */
-  public @NonNull UUID generateJourneyId(@NonNull UUID serverId, @NonNull UUID runId) {
-    return this.journeyIdFactory.create(serverId.toString() + runId);
   }
 }

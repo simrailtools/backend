@@ -67,12 +67,12 @@ class SimRailServerTrainCollector {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerTrainCollector.class);
 
+  private final JourneyIdService journeyIdService;
   private final SimRailPointProvider pointProvider;
   private final SimRailServerService serverService;
   private final SimRailPanelApiClient panelApiClient;
   private final CollectorJourneyService journeyService;
   private final JourneyEventRealtimeUpdater eventRealtimeUpdater;
-  private final SimRailServerTimetableCollector timetableCollector;
 
   private final Connection connection;
   private final ExecutorService trainCollectExecutor;
@@ -84,22 +84,22 @@ class SimRailServerTrainCollector {
 
   @Autowired
   public SimRailServerTrainCollector(
+    @NonNull JourneyIdService journeyIdService,
     @NonNull SimRailPointProvider pointProvider,
     @NonNull SimRailServerService serverService,
     @NonNull SimRailPanelApiClient panelApiClient,
     @NonNull CollectorJourneyService journeyService,
     @NonNull JourneyEventRealtimeUpdater eventRealtimeUpdater,
-    @NonNull SimRailServerTimetableCollector timetableCollector,
     @NonNull Connection natsConnection,
     @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyDataCache,
     @NonNull @Qualifier("active_journeys_updated_total") PerServerGauge updatedJourneysCounter,
     @Qualifier("active_journey_collect_duration") Meter.@NonNull MeterProvider<Timer> collectionDurationTimer
   ) {
+    this.journeyIdService = journeyIdService;
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
-    this.timetableCollector = timetableCollector;
     this.eventRealtimeUpdater = eventRealtimeUpdater;
 
     this.updatedJourneysCounter = updatedJourneysCounter;
@@ -379,7 +379,7 @@ class SimRailServerTrainCollector {
         }
 
         // construct a new update holder for the journey, set the required base values
-        var journeyId = this.timetableCollector.generateJourneyId(server.id(), activeTrain.getRunId());
+        var journeyId = this.journeyIdService.generateJourneyId(server.id(), activeTrain.getRunId());
         journeyUpdateHolder = new JourneyUpdateHolder(activeTrain.getRunId(), journeyId);
         journeyUpdateHolder.speed.updateValue(speed);
         journeyUpdateHolder.position.updateValue(position);

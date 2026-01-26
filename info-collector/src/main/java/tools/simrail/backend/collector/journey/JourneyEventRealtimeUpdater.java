@@ -31,7 +31,6 @@ import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
@@ -55,36 +54,33 @@ import tools.simrail.backend.common.journey.JourneyTimeType;
 import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.point.SimRailPoint;
 import tools.simrail.backend.common.signal.PlatformSignalProvider;
-import tools.simrail.backend.common.util.UuidV5Factory;
 
 @Component
 final class JourneyEventRealtimeUpdater {
 
-  private static final Comparator<JourneyEventEntity> EVENT_COMPARATOR =
-    Comparator.comparingInt(JourneyEventEntity::getEventIndex);
   private static final Logger LOGGER = LoggerFactory.getLogger(JourneyEventRealtimeUpdater.class);
 
+  private final JourneyIdService journeyIdService;
   private final PlatformSignalProvider signalProvider;
   private final TransactionTemplate transactionTemplate;
   private final JourneyEventRepository journeyEventRepository;
 
-  private final UuidV5Factory journeyEventIdFactory;
+  private final Timer eventUpdateTimer;
   private final BlockingQueue<JourneyEventUpdateRequest> pendingUpdates;
 
-  private final Timer eventUpdateTimer;
-
   JourneyEventRealtimeUpdater(
+    @NonNull JourneyIdService journeyIdService,
     @NonNull PlatformSignalProvider signalProvider,
     @NonNull TransactionTemplate transactionTemplate,
     @NonNull JourneyEventRepository journeyEventRepository,
     @NonNull MeterRegistry meterRegistry
   ) {
+    this.journeyIdService = journeyIdService;
     this.signalProvider = signalProvider;
     this.transactionTemplate = transactionTemplate;
     this.journeyEventRepository = journeyEventRepository;
 
     this.pendingUpdates = new LinkedBlockingQueue<>();
-    this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
 
     // init metrics
     this.eventUpdateTimer = Timer.builder("journey_event_update_time_seconds")
@@ -131,7 +127,7 @@ final class JourneyEventRealtimeUpdater {
   // this method runs in a transaction
   private void processUpdateRequest(@NonNull JourneyEventUpdateRequest request) {
     var events = this.journeyEventRepository.findAllByJourneyId(request.journeyId());
-    events.sort(EVENT_COMPARATOR);
+    events.sort(JourneyEventEntity.BY_EVENT_INDEX_COMPARATOR);
     if (events.isEmpty()) {
       return;
     }
@@ -270,7 +266,7 @@ final class JourneyEventRealtimeUpdater {
           request.serverTime());
         events.add(jitEventPair.getFirst()); // arrival event
         events.add(jitEventPair.getSecond()); // departure event
-        events.sort(EVENT_COMPARATOR); // ensure stable ordering of list
+        events.sort(JourneyEventEntity.BY_EVENT_INDEX_COMPARATOR); // ensure stable ordering of list
         return jitEventPair.getFirst();
       });
     if (arrivalEventOfPoint == null || arrivalEventOfPoint.getRealtimeTimeType() == JourneyTimeType.REAL) {
@@ -509,9 +505,8 @@ final class JourneyEventRealtimeUpdater {
     @NonNull LocalDateTime scheduledTime,
     @NonNull JourneyEventEntity prevEvent
   ) {
-    @SuppressWarnings("DataFlowIssue") // journey id is not null here
-    var jid = journey.getId().toString();
-    var eventId = this.journeyEventIdFactory.create("JIT_" + jid + pointId + prevEvent.getId() + type);
+    @SuppressWarnings("DataFlowIssue") // journey/prev event id is not null here
+    var eventId = this.journeyIdService.generateJitJourneyEventId(journey.getId(), pointId, prevEvent.getId(), type);
 
     var journeyEvent = new JourneyEventEntity();
     journeyEvent.setNew(true);
