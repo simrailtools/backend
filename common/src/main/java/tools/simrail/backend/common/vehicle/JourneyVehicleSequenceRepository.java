@@ -22,32 +22,14 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.collector.vehicle;
+package tools.simrail.backend.common.vehicle;
 
 import java.util.UUID;
-import org.jspecify.annotations.NonNull;
-import org.jspecify.annotations.Nullable;
-import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
+import org.springframework.data.repository.ListCrudRepository;
 
 /**
- * A projection of a stored journey vehicle only holding the necessary fields for collection.
+ * Repository for journey vehicle sequences.
  */
-record CollectorJourneyVehicleProjection(
-  int indexInGroup,
-  @Nullable Integer loadWeight,
-  @Nullable JourneyVehicleLoad load,
-  @Nullable UUID railcarId,
-  @NonNull UUID associatedJourneyId
-) {
+public interface JourneyVehicleSequenceRepository extends ListCrudRepository<JourneyVehicleSequenceEntity, UUID> {
 
-  public static @NonNull CollectorJourneyVehicleProjection fromSqlTuple(@NonNull Object[] tuple) {
-    // tuple input: <id>, <index_in_group>, <load>, <load_weight>, <railcar_id>, <more, irrelevant entries...>
-    var load = tuple[2] != null ? JourneyVehicleLoad.valueOf(tuple[2].toString()) : null;
-    return new CollectorJourneyVehicleProjection(
-      (int) tuple[1],
-      (Integer) tuple[3],
-      load,
-      (UUID) tuple[4],
-      (UUID) tuple[5]);
-  }
 }

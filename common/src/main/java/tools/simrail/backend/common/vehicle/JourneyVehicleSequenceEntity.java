@@ -28,41 +28,44 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
 import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
-import tools.simrail.backend.common.journey.JourneyEntity;
+import org.hibernate.annotations.UuidGenerator;
+import org.hibernate.type.SqlTypes;
 
 /**
- * A vehicle entry (one wagon or locomotive for journey).
+ * Holds the predicted or real vehicle sequence for a journey.
  */
 @Getter
 @Setter
 @NoArgsConstructor
-@Entity(name = "sit_journey_vehicle")
-public final class JourneyVehicleEntity {
+@Entity(name = "sit_journey_vehicle_sequence")
+public final class JourneyVehicleSequenceEntity {
 
   /**
-   * The id of the specific vehicle.
+   * The id of this journey sequence.
    */
   @Id
-  @GeneratedValue // TODO: switch to uuid v7
   @Column(name = "id")
+  @UuidGenerator(style = UuidGenerator.Style.VERSION_7)
   private UUID id;
   /**
-   * The journey that this vehicle is associated with.
+   * The id of the journey that this vehicle sequence is associated with.
    */
-  @JoinColumn(name = "journey_id")
-  @ManyToOne(fetch = FetchType.LAZY)
-  private JourneyEntity journey;
+  @Column(name = "journey_id")
+  private UUID journeyId;
+  /**
+   * Special internal key to resolve this sequence.
+   */
+  @Column(name = "sequence_resolve_key")
+  private String sequenceResolveKey;
 
   /**
    * The time and date when this vehicle information was last updated.
@@ -72,31 +75,15 @@ public final class JourneyVehicleEntity {
   private Instant updateTime;
 
   /**
-   * The index where this vehicle is loaded in the vehicle group.
-   */
-  @Column(name = "index_in_group")
-  private int indexInGroup;
-  /**
-   * The status of the vehicle information.
+   * The status of the vehicle sequence information.
    */
   @Column(name = "status")
   @Enumerated(EnumType.STRING)
   private JourneyVehicleStatus status;
-
   /**
-   * The id of the used railcar in the group, can only be null if the status is unknown.
+   * The vehicles that are in the vehicle sequence.
    */
-  @Column(name = "railcar_id")
-  private UUID railcarId;
-  /**
-   * The weight of the load, null if no load is provided for the vehicle.
-   */
-  @Column(name = "load_weight")
-  private Integer loadWeight;
-  /**
-   * The load of the vehicle, null if no load is provided for the vehicle.
-   */
-  @Column(name = "load")
-  @Enumerated(EnumType.STRING)
-  private JourneyVehicleLoad load;
+  @Column(name = "vehicles")
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Set<JourneyVehicle> vehicles;
 }

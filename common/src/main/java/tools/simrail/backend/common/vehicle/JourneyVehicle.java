@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,43 @@
 
 package tools.simrail.backend.common.vehicle;
 
-import org.springframework.data.repository.ListCrudRepository;
+import java.util.Comparator;
+import java.util.UUID;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-/**
- * Repository for journey vehicles.
- */
-public interface JourneyVehicleRepository extends ListCrudRepository<JourneyVehicleEntity, Long> {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public final class JourneyVehicle {
 
+  /**
+   * Comparator to compare the index of the vehicle in the sequence, ascending.
+   */
+  public static final Comparator<JourneyVehicle> BY_SEQUENCE_INDEX_COMPARATOR
+    = Comparator.comparingInt(JourneyVehicle::getIndexInSequence);
+
+  /**
+   * The index where this vehicle is located in the vehicle sequence.
+   */
+  private int indexInSequence;
+  /**
+   * The id of the railcar that is associated with this vehicle.
+   */
+  @NonNull
+  private UUID railcarId;
+
+  /**
+   * The weight of the load, null if no load is provided for the vehicle.
+   */
+  @Nullable
+  private Integer loadWeight;
+  /**
+   * The load of the vehicle, null if no load is provided for the vehicle.
+   */
+  @Nullable
+  private JourneyVehicleLoad load;
 }

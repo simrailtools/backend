@@ -24,66 +24,54 @@
 
 package tools.simrail.backend.collector.vehicle;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import tools.simrail.backend.common.vehicle.JourneyVehicleRepository;
+import tools.simrail.backend.common.vehicle.JourneyVehicleSequenceEntity;
+import tools.simrail.backend.common.vehicle.JourneyVehicleSequenceRepository;
 
 /**
  * Repository with specialized information for the collector.
  */
-interface CollectorVehicleRepository extends JourneyVehicleRepository {
+interface CollectorVehicleRepository extends JourneyVehicleSequenceRepository {
 
   /**
-   * Finds all journeys (mapping of [journey id, run id]) that don't have a stored vehicle composition yet.
+   * Finds the subset of the given journey ids that don't have an associated vehicle sequence.
    *
-   * @param serverId the id of the server to select the journeys on.
-   * @param runIds   the run ids to include in the result.
-   * @return the journey ids and run ids of the journey without a stored vehicle composition.
+   * @param journeyIds the ids to find the subset of not stored ids of.
+   * @return a subset of the given collection holding all ids that don't have an associated vehicle sequence.
+   */
+  // "Condition 'vs.journey_id IS NULL' is always 'false'" is actually wrong, don't listen to it ¯\_(ツ)_/¯
+  @Query(value = """
+    SELECT j.journey_id
+    FROM unnest(cast(:journeyIds as uuid[])) AS j(journey_id)
+    WHERE EXISTS (SELECT 1 FROM sit_journey sj WHERE sj.id = j.journey_id)
+    AND NOT EXISTS (SELECT 1 FROM sit_journey_vehicle_sequence vs WHERE vs.journey_id = j.journey_id)
+    """, nativeQuery = true)
+  List<UUID> findMissingJourneyIds(@Param("journeyIds") UUID[] journeyIds);
+
+  /**
+   * Finds all unconfirmed vehicle sequences whose associated journey is in the given collection of journey ids.
+   *
+   * @param journeyIds the ids of the journeys to find the unconfirmed vehicle sequences of.
+   * @return the unconfirmed vehicle sequences that are associated with one of the given journeys.
    */
   @Query(value = """
-    SELECT DISTINCT ON (j.id)
-      j.id, j.foreign_run_id
-    FROM sit_journey j
-    LEFT JOIN sit_vehicle jv
-      ON jv.journey_id = j.id AND jv.index_in_group = 0
-    WHERE
-      jv.journey_id IS NULL
-      AND j.server_id = :serverId
-      AND j.foreign_run_id IN :runIds
+    SELECT *
+    FROM sit_journey_vehicle_sequence
+    WHERE journey_id IN (:journeyIds) AND status <> 'REAL'
     """, nativeQuery = true)
-  List<Object[]> findJourneyRunsWithoutVehicleComposition(
-    @Param("serverId") UUID serverId,
-    @Param("runIds") List<UUID> runIds);
+  List<JourneyVehicleSequenceEntity> findAllUnconfirmedByJourneyIdIn(@Param("journeyIds") Collection<UUID> journeyIds);
 
   /**
-   * Finds all journeys (mapping of [journey id, run id]) that don't have a stored, confirmed vehicle composition yet.
+   * Finds all the vehicle sequences based on the given sequence resolve keys.
    *
-   * @param serverId the id of the server to select the journeys on.
-   * @param runIds   the run ids to include in the result.
-   * @return the journey ids and run ids of the journey without a stored, confirmed vehicle composition.
+   * @param sequenceResolveKeys the sequence keys to find the sequences of.
+   * @return the sequences associated with one of the given sequence resolve keys.
    */
-  @Query(value = """
-    SELECT DISTINCT ON (j.id)
-      j.id, j.foreign_run_id
-    FROM sit_journey j
-    LEFT JOIN sit_vehicle jv
-      ON jv.journey_id = j.id AND jv.index_in_group = 0
-    WHERE
-      j.server_id = :serverId
-      AND j.foreign_run_id IN :runIds
-      AND (jv.journey_id IS NULL OR jv.status != 0)
-    """, nativeQuery = true)
-  List<Object[]> findJourneyRunsWithoutConfirmedVehicleComposition(
-    @Param("serverId") UUID serverId,
-    @Param("runIds") List<UUID> runIds);
-
-  /**
-   * Deletes all vehicle entries for the journey with the given id.
-   *
-   * @param journeyId the id of the journey to delete the vehicles of.
-   */
-  void deleteAllByJourneyId(@NonNull UUID journeyId);
+  @NonNull
+  List<JourneyVehicleSequenceEntity> findAllBySequenceResolveKeyIn(@NonNull Collection<String> sequenceResolveKeys);
 }

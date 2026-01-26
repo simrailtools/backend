@@ -105,17 +105,16 @@ CREATE TABLE sit_journey_event
   CONSTRAINT pk_sit_journey_event PRIMARY KEY (id)
 );
 
-CREATE TABLE sit_journey_vehicle
+CREATE TABLE sit_journey_vehicle_sequence
 (
-  id             UUID                        NOT NULL,
-  journey_id     UUID                        NOT NULL,
-  updated_at     TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  index_in_group SMALLINT                    NOT NULL,
-  status         TEXT                        NOT NULL,
-  railcar_id     UUID                        NOT NULL,
-  load_weight    SMALLINT,
-  load           TEXT,
-  CONSTRAINT pk_sit_journey_vehicle PRIMARY KEY (id)
+  id                   UUID                        NOT NULL,
+  journey_id           UUID                        NOT NULL,
+  sequence_resolve_key TEXT                        NOT NULL,
+  updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  status               TEXT                        NOT NULL,
+  vehicles             JSONB                       NOT NULL,
+  CONSTRAINT pk_sit_journey_vehicle_sequence PRIMARY KEY (id),
+  CONSTRAINT uk_sit_journey_vehicle_sequence_resolve_key UNIQUE (sequence_resolve_key)
 );
 
 CREATE INDEX idx_sr_server_code ON sr_server (code);
@@ -148,16 +147,13 @@ CREATE INDEX idx_sit_journey_event_cancellation_search
   INCLUDE (id, scheduled_time, cancelled, realtime_time_type)
   WHERE in_playable_border = TRUE;
 
-ALTER TABLE sit_journey_checksum
-  ADD CONSTRAINT fk_sit_journey_checksum_journey
+ALTER TABLE sit_journey_vehicle_sequence
+  ADD CONSTRAINT fk_sit_journey_vehicle_sequence_journey
   FOREIGN KEY (journey_id)
   REFERENCES sit_journey (id)
   ON DELETE CASCADE;
-CREATE INDEX idx_sit_journey_checksum_journey ON sit_journey_checksum (journey_id);
-
-ALTER TABLE sit_journey_vehicle
-  ADD CONSTRAINT fk_sit_journey_vehicle_journey
-  FOREIGN KEY (journey_id)
-  REFERENCES sit_journey (id)
-  ON DELETE CASCADE;
-CREATE INDEX idx_sit_journey_vehicle_journey ON sit_journey_vehicle (journey_id);
+CREATE INDEX idx_sit_journey_vehicle_sequence_journey ON sit_journey_vehicle_sequence (journey_id);
+CREATE INDEX idx_sit_journey_vehicle_sequence_resolve_key ON sit_journey_vehicle_sequence (sequence_resolve_key);
+CREATE INDEX idx_sit_journey_vehicle_sequence_unconfirmed_by_journey_id
+  ON sit_journey_vehicle_sequence (journey_id)
+  WHERE status <> 'REAL';
