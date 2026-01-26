@@ -182,7 +182,7 @@ final class JourneyEventRealtimeUpdater {
     }
 
     // mark all events after the last confirmed one canceled
-    for (var index = lastConfirmedEventIdx; index < eventCount; index++) {
+    for (var index = lastConfirmedEventIdx + 1; index < eventCount; index++) {
       var event = events.get(index);
       event.setCancelled(true);
     }
