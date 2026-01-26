@@ -41,6 +41,7 @@ import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.dao.TransientDataAccessException;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
@@ -102,12 +103,17 @@ final class JourneyEventRealtimeUpdater {
         while (!currentThread.isInterrupted()) {
           try {
             var nextRequest = this.pendingUpdates.take();
-            var sample = Timer.start();
-            try {
-              LOGGER.debug("Processing journey event update request: {}", nextRequest);
-              this.transactionTemplate.executeWithoutResult(_ -> this.processUpdateRequest(nextRequest));
-            } finally {
-              sample.stop(this.eventUpdateTimer);
+            for (var attempt = 1; attempt <= 5; attempt++) {
+              var sample = Timer.start();
+              try {
+                LOGGER.debug("Processing journey event update request: {} (attempt: {})", nextRequest, attempt);
+                this.transactionTemplate.executeWithoutResult(_ -> this.processUpdateRequest(nextRequest));
+                break; // update succeeded
+              } catch (TransientDataAccessException _) {
+                // transient exception: operation can succeed on next attempt, just try again
+              } finally {
+                sample.stop(this.eventUpdateTimer);
+              }
             }
           } catch (InterruptedException exception) {
             // interrupt signal received, exit
