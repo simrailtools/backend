@@ -54,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(50, borderPoints.size());
+    Assertions.assertEquals(52, borderPoints.size());
   }
 
   @Test
@@ -99,15 +99,30 @@ public final class MapBorderPointProviderTest {
 
       MapBorderPoint start = null;
       MapBorderPoint end = null;
-      for (var timetableEntry : timetable) {
+      for (var index = 0; index < timetable.size(); index++) {
+        var timetableEntry = timetable.get(index);
         var pointId = timetableEntry.get("pointId").asString();
         var borderPoint = this.borderPointProvider.findMapBorderPoint(pointId).orElse(null);
-        if (borderPoint != null) {
-          if (start == null) {
-            start = borderPoint;
-          } else {
-            end = borderPoint;
+        if (borderPoint == null) {
+          continue;
+        }
+
+        // check that the next point actually matches, otherwise continue (next point only matters for the start point)
+        if (start == null) {
+          var requiredNext = borderPoint.getRequiredNextPoints();
+          if (requiredNext != null) {
+            var nextEntry = timetable.get(index + 1);
+            if (nextEntry == null || !requiredNext.contains(nextEntry.get("pointId").asString())) {
+              continue;
+            }
           }
+        }
+
+        // either use the current border point as the start or end for the journey
+        if (start == null) {
+          start = borderPoint;
+        } else {
+          end = borderPoint;
         }
       }
 
