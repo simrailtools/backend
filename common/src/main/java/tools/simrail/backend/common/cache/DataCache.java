@@ -109,6 +109,9 @@ public final class DataCache<T extends MessageLite> {
 
     this.primaryKeyPrefix = this.generateFullKey("", KEY_TYPE_PRIMARY); // 'this' escape is safe
     this.secondaryKeyPrefix = this.generateFullKey("", KEY_TYPE_SECONDARY);
+
+    // register this cache for cleanup handling
+    DataCacheCleanupHandler.HANDLER.registerCache(this);
   }
 
   /**

@@ -28,22 +28,47 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import org.jspecify.annotations.NonNull;
-import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Handler to clean stale nodes from caches after a given ttl.
  */
-@Component
-public class DataCacheCleanupHandler {
+final class DataCacheCleanupHandler {
+
+  // jvm-static instance to use for all caches
+  static final DataCacheCleanupHandler HANDLER = new DataCacheCleanupHandler();
 
   // how long cache nodes should be kept after being marked for removal
   private static final long TTL_AFTER_REMOVE = TimeUnit.SECONDS.toNanos(30);
+  private static final Logger LOGGER = LoggerFactory.getLogger(DataCacheCleanupHandler.class);
 
   private final Collection<DataCache<?>> knownCaches = ConcurrentHashMap.newKeySet();
 
-  @Scheduled(fixedDelay = 10, timeUnit = TimeUnit.SECONDS)
-  public void cleanupCaches() {
+  private DataCacheCleanupHandler() {
+    Thread.ofVirtual()
+      .name("DataCache-Cleanup-Thread")
+      .inheritInheritableThreadLocals(false)
+      .start(() -> {
+        var currentThread = Thread.currentThread();
+        while (!currentThread.isInterrupted()) {
+          try {
+            this.cleanupCaches();
+            TimeUnit.SECONDS.sleep(10);
+          } catch (InterruptedException _) {
+            currentThread.interrupt(); // reset interrupted status
+            break;
+          } catch (Exception exception) {
+            LOGGER.error("Caught exception during data cache cleanup", exception);
+          }
+        }
+      });
+  }
+
+  /**
+   * Cleans up the keys in the known caches that are expired.
+   */
+  private void cleanupCaches() {
     var now = System.nanoTime();
     for (var cache : this.knownCaches) {
       var localCache = cache.localCache;
