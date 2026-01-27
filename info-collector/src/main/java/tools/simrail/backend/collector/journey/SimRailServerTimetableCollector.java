@@ -152,7 +152,7 @@ class SimRailServerTimetableCollector {
       .skip(1) // skip the first entry as it is always the train category
       .filter(part -> part.startsWith("\"") && part.endsWith("\""))
       .findFirst()
-      .map(label -> label.substring(1, label.length() - 1))
+      .map(label -> label.replace("\"", "")) // to fix labels such as '\"Zdeněk\"\"'
       .orElse(null);
 
     // create events for all timetable entries
