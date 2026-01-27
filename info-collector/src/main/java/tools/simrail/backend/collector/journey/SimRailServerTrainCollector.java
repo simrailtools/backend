@@ -297,12 +297,18 @@ class SimRailServerTrainCollector {
           this.journeyService.markJourneyAsLastSeen(removedJourneysOnServer);
           updatedJourneyCount += removedJourneysOnServer.size();
 
-          // clear the removed journey journeys from the collector data cache
+          // clean the foreign id -> run id mapping
           for (var entry : collectorData.foreignIdToRunId.entrySet()) {
             var foreignId = entry.getKey();
             var runId = entry.getValue();
             if (!activeRunIds.contains(runId)) {
               collectorData.foreignIdToRunId.remove(foreignId, runId);
+            }
+          }
+
+          // clean the run id -> update holder mapping
+          for (var runId : collectorData.updateHoldersByRunId.keySet()) {
+            if (!activeRunIds.contains(runId)) {
               collectorData.updateHoldersByRunId.remove(runId);
             }
           }
