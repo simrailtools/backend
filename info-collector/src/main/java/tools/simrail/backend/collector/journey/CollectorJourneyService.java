@@ -119,7 +119,10 @@ class CollectorJourneyService {
     // language=sql
     var updateSql = """
       UPDATE sit_journey j
-      SET update_time = CURRENT_TIMESTAMP, first_seen_time = CURRENT_TIMESTAMP, last_seen_time = NULL, cancelled = FALSE
+      SET first_seen_time = COALESCE(first_seen_time, CURRENT_TIMESTAMP),
+          last_seen_time = NULL,
+          cancelled = FALSE,
+          update_time = CURRENT_TIMESTAMP
       WHERE j.id = ?
       """;
     this.jdbcTemplate.update(updateSql, journeyId);
