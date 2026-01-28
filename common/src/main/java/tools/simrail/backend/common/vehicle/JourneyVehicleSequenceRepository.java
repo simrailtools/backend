@@ -24,7 +24,9 @@
 
 package tools.simrail.backend.common.vehicle;
 
+import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.repository.ListCrudRepository;
 
 /**
@@ -32,4 +34,12 @@ import org.springframework.data.repository.ListCrudRepository;
  */
 public interface JourneyVehicleSequenceRepository extends ListCrudRepository<JourneyVehicleSequenceEntity, UUID> {
 
+  /**
+   * Finds the vehicle sequence associated with the given journey id.
+   *
+   * @param journeyId the id of the journey to get the vehicle sequence of.
+   * @return an optional holding the vehicle sequence associated with the given journey id or an empty optional.
+   */
+  @NonNull
+  Optional<JourneyVehicleSequenceEntity> findByJourneyId(@NonNull UUID journeyId);
 }

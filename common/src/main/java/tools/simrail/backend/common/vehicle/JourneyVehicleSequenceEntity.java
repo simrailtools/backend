@@ -30,6 +30,7 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import java.time.Instant;
+import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
@@ -39,6 +40,8 @@ import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
 import org.hibernate.annotations.UuidGenerator;
 import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Holds the predicted or real vehicle sequence for a journey.
@@ -86,4 +89,34 @@ public final class JourneyVehicleSequenceEntity {
   @Column(name = "vehicles")
   @JdbcTypeCode(SqlTypes.JSON)
   private Set<JourneyVehicle> vehicles;
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public boolean equals(@Nullable Object o) {
+    if (this == o) {
+      return true;
+    }
+    if (!(o instanceof JourneyVehicleSequenceEntity entity)) {
+      return false;
+    }
+    return this.id != null && Objects.equals(this.id, entity.getId());
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public int hashCode() {
+    return Objects.hashCode(this.id);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @NonNull String toString() {
+    return "JourneyVehicleSequenceEntity{id=" + this.id + "}";
+  }
 }

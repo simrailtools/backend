@@ -86,10 +86,24 @@ public final class EventSubjectFactory {
     return ALL_FRAMES_PREFIX + DELIM + "server-removals" + DELIM + "v1" + DELIM + serverId;
   }
 
+  /**
+   * Constructs a subject for publishing/listening to dispatch post updates.
+   *
+   * @param serverId the id of the server the dispatch post is located on.
+   * @param postId   the id of the dispatch post that was updated.
+   * @return a subject to publish/listen to dispatch post updates.
+   */
   public static @NonNull String createDispatchPostUpdateSubjectV1(@NonNull String serverId, @NonNull String postId) {
     return ALL_FRAMES_PREFIX + DELIM + "dispatch-post-updates" + DELIM + "v1" + DELIM + serverId + DELIM + postId;
   }
 
+  /**
+   * Constructs a subject for publishing/listening to dispatch post removals.
+   *
+   * @param serverId the id of the server the dispatch post is located on.
+   * @param postId   the id of the dispatch post that was removed.
+   * @return a subject to publish/listen to dispatch post removals.
+   */
   public static @NonNull String createDispatchPostRemoveSubjectV1(@NonNull String serverId, @NonNull String postId) {
     return ALL_FRAMES_PREFIX + DELIM + "dispatch-post-removals" + DELIM + "v1" + DELIM + serverId + DELIM + postId;
   }

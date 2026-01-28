@@ -54,6 +54,11 @@ public final class Railcar {
   @JsonProperty("display_name")
   private String displayName;
   /**
+   * The baptismal name of the locomotive / wagon. Can be {@code null} if none.
+   */
+  @JsonProperty("name")
+  private String name;
+  /**
    * The Steam id of the DLC that is required to get access to this railcar in SimRail, null if no DLC is needed.
    */
   @JsonProperty("required_dlc_id")

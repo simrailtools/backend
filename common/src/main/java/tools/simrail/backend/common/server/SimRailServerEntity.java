@@ -131,7 +131,7 @@ public final class SimRailServerEntity {
     if (!(o instanceof SimRailServerEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**

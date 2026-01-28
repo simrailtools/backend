@@ -129,7 +129,7 @@ public final class JourneyEntity implements Persistable<UUID> {
     if (!(o instanceof JourneyEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**
@@ -145,6 +145,6 @@ public final class JourneyEntity implements Persistable<UUID> {
    */
   @Override
   public @NonNull String toString() {
-    return "Journey{id=" + this.id + "}";
+    return "JourneyEntity{id=" + this.id + "}";
   }
 }

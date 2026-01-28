@@ -135,7 +135,7 @@ public final class SimRailDispatchPostEntity {
     if (!(o instanceof SimRailDispatchPostEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**

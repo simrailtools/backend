@@ -202,7 +202,7 @@ public final class JourneyEventEntity implements Persistable<UUID> {
     if (!(o instanceof JourneyEventEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**
@@ -218,6 +218,6 @@ public final class JourneyEventEntity implements Persistable<UUID> {
    */
   @Override
   public @NonNull String toString() {
-    return "JourneyEvent{id=" + this.id + "}";
+    return "JourneyEventEntity{id=" + this.id + "}";
   }
 }

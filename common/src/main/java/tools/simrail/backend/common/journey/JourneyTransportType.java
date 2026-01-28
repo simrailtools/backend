@@ -124,7 +124,7 @@ public enum JourneyTransportType {
       case "TB", "TD", "TP", "TN", "TM", "TL" -> NATIONAL_CARGO_TRAIN;
 
       // maintenance trains
-      case "ZG", "ZN", "ZX", "ZH" -> MAINTENANCE_TRAIN;
+      case "ZG", "ZN", "ZX", "ZH", "ZU" -> MAINTENANCE_TRAIN;
 
       // unknown train type
       default -> throw new IllegalArgumentException("Unknown train type identifier: " + trainTypeIdentifier);
