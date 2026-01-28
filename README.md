@@ -25,7 +25,8 @@ on [GitHub](https://github.com/simrailtools/frontend) too!).
 Local development on the application is fairly easy.
 
 1. start all necessary docker containers (defined in `.dev/docker-compose.yml`) using `make up_dev_d`
-2. run the collector and/or api application from your IDE
+2. run the collector and/or api application from your IDE (ensure that the `common` and `dev` spring profiles are
+   active, these already contain all the connection information for the databases)
 
 Everything is secured using the same password and credentials to ease local development. The username is always `stb`,
 the password being `stb_very_secu1e_passw0rd`.
