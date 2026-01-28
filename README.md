@@ -52,7 +52,7 @@ The data can be edited or supplemented there. Note that a bunch of tests exists 
 sure to update them accordingly to your changes (and ensure that they still pass). If you found an error in the data,
 feel free to correct it. Please check if a small unit test can be added to prevent future regressions in the data.
 
-## License
+### License
 
 This project is released under the terms of the MIT license. See [license.txt](license.txt)
 or https://opensource.org/licenses/MIT.
