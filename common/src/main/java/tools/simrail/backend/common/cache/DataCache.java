@@ -246,21 +246,40 @@ public final class DataCache<T extends MessageLite> {
   }
 
   /**
-   * Removes the value associated with the given primary key from this cache, if not already done.
+   * Removes the value associated with the given primary key from this cache, if not already done. This method first
+   * checks if the key is locally cached, if so it removes the key from the underlying storage as well.
    *
    * @param key the primary key of the value to remove.
    * @return true if the value was removed from the cache, false otherwise.
    */
   public boolean removeByPrimaryKey(@NonNull String key) {
+    var didRemove = this.removeLocallyByPrimaryKey(key);
+    if (didRemove) {
+      var bucket = this.getBucket(key);
+      bucket.deleteAsync();
+    }
+
+    return didRemove;
+  }
+
+  /**
+   * Removes the value associated with the given primary key from this cache, if not already done. Note that this method
+   * only updates the local cache, use {@link #removeByPrimaryKey(String)} to also update the underlying storage.
+   *
+   * @param key the primary key of the value to remove.
+   * @return true if the value was removed from the cache, false otherwise.
+   */
+  public boolean removeLocallyByPrimaryKey(@NonNull String key) {
     var cacheKey = this.generateFullKey(key, KEY_TYPE_PRIMARY);
     var cacheNode = this.localCache.get(cacheKey);
     return cacheNode != null && cacheNode.markRemoved();
   }
 
   /**
+   * Returns a stream of all cache nodes whose secondary key is not in the given set of keys.
    *
-   * @param keys
-   * @return
+   * @param keys the keys of the caches nodes that should not be returned.
+   * @return a stream of all nodes whose secondary key is not in the given set of keys.
    */
   public @NonNull Stream<T> findBySecondaryKeyNotIn(@NonNull Set<String> keys) {
     return this.localCache.entrySet().stream()
