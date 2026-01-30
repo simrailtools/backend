@@ -24,10 +24,15 @@
 
 package tools.simrail.backend.api.dispatchpost.dto;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.shared.GeoPositionDto;
+import tools.simrail.backend.api.shared.UserDtoConverter;
+import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Converter for dispatch post entities to DTOs.
@@ -35,10 +40,30 @@ import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
 @Component
 public final class DispatchPostInfoDtoConverter implements Function<SimRailDispatchPostEntity, DispatchPostInfoDto> {
 
+  private final UserDtoConverter userDtoConverter;
+  private final DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache;
+
+  @Autowired
+  public DispatchPostInfoDtoConverter(
+    @NonNull UserDtoConverter userDtoConverter,
+    @NonNull DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache
+  ) {
+    this.userDtoConverter = userDtoConverter;
+    this.dispatchPostDataCache = dispatchPostDataCache;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public @Nonnull DispatchPostInfoDto apply(@Nonnull SimRailDispatchPostEntity entity) {
+  public @NonNull DispatchPostInfoDto apply(@NonNull SimRailDispatchPostEntity entity) {
+    var cachedRtData = this.dispatchPostDataCache.findByPrimaryKey(entity.getId().toString());
+    var dispatchPostData = cachedRtData == null ? null : cachedRtData.getDispatchPostData();
+    var dispatcher = dispatchPostData == null || !dispatchPostData.hasDispatcher()
+      ? null
+      : this.userDtoConverter.apply(dispatchPostData.getDispatcher());
+
     var position = entity.getPosition();
-    var convertedPosition = new DispatchPointGeoPositionDto(position.getLatitude(), position.getLongitude());
     return new DispatchPostInfoDto(
       entity.getId(),
       entity.getName(),
@@ -46,10 +71,10 @@ public final class DispatchPostInfoDtoConverter implements Function<SimRailDispa
       entity.getServerId(),
       entity.getUpdateTime(),
       entity.getRegisteredSince(),
-      convertedPosition,
+      new GeoPositionDto(position.getLatitude(), position.getLongitude()),
       entity.getImageUrls(),
-      entity.getDispatcherSteamIds(),
       entity.getDifficultyLevel(),
+      new DispatchPostRealtimeDataDto(dispatcher),
       entity.isDeleted());
   }
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,29 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.dto;
+package tools.simrail.backend.api.shared;
 
-import jakarta.annotation.Nonnull;
+import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Component;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
- * DTO for a single update frame, encapsulating the type, update type and frame data.
+ * Converter for users to a DTO.
  */
-public record EventFrameDto<T>(
-  @Nonnull EventFrameType frameType,
-  @Nonnull EventFrameUpdateType updateType,
-  @Nonnull T frameData
-) {
+@Component
+public final class UserDtoConverter implements Function<EventBusProto.User, UserDto> {
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @NonNull UserDto apply(EventBusProto.@NonNull User user) {
+    var platform = switch (user.getPlatform()) {
+      case XBOX -> UserPlatform.XBOX;
+      case STEAM -> UserPlatform.STEAM;
+      case UNRECOGNIZED -> throw new IllegalStateException("Unrecognized user platform received!");
+    };
+    return new UserDto(user.getId(), platform);
+  }
 }

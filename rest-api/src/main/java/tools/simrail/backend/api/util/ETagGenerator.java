@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.api.util;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -38,7 +38,7 @@ import org.springframework.util.DigestUtils;
 public final class ETagGenerator implements Function<Resource, String> {
 
   @Override
-  public @Nonnull String apply(@Nonnull Resource resource) {
+  public @NonNull String apply(@NonNull Resource resource) {
     try (var inputStream = resource.getInputStream()) {
       // 35 is the length of "0 + 32bits md5 hash + "
       var stringBuilder = new StringBuilder(35);

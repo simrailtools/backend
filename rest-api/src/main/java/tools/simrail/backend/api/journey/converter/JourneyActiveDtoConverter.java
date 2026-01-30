@@ -24,22 +24,32 @@
 
 package tools.simrail.backend.api.journey.converter;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.eventbus.dto.EventbusJourneySnapshotDto;
 import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyActiveTransportDto;
 import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Converter for locally cached journey snapshots to DTOs.
  */
 @Component
-public final class JourneyActiveDtoConverter implements Function<EventbusJourneySnapshotDto, JourneyActiveDto> {
+public final class JourneyActiveDtoConverter implements Function<EventBusProto.JourneyUpdateFrame, JourneyActiveDto> {
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public @Nonnull JourneyActiveDto apply(@Nonnull EventbusJourneySnapshotDto snapshot) {
+  public @NonNull JourneyActiveDto apply(EventBusProto.@NonNull JourneyUpdateFrame snapshot) {
+    var baseData = snapshot.getBaseData();
+    var journeyData = snapshot.getJourneyData();
+
+    // convert position
+    var dataPosition = journeyData.getPosition();
+    var position = new JourneyGeoPositionDto(dataPosition.getLatitude(), dataPosition.getLongitude());
+
     var position = new JourneyGeoPositionDto(snapshot.getPositionLat(), snapshot.getPositionLng());
     var transport = new JourneyActiveTransportDto(
       snapshot.getCategory(),

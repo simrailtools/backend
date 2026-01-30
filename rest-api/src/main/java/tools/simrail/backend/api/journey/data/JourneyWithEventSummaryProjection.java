@@ -24,23 +24,35 @@
 
 package tools.simrail.backend.api.journey.data;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Projection of a journey entity including some extra fields for a single event.
  */
 public interface JourneyWithEventSummaryProjection extends JourneySummaryProjection {
 
-  @Nonnull
-  UUID getFePointId();
+  /**
+   * Get the id of the point at the additionally selected journey event.
+   *
+   * @return the id of the point at the additionally selected journey event.
+   */
+  @NonNull
+  UUID getEventPointId();
 
-  @Nonnull
-  String getFePointName();
+  /**
+   * Get the time when the additionally selected event is scheduled to happen.
+   *
+   * @return the time when the additionally selected event is scheduled to happen.
+   */
+  @NonNull
+  LocalDateTime getEventScheduledTime();
 
-  @Nonnull
-  OffsetDateTime getFeScheduledTime();
-
-  boolean isFeCancelled();
+  /**
+   * Get if the additionally selected event is marked as canceled.
+   *
+   * @return true if the additionally selected event is marked as canceled, false otherwise.
+   */
+  boolean isEventCancelled();
 }

@@ -45,6 +45,13 @@ dependencyResolutionManagement {
       name = "Spring Snapshots"
       url = uri("https://repo.spring.io/snapshot")
     }
+    maven {
+      name = "jitpack"
+      url = uri("https://jitpack.io/")
+      mavenContent {
+        includeGroup("com.github.WilliamAGH.swagger-core")
+      }
+    }
   }
 }
 

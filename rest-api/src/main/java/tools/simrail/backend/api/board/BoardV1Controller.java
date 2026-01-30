@@ -30,11 +30,11 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import java.time.OffsetDateTime;
 import java.util.List;
 import java.util.Objects;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -56,7 +56,7 @@ class BoardV1Controller {
   private final BoardService boardService;
 
   @Autowired
-  public BoardV1Controller(@Nonnull BoardService boardService) {
+  public BoardV1Controller(@NonNull BoardService boardService) {
     this.boardService = boardService;
   }
 
@@ -94,7 +94,7 @@ class BoardV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<BoardEntryDto> listBoardArrivals(
+  public @NonNull List<BoardEntryDto> listBoardArrivals(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
@@ -144,7 +144,7 @@ class BoardV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<BoardEntryDto> listBoardDepartures(
+  public @NonNull List<BoardEntryDto> listBoardDepartures(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,

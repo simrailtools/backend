@@ -135,6 +135,7 @@ ALTER TABLE sit_journey
   ON DELETE CASCADE;
 CREATE INDEX idx_sit_journey_foreign_run_id ON sit_journey (foreign_run_id);
 CREATE INDEX idx_sit_journey_server_id_server ON sit_journey (server_id, id);
+CREATE INDEX idx_sit_journey_event_search ON sit_journey (server_id, id) INCLUDE (first_seen_time, last_seen_time, cancelled);
 
 ALTER TABLE sit_journey_event
   ADD CONSTRAINT fk_sit_journey_event_journey
@@ -146,6 +147,14 @@ CREATE INDEX idx_sit_journey_event_cancellation_search
   ON sit_journey_event (journey_id, event_index)
   INCLUDE (id, scheduled_time, cancelled, realtime_time_type)
   WHERE in_playable_border = TRUE;
+CREATE INDEX idx_sit_journey_event_scheduled_time_journey_id ON sit_journey_event (scheduled_time, journey_id);
+CREATE INDEX idx_sit_journey_event_event_search ON sit_journey_event (transport_number, scheduled_time, journey_id);
+CREATE INDEX idx_sit_journey_event_event_transport_time_reverse_search
+  ON sit_journey_event (transport_type, transport_category, scheduled_time, journey_id)
+  INCLUDE (event_index);
+CREATE INDEX idx_sit_journey_event_journey_id_scheduled_time_event_idx
+  ON sit_journey_event (journey_id, scheduled_time DESC, event_index DESC)
+  INCLUDE (transport_type, transport_category, in_playable_border, point_id, cancelled);
 
 ALTER TABLE sit_journey_vehicle_sequence
   ADD CONSTRAINT fk_sit_journey_vehicle_sequence_journey
@@ -157,3 +166,4 @@ CREATE INDEX idx_sit_journey_vehicle_sequence_resolve_key ON sit_journey_vehicle
 CREATE INDEX idx_sit_journey_vehicle_sequence_unconfirmed_by_journey_id
   ON sit_journey_vehicle_sequence (journey_id)
   WHERE status <> 'REAL';
+CREATE INDEX idx_sit_journey_vehicle_sequence_vehicles ON sit_journey_vehicle_sequence USING gin (vehicles);

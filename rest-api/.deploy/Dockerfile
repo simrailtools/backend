@@ -8,4 +8,4 @@ FROM azul/zulu-openjdk-alpine:25-jre-headless-latest
 WORKDIR /app
 
 COPY --from=builder /build/rest-api/build/libs/docker/rest-api.jar ./
-CMD ["java", "-Duser.timezone=Europe/Berlin", "-Dspring.profiles.active=common,prd", "-Xms512M", "-XX:+UseZGC", "-jar", "--enable-preview", "/app/rest-api.jar"]
+CMD ["java", "-Duser.timezone=Europe/Berlin", "-Dspring.profiles.active=common,prd", "-Xms512M", "-XX:+UseZGC", "-XX:+PerfDisableSharedMem", "-XX:+UseCompactObjectHeaders", "-jar", "--enable-preview", "/app/rest-api.jar"]

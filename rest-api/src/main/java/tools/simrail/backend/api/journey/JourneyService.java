@@ -40,7 +40,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
 import tools.simrail.backend.api.journey.converter.JourneyActiveDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneyDtoConverter;
 import tools.simrail.backend.api.journey.converter.JourneySummaryDtoConverter;
@@ -53,14 +52,16 @@ import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
+import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.journey.JourneyTransportType;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 @Service
 class JourneyService {
 
-  private final SitSnapshotCache snapshotCache;
   private final ApiJourneyRepository journeyRepository;
   private final ApiJourneyEventRepository journeyEventRepository;
+  private final DataCache<EventBusProto.JourneyUpdateFrame> journeyCache;
 
   private final JourneyDtoConverter journeyDtoConverter;
   private final JourneyActiveDtoConverter journeyActiveDtoConverter;
@@ -68,14 +69,12 @@ class JourneyService {
 
   @Autowired
   public JourneyService(
-    @Nonnull SitSnapshotCache snapshotCache,
     @Nonnull ApiJourneyRepository journeyRepository,
     @Nonnull ApiJourneyEventRepository journeyEventRepository,
     @Nonnull JourneyDtoConverter journeyDtoConverter,
     @Nonnull JourneyActiveDtoConverter journeyActiveDtoConverter,
     @Nonnull JourneySummaryDtoConverter journeySummaryDtoConverter
   ) {
-    this.snapshotCache = snapshotCache;
     this.journeyRepository = journeyRepository;
     this.journeyEventRepository = journeyEventRepository;
     this.journeyDtoConverter = journeyDtoConverter;
@@ -116,15 +115,10 @@ class JourneyService {
    * @return all journeys that are currently active on the given server.
    */
   @Cacheable(cacheNames = "active_journey_cache", key = "'by_server_' + #serverId")
-  public @Nonnull Pair<Instant, List<JourneyActiveDto>> findActiveJourneys(@Nonnull UUID serverId) {
-    var activeJourneys = this.snapshotCache.getCachedJourneySnapshots()
-      .filter(snapshot -> snapshot.getServerId().equals(serverId))
-      .filter(snapshot -> {
-        var speed = snapshot.getSpeed();
-        var positionLat = snapshot.getPositionLat();
-        var positionLng = snapshot.getPositionLng();
-        return speed != null && positionLat != null && positionLng != null;
-      })
+  public @Nonnull Pair<Instant, List<JourneyActiveDto>> findActiveJourneys(@Nonnull String serverId) {
+    var activeJourneys = this.journeyCache.cachedValuesSnapshot()
+      .stream()
+      .filter(snapshot -> snapshot.getIds().getServerId().equals(serverId))
       .map(this.journeyActiveDtoConverter)
       .toList();
     return Pair.of(Instant.now(), activeJourneys);
@@ -215,57 +209,6 @@ class JourneyService {
       transportTypes,
       timeStart,
       timeEnd,
-      requestedLimit + 1, // request one more to check if more elements are available
-      offset);
-    return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {
-      var firstEvent = eventPair.getFirst();
-      var lastEvent = eventPair.getSecond();
-      return this.journeySummaryDtoConverter.convert(journey, firstEvent, lastEvent);
-    });
-  }
-
-  /**
-   * Finds details about a journey based on the tail events. The start data of the journey must be completely present,
-   * the end data can be used to narrow the results.Search results are either returned from cache or from querying the
-   * database.
-   *
-   * @param page                 the page of results to return, defaults to 1.
-   * @param limit                the maximum amount of journeys to return, defaults to 20.
-   * @param serverId             the id of the server to return journeys on.
-   * @param startTime            the exact time when the journey starts.
-   * @param startStationId       the exact id of the point where the journey starts.
-   * @param startJourneyNumber   the exact number of the journey at the first point.
-   * @param startJourneyCategory the exact category of the journey at the first point.
-   * @param endTime              the exact time when the journey ends.
-   * @param endStationId         the exact id of the point where the journey ends.
-   * @return a pagination wrapper around the query results based on the given filter parameters.
-   */
-  @Cacheable(cacheNames = "journey_search_cache", sync = true)
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findByTail(
-    @Nullable Integer page,
-    @Nullable Integer limit,
-    @Nonnull UUID serverId,
-    @Nonnull OffsetDateTime startTime,
-    @Nonnull UUID startStationId,
-    @Nonnull String startJourneyNumber,
-    @Nonnull String startJourneyCategory,
-    @Nullable OffsetDateTime endTime,
-    @Nullable UUID endStationId
-  ) {
-    // build the pagination parameter
-    int indexedPage = Objects.requireNonNullElse(page, 1) - 1;
-    int requestedLimit = Objects.requireNonNullElse(limit, 20);
-    int offset = requestedLimit * indexedPage;
-
-    // query and map the results
-    var queriedItems = this.journeyRepository.findJourneySummariesByTails(
-      serverId,
-      startTime,
-      startStationId,
-      startJourneyNumber,
-      startJourneyCategory,
-      endTime,
-      endStationId,
       requestedLimit + 1, // request one more to check if more elements are available
       offset);
     return this.filterJourneys(requestedLimit, queriedItems, (journey, eventPair) -> {

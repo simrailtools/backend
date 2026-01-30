@@ -24,30 +24,84 @@
 
 package tools.simrail.backend.api.journey.data;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
-import tools.simrail.backend.common.journey.JourneyTransport;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
- *
+ * Summary projection for a journey event.
  */
 public interface JourneyEventSummaryProjection {
 
-  @Nonnull
+  /**
+   * Get the id of the journey this event is associated with.
+   *
+   * @return the id of the journey this event is associated with.
+   */
+  @NonNull
   UUID getJourneyId();
 
-  @Nonnull
-  JourneyStopDescriptor getStopDescriptor();
+  /**
+   * Get the time when this event was scheduled to happen.
+   *
+   * @return the time when this event was scheduled to happen.
+   */
+  @NonNull
+  LocalDateTime getScheduledTime();
 
-  @Nonnull
-  OffsetDateTime getScheduledTime();
-
-  @Nonnull
-  JourneyTransport getTransport();
-
+  /**
+   * Get if this event is canceled.
+   *
+   * @return true if this event is canceled, false otherwise.
+   */
   boolean isCancelled();
 
+  /**
+   * Get the index of this event along the journey route.
+   *
+   * @return the index of this event along the journey route.
+   */
   int getEventIndex();
+
+  /**
+   * Get the transport category at the event.
+   *
+   * @return the transport category.
+   */
+  @NonNull
+  String getTransportCategory();
+
+  /**
+   * Get the transport number at the event.
+   *
+   * @return the transport number.
+   */
+  @NonNull
+  String getTransportNumber();
+
+  /**
+   * Get the transport type at the event.
+   *
+   * @return the transport type.
+   */
+  @NonNull
+  JourneyTransportType getTransportType();
+
+  /**
+   * Get the transport line at the event.
+   *
+   * @return the transport line, possibly {@code null}.
+   */
+  @Nullable
+  String getTransportLine();
+
+  /**
+   * Get the transport label at the event.
+   *
+   * @return the transport label, possibly {@code null}.
+   */
+  @Nullable
+  String getTransportLabel();
 }

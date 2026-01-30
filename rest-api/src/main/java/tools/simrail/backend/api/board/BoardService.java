@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.api.board;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.time.Duration;
 import java.time.OffsetDateTime;
 import java.time.temporal.ChronoUnit;
@@ -34,6 +32,8 @@ import java.util.List;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -67,10 +67,10 @@ class BoardService {
 
   @Autowired
   public BoardService(
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull SimRailServerTimeService serverTimeService,
-    @Nonnull BoardJourneyRepository boardJourneyRepository,
-    @Nonnull BoardEntryDtoConverter boardEntryDtoConverter
+    @NonNull SimRailPointProvider pointProvider,
+    @NonNull SimRailServerTimeService serverTimeService,
+    @NonNull BoardJourneyRepository boardJourneyRepository,
+    @NonNull BoardEntryDtoConverter boardEntryDtoConverter
   ) {
     this.pointProvider = pointProvider;
     this.serverTimeService = serverTimeService;
@@ -89,9 +89,9 @@ class BoardService {
    * @param transportTypes the requested transport types.
    * @return an object holding the given request parameters for further requesting of data.
    */
-  public @Nonnull BoardRequestParameters buildRequestParameters(
-    @Nonnull String serverId,
-    @Nonnull String pointId,
+  public @NonNull BoardRequestParameters buildRequestParameters(
+    @NonNull String serverId,
+    @NonNull String pointId,
     @Nullable OffsetDateTime timeStart,
     @Nullable OffsetDateTime timeEnd,
     @Nullable List<JourneyTransportType> transportTypes
@@ -142,7 +142,7 @@ class BoardService {
    * @return all arrivals that are matching the given request parameters.
    */
   @Cacheable(cacheNames = "boards_cache", key = "'arr_' + #requestParameters")
-  public @Nonnull List<BoardEntryDto> listArrivals(@Nonnull BoardRequestParameters requestParameters) {
+  public @NonNull List<BoardEntryDto> listArrivals(@NonNull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getArrivals(
         requestParameters.serverId(),
         requestParameters.pointId(),
@@ -161,7 +161,7 @@ class BoardService {
    * @return all departures that are matching the given request parameters.
    */
   @Cacheable(cacheNames = "boards_cache", key = "'dep_' + #requestParameters")
-  public @Nonnull List<BoardEntryDto> listDepartures(@Nonnull BoardRequestParameters requestParameters) {
+  public @NonNull List<BoardEntryDto> listDepartures(@NonNull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getDepartures(
         requestParameters.serverId(),
         requestParameters.pointId(),

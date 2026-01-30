@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,22 +22,19 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.converter;
+package tools.simrail.backend.api.shared;
 
-import jakarta.annotation.Nonnull;
-import java.time.Instant;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
-import org.springframework.core.convert.converter.Converter;
+import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotNull;
 
 /**
- * Converts an Instant to an OffsetDateTime assuming it is provided in UTC. This is specifically only applied to
- * projection conversion, nothing else.
+ * DTO for a user playing SimRail.
  */
-final class InstantToOffsetDateTimeConverter implements Converter<Instant, OffsetDateTime> {
+public record UserDto(
+  @Schema(description = "The id of the user")
+  @NotNull String id,
+  @Schema(description = "The platform the user is playing on")
+  @NotNull UserPlatform platform
+) {
 
-  @Override
-  public @Nonnull OffsetDateTime convert(@Nonnull Instant source) {
-    return OffsetDateTime.ofInstant(source, ZoneOffset.UTC);
-  }
 }

@@ -90,7 +90,7 @@ public final class JourneySummaryDtoConverter {
       journey.getServerId(),
       journey.getFirstSeenTime(),
       journey.getLastSeenTime(),
-      journey.isFeCancelled(),
+      journey.isEventCancelled(),
       originEvent,
       destinationEvent,
       firstPlayableEvent);
@@ -109,7 +109,7 @@ public final class JourneySummaryDtoConverter {
    * Converts the first playable event that is encapsulated in the given journey projection.
    */
   private @Nonnull JourneyEventDescriptorDto convertFirstEvent(@Nonnull JourneyWithEventSummaryProjection summary) {
-    var stopPlace = new JourneyStopPlaceSummaryDto(summary.getFePointId(), summary.getFePointName(), true);
-    return new JourneyEventDescriptorDto(stopPlace, summary.getFeScheduledTime(), summary.isFeCancelled());
+    var stopPlace = new JourneyStopPlaceSummaryDto(summary.getEventPointId(), summary.getFePointName(), true);
+    return new JourneyEventDescriptorDto(stopPlace, summary.getEventScheduledTime(), summary.isEventCancelled());
   }
 }

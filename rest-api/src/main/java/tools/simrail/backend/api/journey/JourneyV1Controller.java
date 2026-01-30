@@ -69,8 +69,8 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 @Validated
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-journeys/v1/")
-@Tag(name = "journeys-v1", description = "SimRail Journey Data APIs (Version 1)")
+@RequestMapping("/sit-journeys/v2/")
+@Tag(name = "journeys-v2", description = "SimRail Journey Data APIs (Version 2)")
 class JourneyV1Controller {
 
   // all transport types in a list
@@ -222,67 +222,6 @@ class JourneyV1Controller {
     return ResponseEntity.ok()
       .lastModified(journeysWithLastUpdated.getFirst())
       .body(journeysWithLastUpdated.getSecond());
-  }
-
-  /**
-   * Finds journeys based on their tail events.
-   */
-  @GetMapping("/by-tail")
-  @Operation(
-    summary = "Find journeys based on its tails",
-    description = """
-      Filters journeys based on its start and end events, where the start event data is required for filtering and the
-      end event data can optionally be supplied for further narrowing.
-      """,
-    parameters = {
-      @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
-      @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
-      @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
-      @Parameter(name = "startTime", description = "The scheduled time when the journey departs from the first station"),
-      @Parameter(name = "startStationId", description = "The id of the station where the journey is scheduled to depart"),
-      @Parameter(name = "startJourneyNumber", description = "The number of the journey at the first station"),
-      @Parameter(name = "startJourneyCategory", description = "The category of the journey at the first station"),
-      @Parameter(name = "endTime", description = "The scheduled time when the journey arrives at the last station"),
-      @Parameter(name = "endStationId", description = "The id of the station where the journey is scheduled to arrive"),
-    },
-    responses = {
-      @ApiResponse(
-        responseCode = "200",
-        description = "The journeys were successfully resolved based on the given filter parameters"),
-      @ApiResponse(
-        responseCode = "400",
-        description = "One of the filter parameters is invalid or doesn't match the described grouping requirements",
-        content = @Content(schema = @Schema(hidden = true))),
-      @ApiResponse(
-        responseCode = "500",
-        description = "An internal error occurred while processing the request",
-        content = @Content(schema = @Schema(hidden = true))),
-    }
-  )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByTail(
-    @RequestParam(name = "page", required = false) @Min(1) Integer page,
-    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
-    @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
-    @RequestParam(name = "startTime") OffsetDateTime startTime,
-    @RequestParam(name = "startStationId") @UUID(version = 4, allowNil = false) String startStationId,
-    @RequestParam(name = "startJourneyNumber") @Pattern(regexp = ".+") String startJourneyNumber,
-    @RequestParam(name = "startJourneyCategory") @Pattern(regexp = "[A-Z]+") String startJourneyCategory,
-    @RequestParam(name = "endTime", required = false) OffsetDateTime endTime,
-    @RequestParam(name = "endStationId", required = false) @UUID(version = 4, allowNil = false) String endStationId
-  ) {
-    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
-    var stationStationIdFilter = java.util.UUID.fromString(startStationId);
-    var endStationIdFilter = endStationId == null ? null : java.util.UUID.fromString(endStationId);
-    return this.journeyService.findByTail(
-      page,
-      limit,
-      serverIdFilter,
-      startTime,
-      stationStationIdFilter,
-      startJourneyNumber,
-      startJourneyCategory,
-      endTime,
-      endStationIdFilter);
   }
 
   /**

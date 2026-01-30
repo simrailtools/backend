@@ -24,12 +24,14 @@
 
 package tools.simrail.backend.api.advice;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import java.net.URI;
 import java.util.Optional;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.core.MethodParameter;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ProblemDetail;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.server.ServerHttpRequest;
 import org.springframework.http.server.ServerHttpResponse;
@@ -40,31 +42,40 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseBodyAdvice;
  * Advice to convert empty optional return values to 404 response status.
  */
 @ControllerAdvice
-final class EmptyOptionalToNotFoundResponseAdvice implements ResponseBodyAdvice<Optional<?>> {
+final class EmptyOptionalToNotFoundResponseAdvice implements ResponseBodyAdvice<Object> {
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
   public boolean supports(
-    @Nonnull MethodParameter returnType,
-    @Nonnull Class<? extends HttpMessageConverter<?>> converterType
+    @NonNull MethodParameter returnType,
+    @NonNull Class<? extends HttpMessageConverter<?>> converterType
   ) {
-    return Optional.class.isAssignableFrom(returnType.getParameterType());
+    return returnType.getParameterType() == Optional.class;
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  @SuppressWarnings("OptionalAssignedToNull")
-  public @Nullable Optional<?> beforeBodyWrite(
-    @Nullable Optional<?> body,
-    @Nonnull MethodParameter returnType,
-    @Nonnull MediaType selectedContentType,
-    @Nonnull Class<? extends HttpMessageConverter<?>> selectedConverterType,
-    @Nonnull ServerHttpRequest request,
-    @Nonnull ServerHttpResponse response
+  public @Nullable Object beforeBodyWrite(
+    @Nullable Object body,
+    @NonNull MethodParameter returnType,
+    @NonNull MediaType selectedContentType,
+    @NonNull Class<? extends HttpMessageConverter<?>> selectedConverterType,
+    @NonNull ServerHttpRequest request,
+    @NonNull ServerHttpResponse response
   ) {
-    if (body == null || body.isEmpty()) {
+    if (body instanceof Optional<?> optional && optional.isEmpty()) {
+      var pd = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, "The requested resource does not exist");
+      pd.setTitle("Not Found");
+      pd.setInstance(URI.create(request.getURI().getPath()));
       response.setStatusCode(HttpStatus.NOT_FOUND);
-      return null;
-    } else {
-      return body;
+      response.getHeaders().setContentType(MediaType.APPLICATION_PROBLEM_JSON);
+      return pd;
     }
+
+    return body;
   }
 }

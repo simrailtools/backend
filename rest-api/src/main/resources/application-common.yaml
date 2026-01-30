@@ -1,0 +1,44 @@
+logging:
+  pattern:
+    console: '%yellow(%date{dd.MM.yy HH:mm:ss}) [%highlight(%5p)] %cyan(%-40.40logger{0})[%magenta(%4.4line)]: %msg %ex%n'
+
+server:
+  # address gets configured in IPv4AddressWebServerCustomizer
+  port: ${APP_PORT:8080}
+  http2:
+    enabled: true
+  tomcat:
+    accesslog:
+      enabled: false
+
+spring:
+  sql:
+    init:
+      mode: never
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximumPoolSize: 50
+      connection-timeout: 15000
+  web:
+    error:
+      path: '/error'
+      include-exception: false
+      include-stacktrace: never
+      include-binding-errors: never
+      whitelabel:
+        enabled: false
+  mvc:
+    problemdetails:
+      enabled: true
+
+management:
+  prometheus:
+    metrics:
+      export:
+        step: 30s
+        enabled: true

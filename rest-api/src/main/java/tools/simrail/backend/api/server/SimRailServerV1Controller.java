@@ -31,10 +31,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotEmpty;
 import java.util.List;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +56,7 @@ class SimRailServerV1Controller {
   private final SimRailServerService serverService;
 
   @Autowired
-  public SimRailServerV1Controller(@Nonnull SimRailServerService serverService) {
+  public SimRailServerV1Controller(@NonNull SimRailServerService serverService) {
     this.serverService = serverService;
   }
 
@@ -85,7 +85,7 @@ class SimRailServerV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<SimRailServerDto> listServers(
+  public @NonNull List<SimRailServerDto> listServers(
     @RequestParam(name = "includeOffline", defaultValue = "false") boolean includeOffline,
     @RequestParam(name = "includeDeleted", defaultValue = "false") boolean includeDeleted
   ) {
@@ -128,7 +128,7 @@ class SimRailServerV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<SimRailServerDto> findServerById(
+  public @NonNull ResponseEntity<SimRailServerDto> findServerById(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String serverId
   ) {
     return this.serverService.findServerById(java.util.UUID.fromString(serverId))
@@ -175,7 +175,7 @@ class SimRailServerV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<SimRailServerDto> findServerByCode(
+  public @NonNull ResponseEntity<SimRailServerDto> findServerByCode(
     @PathVariable("code") @NotEmpty String serverCode
   ) {
     return this.serverService.findServerByCode(serverCode)

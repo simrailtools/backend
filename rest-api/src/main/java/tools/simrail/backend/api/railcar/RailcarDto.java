@@ -35,7 +35,7 @@ import tools.simrail.backend.common.railcar.RailcarType;
 /**
  * DTO for information about a railcar.
  */
-record RailcarDto(
+public record RailcarDto(
   @Schema(description = "The unique identifier of the railcar")
   @NotNull UUID id,
   @Schema(description = "The display name of the railcar")

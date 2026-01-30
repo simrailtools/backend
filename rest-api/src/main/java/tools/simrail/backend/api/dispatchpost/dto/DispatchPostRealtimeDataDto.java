@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,34 +22,18 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.event.dto;
+package tools.simrail.backend.api.dispatchpost.dto;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-import jakarta.annotation.Nonnull;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import tools.simrail.backend.common.rpc.ServerUpdateFrame;
+import tools.simrail.backend.api.shared.UserDto;
 
 /**
- * DTO for updating a server, only contains the fields that can be updated.
+ * DTO for the realtime data of a dispatch post.
  */
-@JsonInclude(JsonInclude.Include.NON_NULL)
-public record EventServerUpdateDto(
-  @Nonnull String serverId,
-  @Nullable String timezoneId,
-  @Nullable Boolean online,
-  @Nullable String scenery
+public record DispatchPostRealtimeDataDto(
+  @Schema(description = "The user that is currently dispatching the post")
+  @Nullable UserDto dispatcher
 ) {
 
-  /**
-   * Constructs an update DTO instance from the given update frame.
-   *
-   * @param frame the update frame to construct the update frame from.
-   * @return the constructed update dto from the given update frame.
-   */
-  public static @Nonnull EventServerUpdateDto fromServerUpdateFrame(@Nonnull ServerUpdateFrame frame) {
-    var online = frame.hasOnline() ? frame.getOnline() : null;
-    var timezoneId = frame.hasZoneOffset() ? frame.getZoneOffset() : null;
-    var scenery = frame.hasServerScenery() ? frame.getServerScenery() : null;
-    return new EventServerUpdateDto(frame.getServerId(), timezoneId, online, scenery);
-  }
 }

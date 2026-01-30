@@ -24,61 +24,49 @@
 
 package tools.simrail.backend.api.vehicle.dto;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Comparator;
-import java.util.List;
+import java.util.Objects;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.railcar.RailcarDtoConverter;
 import tools.simrail.backend.common.railcar.RailcarProvider;
-import tools.simrail.backend.common.vehicle.JourneyVehicleEntity;
-import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
+import tools.simrail.backend.common.vehicle.JourneyVehicleSequenceEntity;
 
 /**
  * Converter for vehicle information to DTO.
  */
 @Component
-public final class VehicleCompositionDtoConverter implements Function<List<JourneyVehicleEntity>, VehicleCompositionDto> {
+public final class VehicleSequenceDtoConverter implements Function<JourneyVehicleSequenceEntity, VehicleSequenceDto> {
 
   private static final Comparator<VehicleDto> VEHICLE_INDEX_COMPARATOR =
     Comparator.comparingInt(VehicleDto::indexInGroup);
 
   private final RailcarProvider railcarProvider;
+  private final RailcarDtoConverter railcarDtoConverter;
 
   @Autowired
-  public VehicleCompositionDtoConverter(@Nonnull RailcarProvider railcarProvider) {
+  public VehicleSequenceDtoConverter(
+    @NonNull RailcarProvider railcarProvider,
+    @NonNull RailcarDtoConverter railcarDtoConverter
+  ) {
     this.railcarProvider = railcarProvider;
+    this.railcarDtoConverter = railcarDtoConverter;
   }
 
   @Override
-  public @Nullable VehicleCompositionDto apply(@Nonnull List<JourneyVehicleEntity> vehicles) {
-    // get the base information from the first vehicle in the group, return null if
-    // the vehicle status is completely unknown and no data can be provided
-    var firstVehicle = vehicles.getFirst();
-    var firstVehicleStatus = firstVehicle.getStatus();
-    if (firstVehicleStatus == JourneyVehicleStatus.UNKNOWN) {
-      return null;
-    }
-
-    var mappedVehicles = vehicles.stream()
-      .map(vehicle -> {
-        var railcar = this.railcarProvider.findRailcarById(vehicle.getRailcarId()).orElseThrow();
-        var railcarDto = new VehicleRailcarSummaryDto(
-          railcar.getId(),
-          railcar.getDisplayName(),
-          railcar.getRailcarType(),
-          railcar.getWeight(),
-          railcar.getWidth(),
-          railcar.getLength());
-        return new VehicleDto(vehicle.getIndexInGroup(), vehicle.getLoadWeight(), vehicle.getLoad(), railcarDto);
-      })
+  public @NonNull VehicleSequenceDto apply(@NonNull JourneyVehicleSequenceEntity entity) {
+    var mappedVehicles = entity.getVehicles().stream()
+      .map(vehicle -> this.railcarProvider.findRailcarById(vehicle.getRailcarId())
+        .map(railcar -> {
+          var railcarDto = this.railcarDtoConverter.apply(railcar);
+          return new VehicleDto(vehicle.getIndexInSequence(), vehicle.getLoadWeight(), vehicle.getLoad(), railcarDto);
+        })
+        .orElse(null))
+      .filter(Objects::nonNull)
       .sorted(VEHICLE_INDEX_COMPARATOR)
       .toList();
-    return new VehicleCompositionDto(
-      firstVehicle.getJourneyId(),
-      firstVehicleStatus,
-      firstVehicle.getUpdateTime(),
-      mappedVehicles);
+    return new VehicleSequenceDto(entity.getJourneyId(), entity.getStatus(), entity.getUpdateTime(), mappedVehicles);
   }
 }

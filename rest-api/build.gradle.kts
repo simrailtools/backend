@@ -49,6 +49,19 @@ dependencies {
   annotationProcessor("org.springframework.boot:spring-boot-configuration-processor")
 }
 
+// temp override until jackson 3 support is merged into swagger-core
+// see pr: https://github.com/swagger-api/swagger-core/pull/5031
+configurations.all {
+  resolutionStrategy.dependencySubstitution {
+    substitute(module("io.swagger.core.v3:swagger-core-jakarta"))
+      .using(module("com.github.WilliamAGH.swagger-core:swagger-core-jakarta:jackson-3-SNAPSHOT"))
+    substitute(module("io.swagger.core.v3:swagger-models-jakarta"))
+      .using(module("com.github.WilliamAGH.swagger-core:swagger-models-jakarta:jackson-3-SNAPSHOT"))
+    substitute(module("io.swagger.core.v3:swagger-annotations-jakarta"))
+      .using(module("com.github.WilliamAGH.swagger-core:swagger-annotations-jakarta:jackson-3-SNAPSHOT"))
+  }
+}
+
 // copy over downloaded rapidoc into resources/docs folder
 tasks.withType<ProcessResources> {
   dependsOn("downloadRapiDoc")

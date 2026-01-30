@@ -31,8 +31,8 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -42,19 +42,19 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import tools.simrail.backend.api.vehicle.dto.VehicleCompositionDto;
+import tools.simrail.backend.api.vehicle.dto.VehicleSequenceDto;
 
 @Validated
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-vehicles/v1/")
-@Tag(name = "vehicles-v1", description = "SimRail Server Vehicle APIs (Version 1)")
-class VehicleV1Controller {
+@RequestMapping("/sit-vehicles/v2/")
+@Tag(name = "vehicles-v2", description = "SimRail Server Vehicle APIs (Version 2)")
+class VehicleV2Controller {
 
   private final VehicleService vehicleService;
 
   @Autowired
-  public VehicleV1Controller(@Nonnull VehicleService vehicleService) {
+  public VehicleV2Controller(@NonNull VehicleService vehicleService) {
     this.vehicleService = vehicleService;
   }
 
@@ -94,13 +94,13 @@ class VehicleV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<VehicleCompositionDto> findVehicleCompositionByJourneyId(
+  public @NonNull ResponseEntity<VehicleSequenceDto> findVehicleCompositionByJourneyId(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id
   ) {
     return this.vehicleService.findByJourneyId(java.util.UUID.fromString(id))
       .map(vehicleComposition -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .lastModified(vehicleComposition.lastUpdated().toInstant())
+        .lastModified(vehicleComposition.lastUpdated())
         .body(vehicleComposition))
       .orElseGet(() -> ResponseEntity.notFound().build());
   }

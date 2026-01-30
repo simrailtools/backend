@@ -26,7 +26,7 @@ package tools.simrail.backend.api.vehicle.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
@@ -34,13 +34,13 @@ import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
 /**
  * DTO for the vehicle composition of a journey.
  */
-public record VehicleCompositionDto(
+public record VehicleSequenceDto(
   @Schema(description = "The id of the journey associated with the vehicle composition")
   @NotNull UUID journeyId,
   @Schema(description = "The status of the vehicle composition")
   @NotNull JourneyVehicleStatus status,
   @Schema(description = "The time (ISO-8601 with offset) when the vehicle data was last updated")
-  @NotNull OffsetDateTime lastUpdated,
+  @NotNull Instant lastUpdated,
   @Schema(description = "The vehicles that are in the composition")
   @NotNull List<VehicleDto> vehicles
 ) {

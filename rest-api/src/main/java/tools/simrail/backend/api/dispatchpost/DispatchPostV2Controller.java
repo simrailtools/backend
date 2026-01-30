@@ -51,14 +51,14 @@ import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 @Validated
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-dispatch-posts/v1/")
+@RequestMapping("/sit-dispatch-posts/v2/")
 @Tag(name = "dispatch-post-v1", description = "SimRail Dispatch Post Data APIs (Version 1)")
-class DispatchPostV1Controller {
+class DispatchPostV2Controller {
 
   private final DispatchPostService dispatchPostService;
 
   @Autowired
-  public DispatchPostV1Controller(@Nonnull DispatchPostService dispatchPostService) {
+  public DispatchPostV2Controller(@Nonnull DispatchPostService dispatchPostService) {
     this.dispatchPostService = dispatchPostService;
   }
 
@@ -104,7 +104,7 @@ class DispatchPostV1Controller {
     return this.dispatchPostService.findById(java.util.UUID.fromString(id))
       .map(point -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .lastModified(point.lastUpdated().toInstant())
+        .lastModified(point.lastUpdated())
         .body(point))
       .orElseGet(() -> ResponseEntity.notFound().build());
   }

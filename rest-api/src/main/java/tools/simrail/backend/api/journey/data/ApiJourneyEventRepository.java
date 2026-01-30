@@ -32,19 +32,44 @@ import tools.simrail.backend.common.journey.JourneyEventRepository;
 
 public interface ApiJourneyEventRepository extends JourneyEventRepository {
 
-  @Query("""
-    SELECT e
-    FROM sit_journey_event e
-    WHERE
-      e.journeyId IN :journeyIds
-      AND (
-        e.eventIndex = 0 OR
-        e.eventIndex = (
-          SELECT MAX(ei.eventIndex)
-          FROM sit_journey_event ei
-          WHERE ei.journeyId = e.journeyId
-        )
-      )
-    """)
-  List<JourneyEventSummaryProjection> findFirstAndLastEventOfJourneys(@Param("journeyIds") List<UUID> journeyIds);
+  /**
+   * Finds the first and last events of the journey with the given ids.
+   *
+   * @param journeyIds the ids of the journeys to find the first and last event of.
+   * @return a list holding the first and last events of the journey with the given ids.
+   */
+  @Query(value = """
+    (
+      SELECT DISTINCT ON (e.journey_id)
+        e.journey_id,
+        e.scheduled_time,
+        e.cancelled,
+        e.event_index,
+        e.transport_category,
+        e.transport_number,
+        e.transport_type,
+        e.transport_line,
+        e.transport_label
+      FROM sit_journey_event e
+      WHERE e.journey_id = ANY(:journeyIds)
+      ORDER BY e.journey_id, e.event_index
+    )
+    UNION ALL
+    (
+      SELECT DISTINCT ON (e.journey_id)
+        e.journey_id,
+        e.scheduled_time,
+        e.cancelled,
+        e.event_index,
+        e.transport_category,
+        e.transport_number,
+        e.transport_type,
+        e.transport_line,
+        e.transport_label
+      FROM sit_journey_event e
+      WHERE e.journey_id = ANY(:journeyIds)
+      ORDER BY e.journey_id, e.event_index DESC
+    )
+    """, nativeQuery = true)
+  List<JourneyEventSummaryProjection> findFirstAndLastEventOfJourneys(@Param("journeyIds") UUID[] journeyIds);
 }

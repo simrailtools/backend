@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,31 +22,17 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.vehicle.dto;
+package tools.simrail.backend.api.shared;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.Min;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.util.UUID;
-import tools.simrail.backend.common.railcar.RailcarType;
 
 /**
- * Summary information about a railcar.
+ * A DTO carrying a geographical position.
  */
-public record VehicleRailcarSummaryDto(
-  @Schema(description = "The unique identifier of the railcar")
-  @NotNull UUID id,
-  @Schema(description = "The display name of the railcar")
-  @NotNull @NotBlank String name,
-  @Schema(description = "The grouping type of the railcar")
-  @NotNull RailcarType type,
-  @Schema(description = "The weight of the railcar in tons")
-  @NotNull @Min(0) double weight,
-  @Schema(description = "The width of the railcar in meters")
-  @NotNull @Min(0) double width,
-  @Schema(description = "The length of the railcar in meters")
-  @NotNull @Min(0) double length
+public record GeoPositionDto(
+  @Schema(description = "The latitude of the position") @NotNull double latitude,
+  @Schema(description = "The longitude of the position") @NotNull double longitude
 ) {
 
 }

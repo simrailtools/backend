@@ -33,7 +33,7 @@ import tools.simrail.backend.common.railcar.Railcar;
  * Converter for railcars to DTOs.
  */
 @Component
-final class RailcarDtoConverter implements Function<Railcar, RailcarDto> {
+public final class RailcarDtoConverter implements Function<Railcar, RailcarDto> {
 
   @Override
   public @Nonnull RailcarDto apply(@Nonnull Railcar railcar) {

@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import tools.simrail.backend.api.railcar.RailcarDto;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 
 /**
@@ -41,7 +42,7 @@ public record VehicleDto(
   @Schema(description = "The load of the vehicle, can be null in case nothing is loaded", types = {"null"})
   @Nullable JourneyVehicleLoad load,
   @Schema(description = "Summary information about the railcar used for this vehicle")
-  @NotNull VehicleRailcarSummaryDto railcar
+  @NotNull RailcarDto railcar
 ) {
 
 }
