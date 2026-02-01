@@ -40,6 +40,7 @@ public final class RailcarDtoConverter implements Function<Railcar, RailcarDto> 
     return new RailcarDto(
       railcar.getId(),
       railcar.getDisplayName(),
+      railcar.getName(),
       railcar.getRailcarType(),
       railcar.getTypeGroupId(),
       railcar.getRequiredDlcId(),

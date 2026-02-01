@@ -34,8 +34,6 @@ import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
 import tools.simrail.backend.api.board.dto.BoardEntryDto;
 import tools.simrail.backend.api.board.dto.BoardStopInfoDto;
-import tools.simrail.backend.common.journey.JourneyStopType;
-import tools.simrail.backend.common.journey.JourneyTimeType;
 
 /**
  * Converter for a list of board entry projections to board entry dtos.
@@ -68,12 +66,10 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
     var viaEvents = entries.stream().map(this.viaEventDtoConverter).toList();
 
     // convert stop information
-    var stopType = JourneyStopType.VALUES[root.getInitialStopType()];
     var scheduledStopInfo = this.buildStopInfo(root.getInitialScheduledPlatform(), root.getInitialScheduledTrack());
     var realtimeStopInfo = this.buildStopInfo(root.getInitialRealtimePlatform(), root.getInitialRealtimeTrack());
 
     var transport = this.transportDtoConverter.apply(root);
-    var realtimeTimeType = JourneyTimeType.VALUES[root.getInitialRealtimeTimeType()];
     return new BoardEntryDto(
       root.getJourneyId(),
       root.getInitialEventId(),
@@ -81,8 +77,8 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
       root.isInitialAdditional(),
       root.getInitialScheduledTime(),
       root.getInitialRealtimeTime(),
-      realtimeTimeType,
-      stopType,
+      root.getInitialRealtimeTimeType(),
+      root.getInitialStopType(),
       scheduledStopInfo,
       realtimeStopInfo,
       transport,

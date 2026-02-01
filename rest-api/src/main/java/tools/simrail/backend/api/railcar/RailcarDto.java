@@ -39,7 +39,9 @@ public record RailcarDto(
   @Schema(description = "The unique identifier of the railcar")
   @NotNull UUID id,
   @Schema(description = "The display name of the railcar")
-  @NotNull @NotBlank String name,
+  @NotNull @NotBlank String displayName,
+  @Schema(description = "The baptismal name of the locomotive / wagon, null if none", types = {"null"})
+  @Nullable String name,
   @Schema(description = "The grouping type of the railcar")
   @NotNull RailcarType type,
   @Schema(description = "The type identifier of the railcar")

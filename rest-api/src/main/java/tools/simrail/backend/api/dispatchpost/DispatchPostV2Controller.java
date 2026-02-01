@@ -38,7 +38,6 @@ import org.hibernate.validator.constraints.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -48,7 +47,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.dispatchpost.dto.DispatchPostInfoDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-dispatch-posts/v2/")

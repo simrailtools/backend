@@ -28,8 +28,8 @@ import java.time.LocalDateTime;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
-import tools.simrail.backend.common.journey.JourneyEventType;
 import tools.simrail.backend.common.journey.JourneyStopType;
+import tools.simrail.backend.common.journey.JourneyTimeType;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
@@ -126,7 +126,7 @@ public interface BoardJourneyProjection {
    * @return the realtime time type of the initially matched event.
    */
   @NonNull
-  JourneyEventType getInitialRealtimeTimeType();
+  JourneyTimeType getInitialRealtimeTimeType();
 
   /**
    * Get the scheduled platform of the event, null if no passenger stop is scheduled.

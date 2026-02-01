@@ -28,6 +28,7 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.common.point.SimRailPointPosition;
 import tools.simrail.backend.common.proto.EventBusProto;
+import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
  * Converter for a geo position to a DTO.
@@ -38,11 +39,11 @@ public final class GeoPositionDtoConverter {
   /**
    * Converts a geo position from an event bus message.
    *
-   * @param data the event bus position message to convert.
+   * @param position the event bus position message to convert.
    * @return the converted event bus position message as a dto.
    */
-  public @NonNull GeoPositionDto convert(EventBusProto.@NonNull GeoPosition data) {
-    return new GeoPositionDto(data.getLatitude(), data.getLongitude());
+  public @NonNull GeoPositionDto convert(EventBusProto.@NonNull GeoPosition position) {
+    return new GeoPositionDto(position.getLatitude(), position.getLongitude());
   }
 
   /**
@@ -52,6 +53,16 @@ public final class GeoPositionDtoConverter {
    * @return the converted point position as a dto.
    */
   public @NonNull GeoPositionDto convert(@NonNull SimRailPointPosition position) {
+    return new GeoPositionDto(position.getLatitude(), position.getLongitude());
+  }
+
+  /**
+   * Converts a geo position entity to a dto.
+   *
+   * @param position the position entity to convert.
+   * @return the converted position entity as a dto.
+   */
+  public @NonNull GeoPositionDto convert(@NonNull GeoPositionEntity position) {
     return new GeoPositionDto(position.getLatitude(), position.getLongitude());
   }
 }

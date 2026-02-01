@@ -24,9 +24,13 @@
 
 package tools.simrail.backend.api.server;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.server.SimRailServerEntity;
 
 /**
@@ -35,12 +39,22 @@ import tools.simrail.backend.common.server.SimRailServerEntity;
 @Component
 final class SimRailServerDtoConverter implements Function<SimRailServerEntity, SimRailServerDto> {
 
+  private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
+
+  @Autowired
+  public SimRailServerDtoConverter(
+    @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
+  ) {
+    this.serverDataCache = serverDataCache;
+  }
+
   @Override
-  public @Nonnull SimRailServerDto apply(@Nonnull SimRailServerEntity server) {
+  public @NonNull SimRailServerDto apply(@NonNull SimRailServerEntity server) {
+    var serverData = this.serverDataCache.findByPrimaryKey(server.getId().toString());
+    var serverIsOnline = serverData != null && serverData.getServerData().getOnline();
     return new SimRailServerDto(
       server.getId(),
       server.getCode(),
-      server.getTimezone(),
       server.getUtcOffsetHours(),
       server.getRegion(),
       server.getTags(),
@@ -48,7 +62,7 @@ final class SimRailServerDtoConverter implements Function<SimRailServerEntity, S
       server.getScenery(),
       server.getUpdateTime(),
       server.getRegisteredSince(),
-      server.isOnline(),
+      serverIsOnline,
       server.isDeleted()
     );
   }

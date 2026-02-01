@@ -24,13 +24,16 @@
 
 package tools.simrail.backend.api.server;
 
-import jakarta.annotation.Nonnull;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.server.SimRailServerRepository;
 
 @Service
@@ -38,14 +41,17 @@ class SimRailServerService {
 
   private final SimRailServerRepository serverRepository;
   private final SimRailServerDtoConverter serverDtoConverter;
+  private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   @Autowired
   public SimRailServerService(
-    @Nonnull SimRailServerRepository serverRepository,
-    @Nonnull SimRailServerDtoConverter serverDtoConverter
+    @NonNull SimRailServerRepository serverRepository,
+    @NonNull SimRailServerDtoConverter serverDtoConverter,
+    @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
   ) {
     this.serverRepository = serverRepository;
     this.serverDtoConverter = serverDtoConverter;
+    this.serverDataCache = serverDataCache;
   }
 
   /**
@@ -56,10 +62,14 @@ class SimRailServerService {
    * @return a list of all servers that are matching the given filter options.
    */
   @Cacheable(cacheNames = "server_cache", key = "'list_' + #includeOffline + '_' + #includeDeleted")
-  public @Nonnull List<SimRailServerDto> listServers(boolean includeOffline, boolean includeDeleted) {
+  public @NonNull List<SimRailServerDto> listServers(boolean includeOffline, boolean includeDeleted) {
     return this.serverRepository.findAll().stream()
-      .filter(server -> server.isOnline() || server.isDeleted() || includeOffline)
       .filter(server -> !server.isDeleted() || includeDeleted)
+      .filter(server -> {
+        var serverData = this.serverDataCache.findByPrimaryKey(server.getId().toString());
+        var serverIsOnline = serverData != null && serverData.getServerData().getOnline();
+        return serverIsOnline || includeOffline;
+      })
       .map(this.serverDtoConverter)
       .toList();
   }
@@ -72,7 +82,7 @@ class SimRailServerService {
    * @return an optional holding the detail data of the server with the given id, if one exists.
    */
   @Cacheable(cacheNames = "server_cache", key = "'by_id_' + #id")
-  public @Nonnull Optional<SimRailServerDto> findServerById(@Nonnull UUID id) {
+  public @NonNull Optional<SimRailServerDto> findServerById(@NonNull UUID id) {
     return this.serverRepository.findById(id).map(this.serverDtoConverter);
   }
 
@@ -84,7 +94,7 @@ class SimRailServerService {
    * @return an optional holding the detail data of the server with the given code, if one exists.
    */
   @Cacheable(cacheNames = "server_cache", key = "'by_code_' + #code")
-  public @Nonnull Optional<SimRailServerDto> findServerByCode(@Nonnull String code) {
+  public @NonNull Optional<SimRailServerDto> findServerByCode(@NonNull String code) {
     return this.serverRepository.findByCode(code).map(this.serverDtoConverter);
   }
 }

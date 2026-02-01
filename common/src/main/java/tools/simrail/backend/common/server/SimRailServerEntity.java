@@ -30,8 +30,8 @@ import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
 import java.time.Instant;
-import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -112,7 +112,7 @@ public final class SimRailServerEntity {
    */
   @Column(name = "tags")
   @JdbcTypeCode(SqlTypes.JSON)
-  private List<String> tags;
+  private Set<String> tags;
 
   /**
    * If this server is no longer registered in the SimRail backend.

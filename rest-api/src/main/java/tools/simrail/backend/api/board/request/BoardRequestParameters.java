@@ -25,8 +25,7 @@
 package tools.simrail.backend.api.board.request;
 
 import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
@@ -42,9 +41,9 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 public record BoardRequestParameters(
   @Nonnull UUID serverId,
   @Nonnull UUID pointId,
-  @Nonnull OffsetDateTime timeStart,
-  @Nonnull OffsetDateTime timeEnd,
-  @Nonnull List<JourneyTransportType> transportTypes
+  @Nonnull LocalDateTime timeStart,
+  @Nonnull LocalDateTime timeEnd,
+  @Nonnull JourneyTransportType[] transportTypes
 ) {
 
 }

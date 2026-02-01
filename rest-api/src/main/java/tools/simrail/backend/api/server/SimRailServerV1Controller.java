@@ -38,7 +38,6 @@ import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -46,7 +45,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-servers/v1/")
@@ -134,7 +132,7 @@ class SimRailServerV1Controller {
     return this.serverService.findServerById(java.util.UUID.fromString(serverId))
       .map(server -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .lastModified(server.lastUpdated().toInstant())
+        .lastModified(server.lastUpdated())
         .body(server))
       .orElseGet(() -> ResponseEntity.notFound().build());
   }
@@ -181,7 +179,7 @@ class SimRailServerV1Controller {
     return this.serverService.findServerByCode(serverCode)
       .map(server -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .lastModified(server.lastUpdated().toInstant())
+        .lastModified(server.lastUpdated())
         .body(server))
       .orElseGet(() -> ResponseEntity.notFound().build());
   }

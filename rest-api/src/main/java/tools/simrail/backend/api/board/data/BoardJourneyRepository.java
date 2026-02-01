@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.api.board.data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
@@ -35,7 +35,8 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 public interface BoardJourneyRepository extends JourneyRepository {
 
   /**
-   * Get all events for a departure board matching the given filter parameters. The result holds the matched arrival event
+   * Get all events for an arrival board matching the given filter parameters. The result holds the matched arrival
+   * event as well as all previous departure events.
    *
    * @param serverId       the id of the server to match the arrival on.
    * @param pointId        the id of the point to get the arrivals of.
@@ -124,13 +125,14 @@ public interface BoardJourneyRepository extends JourneyRepository {
   List<BoardJourneyProjection> getArrivals(
     @Param("serverId") UUID serverId,
     @Param("pointId") UUID pointId,
-    @Param("spanStart") OffsetDateTime timeSpanStart,
-    @Param("spanEnd") OffsetDateTime timeSpanEnd,
-    @Param("transportTypes") List<JourneyTransportType> transportTypes
+    @Param("spanStart") LocalDateTime timeSpanStart,
+    @Param("spanEnd") LocalDateTime timeSpanEnd,
+    @Param("transportTypes") JourneyTransportType[] transportTypes
   );
 
   /**
-   * Get a projection of all journey events that are after the initially matched event.
+   * Get all events for a departure board matching the given filter parameters. The result holds the matched departure
+   * event as well as all upcoming arrival events.
    *
    * @param serverId       the id of the server to match the departures on.
    * @param pointId        the id of the point to get the departures of.
@@ -219,8 +221,8 @@ public interface BoardJourneyRepository extends JourneyRepository {
   List<BoardJourneyProjection> getDepartures(
     @Param("serverId") UUID serverId,
     @Param("pointId") UUID pointId,
-    @Param("spanStart") OffsetDateTime timeSpanStart,
-    @Param("spanEnd") OffsetDateTime timeSpanEnd,
-    @Param("transportTypes") List<JourneyTransportType> transportTypes
+    @Param("spanStart") LocalDateTime timeSpanStart,
+    @Param("spanEnd") LocalDateTime timeSpanEnd,
+    @Param("transportTypes") JourneyTransportType[] transportTypes
   );
 }

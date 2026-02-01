@@ -30,13 +30,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Set;
 import org.hibernate.validator.constraints.UUID;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -46,7 +46,6 @@ import tools.simrail.backend.api.board.dto.BoardEntryDto;
 import tools.simrail.backend.api.board.request.BoardEntrySortOrder;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-boards/v1/")
@@ -97,9 +96,9 @@ class BoardV1Controller {
   public @NonNull List<BoardEntryDto> listBoardArrivals(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
-    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
-    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
-    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes,
+    @RequestParam(name = "timeStart", required = false) LocalDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) LocalDateTime timeEnd,
+    @RequestParam(name = "transportTypes", required = false) Set<JourneyTransportType> transportTypes,
     @RequestParam(name = "sortBy", required = false) BoardEntrySortOrder sortBy
   ) {
     var sortOrder = Objects.requireNonNullElse(sortBy, BoardEntrySortOrder.REALTIME_TIME);
@@ -147,9 +146,9 @@ class BoardV1Controller {
   public @NonNull List<BoardEntryDto> listBoardDepartures(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "pointId") @UUID(version = 4, allowNil = false) String pointId,
-    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
-    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
-    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes,
+    @RequestParam(name = "timeStart", required = false) LocalDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) LocalDateTime timeEnd,
+    @RequestParam(name = "transportTypes", required = false) Set<JourneyTransportType> transportTypes,
     @RequestParam(name = "sortBy", required = false) BoardEntrySortOrder sortBy
   ) {
     var sortOrder = Objects.requireNonNullElse(sortBy, BoardEntrySortOrder.REALTIME_TIME);
