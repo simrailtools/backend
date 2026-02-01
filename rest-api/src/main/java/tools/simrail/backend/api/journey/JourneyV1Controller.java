@@ -31,24 +31,24 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import java.time.Duration;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.util.Pair;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -58,32 +58,29 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.exception.IllegalRequestParameterException;
-import tools.simrail.backend.api.journey.dto.JourneyActiveDto;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
-import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithEventDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithLiveDataDto;
 import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 import tools.simrail.backend.api.server.SimRailServerTimeService;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-journeys/v2/")
 @Tag(name = "journeys-v2", description = "SimRail Journey Data APIs (Version 2)")
 class JourneyV1Controller {
 
-  // all transport types in a list
-  private static final List<JourneyTransportType> ALL_TRANSPORT_TYPES =
-    List.copyOf(EnumSet.allOf(JourneyTransportType.class));
+  private static final Set<JourneyTransportType> ALL_TRANSPORT_TYPES = EnumSet.allOf(JourneyTransportType.class);
 
   private final JourneyService journeyService;
   private final SimRailServerTimeService serverTimeService;
 
   @Autowired
   public JourneyV1Controller(
-    @Nonnull JourneyService journeyService,
-    @Nonnull SimRailServerTimeService serverTimeService
+    @NonNull JourneyService journeyService,
+    @NonNull SimRailServerTimeService serverTimeService
   ) {
     this.journeyService = journeyService;
     this.serverTimeService = serverTimeService;
@@ -97,9 +94,13 @@ class JourneyV1Controller {
    * @return a pair holding the parsed server id and time of the server with the given id.
    * @throws IllegalRequestParameterException if no server with the given id exists.
    */
-  private @Nonnull Pair<java.util.UUID, OffsetDateTime> getServerIdAndTime(@Nonnull String serverId) {
+  private @NonNull Pair<java.util.UUID, LocalDateTime> getServerIdAndTime(@NonNull String serverId) {
     return this.serverTimeService
       .resolveServerTime(serverId)
+      .map(serverTime -> {
+        var parsedServerId = java.util.UUID.fromString(serverId);
+        return Pair.of(parsedServerId, serverTime);
+      })
       .orElseThrow(() -> new IllegalRequestParameterException("Invalid server id provided"));
   }
 
@@ -139,13 +140,13 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<JourneyDto> findJourneyById(
+  public @NonNull ResponseEntity<JourneyDto> findJourneyById(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id
   ) {
     return this.journeyService.findById(java.util.UUID.fromString(id))
       .map(journey -> ResponseEntity.ok()
         .cacheControl(CacheControl.noStore())
-        .lastModified(journey.lastUpdated().toInstant())
+        .lastModified(journey.lastUpdated())
         .body(journey))
       .orElseGet(() -> ResponseEntity.notFound().build());
   }
@@ -173,7 +174,7 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<JourneyDto> findJourneysByIds(
+  public @NonNull List<JourneyDto> findJourneysByIds(
     @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 5, allowNil = false) String> ids
   ) {
     // sort ids to prevent cache misses when the same request is sent twice with a different id order
@@ -214,11 +215,11 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<List<JourneyActiveDto>> listActiveJourneys(
+  public @NonNull ResponseEntity<List<JourneySummaryWithLiveDataDto>> listActiveJourneys(
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId
   ) {
-    var serverIdFilter = this.getServerIdAndTime(serverId).getFirst();
-    var journeysWithLastUpdated = this.journeyService.findActiveJourneys(serverIdFilter);
+    this.getServerIdAndTime(serverId); // to check if the server exists
+    var journeysWithLastUpdated = this.journeyService.findActiveJourneys(serverId);
     return ResponseEntity.ok()
       .lastModified(journeysWithLastUpdated.getFirst())
       .body(journeysWithLastUpdated.getSecond());
@@ -236,8 +237,8 @@ class JourneyV1Controller {
       - Searching for 'PWJ 146051' will also return 'ROJ 19369' that starts as 'ROJ' but switches to 'PWJ' along its route
       - Searching for 'RE1' at '2024-12-06' will also return journeys that start at '2024-12-05' and continue on '2024-12-06'
       
-      Multiple filter parameter can be provided and are linked in a logical AND chain. Ensure that at least the
-      journey number or journey line is provided.
+      Multiple filter parameter can be provided and are linked in a logical AND chain. At least the journey number or
+      journey line must be provided.
       """,
     parameters = {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
@@ -263,18 +264,18 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByEvent(
+  public @NonNull PaginatedResponseDto<JourneySummaryDto> findJourneysByEvent(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
     @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
-    @RequestParam(name = "journeyNumber", required = false) @Pattern(regexp = ".+") String journeyNumber,
-    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
-    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
+    @RequestParam(name = "journeyNumber", required = false) @Pattern(regexp = "^.{4,6}$") String journeyNumber,
+    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "^[A-Z]{3}$") String journeyCategory,
+    @RequestParam(name = "transportTypes", required = false) Set<JourneyTransportType> transportTypes
   ) {
-    // at least the journey number or line has to be given
     if (journeyNumber == null && line == null) {
+      // at least the journey number or line has to be given
       throw new IllegalRequestParameterException("Either journey number or line must be provided");
     }
 
@@ -317,9 +318,8 @@ class JourneyV1Controller {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
       @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
-      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 with offset), defaults to the current server time if omitted"),
-      @Parameter(name = "timeEnd", description = "The end of the time range (ISO-8601 with offset), defaults to start plus 15 minutes if omitted"),
-      @Parameter(name = "line", description = "The line of the journey at the first playable event"),
+      @Parameter(name = "timeStart", description = "The start of the time range (ISO-8601 without offset), defaults to the current server time if omitted"),
+      @Parameter(name = "timeEnd", description = "The end of the time range (ISO-8601 without offset), defaults to start plus 15 minutes if omitted"),
       @Parameter(name = "journeyCategory", description = "The category of the journey at the first playable event"),
       @Parameter(name = "transportTypes", description = "The transport types that are returned, defaults to all types if omitted"),
     },
@@ -337,15 +337,14 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryWithPlayableEventDto> findJourneysByPlayableDeparture(
+  public @NonNull PaginatedResponseDto<JourneySummaryWithEventDto> findJourneysByPlayableDeparture(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
-    @RequestParam(name = "timeStart", required = false) OffsetDateTime timeStart,
-    @RequestParam(name = "timeEnd", required = false) OffsetDateTime timeEnd,
-    @RequestParam(name = "line", required = false) @Pattern(regexp = ".+") String line,
-    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "[A-Z]+") String journeyCategory,
-    @RequestParam(name = "transportTypes", required = false) List<JourneyTransportType> transportTypes
+    @RequestParam(name = "timeStart", required = false) LocalDateTime timeStart,
+    @RequestParam(name = "timeEnd", required = false) LocalDateTime timeEnd,
+    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "^[A-Z]{3}$") String journeyCategory,
+    @RequestParam(name = "transportTypes", required = false) Set<JourneyTransportType> transportTypes
   ) {
     var serverAndTime = this.getServerIdAndTime(serverId);
     if (timeStart == null) {
@@ -379,19 +378,18 @@ class JourneyV1Controller {
       serverIdFilter,
       truncatedStart,
       truncatedEnd,
-      line,
       journeyCategory,
       transportTypes);
   }
 
   /**
-   * Finds journeys that have the given railcar in their vehicle composition.
+   * Finds journeys that have the given railcars in their vehicle composition.
    */
   @GetMapping("/by-vehicle")
   @Operation(
-    summary = "Finds journeys that are using the given railcar in their vehicle composition",
+    summary = "Finds journeys that are using the given railcars in their vehicle composition",
     description = """
-      Finds journeys that use the given railcar in their vehicle composition on the given date. The results might be
+      Finds journeys that use the given railcars in their vehicle composition on the given date. The results might be
       incomplete or incorrect for journeys that were not active yet, as the result data will be based on predictions
       and not the real composition of the journey.
       """,
@@ -399,8 +397,10 @@ class JourneyV1Controller {
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
       @Parameter(name = "serverId", description = "The id of the server to filter journeys on"),
-      @Parameter(name = "date", description = "The date of an event (ISO-8601 without timezone), defaults to the current server date if omitted"),
-      @Parameter(name = "railcar", description = "The id of the railcar that must be included in the vehicle composition of the journey"),
+      @Parameter(name = "date", description = "The date of an event (ISO-8601), defaults to the current server date if omitted"),
+      @Parameter(name = "railcars", description = "The id of the railcars that must be included in the vehicle composition of the journey"),
+      @Parameter(name = "journeyCategory", description = "The category of the journey at the first playable event"),
+      @Parameter(name = "transportTypes", description = "The transport types that are returned, defaults to all types if omitted"),
     },
     responses = {
       @ApiResponse(
@@ -416,12 +416,14 @@ class JourneyV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<JourneySummaryDto> findJourneysByRailcar(
+  public @NonNull PaginatedResponseDto<JourneySummaryDto> findJourneysByRailcar(
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit,
     @RequestParam(name = "serverId") @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "date", required = false) LocalDate date,
-    @RequestParam(name = "railcar") @UUID(version = 4, allowNil = false) String railcarId
+    @RequestParam(name = "railcars") @Size(min = 1, max = 10) Set<@UUID(version = 4, allowNil = false) String> railcarIds,
+    @RequestParam(name = "journeyCategory", required = false) @Pattern(regexp = "^[A-Z]{3}$") String journeyCategory,
+    @RequestParam(name = "transportTypes", required = false) Set<JourneyTransportType> transportTypes
   ) {
     var serverAndTime = this.getServerIdAndTime(serverId);
     if (date == null) {
@@ -429,8 +431,20 @@ class JourneyV1Controller {
       date = serverAndTime.getSecond().toLocalDate();
     }
 
+    if (transportTypes == null || transportTypes.isEmpty()) {
+      // default the transport types to all if not given
+      transportTypes = ALL_TRANSPORT_TYPES;
+    }
+
     var serverIdFilter = serverAndTime.getFirst();
-    var railcarIdFilter = java.util.UUID.fromString(railcarId);
-    return this.journeyService.findByRailcar(page, limit, serverIdFilter, date, railcarIdFilter);
+    var railcarIdFilter = railcarIds.stream().map(java.util.UUID::fromString).collect(Collectors.toSet());
+    return this.journeyService.findByRailcars(
+      page,
+      limit,
+      serverIdFilter,
+      date,
+      railcarIdFilter,
+      journeyCategory,
+      transportTypes);
   }
 }

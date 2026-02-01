@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.journey.converter;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.journey.dto.JourneyTransportDto;
 import tools.simrail.backend.common.journey.JourneyTransport;
@@ -37,7 +37,7 @@ import tools.simrail.backend.common.journey.JourneyTransport;
 public final class JourneyTransportDtoConverter implements Function<JourneyTransport, JourneyTransportDto> {
 
   @Override
-  public @Nonnull JourneyTransportDto apply(@Nonnull JourneyTransport transport) {
+  public @NonNull JourneyTransportDto apply(@NonNull JourneyTransport transport) {
     return new JourneyTransportDto(
       transport.getCategory(),
       transport.getNumber(),

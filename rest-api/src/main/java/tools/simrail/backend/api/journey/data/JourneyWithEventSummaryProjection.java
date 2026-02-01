@@ -42,6 +42,13 @@ public interface JourneyWithEventSummaryProjection extends JourneySummaryProject
   UUID getEventPointId();
 
   /**
+   * Get if the point of the additionally selected journey event is within the playable border.
+   *
+   * @return true if the point of the event is within the playable border, false otherwise.
+   */
+  boolean isEventPointPlayable();
+
+  /**
    * Get the time when the additionally selected event is scheduled to happen.
    *
    * @return the time when the additionally selected event is scheduled to happen.

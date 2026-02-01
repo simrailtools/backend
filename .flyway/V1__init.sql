@@ -155,6 +155,10 @@ CREATE INDEX idx_sit_journey_event_event_transport_time_reverse_search
 CREATE INDEX idx_sit_journey_event_journey_id_scheduled_time_event_idx
   ON sit_journey_event (journey_id, scheduled_time DESC, event_index DESC)
   INCLUDE (transport_type, transport_category, in_playable_border, point_id, cancelled);
+CREATE INDEX idx_sit_journey_event_board_scheduled_time_filter
+  ON sit_journey_event (point_id, event_type, scheduled_time, transport_type, journey_id, event_index);
+CREATE INDEX idx_sit_journey_event_board_realtime_time_filter
+  ON sit_journey_event (point_id, event_type, realtime_time, transport_type, journey_id, event_index);
 
 ALTER TABLE sit_journey_vehicle_sequence
   ADD CONSTRAINT fk_sit_journey_vehicle_sequence_journey

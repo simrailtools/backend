@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
 
@@ -40,12 +40,12 @@ public record JourneyDto(
   @NotNull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey takes place")
   @NotNull UUID serverId,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey data was last updated")
-  @NotNull OffsetDateTime lastUpdated,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
-  @Nullable OffsetDateTime firstSeenTime,
-  @Schema(description = "The time (ISO-8601 with offset) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
-  @Nullable OffsetDateTime lastSeenTime,
+  @Schema(description = "The instant (ISO-8601) when the journey data was last updated")
+  @NotNull Instant lastUpdated,
+  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
+  @Nullable Instant firstSeenTime,
+  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
+  @Nullable Instant lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
   @NotNull boolean journeyCancelled,
   @JsonInclude(JsonInclude.Include.NON_NULL)

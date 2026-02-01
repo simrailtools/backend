@@ -28,7 +28,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
 import tools.simrail.backend.common.journey.JourneyEventType;
 import tools.simrail.backend.common.journey.JourneyStopType;
@@ -48,10 +48,10 @@ public record JourneyEventDto(
   @NotNull boolean additional,
   @Schema(description = "Information about the stop place where the event takes place")
   @NotNull JourneyStopPlaceDto stopPlace,
-  @Schema(description = "Scheduled time of the event (ISO-8601 with offset)")
-  @NotNull OffsetDateTime scheduledTime,
-  @Schema(description = "Best known time of the event (ISO-8601 with offset), precision is described by the time type field")
-  @NotNull OffsetDateTime realtimeTime,
+  @Schema(description = "Scheduled time of the event in local server time (ISO-8601)")
+  @NotNull LocalDateTime scheduledTime,
+  @Schema(description = "Best known time of the in local server time (ISO-8601), precision is described by the time type field")
+  @NotNull LocalDateTime realtimeTime,
   @Schema(description = "The precision of the realtime time of the event")
   @NotNull JourneyTimeType realtimeTimeType,
   @Schema(description = "The scheduled stop type for the journey at the event")

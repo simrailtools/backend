@@ -49,7 +49,9 @@ public interface ApiJourneyEventRepository extends JourneyEventRepository {
         e.transport_number,
         e.transport_type,
         e.transport_line,
-        e.transport_label
+        e.transport_label,
+        e.point_id,
+        e.in_playable_border AS point_playable
       FROM sit_journey_event e
       WHERE e.journey_id = ANY(:journeyIds)
       ORDER BY e.journey_id, e.event_index
@@ -65,7 +67,9 @@ public interface ApiJourneyEventRepository extends JourneyEventRepository {
         e.transport_number,
         e.transport_type,
         e.transport_line,
-        e.transport_label
+        e.transport_label,
+        e.point_id,
+        e.in_playable_border AS point_playable
       FROM sit_journey_event e
       WHERE e.journey_id = ANY(:journeyIds)
       ORDER BY e.journey_id, e.event_index DESC

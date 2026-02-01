@@ -24,10 +24,13 @@
 
 package tools.simrail.backend.api.board.data;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.common.journey.JourneyEventType;
+import tools.simrail.backend.common.journey.JourneyStopType;
+import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
  * Projection of a journey event including relevant info about the initially matched event to build a board entry.
@@ -39,7 +42,7 @@ public interface BoardJourneyProjection {
    *
    * @return the id of the journey.
    */
-  @Nonnull
+  @NonNull
   UUID getJourneyId();
 
   /**
@@ -47,7 +50,7 @@ public interface BoardJourneyProjection {
    *
    * @return the id of the point.
    */
-  @Nonnull
+  @NonNull
   UUID getPointId();
 
   /**
@@ -84,7 +87,7 @@ public interface BoardJourneyProjection {
    *
    * @return the id of the initially matched event.
    */
-  @Nonnull
+  @NonNull
   UUID getInitialEventId();
 
   /**
@@ -106,23 +109,24 @@ public interface BoardJourneyProjection {
    *
    * @return the scheduled time of the initially matched event.
    */
-  @Nonnull
-  OffsetDateTime getInitialScheduledTime();
+  @NonNull
+  LocalDateTime getInitialScheduledTime();
 
   /**
    * Get the realtime time of the initially matched event.
    *
    * @return the realtime time of the initially matched event.
    */
-  @Nonnull
-  OffsetDateTime getInitialRealtimeTime();
+  @NonNull
+  LocalDateTime getInitialRealtimeTime();
 
   /**
    * Get the realtime time type of the initially matched event.
    *
    * @return the realtime time type of the initially matched event.
    */
-  short getInitialRealtimeTimeType();
+  @NonNull
+  JourneyEventType getInitialRealtimeTimeType();
 
   /**
    * Get the scheduled platform of the event, null if no passenger stop is scheduled.
@@ -161,21 +165,23 @@ public interface BoardJourneyProjection {
    *
    * @return the stop type of the initially matched event.
    */
-  short getInitialStopType();
+  @NonNull
+  JourneyStopType getInitialStopType();
 
   /**
    * Get the transport type of the initially matched event.
    *
    * @return the transport type of the initially matched event.
    */
-  short getInitialTransportType();
+  @NonNull
+  JourneyTransportType getInitialTransportType();
 
   /**
    * Get the transport category of the initially matched event.
    *
    * @return the transport category of the initially matched event.
    */
-  @Nonnull
+  @NonNull
   String getInitialTransportCategory();
 
   /**
@@ -183,7 +189,7 @@ public interface BoardJourneyProjection {
    *
    * @return the transport number of the initially matched event.
    */
-  @Nonnull
+  @NonNull
   String getInitialTransportNumber();
 
   /**

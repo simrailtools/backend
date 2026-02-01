@@ -104,4 +104,19 @@ public interface JourneyEventSummaryProjection {
    */
   @Nullable
   String getTransportLabel();
+
+  /**
+   * Get the id of the point that this event happens at.
+   *
+   * @return the id of the point that this event happens at.
+   */
+  @NonNull
+  UUID getPointId();
+
+  /**
+   * Get if the point of the event is within the playable border.
+   *
+   * @return true if the point of the event is within the playable border, false otherwise.
+   */
+  boolean isPointPlayable();
 }

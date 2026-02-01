@@ -24,13 +24,13 @@
 
 package tools.simrail.backend.api.journey.data;
 
-import jakarta.annotation.Nonnull;
 import java.time.LocalDate;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -47,7 +47,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
    * @return an optional holding the full journey data associated with the given id, if one exists.
    */
   @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
-  Optional<JourneyEntity> findWithEventsById(@Nonnull UUID uuid);
+  Optional<JourneyEntity> findWithEventsById(@NonNull UUID uuid);
 
   /**
    * Get a batch of journeys by the given ids with their event entities loaded as well.
@@ -56,7 +56,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
    * @return a list containing the journeys that were resolved using the given journey ids.
    */
   @EntityGraph(attributePaths = "events", type = EntityGraph.EntityGraphType.LOAD)
-  List<JourneyEntity> findWithEventsByIdIn(@Nonnull Collection<UUID> ids);
+  List<JourneyEntity> findWithEventsByIdIn(@NonNull Collection<UUID> ids);
 
   /**
    * Get the journey summaries of the journeys with the given ids.
@@ -69,7 +69,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     FROM sit_journey j
     WHERE j.id = ANY(:journeyIds)
     """, nativeQuery = true)
-  List<JourneySummaryProjection> findJourneySummariesByTails(@Param("journeyIds") UUID[] journeyIds);
+  List<JourneySummaryProjection> findJourneySummariesByJourneyIds(@Param("journeyIds") UUID[] journeyIds);
 
   /**
    * Finds the journey summary projections by one matching event along the route of the journey.
@@ -196,6 +196,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
       j.last_seen_time,
       j.cancelled,
       w.point_id AS event_point_id,
+      w.in_playable_border AS event_point_playable,
       w.scheduled_time AS event_scheduled_time,
       w.cancelled AS event_cancelled
     FROM w JOIN sit_journey j ON j.id = w.journey_id
@@ -208,12 +209,12 @@ public interface ApiJourneyRepository extends JourneyRepository {
     LIMIT :limit
     OFFSET :offset
     """, nativeQuery = true)
-  List<JourneyWithEventSummaryProjection> findJourneySummariesByTimeAtFirstPlayableEvent(
+  List<JourneyWithEventSummaryProjection> findJourneySummariesByTimeAtPlayableBorderEnter(
     @Param("serverId") UUID serverId,
     @Param("journeyCategory") String journeyCategory,
     @Param("transportTypes") JourneyTransportType[] transportTypes,
-    @Param("rangeStart") OffsetDateTime rangeStart,
-    @Param("rangeEnd") OffsetDateTime rangeEnd,
+    @Param("rangeStart") LocalDateTime rangeStart,
+    @Param("rangeEnd") LocalDateTime rangeEnd,
     @Param("limit") int limit,
     @Param("offset") int offset
   );

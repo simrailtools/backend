@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-2026 Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -22,17 +22,36 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.journey.dto;
+package tools.simrail.backend.api.shared;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.NonNull;
+import org.springframework.stereotype.Component;
+import tools.simrail.backend.common.point.SimRailPointPosition;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
- * DTO for geo positions.
+ * Converter for a geo position to a DTO.
  */
-public record JourneyGeoPositionDto(
-  @Schema(description = "The latitude of the position") @NotNull double latitude,
-  @Schema(description = "The longitude of the position") @NotNull double longitude
-) {
+@Component
+public final class GeoPositionDtoConverter {
 
+  /**
+   * Converts a geo position from an event bus message.
+   *
+   * @param data the event bus position message to convert.
+   * @return the converted event bus position message as a dto.
+   */
+  public @NonNull GeoPositionDto convert(EventBusProto.@NonNull GeoPosition data) {
+    return new GeoPositionDto(data.getLatitude(), data.getLongitude());
+  }
+
+  /**
+   * Converts a geo position of a point to a dto.
+   *
+   * @param position the point position to convert.
+   * @return the converted point position as a dto.
+   */
+  public @NonNull GeoPositionDto convert(@NonNull SimRailPointPosition position) {
+    return new GeoPositionDto(position.getLatitude(), position.getLongitude());
+  }
 }

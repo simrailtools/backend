@@ -26,21 +26,30 @@ package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.annotation.Nullable;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import java.time.Instant;
+import java.util.UUID;
 
 /**
- * Transport information of an active journey.
+ * DTO for summary information about a journey.
  */
-public record JourneyActiveTransportDto(
-  @Schema(description = "The category of the journey")
-  @NotNull @NotBlank String category,
-  @Schema(description = "The number of the journey")
-  @NotNull @NotBlank String number,
-  @Schema(description = "The line of the journey", types = {"null"})
-  @Nullable String line,
-  @Schema(description = "The label of the journey", types = {"null"})
-  @Nullable String label
+public record JourneySummaryWithEventDto(
+  @Schema(description = "The identifier of the journey")
+  @NotNull UUID journeyId,
+  @Schema(description = "The identifier of the server where the journey takes place")
+  @NotNull UUID serverId,
+  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
+  @Nullable Instant firstSeenTime,
+  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
+  @Nullable Instant lastSeenTime,
+  @Schema(description = "Indicates if the journey was cancelled")
+  @NotNull boolean journeyCancelled,
+  @Schema(description = "The origin (first) event of the journey")
+  @NotNull JourneyTerminalEventDto originEvent,
+  @Schema(description = "The destination (last) event of the journey")
+  @NotNull JourneyTerminalEventDto destinationEvent,
+  @Schema(description = "An event of the journey. The exact nature of this event depends on the context it's returned in")
+  @NotNull JourneyEventDescriptorDto event
 ) {
 
 }

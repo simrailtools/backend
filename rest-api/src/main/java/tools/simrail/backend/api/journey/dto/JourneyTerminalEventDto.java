@@ -26,7 +26,7 @@ package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 
 /**
  * DTO for journey summaries describing the first and last event.
@@ -34,8 +34,8 @@ import java.time.OffsetDateTime;
 public record JourneyTerminalEventDto(
   @Schema(description = "The stop place associated with the event")
   @NotNull JourneyStopPlaceSummaryDto stopPlace,
-  @Schema(description = "The scheduled time (ISO-8601 with offset) of the event")
-  @NotNull OffsetDateTime scheduledTime,
+  @Schema(description = "The scheduled time (ISO-8601) in local server time of the event")
+  @NotNull LocalDateTime scheduledTime,
   @Schema(description = "The transport used at the event")
   @NotNull JourneyTransportSummaryDto transport,
   @Schema(description = "Indicates if the event was cancelled")
