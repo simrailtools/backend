@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.configuration;
 
-import jakarta.annotation.Nonnull;
 import java.util.Locale;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -41,7 +41,7 @@ class MiscConfiguration {
    * Fixes the language used for translations to english.
    */
   @Bean
-  public @Nonnull LocaleResolver localeResolver() {
+  public @NonNull LocaleResolver localeResolver() {
     return new FixedLocaleResolver(Locale.ENGLISH);
   }
 }

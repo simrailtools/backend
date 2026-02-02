@@ -29,14 +29,15 @@ import jakarta.validation.constraints.NotNull;
 import java.util.List;
 import java.util.UUID;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 
 /**
  * DTO for the route of a journey.
  */
 public record MapJourneyRouteDto(
   @Schema(description = "The id of the journey to which the waypoints apply") @NotNull UUID journeyId,
-  @Schema(description = "The stops along the journey route") @NotNull List<JourneyStopPlaceDto> stops,
-  @Schema(description = "The waypoints along the journey route") @NotNull List<MapPolylineEntryDto> polyline
+  @Schema(description = "The stops along the journey route") @NotNull List<@NotNull JourneyStopPlaceDto> stops,
+  @Schema(description = "The waypoints along the journey route") @NotNull List<@NotNull GeoPositionDto> polyline
 ) {
 
 }

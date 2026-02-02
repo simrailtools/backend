@@ -24,13 +24,14 @@
 
 package tools.simrail.backend.api.map.dto;
 
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import jakarta.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.node.ArrayNode;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 
 /**
  * Converter for journey info to route info DTO.
@@ -38,22 +39,20 @@ import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 @Component
 public final class MapJourneyRouteDtoConverter {
 
-  public @Nonnull MapJourneyRouteDto convert(
-    @Nonnull UUID journeyId,
-    @Nonnull List<JourneyStopPlaceDto> stops,
-    @Nonnull ArrayNode routingPolylineResponse
+  public @NonNull MapJourneyRouteDto convert(
+    @NonNull UUID journeyId,
+    @NonNull List<JourneyStopPlaceDto> stops,
+    @NonNull ArrayNode routingPolylineResponse
   ) {
     // construct the polyline from the LineString feature of the GeoJson response
-    var polyline = new ArrayList<MapPolylineEntryDto>();
+    var polyline = new ArrayList<GeoPositionDto>();
     for (var node : routingPolylineResponse) {
       var data = (ArrayNode) node;
       var lon = data.get(0).asDouble();
       var lat = data.get(1).asDouble();
-      var elevation = data.path(2).asDouble();
-      polyline.add(new MapPolylineEntryDto(lat, lon, elevation));
+      polyline.add(new GeoPositionDto(lat, lon));
     }
 
-    // construct the full journey route dto
     return new MapJourneyRouteDto(journeyId, stops, polyline);
   }
 }

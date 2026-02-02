@@ -32,9 +32,8 @@ import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 public interface BRouterApiClient {
 
-  static @NonNull BRouterApiClient create() {
-    return FeignClientProvider.prepareFeignInstance()
-      .target(BRouterApiClient.class, "https://brouter.de");
+  static @NonNull BRouterApiClient create(@NonNull String baseUrl) {
+    return FeignClientProvider.prepareFeignInstance().target(BRouterApiClient.class, baseUrl);
   }
 
   /**

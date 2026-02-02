@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.api.configuration;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -38,7 +38,7 @@ class ApiClientConfiguration {
    * Configures the steam api client.
    */
   @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
+  public @NonNull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
     return SteamApiClient.create(steamApiKey);
   }
 
@@ -46,7 +46,9 @@ class ApiClientConfiguration {
    * Configures the BRouter api client.
    */
   @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
+  public @NonNull BRouterApiClient bRouterApiClient(
+    @Value("${sit.brouter.url:https://brouter.simrail.tools}") String brouterBaseUrl
+  ) {
+    return BRouterApiClient.create(brouterBaseUrl);
   }
 }

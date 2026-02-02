@@ -24,15 +24,15 @@
 
 package tools.simrail.backend.api.map.data;
 
-import jakarta.annotation.Nonnull;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 public interface MapEventSummaryProjection {
 
   /**
    * The id of the journey associated with the event.
    */
-  @Nonnull
+  @NonNull
   UUID getJourneyId();
 
   /**
@@ -43,11 +43,11 @@ public interface MapEventSummaryProjection {
   /**
    * The id of the point where the event takes place.
    */
-  @Nonnull
+  @NonNull
   UUID getPointId();
 
   /**
    * If the point where the event happens is within the playable border.
    */
-  boolean isPointPlayable();
+  boolean isInPlayableBorder();
 }

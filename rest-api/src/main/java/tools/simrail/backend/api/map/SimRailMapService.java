@@ -24,26 +24,26 @@
 
 package tools.simrail.backend.api.map;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ArrayNode;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 import tools.simrail.backend.api.map.data.MapEventSummaryProjection;
 import tools.simrail.backend.api.map.data.MapJourneyEventRepository;
 import tools.simrail.backend.api.map.dto.MapJourneyRouteDto;
 import tools.simrail.backend.api.map.dto.MapJourneyRouteDtoConverter;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.external.brouter.BRouterApiClient;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
@@ -63,12 +63,12 @@ class SimRailMapService {
 
   @Autowired
   public SimRailMapService(
-    @Nonnull CacheManager cacheManager,
-    @Nonnull ObjectMapper objectMapper,
-    @Nonnull BRouterApiClient bRouterApiClient,
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull MapJourneyEventRepository repository,
-    @Nonnull MapJourneyRouteDtoConverter journeyRouteDtoConverter
+    @NonNull CacheManager cacheManager,
+    @NonNull ObjectMapper objectMapper,
+    @NonNull BRouterApiClient bRouterApiClient,
+    @NonNull SimRailPointProvider pointProvider,
+    @NonNull MapJourneyEventRepository repository,
+    @NonNull MapJourneyRouteDtoConverter journeyRouteDtoConverter
   ) {
     this.objectMapper = objectMapper;
     this.bRouterApiClient = bRouterApiClient;
@@ -88,8 +88,8 @@ class SimRailMapService {
    * @return an optional DTO for the journey polyline, empty if some info cannot be resolved.
    */
   @Cacheable(cacheNames = "journey_polyline_cache")
-  public @Nonnull Optional<MapJourneyRouteDto> polylineByJourneyId(
-    @Nonnull UUID journeyId,
+  public @NonNull Optional<MapJourneyRouteDto> polylineByJourneyId(
+    @NonNull UUID journeyId,
     boolean includeCancelled,
     boolean includeAdditional,
     boolean allowFallbackComputation
@@ -106,13 +106,13 @@ class SimRailMapService {
       .sorted(EVENT_SORTER)
       .map(event -> this.pointProvider.findPointByIntId(event.getPointId())
         .map(point -> {
-          var pos = new JourneyGeoPositionDto(point.getPosition().getLatitude(), point.getPosition().getLongitude());
+          var pos = new GeoPositionDto(point.getPosition().getLatitude(), point.getPosition().getLongitude());
           return new JourneyStopPlaceDto(
             event.getPointId(),
             point.getName(),
             pos,
             point.isStopPlace(),
-            event.isPointPlayable());
+            event.isInPlayableBorder());
         })
         .orElse(null))
       .filter(Objects::nonNull)
@@ -148,7 +148,7 @@ class SimRailMapService {
    * @param stopsAlongRoute the stops long the journey route to convert to a polyline.
    * @return the coordinate array for the polyline of the journey.
    */
-  private @Nullable ArrayNode resolveJourneyPolyline(@Nonnull List<JourneyStopPlaceDto> stopsAlongRoute) {
+  private @Nullable ArrayNode resolveJourneyPolyline(@NonNull List<JourneyStopPlaceDto> stopsAlongRoute) {
     try {
       var pointsHash = stopsAlongRoute.stream()
         .map(JourneyStopPlaceDto::id)
@@ -176,7 +176,7 @@ class SimRailMapService {
           .path(0)
           .path("geometry")
           .path("coordinates");
-        return lineCoordinates instanceof ArrayNode an ? an : null;
+        return (ArrayNode) lineCoordinates; // CCE is ok here, will be converted to null in catch block
       });
     } catch (Cache.ValueRetrievalException _) {
       // can happen if the value loader throws, most likely due to an upstream issue with the BRouter api

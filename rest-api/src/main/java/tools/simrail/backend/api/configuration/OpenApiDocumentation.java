@@ -35,8 +35,8 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.servers.Server;
-import jakarta.annotation.Nonnull;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +49,7 @@ class OpenApiDocumentation {
    * Configures the base OpenAPI spec data.
    */
   @Bean
-  public @Nonnull OpenAPI openAPI(@Value("${info.app.version:dev-local}") String version) {
+  public @NonNull OpenAPI openAPI(@Value("${info.app.version:dev-local}") String version) {
     return new OpenAPI()
       .info(new Info()
         .version(version)
@@ -81,7 +81,7 @@ class OpenApiDocumentation {
    * Customizer for automatic problem responses for all error response codes (except 404).
    */
   @Bean
-  public @Nonnull OpenApiCustomizer errorResponsesCustomizer() {
+  public @NonNull OpenApiCustomizer errorResponsesCustomizer() {
     return openAPI -> {
       // add the problem detail schema to the spec
       var problemDetailSchema = new ObjectSchema()

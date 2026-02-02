@@ -24,15 +24,15 @@
 
 package tools.simrail.backend.api.map.geojson;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import jakarta.annotation.Nonnull;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.node.ObjectNode;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceDto;
 import tools.simrail.backend.api.map.dto.MapJourneyRouteDto;
-import tools.simrail.backend.api.map.dto.MapPolylineEntryDto;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 
 /**
  * Converter for a MapJourneyRouteDto to a geojson feature collection.
@@ -43,11 +43,11 @@ public final class MapJourneyRouteGeoJsonConverter {
   private final ObjectMapper objectMapper;
 
   @Autowired
-  public MapJourneyRouteGeoJsonConverter(@Nonnull ObjectMapper objectMapper) {
+  public MapJourneyRouteGeoJsonConverter(@NonNull ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 
-  public @Nonnull ObjectNode convertToGeojson(@Nonnull MapJourneyRouteDto journeyRoute) {
+  public @NonNull ObjectNode convertToGeojson(@NonNull MapJourneyRouteDto journeyRoute) {
     // create the top-level feature collection object, add a metadata object to it containing the
     // id of the journey that was requested. this should be valid geojson syntax as per rfc7946 section 7.1
     var featureCollection = this.objectMapper.createObjectNode();
@@ -74,7 +74,7 @@ public final class MapJourneyRouteGeoJsonConverter {
   /**
    * Creates the top-level metadata object for the feature collection.
    */
-  private @Nonnull ObjectNode createMetadataNode(@Nonnull MapJourneyRouteDto journeyRoute) {
+  private @NonNull ObjectNode createMetadataNode(@NonNull MapJourneyRouteDto journeyRoute) {
     var metadata = this.objectMapper.createObjectNode();
     metadata.put("journeyId", journeyRoute.journeyId().toString());
     return metadata;
@@ -83,7 +83,7 @@ public final class MapJourneyRouteGeoJsonConverter {
   /**
    * Creates a geojson point feature for the given stop place object.
    */
-  private @Nonnull ObjectNode createStopPlaceFeature(@Nonnull JourneyStopPlaceDto stopPlace) {
+  private @NonNull ObjectNode createStopPlaceFeature(@NonNull JourneyStopPlaceDto stopPlace) {
     // point is a geojson feature defining a single point, see rfc7946 section 3.1.2
     var point = this.objectMapper.createObjectNode();
     point.put("type", "Feature");
@@ -113,7 +113,7 @@ public final class MapJourneyRouteGeoJsonConverter {
   /**
    * Converts the given coordinates of the polyline into a linestring feature.
    */
-  private @Nonnull ObjectNode createPolylineFeature(@Nonnull List<MapPolylineEntryDto> entries) {
+  private @NonNull ObjectNode createPolylineFeature(@NonNull List<GeoPositionDto> entries) {
     // line string is a geojson feature defining a polyline, see rfc7946 section 3.1.4
     var lineString = this.objectMapper.createObjectNode();
     lineString.put("type", "Feature");
@@ -129,7 +129,6 @@ public final class MapJourneyRouteGeoJsonConverter {
       var point = this.objectMapper.createArrayNode();
       point.add(entry.longitude());
       point.add(entry.latitude());
-      point.add(entry.elevation());
       coordinates.add(point);
     }
 
