@@ -24,11 +24,11 @@
 
 package tools.simrail.backend.api.dispatchpost;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -44,8 +44,8 @@ class DispatchPostService {
 
   @Autowired
   public DispatchPostService(
-    @Nonnull ApiDispatchPostRepository dispatchPostRepository,
-    @Nonnull DispatchPostInfoDtoConverter dispatchPostInfoConverter
+    @NonNull ApiDispatchPostRepository dispatchPostRepository,
+    @NonNull DispatchPostInfoDtoConverter dispatchPostInfoConverter
   ) {
     this.dispatchPostRepository = dispatchPostRepository;
     this.dispatchPostInfoConverter = dispatchPostInfoConverter;
@@ -58,7 +58,7 @@ class DispatchPostService {
    * @return an optional holding the dispatch post to get, if one with the given id exists.
    */
   @Cacheable(cacheNames = "dispatch_post_cache", key = "'by_id_' + #id")
-  public @Nonnull Optional<DispatchPostInfoDto> findById(@Nonnull UUID id) {
+  public @NonNull Optional<DispatchPostInfoDto> findById(@NonNull UUID id) {
     return this.dispatchPostRepository.findById(id).map(this.dispatchPostInfoConverter);
   }
 
@@ -74,7 +74,7 @@ class DispatchPostService {
    * @return a paginated response wrapper around the items that are matching the filter parameters.
    */
   @Cacheable(cacheNames = "dispatch_post_cache")
-  public @Nonnull PaginatedResponseDto<DispatchPostInfoDto> find(
+  public @NonNull PaginatedResponseDto<DispatchPostInfoDto> find(
     @Nullable UUID serverId,
     @Nullable Integer difficulty,
     @Nullable UUID pointId,

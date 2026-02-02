@@ -25,7 +25,7 @@
 package tools.simrail.backend.api.dispatchpost.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.api.shared.UserDto;
 
 /**

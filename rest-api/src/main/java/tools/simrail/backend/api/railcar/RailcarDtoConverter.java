@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.railcar;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.common.railcar.Railcar;
 
@@ -36,7 +36,7 @@ import tools.simrail.backend.common.railcar.Railcar;
 public final class RailcarDtoConverter implements Function<Railcar, RailcarDto> {
 
   @Override
-  public @Nonnull RailcarDto apply(@Nonnull Railcar railcar) {
+  public @NonNull RailcarDto apply(@NonNull Railcar railcar) {
     return new RailcarDto(
       railcar.getId(),
       railcar.getDisplayName(),

@@ -31,10 +31,10 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.ResponseEntity;
@@ -56,7 +56,7 @@ class DispatchPostV2Controller {
   private final DispatchPostService dispatchPostService;
 
   @Autowired
-  public DispatchPostV2Controller(@Nonnull DispatchPostService dispatchPostService) {
+  public DispatchPostV2Controller(@NonNull DispatchPostService dispatchPostService) {
     this.dispatchPostService = dispatchPostService;
   }
 
@@ -96,7 +96,7 @@ class DispatchPostV2Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<DispatchPostInfoDto> findDispatchPostById(
+  public @NonNull ResponseEntity<DispatchPostInfoDto> findDispatchPostById(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id
   ) {
     return this.dispatchPostService.findById(java.util.UUID.fromString(id))
@@ -141,7 +141,7 @@ class DispatchPostV2Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<DispatchPostInfoDto> findDispatchPosts(
+  public @NonNull PaginatedResponseDto<DispatchPostInfoDto> findDispatchPosts(
     @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
     @RequestParam(name = "difficulty", required = false) @Min(1) @Max(5) Integer difficulty,
     @RequestParam(name = "pointId", required = false) @UUID(version = 4, allowNil = false) String pointId,

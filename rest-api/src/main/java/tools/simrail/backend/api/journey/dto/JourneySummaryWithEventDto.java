@@ -25,10 +25,10 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import java.time.Instant;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 
 /**
  * DTO for summary information about a journey.

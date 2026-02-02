@@ -25,9 +25,9 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.api.shared.GeoPositionDto;
 import tools.simrail.backend.api.shared.UserDto;
 

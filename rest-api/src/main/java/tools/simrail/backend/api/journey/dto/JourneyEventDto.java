@@ -26,10 +26,10 @@ package tools.simrail.backend.api.journey.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.journey.JourneyEventType;
 import tools.simrail.backend.common.journey.JourneyStopType;
 import tools.simrail.backend.common.journey.JourneyTimeType;

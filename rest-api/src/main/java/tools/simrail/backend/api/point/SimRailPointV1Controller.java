@@ -30,7 +30,6 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -40,6 +39,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -61,7 +61,7 @@ class SimRailPointV1Controller {
   private final SimRailPointService pointService;
 
   @Autowired
-  public SimRailPointV1Controller(@Nonnull SimRailPointService pointService) {
+  public SimRailPointV1Controller(@NonNull SimRailPointService pointService) {
     this.pointService = pointService;
   }
 
@@ -90,7 +90,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull PaginatedResponseDto<PointInfoDto> listPoints(
+  public @NonNull PaginatedResponseDto<PointInfoDto> listPoints(
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
     @RequestParam(name = "limit", required = false) @Min(1) Integer limit
@@ -125,7 +125,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<PointInfoDto> findPointById(
+  public @NonNull Optional<PointInfoDto> findPointById(
     @PathVariable("id") @UUID(version = 4, allowNil = false) String id
   ) {
     return this.pointService.findPointById(java.util.UUID.fromString(id));
@@ -158,7 +158,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<PointInfoDto> findPointsById(
+  public @NonNull List<PointInfoDto> findPointsById(
     @RequestBody @Size(min = 1, max = 250) List<@UUID(version = 4, allowNil = false) String> ids
   ) {
     return ids.stream()
@@ -201,7 +201,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<PointInfoDto> findPointBySimRailPointId(
+  public @NonNull Optional<PointInfoDto> findPointBySimRailPointId(
     @PathVariable("id") @Pattern(regexp = "[0-9]{2,4}") String pointId
   ) {
     return this.pointService.findPointByPointId(pointId);
@@ -237,7 +237,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<PointInfoDto> findPointByName(
+  public @NonNull List<PointInfoDto> findPointByName(
     @PathVariable(name = "searchQuery") @NotBlank @Pattern(regexp = "^.{3,35}$") String searchQuery,
     @RequestParam(name = "countries", required = false) List<@Pattern(regexp = "[A-Z]{3}") String> countries,
     @RequestParam(name = "limit", required = false) @Min(1) @Max(25) Integer limit
@@ -277,7 +277,7 @@ class SimRailPointV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<PointInfoDto> findPointByPosition(
+  public @NonNull List<PointInfoDto> findPointByPosition(
     @RequestParam(name = "latitude") @Min(-90) @Max(90) double latitude,
     @RequestParam(name = "longitude") @Min(-180) @Max(180) double longitude,
     @RequestParam(name = "radius", required = false) @Min(100) @Max(10_000) Integer radius,

@@ -24,11 +24,11 @@
 
 package tools.simrail.backend.api.board.converter;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
@@ -49,15 +49,15 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
 
   @Autowired
   public BoardEntryDtoConverter(
-    @Nonnull BoardViaEventDtoConverter viaEventDtoConverter,
-    @Nonnull BoardTransportDtoConverter transportDtoConverter
+    @NonNull BoardViaEventDtoConverter viaEventDtoConverter,
+    @NonNull BoardTransportDtoConverter transportDtoConverter
   ) {
     this.viaEventDtoConverter = viaEventDtoConverter;
     this.transportDtoConverter = transportDtoConverter;
   }
 
   @Override
-  public @Nonnull BoardEntryDto apply(@Nonnull List<BoardJourneyProjection> entries) {
+  public @NonNull BoardEntryDto apply(@NonNull List<BoardJourneyProjection> entries) {
     // sort the entries in their encounter order
     entries.sort(INDEX_COMPARATOR);
 

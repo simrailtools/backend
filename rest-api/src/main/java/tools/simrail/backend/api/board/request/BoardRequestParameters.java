@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.api.board.request;
 
-import jakarta.annotation.Nonnull;
 import java.time.LocalDateTime;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
@@ -39,11 +39,11 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
  * @param transportTypes the transport types to include in the board.
  */
 public record BoardRequestParameters(
-  @Nonnull UUID serverId,
-  @Nonnull UUID pointId,
-  @Nonnull LocalDateTime timeStart,
-  @Nonnull LocalDateTime timeEnd,
-  @Nonnull JourneyTransportType[] transportTypes
+  @NonNull UUID serverId,
+  @NonNull UUID pointId,
+  @NonNull LocalDateTime timeStart,
+  @NonNull LocalDateTime timeEnd,
+  @NonNull JourneyTransportType[] transportTypes
 ) {
 
 }
