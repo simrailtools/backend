@@ -32,6 +32,8 @@ dependencies {
   implementation(projects.common)
   implementation(projects.externalApiClient)
 
+  implementation(libs.nats)
+  implementation(libs.redisson)
   implementation(libs.feignCore)
   implementation(libs.fuzzywuzzy)
   implementation(libs.protobufJava)

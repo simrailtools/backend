@@ -33,9 +33,11 @@ import java.time.Duration;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
@@ -117,7 +119,7 @@ public class SimRailServerCollector implements SimRailServerService {
       var data = cachedValue.getServerData();
       updateHolder.online.forceUpdateValue(data.getOnline());
       updateHolder.utcOffsetSeconds.forceUpdateValue(data.getUtcOffsetSeconds());
-      updateHolder.tags.forceUpdateValue(data.getTagsList());
+      updateHolder.tags.forceUpdateValue(new HashSet<>(data.getTagsList()));
       updateHolder.scenery.forceUpdateValue(StringUtils.decodeEnum(data.getScenery(), SimRailServerScenery.FULL));
       if (data.hasSpokenLanguage()) {
         updateHolder.spokenLanguage.forceUpdateValue(data.getSpokenLanguage());
@@ -178,7 +180,7 @@ public class SimRailServerCollector implements SimRailServerService {
         var lang = nameParts.length >= 2 ? nameParts[1] : null;
         var spokenLang = lang == null || lang.equals("International") ? null : lang;
         updateHolder.spokenLanguage.updateValue(spokenLang);
-        updateHolder.tags.updateValue(List.of()); // Xbox servers don't have tags
+        updateHolder.tags.updateValue(Set.of()); // Xbox servers don't have tags
       } else {
         var matcher = SERVER_NAME_REGEX.matcher(serverName);
         if (matcher.matches()) {
@@ -190,16 +192,19 @@ public class SimRailServerCollector implements SimRailServerService {
           // tags are optional, check if they are present
           var tagPart = matcher.group("tags");
           if (tagPart == null) {
-            updateHolder.tags.updateValue(List.of());
+            updateHolder.tags.updateValue(Set.of());
           } else {
             var rawTags = tagPart.split(",");
-            var tags = Arrays.stream(rawTags).map(String::strip).filter(tag -> !tag.isEmpty()).toList();
+            var tags = Arrays.stream(rawTags)
+              .map(String::strip)
+              .filter(tag -> !tag.isEmpty())
+              .collect(Collectors.toSet());
             updateHolder.tags.updateValue(tags);
           }
         } else {
           // unusual name format, just assume international and no tags
           updateHolder.spokenLanguage.updateValue(null);
-          updateHolder.tags.updateValue(List.of());
+          updateHolder.tags.updateValue(Set.of());
         }
       }
 

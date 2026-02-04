@@ -22,27 +22,45 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.user;
+package tools.simrail.backend.external.playerdb.model;
 
-import jakarta.annotation.Nonnull;
-import java.util.function.Function;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.external.steam.model.SteamUserSummary;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import tools.jackson.databind.node.ObjectNode;
 
-/**
- * Converter for steam user summaries to DTOs.
- */
-@Component
-final class SimRailUserDtoConverter implements Function<SteamUserSummary, SimRailUserDto> {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public final class PlayerDbPlayer {
 
-  @Override
-  public @Nonnull SimRailUserDto apply(@Nonnull SteamUserSummary summary) {
-    return new SimRailUserDto(
-      summary.getId(),
-      summary.getDisplayName(),
-      summary.getAvatarHash(),
-      summary.getCommunityProfileUrl(),
-      summary.getCountryCode(),
-      summary.isCommunityProfileVisible());
+  /**
+   * The platform-specific id of the player.
+   */
+  @JsonProperty("id")
+  private String id;
+  /**
+   * The display name of the player.
+   */
+  @JsonProperty("username")
+  private String username;
+  /**
+   * The url to the player avatar image.
+   */
+  @JsonProperty("avatar")
+  private String avatarUrl;
+
+  /**
+   * Additional metadata returned by the api.
+   */
+  @JsonProperty("meta")
+  private ObjectNode metadata;
+
+  /**
+   * Wrapper object returned by the api around the actual player data.
+   */
+  public record Wrapper(@JsonProperty("player") PlayerDbPlayer player, @JsonProperty("status") Integer status) {
+
   }
 }

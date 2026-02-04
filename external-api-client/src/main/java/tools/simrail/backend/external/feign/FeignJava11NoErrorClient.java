@@ -22,18 +22,25 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.dispatchpost.dto;
+package tools.simrail.backend.external.feign;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.jspecify.annotations.Nullable;
-import tools.simrail.backend.api.shared.UserDto;
+import feign.Request;
+import feign.Response;
+import java.io.InputStream;
+import java.net.http.HttpResponse;
+import org.jspecify.annotations.NonNull;
 
 /**
- * DTO for the realtime data of a dispatch post.
+ * Special feign client implementation that just always fakes the http status code to 200 (OK).
  */
-public record DispatchPostRealtimeDataDto(
-  @Schema(description = "The user that is currently dispatching the post")
-  @Nullable UserDto dispatcher
-) {
+public class FeignJava11NoErrorClient extends FeignJava11Client {
 
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  protected @NonNull Response toFeignResponse(@NonNull Request request, @NonNull HttpResponse<InputStream> response) {
+    var originalResponse = super.toFeignResponse(request, response);
+    return originalResponse.toBuilder().status(200).build();
+  }
 }

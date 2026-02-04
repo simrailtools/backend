@@ -24,93 +24,66 @@
 
 package tools.simrail.backend.api.user;
 
-import jakarta.annotation.Nonnull;
-import java.util.ArrayList;
+import com.github.benmanes.caffeine.cache.Caffeine;
+import com.github.benmanes.caffeine.cache.LoadingCache;
+import java.time.Duration;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.List;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.Future;
-import java.util.concurrent.TimeUnit;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
+import java.util.concurrent.StructuredTaskScope;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.Cache;
-import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.external.steam.model.SteamUserSummary;
+import tools.simrail.backend.api.shared.UserDto;
+import tools.simrail.backend.api.shared.UserPlatform;
+import tools.simrail.backend.api.user.loader.UserCacheLoader;
 
 @Service
 class SimRailUserService {
 
-  private final Cache userCache;
-  private final SteamUserFetchQueue userFetchQueue;
-  private final SimRailUserDtoConverter userConverter;
+  private static final Duration CACHE_TTL = Duration.ofDays(1);
+  private static final Duration RESOLVE_TIMEOUT = Duration.ofSeconds(15);
+
+  private final Map<UserPlatform, LoadingCache<String, Optional<SimRailUserDto>>> userCacheByPlatform;
 
   @Autowired
-  public SimRailUserService(
-    @Nonnull SteamUserFetchQueue userFetchQueue,
-    @Nonnull SimRailUserDtoConverter userConverter,
-    @Nonnull CacheManager cacheManager
-  ) {
-    this.userFetchQueue = userFetchQueue;
-    this.userConverter = userConverter;
-    this.userCache = cacheManager.getCache("user_cache");
+  public SimRailUserService(@NonNull Collection<UserCacheLoader> userCacheLoaders) {
+    this.userCacheByPlatform = new EnumMap<>(UserPlatform.class);
+    for (var cacheLoader : userCacheLoaders) {
+      var cache = Caffeine.newBuilder()
+        .recordStats()
+        .maximumSize(5000)
+        .expireAfterWrite(CACHE_TTL)
+        .build(cacheLoader);
+      this.userCacheByPlatform.put(cacheLoader.targetPlatform(), cache);
+    }
   }
 
-  /**
-   * Resolves the user information for the given steam ids, either from cache or from the steam api.
-   *
-   * @param steamIds the steam ids of the users to resolve the information of.
-   * @return all resolvable profiles of all the given steam ids.
-   */
-  public @Nonnull List<SimRailUserDto> findUsersBySteamIds(@Nonnull Collection<String> steamIds) {
-    var users = new ArrayList<SimRailUserDto>();
+  public @NonNull List<SimRailUserDto> findUserDetails(@NonNull Collection<UserDto> users) {
+    try (var scope = StructuredTaskScope.open(
+      StructuredTaskScope.Joiner.awaitAll(),
+      config -> config.withTimeout(RESOLVE_TIMEOUT))) {
+      // fork a new resolve task for each requested user
+      var resolveTasks = users.stream().map(user -> {
+        var userCache = this.userCacheByPlatform.get(user.platform());
+        Objects.requireNonNull(userCache, "no cache for platform registered: " + user.platform());
+        return scope.fork(() -> userCache.get(user.id()));
+      }).toList();
+      scope.join();
 
-    // resolve the ids of the users that are not yet cached
-    var missingIds = new ArrayList<String>();
-    for (var steamId : steamIds) {
-      var cacheEntry = this.userCache.get(steamId);
-      if (cacheEntry != null) {
-        // a resolve attempt was already made
-        var user = (SimRailUserDto) cacheEntry.get();
-        if (user != null) {
-          users.add(user);
-        }
-      } else {
-        // no entry was cached for the user yet, needs to be resolved
-        missingIds.add(steamId);
-      }
+      // after all resolve tasks complete (or time out), return the users that were successfully resolved
+      return resolveTasks.stream()
+        .filter(task -> task.state() == StructuredTaskScope.Subtask.State.SUCCESS)
+        .map(StructuredTaskScope.Subtask::get)
+        .filter(Optional::isPresent)
+        .map(Optional::get)
+        .toList();
+    } catch (InterruptedException _) {
+      Thread.currentThread().interrupt(); // reset interrupted state
+      return List.of();
     }
-
-    if (!missingIds.isEmpty()) {
-      // queue the resolving of the missing non-cached steam users
-      var fetchFutures = missingIds.stream()
-        .map(this.userFetchQueue::queueUserFetch)
-        .toArray(CompletableFuture<?>[]::new);
-      CompletableFuture.allOf(fetchFutures)
-        .orTimeout(5, TimeUnit.SECONDS)
-        .exceptionally(_ -> null)
-        .join();
-
-      // cache all users that were fetched successfully from steam, either
-      // their converted user information, or just that they do not exist
-      for (var future : fetchFutures) {
-        if (future.state() == Future.State.SUCCESS) {
-          @SuppressWarnings("unchecked")
-          var fetchResult = (SimRailUserFetchResult<SteamUserSummary>) future.resultNow();
-          switch (fetchResult) {
-            case SimRailUserFetchResult.Success(var steamUser) -> {
-              var user = this.userConverter.apply(steamUser);
-              this.userCache.put(user.id(), user);
-              users.add(user);
-            }
-            case SimRailUserFetchResult.NotFound(var userId) -> this.userCache.put(userId, null);
-            case null, default -> {
-              // ignore - nothing we can do about this
-            }
-          }
-        }
-      }
-    }
-
-    return users;
   }
 }

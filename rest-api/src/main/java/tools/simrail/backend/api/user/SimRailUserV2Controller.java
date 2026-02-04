@@ -29,54 +29,52 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
-import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Set;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import tools.simrail.backend.api.shared.UserDto;
 
-@Validated
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-users/v1/")
+@RequestMapping("/sit-users/v2/")
 @Tag(name = "users-v1", description = "SimRail User Data APIs (Version 1)")
-class SimRailUserV1Controller {
+class SimRailUserV2Controller {
 
   private final SimRailUserService userService;
 
   @Autowired
-  public SimRailUserV1Controller(@Nonnull SimRailUserService userService) {
+  public SimRailUserV2Controller(@NonNull SimRailUserService userService) {
     this.userService = userService;
   }
 
   /**
-   * Finds the user information of all provided steam ids.
+   * Get a batch of detailed user information (up to 250).
    */
-  @PostMapping("/by-steam-ids")
+  @PostMapping("/batch")
   @Operation(
-    summary = "Get a batch of users (up to 100) by their steam id",
+    summary = "Get a batch of detailed user information (up to 250)",
     description = """
-      Get a batch of users (up to 100) in a single request. If an id is provided which can't be resolved to a user info,
-      the id is skipped and there will be no reference to the id in the response array. The provided ids must all be in
-      the SteamID64 format.
+      Get a batch of detailed user information (up to 250) in a single request. If an id is provided which can't be
+      resolved to a user info, the id is skipped and there will be no reference to the id in the response array.
       """,
     requestBody = @io.swagger.v3.oas.annotations.parameters.RequestBody(
-      description = "An array containing the steam ids of the users to resolve"
+      description = "An array containing the base information (platform and id) of the users to resolve"
     ),
     responses = {
       @ApiResponse(
         responseCode = "200",
-        description = "The users that were successfully resolved based on the given input ids"),
+        description = "The request was processed successfully"),
       @ApiResponse(
         responseCode = "400",
-        description = "One of the given steam ids is in an incorrect format",
+        description = "The given request body is invalid",
         content = @Content(schema = @Schema(hidden = true))),
       @ApiResponse(
         responseCode = "500",
@@ -84,9 +82,9 @@ class SimRailUserV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<SimRailUserDto> findUsersBySteamIds(
-    @RequestBody @Size(min = 1, max = 100) Set<@Pattern(regexp = "^7656119\\d{10}$") String> steamIds
+  public @NonNull List<SimRailUserDto> findUserDetails(
+    @RequestBody @Size(min = 1, max = 250) Set<@NotNull UserDto> steamIds
   ) {
-    return this.userService.findUsersBySteamIds(steamIds);
+    return this.userService.findUserDetails(steamIds);
   }
 }

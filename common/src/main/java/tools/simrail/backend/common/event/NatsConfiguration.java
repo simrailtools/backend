@@ -25,10 +25,12 @@
 package tools.simrail.backend.common.event;
 
 import io.nats.client.Connection;
+import io.nats.client.ConnectionListener;
 import io.nats.client.Nats;
 import io.nats.client.Options;
 import java.time.Duration;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -40,7 +42,10 @@ import org.springframework.context.annotation.Configuration;
 public class NatsConfiguration {
 
   @Bean(destroyMethod = "close")
-  public @NonNull Connection createNatsConnection(@Value("${sit.nats.url}") String natsUrl) throws Exception {
+  public @NonNull Connection createNatsConnection(
+    @Value("${sit.nats.url}") String natsUrl,
+    @Autowired(required = false) ConnectionListener connectionListener
+  ) throws Exception {
     var options = Options.builder()
       .server(natsUrl)
       .maxReconnects(-1) // infinite reconnect attempts
@@ -49,6 +54,7 @@ public class NatsConfiguration {
       .noEcho()
       .supportUTF8Subjects()
       .discardMessagesWhenOutgoingQueueFull()
+      .connectionListener(connectionListener)
       .build();
     return Nats.connect(options);
   }

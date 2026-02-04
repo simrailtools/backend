@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.collector.server;
 
-import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.common.server.SimRailServerScenery;
@@ -44,7 +44,7 @@ final class ServerUpdateHolder {
   final UpdatableField<Boolean> online;
   final UpdatableField<Long> utcOffsetSeconds;
   final UpdatableField<String> spokenLanguage;
-  final UpdatableField<List<String>> tags;
+  final UpdatableField<Set<String>> tags;
   final UpdatableField<SimRailServerScenery> scenery;
 
   public ServerUpdateHolder(@NonNull UUID id, @NonNull String foreignId) {

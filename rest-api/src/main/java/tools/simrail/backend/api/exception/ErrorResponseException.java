@@ -24,20 +24,44 @@
 
 package tools.simrail.backend.api.exception;
 
+import java.util.LinkedHashMap;
+import java.util.Locale;
+import java.util.Map;
 import org.jspecify.annotations.NonNull;
-import org.springframework.http.HttpStatus;
+import org.jspecify.annotations.Nullable;
+import org.springframework.context.MessageSource;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ProblemDetail;
+import org.springframework.web.server.ResponseStatusException;
 
 /**
- * An exception that indicates that an http request parameter is invalid, holding a descriptive message.
+ * Common class to use for all custom error responses.
  */
-public final class IllegalRequestParameterException extends ErrorResponseException {
+abstract class ErrorResponseException extends ResponseStatusException {
+
+  private final Map<String, Object> properties = new LinkedHashMap<>(2, 0.9f);
+
+  ErrorResponseException(@NonNull HttpStatusCode status, @NonNull String reason) {
+    super(status, reason);
+  }
 
   /**
-   * Constructs a new illegal parameter exception.
+   * Adds an extra property to this response, returned within the extensions block in the response.
    *
-   * @param message the message of the exception, note that the message is directly exposed to the http request sender.
+   * @param key   the key of the property.
+   * @param value the value of the property.
    */
-  public IllegalRequestParameterException(@NonNull String message) {
-    super(HttpStatus.BAD_REQUEST, message);
+  protected final void setProperty(@NonNull String key, @Nullable Object value) {
+    this.properties.put(key, value);
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public @NonNull ProblemDetail updateAndGetBody(@Nullable MessageSource messageSource, @NonNull Locale locale) {
+    var problemDetail = super.updateAndGetBody(messageSource, locale);
+    problemDetail.setProperty("extensions", this.properties);
+    return problemDetail;
   }
 }

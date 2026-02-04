@@ -28,7 +28,7 @@ import feign.http2client.Http2Client;
 import java.net.http.HttpClient;
 import java.time.Duration;
 
-public final class FeignJava11Client extends Http2Client {
+public class FeignJava11Client extends Http2Client {
 
   public FeignJava11Client() {
     super(HttpClient.newBuilder()

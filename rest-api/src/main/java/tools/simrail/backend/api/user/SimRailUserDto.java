@@ -25,27 +25,27 @@
 package tools.simrail.backend.api.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
+import org.jspecify.annotations.Nullable;
 
 /**
  * DTO for data about a single steam profile.
  */
-record SimRailUserDto(
-  @Schema(description = "The id of the steam profile")
-  @NotNull @Pattern(regexp = "^7656119\\d{10}$") String id,
-  @Schema(description = "The name of the steam profile")
+public record SimRailUserDto(
+  @Schema(description = "The id of the user")
+  @NotNull String id,
+  @Schema(description = "The name of the user")
   @NotNull @NotBlank String name,
-  @Schema(description = "The avatar hash of the profile, can be used to retrieve the image from Steam")
-  @NotNull @NotBlank String avatarHash,
-  @Schema(description = "The url to the profile")
-  @NotNull @NotBlank String profileUrl,
-  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set", types = {"null"})
-  @Nullable String countryCode,
-  @Schema(description = "Indicates if the steam profile page is publicly visible")
-  @NotNull boolean profileVisible
+  @Schema(description = "The url to the profile of the user")
+  @NotNull @NotBlank @URL String profileUrl,
+  @Schema(description = "The url to the avatar of the user")
+  @NotNull @NotBlank @URL String avatarUrl,
+  @Schema(description = "The location of the user (in some form), null if not known", types = {"null"})
+  @Nullable String location
 ) {
 
+  // https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg
+  // https://xbox.com/play/user/derklaro7460
 }

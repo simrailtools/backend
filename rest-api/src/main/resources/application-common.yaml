@@ -1,3 +1,7 @@
+sit:
+  brouter:
+    url: 'https://brouter.simrail.tools'
+
 logging:
   pattern:
     console: '%yellow(%date{dd.MM.yy HH:mm:ss}) [%highlight(%5p)] %cyan(%-40.40logger{0})[%magenta(%4.4line)]: %msg %ex%n'

@@ -22,41 +22,29 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.user;
+package tools.simrail.backend.external.feign;
 
-import jakarta.annotation.Nonnull;
+import feign.RequestInterceptor;
+import feign.RequestTemplate;
+import java.util.List;
+import java.util.Map;
+import org.jspecify.annotations.NonNull;
 
 /**
- * Fetch result wrapper of a user fetch request.
+ * Interceptor to add additional headers to a feign request.
  *
- * @param <T> the user type that was requested.
+ * @param headers the headers to add the request.
  */
-@SuppressWarnings("unused") // generic type param T is unused but actually required for strict typing
-sealed interface SimRailUserFetchResult<T> {
+public record FeignHeaderInterceptor(@NonNull Map<String, String> headers) implements RequestInterceptor {
 
   /**
-   * Fetch result to indicate that the user was fetched successfully.
-   *
-   * @param user the fetched user.
-   * @param <T>  the user type that was fetched.
+   * {@inheritDoc}
    */
-  record Success<T>(@Nonnull T user) implements SimRailUserFetchResult<T> {
-
-  }
-
-  /**
-   * Fetch result to indicate that the requested user was not found.
-   *
-   * @param userId the id of the user that was requested.
-   */
-  record NotFound<T>(@Nonnull String userId) implements SimRailUserFetchResult<T> {
-
-  }
-
-  /**
-   * Fetch result to indicate that the user fetch request couldn't be fulfilled due to an error.
-   */
-  record Failure<T>() implements SimRailUserFetchResult<T> {
-
+  @Override
+  public void apply(@NonNull RequestTemplate template) {
+    for (var entry : this.headers.entrySet()) {
+      template.header(entry.getKey(), List.of()); // drop the current header value
+      template.header(entry.getKey(), entry.getValue());
+    }
   }
 }

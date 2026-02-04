@@ -90,7 +90,8 @@ subprojects {
     options.compilerArgs.addAll(
       listOf(
         "-Xlint:all",         // enable all warnings
-        "-Xlint:-preview",    // reduce warning size for the following warning types
+        "-Xlint:-serial",     // reduce warning size for the following warning types
+        "-Xlint:-preview",
         "-Xlint:-unchecked",
         "-Xlint:-classfile",
         "-Xlint:-processing",

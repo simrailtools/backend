@@ -22,18 +22,21 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.dispatchpost.dto;
+package tools.simrail.backend.api.user.loader;
 
-import io.swagger.v3.oas.annotations.media.Schema;
-import org.jspecify.annotations.Nullable;
-import tools.simrail.backend.api.shared.UserDto;
+import com.github.benmanes.caffeine.cache.CacheLoader;
+import java.util.Optional;
+import org.jspecify.annotations.NonNull;
+import tools.simrail.backend.api.shared.UserPlatform;
+import tools.simrail.backend.api.user.SimRailUserDto;
 
-/**
- * DTO for the realtime data of a dispatch post.
- */
-public record DispatchPostRealtimeDataDto(
-  @Schema(description = "The user that is currently dispatching the post")
-  @Nullable UserDto dispatcher
-) {
+public interface UserCacheLoader extends CacheLoader<String, Optional<SimRailUserDto>> {
 
+  /**
+   * Get the platform targeted by this cache loader.
+   *
+   * @return the platform targeted by this cache loader.
+   */
+  @NonNull
+  UserPlatform targetPlatform();
 }

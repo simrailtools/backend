@@ -34,7 +34,7 @@ public final class BRouterApiClientTest {
 
   @Test
   void testRouting() {
-    var client = BRouterApiClient.create();
+    var client = BRouterApiClient.create("https://brouter.simrail.tools");
     var jsonMapper = JsonMapper.builder().build();
     var waypoints = List.of(
       new BRouterRouteRequest.GeoPosition(50.481008999348, 19.4231231),
