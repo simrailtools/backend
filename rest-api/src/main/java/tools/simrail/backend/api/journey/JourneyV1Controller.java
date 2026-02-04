@@ -78,7 +78,7 @@ class JourneyV1Controller {
   private final SimRailServerTimeService serverTimeService;
 
   @Autowired
-  public JourneyV1Controller(
+  JourneyV1Controller(
     @NonNull JourneyService journeyService,
     @NonNull SimRailServerTimeService serverTimeService
   ) {
@@ -236,7 +236,6 @@ class JourneyV1Controller {
       - Searching for journey number '40180' will return 'EIP 40180', 'ROJ 40180' etc.
       - Searching for 'PWJ 146051' will also return 'ROJ 19369' that starts as 'ROJ' but switches to 'PWJ' along its route
       - Searching for 'RE1' at '2024-12-06' will also return journeys that start at '2024-12-05' and continue on '2024-12-06'
-      
       Multiple filter parameter can be provided and are linked in a logical AND chain. At least the journey number or
       journey line must be provided.
       """,

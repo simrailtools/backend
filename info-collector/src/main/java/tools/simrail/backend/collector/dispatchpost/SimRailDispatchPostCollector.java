@@ -73,7 +73,7 @@ final class SimRailDispatchPostCollector {
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
   @Autowired
-  public SimRailDispatchPostCollector(
+  SimRailDispatchPostCollector(
     @NonNull Connection connection,
     @NonNull SimRailServerService serverService,
     @NonNull SimRailPanelApiClient panelApiClient,

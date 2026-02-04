@@ -70,7 +70,7 @@ class JourneyService {
   private final JourneySummaryDtoConverter journeySummaryDtoConverter;
 
   @Autowired
-  public JourneyService(
+  JourneyService(
     @NonNull ApiJourneyRepository journeyRepository,
     @NonNull ApiJourneyEventRepository journeyEventRepository,
     @NonNull JourneyDtoConverter journeyDtoConverter,

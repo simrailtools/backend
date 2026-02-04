@@ -40,13 +40,13 @@ public record RailcarDto(
   @NotNull UUID id,
   @Schema(description = "The display name of the railcar")
   @NotNull @NotBlank String displayName,
-  @Schema(description = "The baptismal name of the locomotive / wagon, null if none", types = {"null"})
+  @Schema(description = "The baptismal name of the locomotive / wagon, null if none", types = "null")
   @Nullable String name,
   @Schema(description = "The grouping type of the railcar")
   @NotNull RailcarType type,
   @Schema(description = "The type identifier of the railcar")
   @NotNull @NotBlank String typeIdentifier,
-  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", types = {"null"})
+  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", types = "null")
   @Nullable String requiredDlcId,
   @Schema(description = "The designation of the railcar")
   @NotNull @NotBlank String designation,

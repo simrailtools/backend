@@ -55,7 +55,7 @@ class BoardV1Controller {
   private final BoardService boardService;
 
   @Autowired
-  public BoardV1Controller(@NonNull BoardService boardService) {
+  BoardV1Controller(@NonNull BoardService boardService) {
     this.boardService = boardService;
   }
 

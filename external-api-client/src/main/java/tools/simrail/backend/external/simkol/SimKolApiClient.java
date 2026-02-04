@@ -31,7 +31,7 @@ import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 import tools.simrail.backend.external.simkol.model.SimKolSpeedLimit;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface SimKolApiClient {
 
   static @NonNull SimKolApiClient create() {

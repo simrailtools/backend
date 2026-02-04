@@ -50,7 +50,7 @@ class SimRailUserService {
   private final Map<UserPlatform, LoadingCache<String, Optional<SimRailUserDto>>> userCacheByPlatform;
 
   @Autowired
-  public SimRailUserService(@NonNull Collection<UserCacheLoader> userCacheLoaders) {
+  SimRailUserService(@NonNull Collection<UserCacheLoader> userCacheLoaders) {
     this.userCacheByPlatform = new EnumMap<>(UserPlatform.class);
     for (var cacheLoader : userCacheLoaders) {
       var cache = Caffeine.newBuilder()
@@ -62,6 +62,13 @@ class SimRailUserService {
     }
   }
 
+  /**
+   * Finds the details of the given users, either from cache or from an upstream api. Negative results are cached for a
+   * day locally as well.
+   *
+   * @param users the users to resolve the details of.
+   * @return the resolved detail information of the given users (unless impossible).
+   */
   public @NonNull List<SimRailUserDto> findUserDetails(@NonNull Collection<UserDto> users) {
     try (var scope = StructuredTaskScope.open(
       StructuredTaskScope.Joiner.awaitAll(),

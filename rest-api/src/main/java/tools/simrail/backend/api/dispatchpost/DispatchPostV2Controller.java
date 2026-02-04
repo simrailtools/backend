@@ -56,7 +56,7 @@ class DispatchPostV2Controller {
   private final DispatchPostService dispatchPostService;
 
   @Autowired
-  public DispatchPostV2Controller(@NonNull DispatchPostService dispatchPostService) {
+  DispatchPostV2Controller(@NonNull DispatchPostService dispatchPostService) {
     this.dispatchPostService = dispatchPostService;
   }
 

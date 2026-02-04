@@ -29,6 +29,7 @@ import io.micrometer.core.instrument.Timer;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -54,7 +55,8 @@ class JourneyCancelledMarkingTask {
   private final PerServerGauge cancelledJourneysCounter;
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
-  public JourneyCancelledMarkingTask(
+  @Autowired
+  JourneyCancelledMarkingTask(
     @NonNull SimRailServerService serverService,
     @NonNull CollectorJourneyRepository journeyRepository,
     @NonNull JdbcTemplate jdbcTemplate,

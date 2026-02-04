@@ -45,7 +45,7 @@ final class OptimizedBoundingBox {
    *
    * @param boundingBox the polygon to base this bounding box on.
    */
-  public OptimizedBoundingBox(@NonNull Polygon boundingBox) {
+  OptimizedBoundingBox(@NonNull Polygon boundingBox) {
     this.boundingBox = boundingBox;
     this.rectangle = boundingBox.isRectangle();
     this.boxEnvelope = boundingBox.getEnvelopeInternal();

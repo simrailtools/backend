@@ -48,7 +48,7 @@ class DatabaseCleanupTask {
   private final CleanupJourneyRepository journeyRepository;
 
   @Autowired
-  public DatabaseCleanupTask(
+  DatabaseCleanupTask(
     @NonNull CleanupJourneyRepository journeyRepository,
     @NonNull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
     @NonNull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter

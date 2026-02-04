@@ -34,7 +34,7 @@ import tools.simrail.backend.external.feign.FeignHeaderInterceptor;
 import tools.simrail.backend.external.feign.FeignJava11NoErrorClient;
 import tools.simrail.backend.external.playerdb.model.PlayerDbResponseWrapper;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface PlayerDbApiClient {
 
   static @NonNull PlayerDbApiClient create(@NonNull String userAgent) {

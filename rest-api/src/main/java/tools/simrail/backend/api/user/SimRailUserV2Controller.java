@@ -51,7 +51,7 @@ class SimRailUserV2Controller {
   private final SimRailUserService userService;
 
   @Autowired
-  public SimRailUserV2Controller(@NonNull SimRailUserService userService) {
+  SimRailUserV2Controller(@NonNull SimRailUserService userService) {
     this.userService = userService;
   }
 

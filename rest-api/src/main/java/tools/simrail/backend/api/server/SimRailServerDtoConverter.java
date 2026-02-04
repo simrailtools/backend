@@ -42,7 +42,7 @@ final class SimRailServerDtoConverter implements Function<SimRailServerEntity, S
   private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   @Autowired
-  public SimRailServerDtoConverter(
+  SimRailServerDtoConverter(
     @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
   ) {
     this.serverDataCache = serverDataCache;

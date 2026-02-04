@@ -115,7 +115,7 @@ final class JourneyEventRealtimeUpdater {
                 sample.stop(this.eventUpdateTimer);
               }
             }
-          } catch (InterruptedException exception) {
+          } catch (InterruptedException _) {
             // interrupt signal received, exit
             Thread.currentThread().interrupt();
             break;

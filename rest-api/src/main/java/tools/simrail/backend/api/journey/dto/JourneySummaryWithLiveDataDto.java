@@ -38,9 +38,9 @@ public record JourneySummaryWithLiveDataDto(
   @NotNull UUID journeyId,
   @Schema(description = "The identifier of the server where the journey takes place")
   @NotNull UUID serverId,
-  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
+  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = "null")
   @Nullable Instant firstSeenTime,
-  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
+  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = "null")
   @Nullable Instant lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
   @NotNull boolean journeyCancelled,

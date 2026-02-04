@@ -63,7 +63,7 @@ class SimRailMapController {
   private final MapJourneyRouteGeoJsonConverter journeyRouteGeoJsonConverter;
 
   @Autowired
-  public SimRailMapController(
+  SimRailMapController(
     @NonNull SimRailMapService mapService,
     @NonNull MapJourneyRouteGeoJsonConverter journeyRouteGeoJsonConverter
   ) {

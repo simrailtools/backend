@@ -90,11 +90,6 @@ public enum JourneyTransportType {
   MAINTENANCE_TRAIN;
 
   /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTransportType[] VALUES = JourneyTransportType.values();
-
-  /**
    * Maps the given train type (3 characters long) string to transport type.
    *
    * @param trainType the train type to map.

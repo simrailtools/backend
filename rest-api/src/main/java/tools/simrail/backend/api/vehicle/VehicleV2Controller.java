@@ -52,7 +52,7 @@ class VehicleV2Controller {
   private final VehicleService vehicleService;
 
   @Autowired
-  public VehicleV2Controller(@NonNull VehicleService vehicleService) {
+  VehicleV2Controller(@NonNull VehicleService vehicleService) {
     this.vehicleService = vehicleService;
   }
 

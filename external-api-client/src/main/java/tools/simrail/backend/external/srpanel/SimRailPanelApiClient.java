@@ -38,7 +38,7 @@ import tools.simrail.backend.external.srpanel.model.SimRailPanelTrain;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelTrainPosition;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelUserInfo;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface SimRailPanelApiClient {
 
   static @NonNull SimRailPanelApiClient create() {

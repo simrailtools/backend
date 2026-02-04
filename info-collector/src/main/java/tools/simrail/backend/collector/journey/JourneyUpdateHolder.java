@@ -49,7 +49,7 @@ final class JourneyUpdateHolder {
   final UpdatableField<EventBusProto.SignalInfo> nextSignal;
   final UpdatableField<String> nextSignalId; // internally used only, not stored in cache (derived from next signal)
 
-  public JourneyUpdateHolder(@NonNull UUID runId, @NonNull UUID journeyId) {
+  JourneyUpdateHolder(@NonNull UUID runId, @NonNull UUID journeyId) {
     this.runId = runId;
     this.journeyId = journeyId;
     this.runIdString = runId.toString();

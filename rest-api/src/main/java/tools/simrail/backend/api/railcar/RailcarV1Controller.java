@@ -58,7 +58,7 @@ class RailcarV1Controller {
   private final RailcarDtoConverter railcarConverter;
 
   @Autowired
-  public RailcarV1Controller(
+  RailcarV1Controller(
     @NonNull RailcarProvider railcarProvider,
     @NonNull RailcarDtoConverter railcarConverter
   ) {

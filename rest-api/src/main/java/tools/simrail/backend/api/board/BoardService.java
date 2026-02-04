@@ -66,7 +66,7 @@ class BoardService {
   private final BoardEntryDtoConverter boardEntryDtoConverter;
 
   @Autowired
-  public BoardService(
+  BoardService(
     @NonNull SimRailPointProvider pointProvider,
     @NonNull SimRailServerTimeService serverTimeService,
     @NonNull BoardJourneyRepository boardJourneyRepository,

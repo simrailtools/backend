@@ -36,7 +36,7 @@ import org.jspecify.annotations.Nullable;
 public record JourneySignalDto(
   @Schema(description = "The id (name) of the signal")
   @NotNull @NotBlank String id,
-  @Schema(description = "The allowed speed of passing the signal, null if no speed reduction", types = {"null"})
+  @Schema(description = "The allowed speed of passing the signal, null if no speed reduction", types = "null")
   @Nullable @Min(0) Short maxSpeed,
   @Schema(description = "The distance of the journey to the signal, in 10 meter steps")
   @NotNull @Min(0) int distance

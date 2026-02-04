@@ -51,8 +51,8 @@ import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 @Service
 class SimRailMapService {
 
-  private static final Comparator<MapEventSummaryProjection> EVENT_SORTER
-    = Comparator.comparingInt(MapEventSummaryProjection::getEventIndex);
+  private static final Comparator<MapEventSummaryProjection> EVENT_SORTER =
+    Comparator.comparingInt(MapEventSummaryProjection::getEventIndex);
 
   private final Cache polylineCache;
   private final ObjectMapper objectMapper;
@@ -62,7 +62,7 @@ class SimRailMapService {
   private final MapJourneyRouteDtoConverter journeyRouteDtoConverter;
 
   @Autowired
-  public SimRailMapService(
+  SimRailMapService(
     @NonNull CacheManager cacheManager,
     @NonNull ObjectMapper objectMapper,
     @NonNull BRouterApiClient bRouterApiClient,

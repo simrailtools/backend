@@ -44,7 +44,7 @@ class SimRailServerService {
   private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   @Autowired
-  public SimRailServerService(
+  SimRailServerService(
     @NonNull SimRailServerRepository serverRepository,
     @NonNull SimRailServerDtoConverter serverDtoConverter,
     @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache

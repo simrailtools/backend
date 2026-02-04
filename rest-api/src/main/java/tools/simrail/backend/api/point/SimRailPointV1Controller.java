@@ -61,7 +61,7 @@ class SimRailPointV1Controller {
   private final SimRailPointService pointService;
 
   @Autowired
-  public SimRailPointV1Controller(@NonNull SimRailPointService pointService) {
+  SimRailPointV1Controller(@NonNull SimRailPointService pointService) {
     this.pointService = pointService;
   }
 

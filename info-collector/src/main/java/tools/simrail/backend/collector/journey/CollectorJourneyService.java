@@ -54,7 +54,7 @@ class CollectorJourneyService {
   private final DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache;
 
   @Autowired
-  public CollectorJourneyService(
+  CollectorJourneyService(
     @NonNull JdbcTemplate jdbcTemplate,
     @NonNull CollectorJourneyRepository journeyRepository,
     @NonNull JourneyEventRepository journeyEventRepository,

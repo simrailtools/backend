@@ -50,7 +50,7 @@ final class SteamUserCacheLoader implements UserCacheLoader {
   private final PlayerDbApiClient playerDbApiClient;
 
   @Autowired
-  public SteamUserCacheLoader(@NonNull PlayerDbApiClient playerDbApiClient) {
+  SteamUserCacheLoader(@NonNull PlayerDbApiClient playerDbApiClient) {
     this.playerDbApiClient = playerDbApiClient;
   }
 

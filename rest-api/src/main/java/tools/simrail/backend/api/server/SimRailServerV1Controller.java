@@ -54,7 +54,7 @@ class SimRailServerV1Controller {
   private final SimRailServerService serverService;
 
   @Autowired
-  public SimRailServerV1Controller(@NonNull SimRailServerService serverService) {
+  SimRailServerV1Controller(@NonNull SimRailServerService serverService) {
     this.serverService = serverService;
   }
 

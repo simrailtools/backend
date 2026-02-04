@@ -55,8 +55,10 @@ public final class ExceptionHandlingRetryer implements Retryer {
     throw exception;
   }
 
+  // CHECKSTYLE.OFF: clone method is used by feign, leave this optimization
   @Override
   public @NonNull Retryer clone() {
     return INSTANCE;
   }
+  // CHECKSTYLE.ON
 }

@@ -47,7 +47,7 @@ final class ServerUpdateHolder {
   final UpdatableField<Set<String>> tags;
   final UpdatableField<SimRailServerScenery> scenery;
 
-  public ServerUpdateHolder(@NonNull UUID id, @NonNull String foreignId) {
+  ServerUpdateHolder(@NonNull UUID id, @NonNull String foreignId) {
     this.id = id;
     this.foreignId = foreignId;
 

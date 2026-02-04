@@ -37,9 +37,9 @@ import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 public record VehicleDto(
   @Schema(description = "The index (0 based) where the vehicle is located in the composition")
   @NotNull @Min(0) int indexInGroup,
-  @Schema(description = "The load weight of the vehicle, can be null in case nothing is loaded", types = {"null"})
+  @Schema(description = "The load weight of the vehicle, can be null in case nothing is loaded", types = "null")
   @Nullable Integer loadWeight,
-  @Schema(description = "The load of the vehicle, can be null in case nothing is loaded", types = {"null"})
+  @Schema(description = "The load of the vehicle, can be null in case nothing is loaded", types = "null")
   @Nullable JourneyVehicleLoad load,
   @Schema(description = "Summary information about the railcar used for this vehicle")
   @NotNull RailcarDto railcar

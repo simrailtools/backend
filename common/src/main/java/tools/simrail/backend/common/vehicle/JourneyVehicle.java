@@ -40,8 +40,8 @@ public final class JourneyVehicle {
   /**
    * Comparator to compare the index of the vehicle in the sequence, ascending.
    */
-  public static final Comparator<JourneyVehicle> BY_SEQUENCE_INDEX_COMPARATOR
-    = Comparator.comparingInt(JourneyVehicle::getIndexInSequence);
+  public static final Comparator<JourneyVehicle> BY_SEQUENCE_INDEX_COMPARATOR =
+    Comparator.comparingInt(JourneyVehicle::getIndexInSequence);
 
   /**
    * The index where this vehicle is located in the vehicle sequence.

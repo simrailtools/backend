@@ -53,7 +53,7 @@ class CollectorDispatchPostService {
   private final SimRailDispatchPostRepository dispatchPostRepository;
 
   @Autowired
-  public CollectorDispatchPostService(
+  CollectorDispatchPostService(
     @NonNull SimRailPointProvider pointProvider,
     @NonNull SimRailDispatchPostRepository dispatchPostRepository
   ) {

@@ -43,7 +43,7 @@ class DispatchPostService {
   private final DispatchPostInfoDtoConverter dispatchPostInfoConverter;
 
   @Autowired
-  public DispatchPostService(
+  DispatchPostService(
     @NonNull ApiDispatchPostRepository dispatchPostRepository,
     @NonNull DispatchPostInfoDtoConverter dispatchPostInfoConverter
   ) {

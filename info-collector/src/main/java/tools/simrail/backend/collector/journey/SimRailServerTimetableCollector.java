@@ -77,7 +77,7 @@ class SimRailServerTimetableCollector {
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
   @Autowired
-  public SimRailServerTimetableCollector(
+  SimRailServerTimetableCollector(
     @NonNull SimRailAwsApiClient awsApiClient,
     @NonNull JourneyIdService journeyIdService,
     @NonNull SimRailPointProvider pointProvider,

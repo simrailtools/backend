@@ -43,7 +43,7 @@ final class DispatchPostUpdateHolder {
   final UpdatableFieldGroup fieldGroup;
   final UpdatableField<EventBusProto.User> dispatcher;
 
-  public DispatchPostUpdateHolder(@NonNull UUID id, @NonNull String foreignId, @NonNull String secondaryCacheKey) {
+  DispatchPostUpdateHolder(@NonNull UUID id, @NonNull String foreignId, @NonNull String secondaryCacheKey) {
     this.id = id;
     this.foreignId = foreignId;
     this.secondaryCacheKey = secondaryCacheKey;

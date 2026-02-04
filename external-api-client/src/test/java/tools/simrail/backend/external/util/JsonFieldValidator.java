@@ -31,6 +31,10 @@ import tools.jackson.databind.node.ObjectNode;
 
 public final class JsonFieldValidator {
 
+  private JsonFieldValidator() {
+    throw new UnsupportedOperationException();
+  }
+
   public static void assertContainsAllKeys(ObjectNode node, Set<String> keyNames) {
     var fieldNames = node.propertyNames();
     var expectedFieldNames = new HashSet<>(keyNames);

@@ -63,6 +63,10 @@ public final class TimetableHolder {
     }
   }
 
+  private TimetableHolder() {
+    throw new UnsupportedOperationException();
+  }
+
   /**
    * Get the timetable data of the default server, either from local cached or from the SimRail backend.
    *

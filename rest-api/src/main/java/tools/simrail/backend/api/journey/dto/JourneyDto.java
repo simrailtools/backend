@@ -42,9 +42,9 @@ public record JourneyDto(
   @NotNull UUID serverId,
   @Schema(description = "The instant (ISO-8601) when the journey data was last updated")
   @NotNull Instant lastUpdated,
-  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = {"null"})
+  @Schema(description = "The instant (ISO-8601) when the journey was first seen, null if the journey wasn't active yet", types = "null")
   @Nullable Instant firstSeenTime,
-  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = {"null"})
+  @Schema(description = "The instant (ISO-8601) when the journey was last seen, null if the journey is still or wasn't active", types = "null")
   @Nullable Instant lastSeenTime,
   @Schema(description = "Indicates if the journey was cancelled")
   @NotNull boolean journeyCancelled,

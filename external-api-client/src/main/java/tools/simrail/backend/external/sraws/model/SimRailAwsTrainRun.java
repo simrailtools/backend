@@ -58,13 +58,11 @@ public final class SimRailAwsTrainRun {
   /**
    * The internation train number, currently not in use.
    */
-  @Deprecated
   @JsonProperty("trainNoInternational")
   private String trainNumberInternational;
   /**
    * The number of the train that this train will convert to at the final station, currently not in use.
    */
-  @Deprecated
   @JsonProperty("continuesAs")
   private String continuationTrainNumber;
 

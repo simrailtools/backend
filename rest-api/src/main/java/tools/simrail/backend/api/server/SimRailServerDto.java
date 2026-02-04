@@ -48,7 +48,7 @@ record SimRailServerDto(
   @NotNull SimRailServerRegion region,
   @Schema(description = "Tags of the server, for example providing detail information about the moderation status")
   @NotNull Set<String> tags,
-  @Schema(description = "The language spoken on the server, null for all languages", types = {"null"})
+  @Schema(description = "The language spoken on the server, null for all languages", types = "null")
   @Nullable String spokenLanguage,
   @Schema(description = "The scenery (map part) that is available on the server")
   @NotNull SimRailServerScenery scenery,

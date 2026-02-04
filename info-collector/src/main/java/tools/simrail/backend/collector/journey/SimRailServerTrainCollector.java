@@ -83,7 +83,7 @@ class SimRailServerTrainCollector {
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
   @Autowired
-  public SimRailServerTrainCollector(
+  SimRailServerTrainCollector(
     @NonNull JourneyIdService journeyIdService,
     @NonNull SimRailPointProvider pointProvider,
     @NonNull SimRailServerService serverService,

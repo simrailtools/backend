@@ -40,7 +40,7 @@ class WebMvcConfiguration implements WebMvcConfigurer {
   private final ETagGenerator etagGenerator;
 
   @Autowired
-  public WebMvcConfiguration(@NonNull ETagGenerator etagGenerator) {
+  WebMvcConfiguration(@NonNull ETagGenerator etagGenerator) {
     this.etagGenerator = etagGenerator;
   }
 

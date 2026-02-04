@@ -39,9 +39,9 @@ public record JourneyLiveDataDto(
   @NotNull @Min(0) int speed,
   @Schema(description = "The current position of the journey")
   @NotNull GeoPositionDto position,
-  @Schema(description = "The current driver of the journey", types = {"null"})
+  @Schema(description = "The current driver of the journey", types = "null")
   @Nullable UserDto driver,
-  @Schema(description = "The signal in front of the journey, null in case it is too far away or doesn't exist", types = {"null"})
+  @Schema(description = "The signal in front of the journey, null in case it is too far away or doesn't exist", types = "null")
   @Nullable JourneySignalDto nextSignal
 ) {
 

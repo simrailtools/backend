@@ -36,7 +36,7 @@ import tools.simrail.backend.external.steam.wrapper.SteamAchievementPercentageWr
 import tools.simrail.backend.external.steam.wrapper.SteamUserStatsWrapper;
 import tools.simrail.backend.external.steam.wrapper.SteamUserSummaryWrapper;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface SteamApiClient {
 
   static @NonNull SteamApiClient create(@NonNull String apiKey) {

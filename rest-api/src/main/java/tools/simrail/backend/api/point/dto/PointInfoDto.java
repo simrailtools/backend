@@ -46,7 +46,7 @@ public record PointInfoDto(
   @NotNull @Size(min = 3, max = 3) String country,
   @Schema(description = "The position where the point located")
   @NotNull GeoPositionDto position,
-  @Schema(description = "The UIC reference of the point, might not null in case it is unknown", types = {"null"})
+  @Schema(description = "The UIC reference of the point, might not null in case it is unknown", types = "null")
   @Nullable String uicRef,
   @Schema(description = "The OSM node id of the point")
   @NotNull long osmNodeId,

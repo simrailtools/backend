@@ -39,9 +39,9 @@ public record BoardTransportDto(
   @NotNull @NotBlank String category,
   @Schema(description = "The number of the transport")
   @NotNull @NotBlank String number,
-  @Schema(description = "The line of the transport, null in case no line is associated with the transport", types = {"null"})
+  @Schema(description = "The line of the transport, null in case no line is associated with the transport", types = "null")
   @Nullable String line,
-  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport", types = {"null"})
+  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport", types = "null")
   @Nullable String label,
   @Schema(description = "The higher-level category of the transport")
   @NotNull JourneyTransportType type,

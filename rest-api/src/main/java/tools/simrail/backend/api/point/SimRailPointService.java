@@ -64,7 +64,7 @@ class SimRailPointService {
   private final PlatformSignalProvider platformSignalProvider;
 
   @Autowired
-  public SimRailPointService(
+  SimRailPointService(
     @NonNull SimRailPointProvider pointProvider,
     @NonNull PointInfoDtoConverter pointInfoConverter,
     @NonNull PlatformSignalProvider platformSignalProvider

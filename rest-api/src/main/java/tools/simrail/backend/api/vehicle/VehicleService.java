@@ -41,7 +41,7 @@ class VehicleService {
   private final VehicleSequenceDtoConverter vehicleSequenceDtoConverter;
 
   @Autowired
-  public VehicleService(
+  VehicleService(
     @NonNull JourneyVehicleSequenceRepository vehicleRepository,
     @NonNull VehicleSequenceDtoConverter vehicleSequenceDtoConverter
   ) {

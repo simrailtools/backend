@@ -52,7 +52,7 @@ final class XBoxUserCacheLoader implements UserCacheLoader {
   private final PlayerDbApiClient playerDbApiClient;
 
   @Autowired
-  public XBoxUserCacheLoader(@NonNull PlayerDbApiClient playerDbApiClient) {
+  XBoxUserCacheLoader(@NonNull PlayerDbApiClient playerDbApiClient) {
     this.playerDbApiClient = playerDbApiClient;
   }
 

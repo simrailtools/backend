@@ -59,7 +59,7 @@ final class DataCacheNode<T> {
   // if this node was removed from the underlying cache
   volatile boolean removed;
 
-  public DataCacheNode(@NonNull ToLongFunction<T> versionExtractor, @NonNull T value) {
+  DataCacheNode(@NonNull ToLongFunction<T> versionExtractor, @NonNull T value) {
     this.versionExtractor = versionExtractor;
 
     this.value = value;

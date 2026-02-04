@@ -80,7 +80,7 @@ class JourneyVehicleCollector {
   private final Meter.MeterProvider<Timer> predictedCompositionCollectTimer;
 
   @Autowired
-  public JourneyVehicleCollector(
+  JourneyVehicleCollector(
     @NonNull SimRailAwsApiClient awsApiClient,
     @NonNull SimRailPanelApiClient panelApiClient,
     @NonNull RailcarProvider railcarProvider,

@@ -40,11 +40,5 @@ public enum JourneyTimeType {
   /**
    * The time is confirmed and the event actually happened at the time.
    */
-  REAL,
-  ;
-
-  /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTimeType[] VALUES = JourneyTimeType.values();
+  REAL
 }

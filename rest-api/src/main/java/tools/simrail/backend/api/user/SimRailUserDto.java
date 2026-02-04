@@ -42,7 +42,7 @@ public record SimRailUserDto(
   @NotNull @NotBlank @URL String profileUrl,
   @Schema(description = "The url to the avatar of the user")
   @NotNull @NotBlank @URL String avatarUrl,
-  @Schema(description = "The location of the user (in some form), null if not known", types = {"null"})
+  @Schema(description = "The location of the user (in some form), null if not known", types = "null")
   @Nullable String location
 ) {
 

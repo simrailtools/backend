@@ -42,7 +42,7 @@ class CollectorServerService {
   private final SimRailServerRepository serverRepository;
 
   @Autowired
-  public CollectorServerService(@NonNull SimRailServerRepository serverRepository) {
+  CollectorServerService(@NonNull SimRailServerRepository serverRepository) {
     this.serverRepository = serverRepository;
   }
 
