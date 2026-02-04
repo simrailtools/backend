@@ -48,14 +48,14 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-boards/v1/")
-@Tag(name = "boards-v1", description = "SimRail Boards Data APIs (Version 1)")
-class BoardV1Controller {
+@RequestMapping("/sit-boards/v2/")
+@Tag(name = "boards-v2", description = "SimRail Boards Data APIs (Version 2)")
+class BoardV2Controller {
 
   private final BoardService boardService;
 
   @Autowired
-  BoardV1Controller(@NonNull BoardService boardService) {
+  BoardV2Controller(@NonNull BoardService boardService) {
     this.boardService = boardService;
   }
 

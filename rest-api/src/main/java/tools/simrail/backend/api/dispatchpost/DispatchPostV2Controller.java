@@ -50,7 +50,7 @@ import tools.simrail.backend.api.pagination.PaginatedResponseDto;
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-dispatch-posts/v2/")
-@Tag(name = "dispatch-post-v1", description = "SimRail Dispatch Post Data APIs (Version 1)")
+@Tag(name = "dispatch-post-v2", description = "SimRail Dispatch Post Data APIs (Version 2)")
 class DispatchPostV2Controller {
 
   private final DispatchPostService dispatchPostService;

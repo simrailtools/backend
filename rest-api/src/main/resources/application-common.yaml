@@ -40,6 +40,14 @@ spring:
     problemdetails:
       enabled: true
 
+springdoc:
+  disable-i18n: true
+  writer-with-default-pretty-printer: true
+  api-docs:
+    enabled: true
+    path: '/docs/openapi'
+    version: openapi_3_1
+
 management:
   prometheus:
     metrics:

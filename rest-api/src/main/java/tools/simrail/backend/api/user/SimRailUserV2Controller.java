@@ -45,7 +45,7 @@ import tools.simrail.backend.api.shared.UserDto;
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-users/v2/")
-@Tag(name = "users-v1", description = "SimRail User Data APIs (Version 1)")
+@Tag(name = "users-v2", description = "SimRail User Data APIs (Version 2)")
 class SimRailUserV2Controller {
 
   private final SimRailUserService userService;

@@ -47,14 +47,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping("/sit-servers/v1/")
-@Tag(name = "servers-v1", description = "SimRail Server Data APIs (Version 1)")
-class SimRailServerV1Controller {
+@RequestMapping("/sit-servers/v2/")
+@Tag(name = "servers-v2", description = "SimRail Server Data APIs (Version 2)")
+class SimRailServerV2Controller {
 
   private final SimRailServerService serverService;
 
   @Autowired
-  SimRailServerV1Controller(@NonNull SimRailServerService serverService) {
+  SimRailServerV2Controller(@NonNull SimRailServerService serverService) {
     this.serverService = serverService;
   }
 

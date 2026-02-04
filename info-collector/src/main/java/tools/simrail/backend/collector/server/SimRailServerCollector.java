@@ -248,7 +248,7 @@ public class SimRailServerCollector implements SimRailServerService {
         });
         updateHolder.scenery.ifDirty(serverScenery -> serverDataBuilder.setScenery(serverScenery.name()));
 
-        // build the final update frame, store it & publish it to consumers
+        // insert the server data into the cache
         var serverData = serverDataBuilder.build();
         var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
           .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
@@ -257,6 +257,9 @@ public class SimRailServerCollector implements SimRailServerService {
           .setBaseData(baseFrameData)
           .setServerData(serverData)
           .build();
+        this.serverDataCache.setCachedValue(updateFrame);
+
+        // send out server update frame
         var subject = EventSubjectFactory.createServerUpdateSubjectV1(updateFrame.getIds().getServerId());
         this.connection.publish(subject, updateFrame.toByteArray());
       }
@@ -280,15 +283,15 @@ public class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).collect(Collectors.toSet());
-    if (shouldUpdateDatabase) {
-      // mark all servers which are not included in the response as deleted
-      this.serverService.markUncontainedServersAsDeleted(updatedServerIds);
-    }
-
     if (fullCollection) {
+      // mark all servers which are not included in the response as deleted
+      var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).collect(Collectors.toSet());
+      this.serverService.markUncontainedServersAsDeleted(updatedServerIds);
+
       // remove the removed servers from the
-      var updatedServerIdStrings = updatedServerIds.stream().map(UUID::toString).collect(Collectors.toSet());
+      var updatedServerIdStrings = foundServers.stream()
+        .map(SimRailServerDescriptor::foreignId)
+        .collect(Collectors.toSet());
       var removedServers = this.serverDataCache.findBySecondaryKeyNotIn(updatedServerIdStrings);
       removedServers.forEach(cached -> {
         this.serverDataCache.removeByPrimaryKey(cached.getIds().getDataId());

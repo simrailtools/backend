@@ -70,7 +70,7 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 @RestController
 @RequestMapping("/sit-journeys/v2/")
 @Tag(name = "journeys-v2", description = "SimRail Journey Data APIs (Version 2)")
-class JourneyV1Controller {
+class JourneyV2Controller {
 
   private static final Set<JourneyTransportType> ALL_TRANSPORT_TYPES = EnumSet.allOf(JourneyTransportType.class);
 
@@ -78,7 +78,7 @@ class JourneyV1Controller {
   private final SimRailServerTimeService serverTimeService;
 
   @Autowired
-  JourneyV1Controller(
+  JourneyV2Controller(
     @NonNull JourneyService journeyService,
     @NonNull SimRailServerTimeService serverTimeService
   ) {

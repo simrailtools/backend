@@ -22,47 +22,67 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.server;
+package tools.simrail.backend.api.cache;
 
-import java.util.function.Function;
+import io.nats.client.Connection;
+import io.nats.client.ConnectionListener;
+import java.util.Collection;
+import java.util.concurrent.atomic.AtomicBoolean;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.common.cache.DataCache;
-import tools.simrail.backend.common.proto.EventBusProto;
-import tools.simrail.backend.common.server.SimRailServerEntity;
 
-/**
- * A converter for server entities to server DTOs.
- */
 @Component
-final class SimRailServerDtoConverter implements Function<SimRailServerEntity, SimRailServerDto> {
+final class CacheRefreshListener implements ConnectionListener {
 
-  private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
+  private final AtomicBoolean refreshRunning;
+  private final Collection<DataCache<?>> dataCaches;
 
   @Autowired
-  SimRailServerDtoConverter(
-    @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
-  ) {
-    this.serverDataCache = serverDataCache;
+  CacheRefreshListener(@NonNull Collection<DataCache<?>> dataCaches) {
+    this.dataCaches = dataCaches;
+    this.refreshRunning = new AtomicBoolean(false);
   }
 
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public @NonNull SimRailServerDto apply(@NonNull SimRailServerEntity server) {
-    var serverData = this.serverDataCache.findByPrimaryKey(server.getId().toString());
-    var serverIsOnline = serverData != null && serverData.getServerData().getOnline();
-    return new SimRailServerDto(
-      server.getId(),
-      server.getCode(),
-      server.getUtcOffsetHours(),
-      server.getRegion(),
-      server.getTags(),
-      server.getSpokenLanguage(),
-      server.getScenery(),
-      server.getUpdateTime(),
-      server.getRegisteredSince(),
-      serverIsOnline,
-      server.isDeleted());
+  public void connectionEvent(@NonNull Connection connection, @NonNull Events type) {
+    throw new AssertionError("deprecated method must not be called anymore!");
+  }
+
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void connectionEvent(
+    @NonNull Connection conn,
+    @NonNull Events type,
+    @NonNull Long time,
+    @Nullable String uriDetails
+  ) {
+    if (type == Events.RESUBSCRIBED) {
+      this.triggerCacheRefresh();
+    }
+  }
+
+  /**
+   * Triggers a cache refresh unless a refresh is currently in flight.
+   */
+  private void triggerCacheRefresh() {
+    if (!this.refreshRunning.compareAndSet(false, true)) {
+      return;
+    }
+
+    Thread.ofVirtual().start(() -> {
+      for (var cache : this.dataCaches) {
+        cache.pullCacheFromStorage();
+      }
+
+      this.refreshRunning.set(false);
+    });
   }
 }

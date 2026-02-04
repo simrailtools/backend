@@ -325,6 +325,24 @@ public final class DataCache<T extends MessageLite> {
   }
 
   /**
+   * Get the name of this cache.
+   *
+   * @return the name of this cache.
+   */
+  public @NonNull String getName() {
+    return this.name;
+  }
+
+  /**
+   * Get the message parser used for the primary cached data.
+   *
+   * @return the message parser used for the primary cached data.
+   */
+  public @NonNull Parser<T> getMessageParser() {
+    return this.messageParser;
+  }
+
+  /**
    * Get the bucket for the underlying store to store cached data in. This operation is very cheap.
    *
    * @param key the key of the storage bucket to get.

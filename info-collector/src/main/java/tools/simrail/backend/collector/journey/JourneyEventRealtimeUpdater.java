@@ -372,10 +372,10 @@ final class JourneyEventRealtimeUpdater {
           // scheduled or not. in case a stopover was scheduled, in might be partly skipped to gain
           // some time on delays again, so we need to check a bit more deeply
           case DEPARTURE -> switch (currentEvent.getStopType()) {
-            // if there is no stopover scheduled for the journey then the scheduled departure time
-            // is equal to the scheduled arrival time, which means we can just copy the realtime
-            // arrival time as well
-            case NONE -> lastEvent.getRealtimeTime();
+            // if there is no stopover scheduled for the journey then the journey just has to travel through
+            // the point. 30 seconds might be enough, some stations are big and require more time, but
+            // it should be a good middle ground for a prediction
+            case NONE -> lastEvent.getRealtimeTime().plusSeconds(30);
             // technical stops can be skipped entirely in case they are not needed. if the journey is
             // late we just expect the technical stop to be completely skippable. if no delay is remaining
             // after the stop we continue to use the scheduled time from here
