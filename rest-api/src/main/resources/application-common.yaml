@@ -49,6 +49,8 @@ springdoc:
     version: openapi_3_1
 
 management:
+  server:
+    port: 8085
   prometheus:
     metrics:
       export:

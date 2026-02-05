@@ -40,6 +40,7 @@ dependencies {
   implementation(libs.springDocOpenApi)
   implementation("org.postgresql:postgresql")
   implementation("com.github.ben-manes.caffeine:caffeine")
+  implementation("io.micrometer:micrometer-registry-prometheus")
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-cache")
