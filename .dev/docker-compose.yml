@@ -9,6 +9,7 @@ services:
     volumes:
       - "./volumes/postgres-data:/var/lib/postgresql"
     command: >
+      -c timezone=UTC
       -c max_connections=200
       -c synchronous_commit=off
       -c logging_collector=on
