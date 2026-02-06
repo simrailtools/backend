@@ -24,48 +24,48 @@
 
 CREATE TABLE sr_server
 (
-  id               UUID                        NOT NULL,
-  foreign_id       VARCHAR(24)                 NOT NULL,
-  update_time      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  registered_since TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  code             TEXT                        NOT NULL,
-  region           TEXT                        NOT NULL,
-  utc_offset_hours SMALLINT                    NOT NULL,
+  id               UUID                     NOT NULL,
+  foreign_id       VARCHAR(24)              NOT NULL,
+  update_time      TIMESTAMP WITH TIME ZONE NOT NULL,
+  registered_since TIMESTAMP WITH TIME ZONE NOT NULL,
+  code             TEXT                     NOT NULL,
+  region           TEXT                     NOT NULL,
+  utc_offset_hours SMALLINT                 NOT NULL,
   language         TEXT,
-  scenery          TEXT                        NOT NULL,
-  tags             JSONB                       NOT NULL,
-  deleted          BOOLEAN                     NOT NULL,
+  scenery          TEXT                     NOT NULL,
+  tags             JSONB                    NOT NULL,
+  deleted          BOOLEAN                  NOT NULL,
   CONSTRAINT pk_sr_server PRIMARY KEY (id),
   CONSTRAINT uk_sr_server_foreign_id UNIQUE (foreign_id)
 );
 
 CREATE TABLE sr_dispatch_post
 (
-  id               UUID                        NOT NULL,
-  point_id         UUID                        NOT NULL,
-  foreign_id       VARCHAR(24)                 NOT NULL,
-  server_id        UUID                        NOT NULL,
-  update_time      TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  registered_since TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  name             TEXT                        NOT NULL,
-  difficulty_level SMALLINT                    NOT NULL,
-  pos_latitude     DOUBLE PRECISION            NOT NULL,
-  pos_longitude    DOUBLE PRECISION            NOT NULL,
-  image_urls       JSONB                       NOT NULL,
-  deleted          BOOLEAN                     NOT NULL,
+  id               UUID                     NOT NULL,
+  point_id         UUID                     NOT NULL,
+  foreign_id       VARCHAR(24)              NOT NULL,
+  server_id        UUID                     NOT NULL,
+  update_time      TIMESTAMP WITH TIME ZONE NOT NULL,
+  registered_since TIMESTAMP WITH TIME ZONE NOT NULL,
+  name             TEXT                     NOT NULL,
+  difficulty_level SMALLINT                 NOT NULL,
+  pos_latitude     DOUBLE PRECISION         NOT NULL,
+  pos_longitude    DOUBLE PRECISION         NOT NULL,
+  image_urls       JSONB                    NOT NULL,
+  deleted          BOOLEAN                  NOT NULL,
   CONSTRAINT pk_sr_dispatch_post PRIMARY KEY (id),
   CONSTRAINT uk_sr_dispatch_post_server_foreign_id UNIQUE (server_id, foreign_id)
 );
 
 CREATE TABLE sit_journey
 (
-  id                      UUID                        NOT NULL,
-  foreign_run_id          UUID                        NOT NULL,
-  server_id               UUID                        NOT NULL,
-  update_time             TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  first_seen_time         TIMESTAMP WITHOUT TIME ZONE,
-  last_seen_time          TIMESTAMP WITHOUT TIME ZONE,
-  cancelled               BOOLEAN                     NOT NULL,
+  id                      UUID                     NOT NULL,
+  foreign_run_id          UUID                     NOT NULL,
+  server_id               UUID                     NOT NULL,
+  update_time             TIMESTAMP WITH TIME ZONE NOT NULL,
+  first_seen_time         TIMESTAMP WITH TIME ZONE,
+  last_seen_time          TIMESTAMP WITH TIME ZONE,
+  cancelled               BOOLEAN                  NOT NULL,
   continuation_journey_id UUID,
   CONSTRAINT pk_sit_journey PRIMARY KEY (id),
   CONSTRAINT uk_sit_journey_run_id UNIQUE (foreign_run_id)
@@ -76,7 +76,7 @@ CREATE TABLE sit_journey_event
   id                  UUID                        NOT NULL,
   journey_id          UUID                        NOT NULL,
   event_index         SMALLINT                    NOT NULL,
-  created_at          TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+  created_at          TIMESTAMP WITH TIME ZONE    NOT NULL,
   event_type          TEXT                        NOT NULL,
 
   point_id            UUID                        NOT NULL,
@@ -107,12 +107,12 @@ CREATE TABLE sit_journey_event
 
 CREATE TABLE sit_journey_vehicle_sequence
 (
-  id                   UUID                        NOT NULL,
-  journey_id           UUID                        NOT NULL,
-  sequence_resolve_key TEXT                        NOT NULL,
-  updated_at           TIMESTAMP WITHOUT TIME ZONE NOT NULL,
-  status               TEXT                        NOT NULL,
-  vehicles             JSONB                       NOT NULL,
+  id                   UUID                     NOT NULL,
+  journey_id           UUID                     NOT NULL,
+  sequence_resolve_key TEXT                     NOT NULL,
+  updated_at           TIMESTAMP WITH TIME ZONE NOT NULL,
+  status               TEXT                     NOT NULL,
+  vehicles             JSONB                    NOT NULL,
   CONSTRAINT pk_sit_journey_vehicle_sequence PRIMARY KEY (id),
   CONSTRAINT uk_sit_journey_vehicle_journey_id UNIQUE (journey_id)
 );
