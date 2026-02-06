@@ -255,7 +255,8 @@ public final class DataCache<T extends MessageLite> {
   public boolean removeByPrimaryKey(@NonNull String key) {
     var didRemove = this.removeLocallyByPrimaryKey(key);
     if (didRemove) {
-      var bucket = this.getBucket(key);
+      var primaryKey = this.generateFullKey(key, KEY_TYPE_PRIMARY);
+      var bucket = this.getBucket(primaryKey);
       bucket.deleteAsync();
     }
 
