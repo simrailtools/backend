@@ -190,7 +190,7 @@ class JourneyService {
     int offset = requestedLimit * indexedPage;
 
     // query and map the results
-    var transportTypeArray = transportTypes.toArray(JourneyTransportType[]::new);
+    var transportTypeArray = transportTypes.stream().map(Enum::name).toArray(String[]::new);
     var queriedItems = this.journeyRepository.findJourneySummariesByMatchingEvent(
       serverId,
       date,
@@ -236,7 +236,7 @@ class JourneyService {
     int offset = requestedLimit * indexedPage;
 
     // query and map the results
-    var transportTypeArray = transportTypes.toArray(JourneyTransportType[]::new);
+    var transportTypeArray = transportTypes.stream().map(Enum::name).toArray(String[]::new);
     var queriedItems = this.journeyRepository.findJourneySummariesByTimeAtPlayableBorderEnter(
       serverId,
       journeyCategory,
@@ -281,7 +281,7 @@ class JourneyService {
 
     // query and map the results
     var requiredRailcarArray = requiredRailcars.toArray(UUID[]::new);
-    var transportTypesArray = transportTypes.toArray(JourneyTransportType[]::new);
+    var transportTypesArray = transportTypes.stream().map(Enum::name).toArray(String[]::new);
     var queriedItems = this.journeyRepository.findJourneySummariesByRailcar(
       serverId,
       date,

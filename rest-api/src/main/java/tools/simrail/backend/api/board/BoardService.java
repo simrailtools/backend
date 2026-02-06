@@ -134,7 +134,7 @@ class BoardService {
     timeEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
 
     var parsedServerId = UUID.fromString(serverId);
-    var transportTypeArray = transportTypes.toArray(JourneyTransportType[]::new);
+    var transportTypeArray = transportTypes.stream().map(Enum::name).toArray(String[]::new);
     return new BoardRequestParameters(parsedServerId, point.getId(), timeStart, timeEnd, transportTypeArray);
   }
 

@@ -30,7 +30,6 @@ import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.journey.JourneyRepository;
-import tools.simrail.backend.common.journey.JourneyTransportType;
 
 public interface BoardJourneyRepository extends JourneyRepository {
 
@@ -127,7 +126,7 @@ public interface BoardJourneyRepository extends JourneyRepository {
     @Param("pointId") UUID pointId,
     @Param("spanStart") LocalDateTime timeSpanStart,
     @Param("spanEnd") LocalDateTime timeSpanEnd,
-    @Param("transportTypes") JourneyTransportType[] transportTypes
+    @Param("transportTypes") String[] transportTypes // enum type: JourneyTransportType
   );
 
   /**
@@ -223,6 +222,6 @@ public interface BoardJourneyRepository extends JourneyRepository {
     @Param("pointId") UUID pointId,
     @Param("spanStart") LocalDateTime timeSpanStart,
     @Param("spanEnd") LocalDateTime timeSpanEnd,
-    @Param("transportTypes") JourneyTransportType[] transportTypes
+    @Param("transportTypes") String[] transportTypes // enum type: JourneyTransportType
   );
 }

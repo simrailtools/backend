@@ -36,7 +36,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyRepository;
-import tools.simrail.backend.common.journey.JourneyTransportType;
 
 public interface ApiJourneyRepository extends JourneyRepository {
 
@@ -109,7 +108,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     @Param("line") String line,
     @Param("journeyNumber") String journeyNumber,
     @Param("journeyCategory") String journeyCategory,
-    @Param("transportTypes") JourneyTransportType[] transportTypes,
+    @Param("transportTypes") String[] transportTypes, // enum type: JourneyTransportType
     @Param("limit") int limit,
     @Param("offset") int offset
   );
@@ -212,7 +211,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
   List<JourneyWithEventSummaryProjection> findJourneySummariesByTimeAtPlayableBorderEnter(
     @Param("serverId") UUID serverId,
     @Param("journeyCategory") String journeyCategory,
-    @Param("transportTypes") JourneyTransportType[] transportTypes,
+    @Param("transportTypes") String[] transportTypes, // enum type: JourneyTransportType
     @Param("rangeStart") LocalDateTime rangeStart,
     @Param("rangeEnd") LocalDateTime rangeEnd,
     @Param("limit") int limit,
@@ -270,7 +269,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
     @Param("date") LocalDate date,
     @Param("railcarIds") UUID[] railcarIds,
     @Param("journeyCategory") String journeyCategory,
-    @Param("transportTypes") JourneyTransportType[] transportTypes,
+    @Param("transportTypes") String[] transportTypes, // enum type: JourneyTransportType
     @Param("limit") int limit,
     @Param("offset") int offset
   );

@@ -27,7 +27,6 @@ package tools.simrail.backend.api.board.request;
 import java.time.LocalDateTime;
 import java.util.UUID;
 import org.jspecify.annotations.NonNull;
-import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
  * Extracted and parsed request parameters for an arrival/departure board.
@@ -43,7 +42,7 @@ public record BoardRequestParameters(
   @NonNull UUID pointId,
   @NonNull LocalDateTime timeStart,
   @NonNull LocalDateTime timeEnd,
-  @NonNull JourneyTransportType[] transportTypes
+  @NonNull String[] transportTypes
 ) {
 
 }
