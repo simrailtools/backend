@@ -46,6 +46,4 @@ public record SimRailUserDto(
   @Nullable String location
 ) {
 
-  // https://avatars.steamstatic.com/fef49e7fa7e1997310d705b2a6158ff8dc1cdfeb_full.jpg
-  // https://xbox.com/play/user/derklaro7460
 }
