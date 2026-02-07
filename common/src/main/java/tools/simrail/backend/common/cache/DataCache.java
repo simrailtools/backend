@@ -344,6 +344,23 @@ public final class DataCache<T extends MessageLite> {
   }
 
   /**
+   * Get the count of the locally cached value mappings. This also includes values that are marked as removed.
+   *
+   * @return the count of the locally cached value mappings.
+   */
+  public int getLocalCacheSize() {
+    var cacheSize = this.localCache.size();
+    if (this.secondaryKeyExtractor != null) {
+      // if a secondary cache key can be extracted, each local values is associated twice.
+      // once using the primary key and once using the secondary key. so the actual cached
+      // values count is half of the cache size
+      cacheSize /= 2;
+    }
+
+    return cacheSize;
+  }
+
+  /**
    * Get the bucket for the underlying store to store cached data in. This operation is very cheap.
    *
    * @param key the key of the storage bucket to get.

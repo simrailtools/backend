@@ -22,34 +22,40 @@
  * SOFTWARE.
  */
 
-plugins {
-  alias(libs.plugins.protobuf)
-}
+package tools.simrail.backend.common.cache;
 
-dependencies {
-  implementation(libs.jts)
-  implementation(libs.nats)
-  implementation(libs.redisson)
-  implementation(libs.protobufJava)
-  implementation("io.micrometer:micrometer-core")
+import io.micrometer.core.instrument.Gauge;
+import io.micrometer.core.instrument.MeterRegistry;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.context.ApplicationListener;
+import org.springframework.stereotype.Component;
 
-  implementation("org.springframework.boot:spring-boot-starter-web")
-  implementation("org.springframework.boot:spring-boot-starter-data-jpa")
-  testImplementation("org.springframework.boot:spring-boot-starter-test")
+/**
+ * Configures a size metric gauge for each known data cache.
+ */
+@Component
+final class DataCacheMetricProcessor implements ApplicationListener<ApplicationReadyEvent> {
 
-  // include protobuf files from <project root>/.proto folder
-  protobuf(project.isolated.rootProject.projectDirectory.files(".proto"))
-}
+  private final MeterRegistry meterRegistry;
 
-protobuf {
-  protoc {
-    artifact = "com.google.protobuf:protoc:${libs.versions.protobufJava.get()}"
+  @Autowired
+  public DataCacheMetricProcessor(@NonNull MeterRegistry meterRegistry) {
+    this.meterRegistry = meterRegistry;
   }
-}
 
-tasks.withType<ProcessResources> {
-  from(project.isolated.rootProject.projectDirectory.dir(".data")) {
-    into("data")
-    include("*.json", "*.json5")
+  /**
+   * {@inheritDoc}
+   */
+  @Override
+  public void onApplicationEvent(@NonNull ApplicationReadyEvent event) {
+    var caches = event.getApplicationContext().getBeansOfType(DataCache.class);
+    for (var dataCache : caches.values()) {
+      Gauge.builder("data_cache_size_total", dataCache, DataCache::getLocalCacheSize)
+        .tag("cache_name", dataCache.getName())
+        .description("The total size of the data cache")
+        .register(this.meterRegistry);
+    }
   }
 }
