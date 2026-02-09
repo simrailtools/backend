@@ -88,7 +88,13 @@ final class SteamUserCacheLoader implements UserCacheLoader {
     var locationRaw = playerData.getMetadata().path("loccountrycode").stringValue(null);
     var location = StringUtils.hasLength(locationRaw) ? locationRaw : null;
     var profileUrl = STEAM_COMMUNITY_PROFILE_URL_PREFIX + playerData.getId();
-    var user = new SimRailUserDto(key, playerData.getUsername(), profileUrl, playerData.getAvatarUrl(), location);
+    var user = new SimRailUserDto(
+      key,
+      UserPlatform.STEAM,
+      playerData.getUsername(),
+      profileUrl,
+      playerData.getAvatarUrl(),
+      location);
     return Optional.of(user);
   }
 }

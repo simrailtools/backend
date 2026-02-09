@@ -91,7 +91,13 @@ final class XBoxUserCacheLoader implements UserCacheLoader {
     var locationRaw = playerData.getMetadata().path("location").stringValue(null);
     var location = StringUtils.hasLength(locationRaw) ? locationRaw : null;
     var profileUrl = XBOX_PROFILE_URL_PREFIX + playerData.getUsername();
-    var user = new SimRailUserDto(key, playerData.getUsername(), profileUrl, playerData.getAvatarUrl(), location);
+    var user = new SimRailUserDto(
+      key,
+      UserPlatform.XBOX,
+      playerData.getUsername(),
+      profileUrl,
+      playerData.getAvatarUrl(),
+      location);
     return Optional.of(user);
   }
 }

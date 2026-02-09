@@ -29,6 +29,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.URL;
 import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.api.shared.UserPlatform;
 
 /**
  * DTO for data about a single steam profile.
@@ -36,6 +37,8 @@ import org.jspecify.annotations.Nullable;
 public record SimRailUserDto(
   @Schema(description = "The id of the user")
   @NotNull String id,
+  @Schema(description = "The platform the user is playing on")
+  @NotNull UserPlatform platform,
   @Schema(description = "The name of the user")
   @NotNull @NotBlank String name,
   @Schema(description = "The url to the profile of the user")
