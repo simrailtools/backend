@@ -190,7 +190,7 @@ class JourneyV2Controller {
     summary = "Get all journeys that are currently active on a server",
     description = """
       Get descriptive information about all journeys that are currently active on a server. Data returned by this
-      endpoint updates every 15 seconds. This endpoint shouldn't be used to poll journey updates, use the event system
+      endpoint might update irregularly. This endpoint shouldn't be used to poll journey updates, use the event system
       SIT-Events instead.
       """,
     parameters = {

@@ -147,7 +147,7 @@ class DispatchPostV2Controller {
     @RequestParam(name = "pointId", required = false) @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "deleted", required = false) Boolean deleted,
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
-    @RequestParam(name = "limit", required = false) @Min(1) @Max(100) Integer limit
+    @RequestParam(name = "limit", required = false) @Min(1) @Max(250) Integer limit
   ) {
     var serverIdFilter = serverId == null ? null : java.util.UUID.fromString(serverId);
     var pointIdFilter = pointId == null ? null : java.util.UUID.fromString(pointId);

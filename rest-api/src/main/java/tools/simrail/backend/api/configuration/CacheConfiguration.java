@@ -77,19 +77,6 @@ class CacheConfiguration {
   }
 
   /**
-   * Cache for actives journeys (data expires after 15 seconds in the cache).
-   */
-  @Bean
-  public @NonNull Cache activeJourneyCache() {
-    return new CaffeineCache(
-      "active_journey_cache",
-      Caffeine.newBuilder()
-        .recordStats()
-        .expireAfterWrite(15, TimeUnit.SECONDS)
-        .build());
-  }
-
-  /**
    * Cache for journey search data (data expires after 5 minutes in the cache).
    */
   @Bean

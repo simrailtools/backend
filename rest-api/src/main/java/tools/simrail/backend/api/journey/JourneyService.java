@@ -124,7 +124,6 @@ class JourneyService {
    * @return all journeys that are currently active on the given server.
    */
   @Transactional(readOnly = true)
-  @Cacheable(cacheNames = "active_journey_cache", key = "'by_server_' + #serverId")
   public @NonNull Pair<Instant, List<JourneySummaryWithLiveDataDto>> findActiveJourneys(@NonNull String serverId) {
     var activeJourneyData = this.journeyCache.cachedValuesSnapshot()
       .stream()
