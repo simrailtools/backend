@@ -61,7 +61,6 @@ class SimRailServerService {
    * @param includeDeleted if deleted servers should be included in the returned list.
    * @return a list of all servers that are matching the given filter options.
    */
-  @Cacheable(cacheNames = "server_cache", key = "'list_' + #includeOffline + '_' + #includeDeleted")
   public @NonNull List<SimRailServerDto> listServers(boolean includeOffline, boolean includeDeleted) {
     return this.serverRepository.findAll().stream()
       .filter(server -> !server.isDeleted() || includeDeleted)

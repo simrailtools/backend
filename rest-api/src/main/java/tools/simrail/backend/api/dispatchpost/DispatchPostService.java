@@ -73,7 +73,6 @@ class DispatchPostService {
    * @param page       the page of items to return in the response.
    * @return a paginated response wrapper around the items that are matching the filter parameters.
    */
-  @Cacheable(cacheNames = "dispatch_post_cache")
   public @NonNull PaginatedResponseDto<DispatchPostInfoDto> find(
     @Nullable UUID serverId,
     @Nullable Integer difficulty,
