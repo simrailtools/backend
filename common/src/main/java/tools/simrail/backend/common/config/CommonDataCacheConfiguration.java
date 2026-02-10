@@ -86,7 +86,7 @@ public class CommonDataCacheConfiguration {
   public @NonNull DataCache<EventBusProto.ServerUpdateFrame> serverDataCache(@NonNull RedissonClient redisson) {
     return new DataCache<>(
       "server_data_cache",
-      Duration.ofMinutes(30),
+      Duration.ofHours(12),
       redisson,
       EventBusProto.ServerUpdateFrame.parser(),
       data -> data.getBaseData().getTimestamp(),
@@ -98,7 +98,7 @@ public class CommonDataCacheConfiguration {
   public @NonNull DataCache<EventBusProto.DispatchPostUpdateFrame> postDataCache(@NonNull RedissonClient redisson) {
     return new DataCache<>(
       "dispatch_post_cache",
-      Duration.ofMinutes(30),
+      Duration.ofHours(12),
       redisson,
       EventBusProto.DispatchPostUpdateFrame.parser(),
       data -> data.getBaseData().getTimestamp(),
