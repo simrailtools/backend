@@ -83,9 +83,8 @@ public final class PlayerDBApiClientTest {
   void testInvalidXBoxId() {
     var client = PlayerDbApiClient.create(TEST_USER_AGENT);
     var response = Assertions.assertDoesNotThrow(() -> client.getXboxPlayer("2535467890123456"));
-    Assertions.assertEquals(PlayerDbResponseWrapper.RESPONSE_CODE_XBOX_BAD_RESPONSE_CODE, response.getCode());
+    Assertions.assertEquals(PlayerDbResponseWrapper.RESPONSE_CODE_XBOX_NOT_FOUND, response.getCode());
     Assertions.assertNotNull(response.getData());
     Assertions.assertNull(response.getData().player());
-    Assertions.assertEquals(400, response.getData().status());
   }
 }

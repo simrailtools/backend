@@ -24,12 +24,10 @@
 
 package tools.simrail.backend.api.user.loader;
 
-import java.util.Objects;
 import java.util.Optional;
 import java.util.regex.Pattern;
 import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import tools.simrail.backend.api.shared.UserPlatform;
@@ -78,8 +76,7 @@ final class XBoxUserCacheLoader implements UserCacheLoader {
     var responseCode = response.getCode();
     if (!responseCode.equals(PlayerDbResponseWrapper.RESPONSE_CODE_SUCCESS)) {
       // we already validated the id, so the only reason to get an "invalid id" response is that the user does not exist
-      var doesNotExist = responseCode.equals(PlayerDbResponseWrapper.RESPONSE_CODE_XBOX_BAD_RESPONSE_CODE)
-        && Objects.equals(response.getData().status(), HttpStatus.BAD_REQUEST.value());
+      var doesNotExist = responseCode.equals(PlayerDbResponseWrapper.RESPONSE_CODE_XBOX_NOT_FOUND);
       if (doesNotExist) {
         return Optional.empty();
       }

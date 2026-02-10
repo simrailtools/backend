@@ -41,7 +41,7 @@ final class DataCacheMetricProcessor implements ApplicationListener<ApplicationR
   private final MeterRegistry meterRegistry;
 
   @Autowired
-  public DataCacheMetricProcessor(@NonNull MeterRegistry meterRegistry) {
+  DataCacheMetricProcessor(@NonNull MeterRegistry meterRegistry) {
     this.meterRegistry = meterRegistry;
   }
 
