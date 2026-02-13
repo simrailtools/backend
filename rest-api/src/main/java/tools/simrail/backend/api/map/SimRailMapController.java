@@ -103,7 +103,7 @@ class SimRailMapController {
             schema = @Schema(implementation = MapJourneyRouteDto.class)),
           @Content(
             mediaType = "application/geo+json",
-            schema = @Schema(hidden = true)),
+            schema = @Schema(types = "string")),
         }),
       @ApiResponse(
         responseCode = "400",
