@@ -363,9 +363,14 @@ final class JourneyEventRealtimeUpdater {
         var currentEvent = events.get(index);
         var predictedTime = switch (currentEvent.getEventType()) {
           // at arrival events we can just add the scheduled driving time from the last departure
-          // event to the current event to the realtime departure time of the last event
+          // event to the current event to the realtime departure time of the last event. given that
+          // our station boundaries are bigger than anticipated by the timetable, therefore we optionally
+          // remove 30 seconds from the driving time, if it still results in a positive driving time
+          // between the last and current event.
           case ARRIVAL -> {
-            var scheduledDrive = Duration.between(lastEvent.getScheduledTime(), currentEvent.getScheduledTime());
+            var scheduledDriveTime = Duration.between(lastEvent.getScheduledTime(), currentEvent.getScheduledTime());
+            var reducedDriveTime = scheduledDriveTime.minusSeconds(30);
+            var scheduledDrive = reducedDriveTime.isPositive() ? reducedDriveTime : scheduledDriveTime;
             yield lastEvent.getRealtimeTime().plus(scheduledDrive);
           }
           // departure events have a different time than arrival events, depending on if a stopover was
