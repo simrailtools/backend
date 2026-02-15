@@ -12,19 +12,5 @@
         "name": "container liveness check"
       }
     ]
-  },
-  "env": {
-    "SPRING_DATASOURCE_URL": {
-      "required": true,
-      "description": "The datasource url"
-    },
-    "SPRING_DATASOURCE_USERNAME": {
-      "required": true,
-      "description": "The datasource username"
-    },
-    "SPRING_DATASOURCE_PASSWORD": {
-      "required": true,
-      "description": "The datasource password"
-    }
   }
 }
