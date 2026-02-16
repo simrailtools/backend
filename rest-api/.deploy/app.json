@@ -10,12 +10,14 @@
         "attempts": 20,
         "initialDelay": 5,
         "type": "startup",
+        "port": 8085,
         "path": "/admin/health",
         "name": "container startup check"
       },
       {
         "wait": 5,
         "type": "liveness",
+        "port": 8085,
         "path": "/admin/health",
         "name": "container liveness check"
       }
