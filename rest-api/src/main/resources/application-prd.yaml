@@ -8,7 +8,7 @@ management:
       discovery:
         enabled: false
       exposure:
-        include: 'health'
+        include: 'health,prometheus'
   endpoint:
     health:
       access: read_only
