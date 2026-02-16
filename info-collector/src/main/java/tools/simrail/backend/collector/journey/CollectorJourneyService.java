@@ -24,6 +24,8 @@
 
 package tools.simrail.backend.collector.journey;
 
+import jakarta.persistence.EntityManager;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
@@ -34,9 +36,9 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionTemplate;
 import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.journey.JourneyEntity;
-import tools.simrail.backend.common.journey.JourneyEventRepository;
 import tools.simrail.backend.common.proto.CacheProto;
 import tools.simrail.backend.common.util.ObjectChecksumGenerator;
 
@@ -49,24 +51,27 @@ class CollectorJourneyService {
   private static final int JOURNEY_INSERT_BATCH_SIZE = 100;
 
   private final JdbcTemplate jdbcTemplate;
+  private final EntityManager entityManager;
+  private final TransactionTemplate transactionTemplate;
+
   private final CollectorJourneyRepository journeyRepository;
-  private final JourneyEventRepository journeyEventRepository;
   private final DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache;
 
   @Autowired
   CollectorJourneyService(
     @NonNull JdbcTemplate jdbcTemplate,
+    @NonNull EntityManager entityManager,
+    @NonNull TransactionTemplate transactionTemplate,
     @NonNull CollectorJourneyRepository journeyRepository,
-    @NonNull JourneyEventRepository journeyEventRepository,
     @NonNull @Qualifier("journey_checksum_cache") DataCache<CacheProto.JourneyChecksumData> journeyChecksumCache
   ) {
     this.jdbcTemplate = jdbcTemplate;
+    this.entityManager = entityManager;
+    this.transactionTemplate = transactionTemplate;
     this.journeyRepository = journeyRepository;
-    this.journeyEventRepository = journeyEventRepository;
     this.journeyChecksumCache = journeyChecksumCache;
   }
 
-  @Transactional
   @SuppressWarnings("DataFlowIssue") // just for IJ to shut up
   public void persistScheduledUpdatedJourneys(@NonNull Collection<JourneyEntity> journeys) {
     var relevantJourneys = journeys.stream()
@@ -90,25 +95,41 @@ class CollectorJourneyService {
       var endIdx = Math.min(startIdx + JOURNEY_INSERT_BATCH_SIZE, relevantJourneys.size());
       var journeyBatch = relevantJourneys.subList(startIdx, endIdx);
 
-      // delete all the journeys from the database which did not spawn yet
-      var batchRunIds = journeyBatch.stream().map(entry -> entry.getKey().getForeignRunId()).toList();
-      this.journeyRepository.deleteUnstartedJourneysByRunIds(batchRunIds);
+      var journeyChecksums = this.transactionTemplate.execute(_ -> {
+        // delete all the journeys from the database which did not spawn yet
+        var batchRunIds = journeyBatch.stream().map(entry -> entry.getKey().getForeignRunId()).toList();
+        this.journeyRepository.deleteUnstartedJourneysByRunIds(batchRunIds);
 
-      // re-store all journeys into the db that either do not exist or did not spawn yet
-      var updatableRunIds = this.journeyRepository.findMissingRunIds(batchRunIds.toArray(UUID[]::new));
-      for (var journeyEntry : journeyBatch) {
-        var journey = journeyEntry.getKey();
-        var journeyChecksum = journeyEntry.getValue();
-        if (updatableRunIds.contains(journey.getForeignRunId())) {
-          this.journeyRepository.save(journey);
-          this.journeyEventRepository.saveAll(journey.getEvents());
+        // re-store all journeys into the db that either do not exist or did not spawn yet
+        var storedJourneyChecksums = new ArrayList<CacheProto.JourneyChecksumData>();
+        var updatableRunIds = this.journeyRepository.findMissingRunIds(batchRunIds.toArray(UUID[]::new));
+        for (var journeyEntry : journeyBatch) {
+          var journey = journeyEntry.getKey();
+          var journeyChecksum = journeyEntry.getValue();
+          if (updatableRunIds.contains(journey.getForeignRunId())) {
+            // persist the journey and all it's associated events
+            this.entityManager.persist(journey);
+            journey.getEvents().forEach(this.entityManager::persist);
 
-          var checksumData = CacheProto.JourneyChecksumData.newBuilder()
-            .setChecksum(journeyChecksum)
-            .setForeignRunId(journey.getForeignRunId().toString())
-            .build();
-          this.journeyChecksumCache.setCachedValue(checksumData);
+            // flush & clear the persistence context (otherwise it becomes too big)
+            this.entityManager.flush();
+            this.entityManager.clear();
+
+            // add the new journey checksum for storing after the transaction was commited
+            var checksumData = CacheProto.JourneyChecksumData.newBuilder()
+              .setChecksum(journeyChecksum)
+              .setForeignRunId(journey.getForeignRunId().toString())
+              .build();
+            storedJourneyChecksums.add(checksumData);
+          }
         }
+
+        return storedJourneyChecksums;
+      });
+
+      // store the checksums of the journeys that were actually updated
+      for (var checksumData : journeyChecksums) {
+        this.journeyChecksumCache.setCachedValue(checksumData);
       }
     }
   }
