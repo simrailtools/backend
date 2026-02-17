@@ -1,5 +1,4 @@
 name: "CodeQL"
-
 on:
   push:
     branches: [ "main" ]
@@ -18,10 +17,8 @@ permissions:
 
 jobs:
   analyze:
-    name: Analyze
     runs-on: ubuntu-latest
     if: ${{ !startsWith(github.ref, 'refs/heads/renovate/') }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6

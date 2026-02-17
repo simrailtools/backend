@@ -21,7 +21,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Rest API
     if: ${{ github.event.inputs.api == 'true' }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
@@ -40,7 +39,6 @@ jobs:
     runs-on: ubuntu-latest
     name: Deploy Data Collector
     if: ${{ github.event.inputs.collector == 'true' }}
-
     steps:
       - name: Checkout repository
         uses: actions/checkout@v6
