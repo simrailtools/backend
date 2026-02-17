@@ -28,6 +28,8 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import feign.ExceptionPropagationPolicy;
 import feign.Feign;
 import feign.Logger;
+import feign.jackson3.Jackson3Decoder;
+import feign.jackson3.Jackson3Encoder;
 import feign.slf4j.Slf4jLogger;
 import java.util.Set;
 import org.jspecify.annotations.NonNull;
@@ -41,8 +43,6 @@ import tools.simrail.backend.external.feign.ExceptionHandlingRetryer;
 import tools.simrail.backend.external.feign.FeignJava11Client;
 import tools.simrail.backend.external.feign.FeignJsonResponseTupleDecoder;
 import tools.simrail.backend.external.feign.FeignResponseInterceptor;
-import tools.simrail.backend.external.feign.jackson.Jackson3Decoder;
-import tools.simrail.backend.external.feign.jackson.Jackson3Encoder;
 
 public final class FeignClientProvider {
 

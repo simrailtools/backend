@@ -10,7 +10,7 @@ springDependencyManagement = "1.1.7"
 # direct dependencies
 jts = "1.20.0"
 nats = "2.25.1"
-feign = "13.6"
+feign = "13.8"
 jackson = "3.0.4"
 lombok = "1.18.42"
 jspecify = "1.0.0"
@@ -30,6 +30,7 @@ jacksonCore = { group = "tools.jackson.core", name = "jackson-databind", version
 
 # feign
 feignCore = { group = "io.github.openfeign", name = "feign-core", version.ref = "feign" }
+feignJackson3 = { group = "io.github.openfeign", name = "feign-jackson3", version.ref = "feign" }
 feignLoggingSlf4j = { group = "io.github.openfeign", name = "feign-slf4j", version.ref = "feign" }
 feignClientJava11 = { group = "io.github.openfeign", name = "feign-java11", version.ref = "feign" }
 
