@@ -78,6 +78,7 @@ subprojects {
   }
 
   tasks.withType<JavaCompile> {
+    // Hint for the CodeQL autobuilder: sourceCompatibility = 25
     sourceCompatibility = JavaVersion.VERSION_25.toString()
     targetCompatibility = JavaVersion.VERSION_25.toString()
 

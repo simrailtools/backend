@@ -39,10 +39,6 @@ jobs:
           cache-read-only: true
           add-job-summary: always
 
-      - name: Remove toolchains file
-        run: |
-          rm ~/.m2/toolchains.xml
-
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
         with:
