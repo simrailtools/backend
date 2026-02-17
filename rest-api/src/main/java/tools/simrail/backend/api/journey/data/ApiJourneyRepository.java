@@ -87,8 +87,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
     WITH e AS (
       SELECT je.journey_id, min(je.scheduled_time) AS scheduled_time
       FROM sit_journey_event je
-      WHERE je.scheduled_time >= :date::date
-        AND je.scheduled_time < (:date::date + 1)
+      WHERE je.scheduled_time >= CAST(:date AS date)
+        AND je.scheduled_time < (CAST(:date AS date) + 1)
         AND (:line IS NULL OR je.transport_line = :line)
         AND (:journeyNumber IS NULL OR je.transport_number = :journeyNumber)
         AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
@@ -135,8 +135,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
           FROM sit_journey_event je
           WHERE je.journey_id = j.id
             AND je.transport_type = ANY(:transportTypes)
-            AND je.scheduled_time >= :rangeStart::timestamp
-            AND je.scheduled_time < :rangeEnd::timestamp
+            AND je.scheduled_time >= CAST(:rangeStart AS timestamp)
+            AND je.scheduled_time < CAST(:rangeEnd AS timestamp)
             AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
         )
     ),
@@ -149,8 +149,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
         je.point_id,
         je.cancelled
       FROM sit_journey_event je JOIN journeys_in_range jr ON jr.journey_id = je.journey_id
-      WHERE je.scheduled_time >= :rangeStart::timestamp
-        AND je.scheduled_time < :rangeEnd::timestamp
+      WHERE je.scheduled_time >= CAST(:rangeStart AS timestamp)
+        AND je.scheduled_time < CAST(:rangeEnd AS timestamp)
         AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
         AND je.transport_type = ANY(:transportTypes)
     ),
@@ -167,7 +167,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
           je.cancelled
         FROM sit_journey_event je
         WHERE je.journey_id = jr.journey_id
-          AND je.scheduled_time < :rangeStart::timestamp
+          AND je.scheduled_time < CAST(:rangeStart AS timestamp)
           AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
           AND je.transport_type = ANY(:transportTypes)
         ORDER BY je.scheduled_time DESC, je.event_index DESC
@@ -200,8 +200,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
       w.cancelled AS event_cancelled
     FROM w JOIN sit_journey j ON j.id = w.journey_id
     WHERE j.server_id = :serverId
-      AND w.scheduled_time >= :rangeStart::timestamp
-      AND w.scheduled_time < :rangeEnd::timestamp
+      AND w.scheduled_time >= CAST(:rangeStart AS timestamp)
+      AND w.scheduled_time < CAST(:rangeEnd AS timestamp)
       AND w.in_playable_border = TRUE
       AND COALESCE(w.prev_in_playable_border, FALSE) = FALSE
     ORDER BY w.scheduled_time, w.journey_id, w.event_index
@@ -233,7 +233,7 @@ public interface ApiJourneyRepository extends JourneyRepository {
   @Query(value = """
     WITH required AS (
       SELECT jsonb_agg(jsonb_build_object('railcarId', v::text)) AS vehicles
-      FROM (SELECT DISTINCT v FROM unnest(:railcarIds::uuid[]) u(v)) d
+      FROM (SELECT DISTINCT v FROM unnest(CAST(:railcarIds AS uuid[])) u(v)) d
     ),
     js AS (
       SELECT id, server_id, first_seen_time, last_seen_time, cancelled
@@ -253,8 +253,8 @@ public interface ApiJourneyRepository extends JourneyRepository {
       SELECT je.scheduled_time
       FROM sit_journey_event je
       WHERE je.journey_id = js.id
-        AND je.scheduled_time >= :date::date
-        AND je.scheduled_time < (:date::date + 1)
+        AND je.scheduled_time >= CAST(:date AS date)
+        AND je.scheduled_time < (CAST(:date AS date) + 1)
         AND (:journeyCategory IS NULL OR je.transport_category = :journeyCategory)
         AND je.transport_type = ANY(:transportTypes)
       ORDER BY je.scheduled_time, je.event_index
