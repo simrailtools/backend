@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,27 @@
 
 package tools.simrail.backend.external.util;
 
-import com.fasterxml.jackson.databind.node.ObjectNode;
 import java.util.HashSet;
 import java.util.Set;
 import org.junit.jupiter.api.Assertions;
+import tools.jackson.databind.node.ObjectNode;
 
 public final class JsonFieldValidator {
 
+  private JsonFieldValidator() {
+    throw new UnsupportedOperationException();
+  }
+
   public static void assertContainsAllKeys(ObjectNode node, Set<String> keyNames) {
-    var fieldNames = node.fieldNames();
+    var fieldNames = node.propertyNames();
     var expectedFieldNames = new HashSet<>(keyNames);
-    while (fieldNames.hasNext()) {
-      var fieldName = fieldNames.next();
+    for (var fieldName : fieldNames) {
       if (!expectedFieldNames.remove(fieldName)) {
-        // unknown field found
         Assertions.fail("Found unknown field " + fieldName + " in object");
       }
     }
 
     if (!expectedFieldNames.isEmpty()) {
-      // a field has been removed
       Assertions.fail("Detected removed fields: " + String.join(", ", expectedFieldNames));
     }
   }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package tools.simrail.backend.common.server;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Primary;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.ListCrudRepository;
@@ -46,8 +46,8 @@ public interface SimRailServerRepository extends ListCrudRepository<SimRailServe
    * @param code the code of the server to get.
    * @return an optional holding the server entity if an entity with the given code exists.
    */
-  @Nonnull
-  Optional<SimRailServerEntity> findByCode(@Nonnull String code);
+  @NonNull
+  Optional<SimRailServerEntity> findByCode(@NonNull String code);
 
   /**
    * Finds a single SimRail server by the given foreign id.
@@ -55,8 +55,8 @@ public interface SimRailServerRepository extends ListCrudRepository<SimRailServe
    * @param foreignId the foreign id of the server to get.
    * @return an optional holding the server entity if an entity with the given foreign id exists.
    */
-  @Nonnull
-  Optional<SimRailServerEntity> findByForeignId(@Nonnull String foreignId);
+  @NonNull
+  Optional<SimRailServerEntity> findByForeignId(@NonNull String foreignId);
 
   /**
    * Finds all server whose id is not in the given id collection and is not deleted.
@@ -64,7 +64,7 @@ public interface SimRailServerRepository extends ListCrudRepository<SimRailServe
    * @param ids the ids of the servers which shouldn't be returned.
    * @return all servers whose id is not in the given collection and not marked as deleted.
    */
-  @Nonnull
+  @NonNull
   @Query("SELECT s FROM sr_server s WHERE s.id NOT IN :ids AND s.deleted IS false")
-  List<SimRailServerEntity> findAllByIdNotInAndNotDeleted(@Nonnull @Param("ids") Collection<UUID> ids);
+  List<SimRailServerEntity> findAllByIdNotInAndNotDeleted(@NonNull @Param("ids") Collection<UUID> ids);
 }

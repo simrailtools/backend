@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,17 +26,14 @@ package tools.simrail.backend.external.brouter;
 
 import feign.QueryMap;
 import feign.RequestLine;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 public interface BRouterApiClient {
 
-  @Contract("-> new")
-  static @NotNull BRouterApiClient create() {
-    return FeignClientProvider.prepareFeignInstance()
-      .target(BRouterApiClient.class, "https://brouter.de");
+  static @NonNull BRouterApiClient create(@NonNull String baseUrl) {
+    return FeignClientProvider.prepareFeignInstance().target(BRouterApiClient.class, baseUrl);
   }
 
   /**

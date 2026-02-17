@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,40 +26,37 @@ package tools.simrail.backend.collector.journey;
 
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.List;
-import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.collector.metric.PerServerGauge;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
+import tools.simrail.backend.collector.util.PerServerGauge;
 import tools.simrail.backend.common.border.MapBorderPointProvider;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
 import tools.simrail.backend.common.journey.JourneyEventType;
 import tools.simrail.backend.common.journey.JourneyPassengerStopInfo;
-import tools.simrail.backend.common.journey.JourneyStopDescriptor;
 import tools.simrail.backend.common.journey.JourneyStopType;
 import tools.simrail.backend.common.journey.JourneyTimeType;
 import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.journey.JourneyTransportType;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 import tools.simrail.backend.common.util.RomanNumberConverter;
-import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTimetableEntry;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
@@ -69,10 +66,8 @@ class SimRailServerTimetableCollector {
 
   private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
 
-  private final UuidV5Factory journeyIdFactory;
-  private final UuidV5Factory journeyEventIdFactory;
-
   private final SimRailAwsApiClient awsApiClient;
+  private final JourneyIdService journeyIdService;
   private final SimRailPointProvider pointProvider;
   private final SimRailServerService serverService;
   private final CollectorJourneyService journeyService;
@@ -82,23 +77,22 @@ class SimRailServerTimetableCollector {
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
   @Autowired
-  public SimRailServerTimetableCollector(
-    @Nonnull SimRailAwsApiClient awsApiClient,
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorJourneyService journeyService,
-    @Nonnull MapBorderPointProvider borderPointProvider,
-    @Nonnull @Qualifier("timetable_collected_runs_total") PerServerGauge collectedJourneyCounter,
-    @Nonnull @Qualifier("timetable_run_collect_duration") Meter.MeterProvider<Timer> collectionDurationTimer
+  SimRailServerTimetableCollector(
+    @NonNull SimRailAwsApiClient awsApiClient,
+    @NonNull JourneyIdService journeyIdService,
+    @NonNull SimRailPointProvider pointProvider,
+    @NonNull SimRailServerService serverService,
+    @NonNull CollectorJourneyService journeyService,
+    @NonNull MapBorderPointProvider borderPointProvider,
+    @NonNull @Qualifier("timetable_collected_runs_total") PerServerGauge collectedJourneyCounter,
+    @Qualifier("timetable_run_collect_duration") Meter.@NonNull MeterProvider<Timer> collectionDurationTimer
   ) {
     this.awsApiClient = awsApiClient;
+    this.journeyIdService = journeyIdService;
     this.pointProvider = pointProvider;
     this.serverService = serverService;
     this.journeyService = journeyService;
     this.borderPointProvider = borderPointProvider;
-
-    this.journeyIdFactory = new UuidV5Factory(JourneyEntity.ID_NAMESPACE);
-    this.journeyEventIdFactory = new UuidV5Factory(JourneyEventEntity.ID_NAMESPACE);
 
     this.collectedJourneyCounter = collectedJourneyCounter;
     this.collectionDurationTimer = collectionDurationTimer;
@@ -116,25 +110,11 @@ class SimRailServerTimetableCollector {
       // get the trains running on the server and their associated run ids
       var span = Timer.start();
       var trainRuns = this.awsApiClient.getTrainRuns(server.code());
-      var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
-
-      // collect the scheduled journeys based on the timetable information
-      var existingJourneys = this.journeyService.retrieveJourneysByRunIds(runIds)
-        .stream()
-        .collect(Collectors.toMap(JourneyEntity::getId, Function.identity()));
-      var existingRuns = existingJourneys.values()
-        .stream()
-        .collect(Collectors.toMap(JourneyEntity::getForeignRunId, Function.identity()));
-      var existingEvents = this.journeyService.retrieveInactiveJourneyEventsOfServerByRunIds(server.id(), runIds)
-        .stream()
-        .collect(Collectors.groupingBy(JourneyEventEntity::getJourneyId, Collectors.collectingAndThen(
-          Collectors.toList(),
-          events -> {
-            events.sort(Comparator.comparingInt(JourneyEventEntity::getEventIndex));
-            return events;
-          }
-        )));
-      trainRuns.forEach(run -> this.collectJourney(server, run, existingRuns, existingJourneys, existingEvents));
+      var journeysInTimetable = trainRuns.stream()
+        .map(run -> this.collectJourney(server, run))
+        .filter(Objects::nonNull)
+        .toList();
+      this.journeyService.persistScheduledUpdatedJourneys(journeysInTimetable);
 
       // print information about the collection run
       this.collectedJourneyCounter.setValue(server, trainRuns.size());
@@ -142,37 +122,23 @@ class SimRailServerTimetableCollector {
     }
   }
 
-  private void collectJourney(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull SimRailAwsTrainRun run,
-    @Nonnull Map<UUID, JourneyEntity> existingRuns,
-    @Nonnull Map<UUID, JourneyEntity> existingJourneys,
-    @Nonnull Map<UUID, List<JourneyEventEntity>> existingJourneyEvents
-  ) {
-    // generate the identifier for the journey & find the journey if it was already registered
-    var runId = run.getRunId();
-    var trainNumber = run.getTrainNumber();
-    var journeyId = this.journeyIdFactory.create(trainNumber + runId + server.id());
-    var journey = existingJourneys.get(journeyId);
-    if (journey == null) {
-      var existingRun = existingRuns.get(runId);
-      if (existingRun != null) {
-        // another journey was already recorded with a different journey id,
-        // remove the old journey in favor of the new journey
-        //noinspection DataFlowIssue - id won't be null in this case
-        this.journeyService.wipeJourney(existingRun.getId());
-      }
-
-      journey = new JourneyEntity();
-      journey.setNew(true);
-      journey.setId(journeyId);
-      journey.setForeignRunId(runId);
-      journey.setServerId(server.id());
-      this.journeyService.persistJourney(journey);
-    } else if (journey.getFirstSeenTime() != null) {
-      // don't update the timetable of a journey that is already active
-      return;
+  @Nullable
+  private JourneyEntity collectJourney(@NonNull SimRailServerDescriptor server, @NonNull SimRailAwsTrainRun run) {
+    // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
+    var originalTimetable = run.getTimetable();
+    if (originalTimetable.isEmpty()) {
+      return null;
     }
+
+    var runId = run.getRunId();
+    var journeyId = this.journeyIdService.generateJourneyId(server.id(), runId);
+
+    // construct the base journey data
+    var journey = new JourneyEntity();
+    journey.setNew(true);
+    journey.setId(journeyId);
+    journey.setForeignRunId(runId);
+    journey.setServerId(server.id());
 
     // extract the line information from the display name of the train
     var cleanedTrainName = WHITESPACE_PATTERN.matcher(run.getTrainDisplayName()).replaceAll("");
@@ -186,14 +152,8 @@ class SimRailServerTimetableCollector {
       .skip(1) // skip the first entry as it is always the train category
       .filter(part -> part.startsWith("\"") && part.endsWith("\""))
       .findFirst()
-      .map(label -> label.substring(1, label.length() - 1))
+      .map(label -> label.replace("\"", "")) // to fix labels such as '\"Zdeněk\"\"'
       .orElse(null);
-
-    // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
-    var originalTimetable = run.getTimetable();
-    if (originalTimetable.isEmpty()) {
-      return;
-    }
 
     // create events for all timetable entries
     var inBorder = false; // keeps track if the journey is within the playable border
@@ -243,44 +203,47 @@ class SimRailServerTimetableCollector {
 
       // construct the arrival event for the entry, if the event is not the first along the route
       if (index != 0) {
-        previousEvent = this.registerJourneyEvent(
-          journeyId,
+        var prev = previousEvent;
+        previousEvent = this.createAndRegisterJourneyEvent(
+          journey,
           trainLine,
           trainLabel,
-          server,
           JourneyEventType.ARRIVAL,
           previousEvent,
           timetableEntry,
-          events,
-          inBorder);
+          events);
+        if (previousEvent != null && prev != previousEvent) {
+          previousEvent.setInPlayableBorder(inBorder);
+        }
       }
 
       // construct the departure event for the entry, if the event is not the last along the route
       if (index != lastTimetableIndex) {
-        previousEvent = this.registerJourneyEvent(
-          journeyId,
+        var prev = previousEvent;
+        previousEvent = this.createAndRegisterJourneyEvent(
+          journey,
           trainLine,
           trainLabel,
-          server,
           JourneyEventType.DEPARTURE,
           previousEvent,
           timetableEntry,
-          events,
-          inBorder);
+          events);
+        if (previousEvent != null && prev != previousEvent) {
+          previousEvent.setInPlayableBorder(inBorder);
+        }
       }
 
       if (events.size() > 1 && previousEvent != null && previousEvent.getEventType() == JourneyEventType.DEPARTURE) {
-        // ensure that events with a scheduled overlay (arrival time != departure time)
-        // have a technical or passenger stop scheduled - for some reason that's not directly
-        // done in the train timetables even tho the time for stopping is planned
         var arrivalEvent = events.get(events.size() - 2);
-        var hasOverlay = !previousEvent.getScheduledTime().isEqual(arrivalEvent.getScheduledTime());
-        if (previousEvent.getStopType() == JourneyStopType.NONE && hasOverlay) {
+        var overlayDuration = Duration.between(arrivalEvent.getScheduledTime(), previousEvent.getScheduledTime())
+          .abs()
+          .truncatedTo(ChronoUnit.SECONDS);
+        if (previousEvent.getStopType() == JourneyStopType.NONE && overlayDuration.toMinutes() >= 5) {
+          // add a technical stop for the journey at the event, the journey stays at
+          // the point for at least 5 minutes, this should be some stop, not a drive-trough
           arrivalEvent.setStopType(JourneyStopType.TECHNICAL);
           previousEvent.setStopType(JourneyStopType.TECHNICAL);
-        }
-
-        if (previousEvent.getStopType() == JourneyStopType.PASSENGER && !hasOverlay) {
+        } else if (previousEvent.getStopType() == JourneyStopType.PASSENGER && overlayDuration.isZero()) {
           // if the journey has a passenger stop scheduled but no overlay set for
           // the station, schedule an overlay of 30 seconds for the stations to allow
           // for passenger change. apparently the SimRail backend can currently not
@@ -290,7 +253,7 @@ class SimRailServerTimetableCollector {
           var timeWithOverlay = scheduledTime.plusSeconds(30);
           previousEvent.setScheduledTime(timeWithOverlay);
           previousEvent.setRealtimeTime(timeWithOverlay);
-        } else if (!hasOverlay) {
+        } else if (overlayDuration.isZero()) {
           // remove the stop type at the point in case there is no overlay time
           // scheduled for the journey (basically a stop without a stop)
           arrivalEvent.setStopType(JourneyStopType.NONE);
@@ -357,34 +320,23 @@ class SimRailServerTimetableCollector {
       }
     }
 
-    // update the events associated with the journey if they changed
-    var existingEvents = existingJourneyEvents.get(journeyId);
-    if (this.eventsNeedUpdate(existingEvents, events)) {
-      this.journeyService.forcePersistJourneyEvents(server.id(), journeyId, events);
-    }
+    // copy the events into the journey
+    var movedEvents = new LinkedHashSet<>(events);
+    journey.setEvents(movedEvents);
+    return journey;
   }
 
-  private @Nullable JourneyEventEntity registerJourneyEvent(
-    @Nonnull UUID journeyId,
+  private @Nullable JourneyEventEntity createAndRegisterJourneyEvent(
+    @NonNull JourneyEntity journey,
     @Nullable String trainLine,
     @Nullable String trainLabel,
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull JourneyEventType eventType,
+    @NonNull JourneyEventType eventType,
     @Nullable JourneyEventEntity previousEvent,
-    @Nonnull SimRailAwsTimetableEntry timetableEntry,
-    @Nonnull List<JourneyEventEntity> journeyEvents,
-    boolean inMapBorder
+    @NonNull SimRailAwsTimetableEntry timetableEntry,
+    @NonNull List<JourneyEventEntity> journeyEvents
   ) {
     var previousTime = previousEvent == null ? null : previousEvent.getScheduledTime();
-    var event = this.createJourneyEvent(
-      journeyId,
-      trainLine,
-      trainLabel,
-      server,
-      eventType,
-      previousTime,
-      timetableEntry,
-      inMapBorder);
+    var event = this.createJourneyEvent(journey, trainLine, trainLabel, eventType, previousTime, timetableEntry);
     if (event != null) {
       journeyEvents.add(event);
       return event;
@@ -394,14 +346,12 @@ class SimRailServerTimetableCollector {
   }
 
   private @Nullable JourneyEventEntity createJourneyEvent(
-    @Nonnull UUID journeyId,
+    @NonNull JourneyEntity journey,
     @Nullable String trainLine,
     @Nullable String trainLabel,
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull JourneyEventType eventType,
-    @Nullable OffsetDateTime previousEventTime,
-    @Nonnull SimRailAwsTimetableEntry timetableEntry,
-    boolean inPlayableBorder
+    @NonNull JourneyEventType eventType,
+    @Nullable LocalDateTime previousEventTime,
+    @NonNull SimRailAwsTimetableEntry timetableEntry
   ) {
     // get the point where the event is happening, return if the point is not registered
     var point = this.pointProvider.findPointByPointId(timetableEntry.getPointId()).orElse(null);
@@ -410,44 +360,43 @@ class SimRailServerTimetableCollector {
     }
 
     // extract the scheduled time of the event
-    var scheduledLocalTime = switch (eventType) {
+    var originalScheduledTime = switch (eventType) {
       case ARRIVAL -> timetableEntry.getArrivalTime();
       case DEPARTURE -> timetableEntry.getDepartureTime();
     };
-    var scheduledOffsetTime = switch (previousEventTime) {
-      case OffsetDateTime previousTime -> {
+    var scheduledTime = switch (previousEventTime) {
+      case LocalDateTime previousTime -> {
         // previous time is present, add the diff between the last and current event
         // to the last time to get this event time, there are some cases in which dates
         // of the provided time-date info are one day off. note that the diff might be negative
         // in case when the event times are at the dates border (e.g. prev: 23:55, curr: 00:05 yields PT-23H-50M)
         // in these cases we add a full day to the duration to fixup these issues
-        var diff = Duration.between(previousTime.toLocalTime(), scheduledLocalTime.toLocalTime());
+        var diff = Duration.between(previousTime.toLocalTime(), originalScheduledTime.toLocalTime());
         if (diff.isNegative()) {
           diff = diff.plusDays(1);
         }
 
         yield previousTime.plus(diff);
       }
-      case null -> // no previous time present, use the information from the server and event
-        OffsetDateTime.of(scheduledLocalTime, server.timezoneOffset());
+      // no previous time present, use the information from the server and event
+      case null -> originalScheduledTime;
     };
 
-    // create the event entity id and the base event entity
-    var id = this.journeyEventIdFactory.create(journeyId.toString() + point.getId() + scheduledLocalTime + eventType);
+    @SuppressWarnings("DataFlowIssue") // journey id is not null here as it's not set by the persistence provider
+    var id = this.journeyIdService.generateJourneyEventId(
+      journey.getId(),
+      point.getId(),
+      originalScheduledTime,
+      eventType);
     var eventEntity = new JourneyEventEntity();
     eventEntity.setId(id);
-    eventEntity.setJourneyId(journeyId);
+    eventEntity.setNew(true);
+    eventEntity.setJourney(journey);
     eventEntity.setEventType(eventType);
-    eventEntity.setScheduledTime(scheduledOffsetTime);
-    eventEntity.setRealtimeTime(scheduledOffsetTime);
+    eventEntity.setScheduledTime(scheduledTime);
+    eventEntity.setRealtimeTime(scheduledTime);
     eventEntity.setRealtimeTimeType(JourneyTimeType.SCHEDULE);
-
-    // add information about the stop where the event is happening
-    var stopDescriptorEntity = new JourneyStopDescriptor();
-    stopDescriptorEntity.setId(point.getId());
-    stopDescriptorEntity.setName(point.getName());
-    stopDescriptorEntity.setPlayable(inPlayableBorder);
-    eventEntity.setStopDescriptor(stopDescriptorEntity);
+    eventEntity.setPointId(point.getId());
 
     // add information about the stop type at the event
     var stopType = timetableEntry.getStopType();
@@ -486,7 +435,7 @@ class SimRailServerTimetableCollector {
     return eventEntity;
   }
 
-  private @Nonnull List<SimRailAwsTimetableEntry> fixupTimetable(@Nonnull List<SimRailAwsTimetableEntry> timetable) {
+  private @NonNull List<SimRailAwsTimetableEntry> fixupTimetable(@NonNull List<SimRailAwsTimetableEntry> timetable) {
     // fixing the events starts from the second event, to facilitate it which means
     // that the first event must always be in the list of events as the loop never touches it
     var firstEvent = timetable.getFirst();
@@ -538,24 +487,5 @@ class SimRailServerTimetableCollector {
     }
 
     return fixedEvents;
-  }
-
-  private boolean eventsNeedUpdate(@Nullable List<JourneyEventEntity> orig, @Nonnull List<JourneyEventEntity> compare) {
-    // if the original has no events or the size changed we need to update
-    if (orig == null || orig.size() != compare.size()) {
-      return true;
-    }
-
-    // check if one element in the collection does not deep equal its new version
-    for (var index = 0; index < orig.size(); index++) {
-      var originalEntity = orig.get(index);
-      var compareEntity = compare.get(index);
-      if (!originalEntity.scheduledDataEquals(compareEntity)) {
-        return true;
-      }
-    }
-
-    // all entries match
-    return false;
   }
 }

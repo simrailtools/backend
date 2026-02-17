@@ -11,3 +11,11 @@ scrape_configs:
     follow_redirects: false
     static_configs:
       - targets: [ 'host.docker.internal:8080' ]
+  - job_name: 'sit_api'
+    scheme: 'http'
+    metrics_path: '/admin/prometheus'
+    enable_http2: true
+    body_size_limit: 0
+    follow_redirects: false
+    static_configs:
+      - targets: [ 'host.docker.internal:8085' ]

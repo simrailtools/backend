@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.collector.configuration;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
@@ -37,7 +37,7 @@ class ApiClientConfiguration {
    * Configures the SimRail-Panel api client.
    */
   @Bean
-  public @Nonnull SimRailPanelApiClient simRailPanelApiClient() {
+  public @NonNull SimRailPanelApiClient simRailPanelApiClient() {
     return SimRailPanelApiClient.create();
   }
 
@@ -45,7 +45,7 @@ class ApiClientConfiguration {
    * Configures the SimRail AWS api client.
    */
   @Bean
-  public @Nonnull SimRailAwsApiClient simRailAwsApiClient() {
+  public @NonNull SimRailAwsApiClient simRailAwsApiClient() {
     return SimRailAwsApiClient.create();
   }
 }

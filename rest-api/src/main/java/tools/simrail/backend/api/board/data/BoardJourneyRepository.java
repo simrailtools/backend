@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,18 @@
 
 package tools.simrail.backend.api.board.data;
 
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import tools.simrail.backend.common.journey.JourneyRepository;
-import tools.simrail.backend.common.journey.JourneyTransportType;
 
 public interface BoardJourneyRepository extends JourneyRepository {
 
   /**
-   * Get a projection of all journey events that are after the initially matched event.
+   * Get all events for an arrival board matching the given filter parameters. The result holds the matched arrival
+   * event as well as all previous departure events.
    *
    * @param serverId       the id of the server to match the arrival on.
    * @param pointId        the id of the point to get the arrivals of.
@@ -46,83 +46,92 @@ public interface BoardJourneyRepository extends JourneyRepository {
    */
   @Query(
     value = """
-      WITH initial_matching_events AS (
-        SELECT DISTINCT ON (je.journey_id)
+      WITH matching_arrivals AS (
+        -- find scheduled events in range
+        SELECT
+          je.id,
           je.journey_id,
           je.event_index,
-          je.id,
-          je.additional,
-          je.cancelled,
           je.scheduled_time,
-          je.realtime_time,
-          je.realtime_time_type,
-          je.scheduled_platform,
-          je.scheduled_track,
-          je.realtime_platform,
-          je.realtime_track,
-          je.stop_type,
-          je.transport_type,
-          je.transport_category,
-          je.transport_number,
-          je.transport_line,
-          je.transport_label,
-          je.transport_max_speed
+          je.realtime_time
         FROM sit_journey_event je
-        JOIN sit_journey j ON j.id = je.journey_id
-        WHERE
-          j.server_id = :serverId
-          AND je.event_type = 0 -- select arrival event at point
-          AND je.point_id = :pointId
-          AND je.transport_type IN :transportTypes
-          AND ((je.realtime_time >= :spanStart AND je.realtime_time <= :spanEnd)
-            OR (je.scheduled_time >= :spanStart AND je.scheduled_time <= :spanEnd))
-      ),
-      via_events AS (
+        WHERE je.point_id = :pointId
+          AND je.event_type = 'ARRIVAL'
+          AND je.transport_type = ANY(:transportTypes)
+          AND je.scheduled_time BETWEEN :spanStart AND :spanEnd
+          AND EXISTS (SELECT 1 FROM sit_journey j WHERE j.id = je.journey_id AND j.server_id = :serverId)
+        UNION ALL
+        -- find realtime events in range whose scheduled time is not in range
         SELECT
-          e.journey_id,
-          e.point_id,
-          e.event_index,
-          e.cancelled,
-          e.additional,
-          e.scheduled_platform,
-          -- initial event data
-          ie.id AS initial_event_id,
-          ie.additional AS initial_additional,
-          ie.cancelled AS initial_cancelled,
-          ie.scheduled_time AS initial_scheduled_time,
-          ie.realtime_time AS initial_realtime_time,
-          ie.realtime_time_type AS initial_realtime_time_type,
-          ie.scheduled_platform AS initial_scheduled_platform,
-          ie.scheduled_track AS initial_scheduled_track,
-          ie.realtime_platform AS initial_realtime_platform,
-          ie.realtime_track AS initial_realtime_track,
-          ie.stop_type AS initial_stop_type,
-          ie.transport_type AS initial_transport_type,
-          ie.transport_category AS initial_transport_category,
-          ie.transport_number AS initial_transport_number,
-          ie.transport_line AS initial_transport_line,
-          ie.transport_label AS initial_transport_label,
-          ie.transport_max_speed AS initial_transport_max_speed
-        FROM sit_journey_event e
-        INNER JOIN initial_matching_events ie ON e.journey_id = ie.journey_id
-        WHERE
-          e.event_index < ie.event_index
-          AND e.event_type = 1 -- select departure event for previous events (catches initial departure event)
+          je.id,
+          je.journey_id,
+          je.event_index,
+          je.scheduled_time,
+          je.realtime_time
+        FROM sit_journey_event je
+        WHERE je.point_id = :pointId
+          AND je.event_type = 'ARRIVAL'
+          AND je.transport_type = ANY(:transportTypes)
+          AND je.realtime_time BETWEEN :spanStart AND :spanEnd
+          AND NOT (je.scheduled_time BETWEEN :spanStart AND :spanEnd)
+          AND EXISTS (SELECT 1 FROM sit_journey j WHERE j.id = je.journey_id AND j.server_id = :serverId)
+      ),
+      initial_matching_events AS (
+        SELECT DISTINCT ON (journey_id)
+          id,
+          journey_id,
+          event_index,
+          scheduled_time,
+          realtime_time
+        FROM matching_arrivals
+        ORDER BY journey_id, event_index
       )
-      SELECT *
-      FROM via_events
+      SELECT
+        e.journey_id,
+        e.point_id,
+        e.event_index,
+        e.cancelled,
+        e.additional,
+        e.scheduled_platform,
+        ie_full.id AS initial_event_id,
+        ie_full.additional AS initial_additional,
+        ie_full.cancelled AS initial_cancelled,
+        ie_full.scheduled_time AS initial_scheduled_time,
+        ie_full.realtime_time  AS initial_realtime_time,
+        ie_full.realtime_time_type AS initial_realtime_time_type,
+        ie_full.scheduled_platform AS initial_scheduled_platform,
+        ie_full.scheduled_track AS initial_scheduled_track,
+        ie_full.realtime_platform AS initial_realtime_platform,
+        ie_full.realtime_track AS initial_realtime_track,
+        ie_full.stop_type AS initial_stop_type,
+        ie_full.transport_type AS initial_transport_type,
+        ie_full.transport_category AS initial_transport_category,
+        ie_full.transport_number AS initial_transport_number,
+        ie_full.transport_line AS initial_transport_line,
+        ie_full.transport_label AS initial_transport_label,
+        ie_full.transport_max_speed AS initial_transport_max_speed
+      FROM initial_matching_events ie
+      JOIN sit_journey_event ie_full ON ie_full.id = ie.id
+      JOIN sit_journey_event e
+        ON e.journey_id = ie.journey_id
+        AND e.event_type = 'DEPARTURE'
+        AND e.event_index < ie.event_index
+      ORDER BY
+        e.journey_id,
+        e.event_index
       """, nativeQuery = true
   )
   List<BoardJourneyProjection> getArrivals(
     @Param("serverId") UUID serverId,
     @Param("pointId") UUID pointId,
-    @Param("spanStart") OffsetDateTime timeSpanStart,
-    @Param("spanEnd") OffsetDateTime timeSpanEnd,
-    @Param("transportTypes") List<JourneyTransportType> transportTypes
+    @Param("spanStart") LocalDateTime timeSpanStart,
+    @Param("spanEnd") LocalDateTime timeSpanEnd,
+    @Param("transportTypes") String[] transportTypes // enum type: JourneyTransportType
   );
 
   /**
-   * Get a projection of all journey events that are after the initially matched event.
+   * Get all events for a departure board matching the given filter parameters. The result holds the matched departure
+   * event as well as all upcoming arrival events.
    *
    * @param serverId       the id of the server to match the departures on.
    * @param pointId        the id of the point to get the departures of.
@@ -133,78 +142,86 @@ public interface BoardJourneyRepository extends JourneyRepository {
    */
   @Query(
     value = """
-      WITH initial_matching_events AS (
-        SELECT DISTINCT ON (je.journey_id)
+      WITH matching_departures AS (
+        -- find scheduled events in range
+        SELECT
+          je.id,
           je.journey_id,
           je.event_index,
-          je.id,
-          je.additional,
-          je.cancelled,
           je.scheduled_time,
-          je.realtime_time,
-          je.realtime_time_type,
-          je.scheduled_platform,
-          je.scheduled_track,
-          je.realtime_platform,
-          je.realtime_track,
-          je.stop_type,
-          je.transport_type,
-          je.transport_category,
-          je.transport_number,
-          je.transport_line,
-          je.transport_label,
-          je.transport_max_speed
+          je.realtime_time
         FROM sit_journey_event je
-        JOIN sit_journey j ON j.id = je.journey_id
-        WHERE
-          j.server_id = :serverId
-          AND je.event_type = 1 -- select departure event at point
-          AND je.point_id = :pointId
-          AND je.transport_type IN :transportTypes
-          AND ((je.realtime_time >= :spanStart AND je.realtime_time <= :spanEnd)
-            OR (je.scheduled_time >= :spanStart AND je.scheduled_time <= :spanEnd))
-      ),
-      via_events AS (
+        WHERE je.point_id = :pointId
+          AND je.event_type = 'DEPARTURE'
+          AND je.transport_type = ANY(:transportTypes)
+          AND je.scheduled_time BETWEEN :spanStart AND :spanEnd
+          AND EXISTS (SELECT 1 FROM sit_journey j WHERE j.id = je.journey_id AND j.server_id = :serverId)
+        UNION ALL
+        -- find realtime events in range whose scheduled time is not in range
         SELECT
-          e.journey_id,
-          e.point_id,
-          e.event_index,
-          e.cancelled,
-          e.additional,
-          e.scheduled_platform,
-          -- initial event data
-          ie.id AS initial_event_id,
-          ie.additional AS initial_additional,
-          ie.cancelled AS initial_cancelled,
-          ie.scheduled_time AS initial_scheduled_time,
-          ie.realtime_time AS initial_realtime_time,
-          ie.realtime_time_type AS initial_realtime_time_type,
-          ie.scheduled_platform AS initial_scheduled_platform,
-          ie.scheduled_track AS initial_scheduled_track,
-          ie.realtime_platform AS initial_realtime_platform,
-          ie.realtime_track AS initial_realtime_track,
-          ie.stop_type AS initial_stop_type,
-          ie.transport_type AS initial_transport_type,
-          ie.transport_category AS initial_transport_category,
-          ie.transport_number AS initial_transport_number,
-          ie.transport_line AS initial_transport_line,
-          ie.transport_label AS initial_transport_label,
-          ie.transport_max_speed AS initial_transport_max_speed
-        FROM sit_journey_event e
-        INNER JOIN initial_matching_events ie ON e.journey_id = ie.journey_id
-        WHERE
-          e.event_index > ie.event_index
-          AND e.event_type = 0 -- select arrival event for follow-ups (catches final arrival event)
+          je.id,
+          je.journey_id,
+          je.event_index,
+          je.scheduled_time,
+          je.realtime_time
+        FROM sit_journey_event je
+        WHERE je.point_id = :pointId
+          AND je.event_type = 'DEPARTURE'
+          AND je.transport_type = ANY(:transportTypes)
+          AND je.realtime_time BETWEEN :spanStart AND :spanEnd
+          AND NOT (je.scheduled_time BETWEEN :spanStart AND :spanEnd)
+          AND EXISTS (SELECT 1 FROM sit_journey j WHERE j.id = je.journey_id AND j.server_id = :serverId)
+      ),
+      initial_matching_events AS (
+        SELECT DISTINCT ON (journey_id)
+          id,
+          journey_id,
+          event_index,
+          scheduled_time,
+          realtime_time
+        FROM matching_departures
+        ORDER BY journey_id, event_index
       )
-      SELECT *
-      FROM via_events
+      SELECT
+        e.journey_id,
+        e.point_id,
+        e.event_index,
+        e.cancelled,
+        e.additional,
+        e.scheduled_platform,
+        ie_full.id AS initial_event_id,
+        ie_full.additional AS initial_additional,
+        ie_full.cancelled AS initial_cancelled,
+        ie_full.scheduled_time AS initial_scheduled_time,
+        ie_full.realtime_time  AS initial_realtime_time,
+        ie_full.realtime_time_type AS initial_realtime_time_type,
+        ie_full.scheduled_platform AS initial_scheduled_platform,
+        ie_full.scheduled_track AS initial_scheduled_track,
+        ie_full.realtime_platform AS initial_realtime_platform,
+        ie_full.realtime_track AS initial_realtime_track,
+        ie_full.stop_type AS initial_stop_type,
+        ie_full.transport_type AS initial_transport_type,
+        ie_full.transport_category AS initial_transport_category,
+        ie_full.transport_number AS initial_transport_number,
+        ie_full.transport_line AS initial_transport_line,
+        ie_full.transport_label AS initial_transport_label,
+        ie_full.transport_max_speed AS initial_transport_max_speed
+      FROM initial_matching_events ie
+      JOIN sit_journey_event ie_full ON ie_full.id = ie.id
+      JOIN sit_journey_event e
+        ON e.journey_id = ie.journey_id
+        AND e.event_type = 'ARRIVAL'
+        AND e.event_index > ie.event_index
+      ORDER BY
+        e.journey_id,
+        e.event_index
       """, nativeQuery = true
   )
   List<BoardJourneyProjection> getDepartures(
     @Param("serverId") UUID serverId,
     @Param("pointId") UUID pointId,
-    @Param("spanStart") OffsetDateTime timeSpanStart,
-    @Param("spanEnd") OffsetDateTime timeSpanEnd,
-    @Param("transportTypes") List<JourneyTransportType> transportTypes
+    @Param("spanStart") LocalDateTime timeSpanStart,
+    @Param("spanEnd") LocalDateTime timeSpanEnd,
+    @Param("transportTypes") String[] transportTypes // enum type: JourneyTransportType
   );
 }

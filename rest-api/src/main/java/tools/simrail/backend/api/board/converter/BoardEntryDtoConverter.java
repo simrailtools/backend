@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,16 @@
 
 package tools.simrail.backend.api.board.converter;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.util.Comparator;
 import java.util.List;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
 import tools.simrail.backend.api.board.dto.BoardEntryDto;
 import tools.simrail.backend.api.board.dto.BoardStopInfoDto;
-import tools.simrail.backend.common.journey.JourneyStopType;
-import tools.simrail.backend.common.journey.JourneyTimeType;
 
 /**
  * Converter for a list of board entry projections to board entry dtos.
@@ -51,15 +49,15 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
 
   @Autowired
   public BoardEntryDtoConverter(
-    @Nonnull BoardViaEventDtoConverter viaEventDtoConverter,
-    @Nonnull BoardTransportDtoConverter transportDtoConverter
+    @NonNull BoardViaEventDtoConverter viaEventDtoConverter,
+    @NonNull BoardTransportDtoConverter transportDtoConverter
   ) {
     this.viaEventDtoConverter = viaEventDtoConverter;
     this.transportDtoConverter = transportDtoConverter;
   }
 
   @Override
-  public @Nonnull BoardEntryDto apply(@Nonnull List<BoardJourneyProjection> entries) {
+  public @NonNull BoardEntryDto apply(@NonNull List<BoardJourneyProjection> entries) {
     // sort the entries in their encounter order
     entries.sort(INDEX_COMPARATOR);
 
@@ -68,12 +66,10 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
     var viaEvents = entries.stream().map(this.viaEventDtoConverter).toList();
 
     // convert stop information
-    var stopType = JourneyStopType.VALUES[root.getInitialStopType()];
     var scheduledStopInfo = this.buildStopInfo(root.getInitialScheduledPlatform(), root.getInitialScheduledTrack());
     var realtimeStopInfo = this.buildStopInfo(root.getInitialRealtimePlatform(), root.getInitialRealtimeTrack());
 
     var transport = this.transportDtoConverter.apply(root);
-    var realtimeTimeType = JourneyTimeType.VALUES[root.getInitialRealtimeTimeType()];
     return new BoardEntryDto(
       root.getJourneyId(),
       root.getInitialEventId(),
@@ -81,8 +77,8 @@ public final class BoardEntryDtoConverter implements Function<List<BoardJourneyP
       root.isInitialAdditional(),
       root.getInitialScheduledTime(),
       root.getInitialRealtimeTime(),
-      realtimeTimeType,
-      stopType,
+      root.getInitialRealtimeTimeType(),
+      root.getInitialStopType(),
       scheduledStopInfo,
       realtimeStopInfo,
       transport,

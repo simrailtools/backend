@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,11 @@
 
 package tools.simrail.backend.common.controller;
 
-import jakarta.annotation.Nonnull;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Objects;
-import org.springframework.boot.web.servlet.error.ErrorController;
+import org.jspecify.annotations.NonNull;
+import org.springframework.boot.webmvc.error.ErrorController;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -42,7 +42,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public final class StatusOnlyErrorController implements ErrorController {
 
   @RequestMapping
-  public @Nonnull ResponseEntity<Void> handleError(@Nonnull HttpServletRequest request) {
+  public @NonNull ResponseEntity<Void> handleError(@NonNull HttpServletRequest request) {
     var errorCode = (Integer) request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
     if (errorCode == null) {
       // use 500 (internal server error) in case the error status is not present

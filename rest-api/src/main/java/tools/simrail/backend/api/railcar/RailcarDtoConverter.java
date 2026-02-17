@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.railcar;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.common.railcar.Railcar;
 
@@ -33,13 +33,14 @@ import tools.simrail.backend.common.railcar.Railcar;
  * Converter for railcars to DTOs.
  */
 @Component
-final class RailcarDtoConverter implements Function<Railcar, RailcarDto> {
+public final class RailcarDtoConverter implements Function<Railcar, RailcarDto> {
 
   @Override
-  public @Nonnull RailcarDto apply(@Nonnull Railcar railcar) {
+  public @NonNull RailcarDto apply(@NonNull Railcar railcar) {
     return new RailcarDto(
       railcar.getId(),
       railcar.getDisplayName(),
+      railcar.getName(),
       railcar.getRailcarType(),
       railcar.getTypeGroupId(),
       railcar.getRequiredDlcId(),

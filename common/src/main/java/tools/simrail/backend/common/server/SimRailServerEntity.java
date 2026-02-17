@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,23 @@
 
 package tools.simrail.backend.common.server;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.Instant;
 import java.util.Objects;
+import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * The entity that holds all information about a single server registered in the SimRail api.
@@ -52,10 +49,6 @@ import org.hibernate.annotations.UpdateTimestamp;
 @Setter
 @NoArgsConstructor
 @Entity(name = "sr_server")
-@Table(indexes = {
-  @Index(columnList = "code"),
-  @Index(columnList = "foreignId"),
-})
 public final class SimRailServerEntity {
 
   /**
@@ -67,90 +60,65 @@ public final class SimRailServerEntity {
    * The unique identifier of the server.
    */
   @Id
-  @Nonnull
+  @Column(name = "id")
   private UUID id;
   /**
    * The foreign (mongo identifier) of the server provided by the SimRail api.
    */
-  @Nonnull
-  @Column(nullable = false, unique = true, updatable = false, length = 24)
+  @Column(name = "foreign_id")
   private String foreignId;
+  /**
+   * The code of the server (e.g. DE1).
+   */
+  @Column(name = "code")
+  private String code;
 
   /**
    * The timestamp when this server entry was last updated.
    */
-  @Nonnull
   @UpdateTimestamp
-  @Column(nullable = false)
-  private OffsetDateTime updateTime;
+  @Column(name = "update_time")
+  private Instant updateTime;
   /**
    * The time when the server was initially registered in the SimRail backend.
    */
-  @Nonnull
-  @Column(nullable = false)
-  private OffsetDateTime registeredSince;
+  @Column(name = "registered_since")
+  private Instant registeredSince;
 
-  /**
-   * The code of the server (e.g. DE1).
-   */
-  @Nonnull
-  @Column(nullable = false, unique = true)
-  private String code;
   /**
    * The region in which the server is located (e.g. Europe).
    */
-  @Nonnull
-  @Column(nullable = false)
+  @Column(name = "region")
+  @Enumerated(EnumType.STRING)
   private SimRailServerRegion region;
-  /**
-   * The timezone that is used on the server (e.g. UTC+1).
-   */
-  @Nonnull
-  @Column(nullable = false)
-  private String timezone;
   /**
    * The time offset on the server (in hours) from the current utc time.
    */
-  @Column
+  @Column(name = "utc_offset_hours")
   private int utcOffsetHours;
   /**
    * The language used to communicate on the server, null for international servers.
    */
-  @Column
-  @Nullable
+  @Column(name = "language")
   private String spokenLanguage;
   /**
    * Scenery (map part) of the server.
    */
-  @Nonnull
-  @Column(nullable = false)
+  @Column(name = "scenery")
   @Enumerated(EnumType.STRING)
   private SimRailServerScenery scenery;
-
-  /**
-   * If this server is currently online.
-   */
-  @Column
-  private boolean online;
-  /**
-   * If this server is no longer registered in the SimRail backend.
-   */
-  @Column
-  private boolean deleted;
-
   /**
    * The tags that are applied to the server, can be an empty list if no tags are applied.
    */
-  @Nonnull
-  @Column(nullable = false)
-  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-  private List<String> tags;
+  @Column(name = "tags")
+  @JdbcTypeCode(SqlTypes.JSON)
+  private Set<String> tags;
 
   /**
-   * Internal marker to indicate if the server entity was newly created when being collected.
+   * If this server is no longer registered in the SimRail backend.
    */
-  @Transient
-  private boolean isNew;
+  @Column(name = "deleted")
+  private boolean deleted;
 
   /**
    * {@inheritDoc}
@@ -163,7 +131,7 @@ public final class SimRailServerEntity {
     if (!(o instanceof SimRailServerEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**
@@ -178,7 +146,7 @@ public final class SimRailServerEntity {
    * {@inheritDoc}
    */
   @Override
-  public @Nonnull String toString() {
+  public @NonNull String toString() {
     return "ServerEntity{id=" + this.id + ", code=" + this.code + "}";
   }
 }

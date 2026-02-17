@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,8 @@
 
 package tools.simrail.backend.api.board.converter;
 
-import jakarta.annotation.Nonnull;
-import java.util.NoSuchElementException;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
@@ -42,15 +41,13 @@ public final class BoardViaEventDtoConverter implements Function<BoardJourneyPro
   private final SimRailPointProvider pointProvider;
 
   @Autowired
-  public BoardViaEventDtoConverter(@Nonnull SimRailPointProvider pointProvider) {
+  public BoardViaEventDtoConverter(@NonNull SimRailPointProvider pointProvider) {
     this.pointProvider = pointProvider;
   }
 
   @Override
-  public @Nonnull BoardViaEventDto apply(@Nonnull BoardJourneyProjection projection) {
-    var point = this.pointProvider
-      .findPointByIntId(projection.getPointId())
-      .orElseThrow(() -> new NoSuchElementException("missing point for stop " + projection.getPointId()));
+  public @NonNull BoardViaEventDto apply(@NonNull BoardJourneyProjection projection) {
+    var point = this.pointProvider.findPointByIntId(projection.getPointId()).orElseThrow();
     return new BoardViaEventDto(
       point.getId(),
       point.getName(),

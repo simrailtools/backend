@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,19 +29,17 @@ import feign.Headers;
 import feign.Param;
 import feign.RequestLine;
 import java.util.List;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 import tools.simrail.backend.external.steam.feign.SteamApiKeyInterceptor;
 import tools.simrail.backend.external.steam.wrapper.SteamAchievementPercentageWrapper;
 import tools.simrail.backend.external.steam.wrapper.SteamUserStatsWrapper;
 import tools.simrail.backend.external.steam.wrapper.SteamUserSummaryWrapper;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface SteamApiClient {
 
-  @Contract("_ -> new")
-  static @NotNull SteamApiClient create(@NotNull String apiKey) {
+  static @NonNull SteamApiClient create(@NonNull String apiKey) {
     return FeignClientProvider.prepareJsonFeignInstance()
       .requestInterceptor(new SteamApiKeyInterceptor(apiKey))
       .target(SteamApiClient.class, "https://api.steampowered.com");
@@ -54,9 +52,8 @@ public interface SteamApiClient {
    * @param steamIds the steam ids of the players to get.
    * @return detailed information about the players with the given steam ids.
    */
-  @NotNull
   @RequestLine(value = "GET /ISteamUser/GetPlayerSummaries/v0002?steamids={steamIds}", collectionFormat = CollectionFormat.CSV)
-  SteamUserSummaryWrapper.Root getPlayerSummaries(@Param("steamIds") List<String> steamIds);
+  SteamUserSummaryWrapper.@NonNull Root getPlayerSummaries(@Param("steamIds") List<String> steamIds);
 
   /**
    * Get the stats of the given user for the given game.
@@ -65,7 +62,7 @@ public interface SteamApiClient {
    * @param userId the steam id of the user to get the stats of.
    * @return the stats of the given user in the given game.
    */
-  @NotNull
+  @NonNull
   @RequestLine("GET /ISteamUserStats/GetUserStatsForGame/v0002?appid={appId}&steamid={userId}")
   SteamUserStatsWrapper getUserStats(@Param("appId") String appId, @Param("userId") String userId);
 
@@ -75,7 +72,6 @@ public interface SteamApiClient {
    * @param appId the id of the game to get the achievement progress for.
    * @return the global achievement progress of all players in the given game.
    */
-  @NotNull
   @RequestLine("GET /ISteamUserStats/GetGlobalAchievementPercentagesForApp/v0002?gameid={appId}")
-  SteamAchievementPercentageWrapper.Root getGlobalAchievementProgress(@Param("appId") String appId);
+  SteamAchievementPercentageWrapper.@NonNull Root getGlobalAchievementProgress(@Param("appId") String appId);
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,78 +24,43 @@
 
 package tools.simrail.backend.common.vehicle;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.Table;
-import java.time.OffsetDateTime;
+import java.util.Comparator;
 import java.util.UUID;
-import lombok.Getter;
+import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-import org.hibernate.annotations.UpdateTimestamp;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
-/**
- * A vehicle entry (one wagon or locomotive for journey).
- */
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@Entity(name = "sit_vehicle")
-@Table(indexes = {
-  @Index(columnList = "journeyId"),
-  @Index(columnList = "railcarId"),
-  @Index(columnList = "journeyId, status"),
-  @Index(columnList = "journeyId, indexInGroup"),
-})
+@AllArgsConstructor
 public final class JourneyVehicle {
 
   /**
-   * The id of the specific vehicle.
+   * Comparator to compare the index of the vehicle in the sequence, ascending.
    */
-  @Id
-  @GeneratedValue
-  private Long id;
-  /**
-   * The time and date when this vehicle information was last updated.
-   */
-  @UpdateTimestamp
-  private OffsetDateTime updateTime;
+  public static final Comparator<JourneyVehicle> BY_SEQUENCE_INDEX_COMPARATOR =
+    Comparator.comparingInt(JourneyVehicle::getIndexInSequence);
 
   /**
-   * The id of the journey to which this vehicle entry belongs.
+   * The index where this vehicle is located in the vehicle sequence.
    */
-  @Column(nullable = false)
-  private UUID journeyId;
+  private int indexInSequence;
   /**
-   * The index where this vehicle is loaded in the vehicle group.
+   * The id of the railcar that is associated with this vehicle.
    */
-  @Column
-  private int indexInGroup;
-  /**
-   * The status of the vehicle information.
-   */
-  @Column(nullable = false)
-  private JourneyVehicleStatus status;
-
-  /**
-   * The id of the used railcar in the group, can only be null if the status is unknown.
-   */
-  @Column
+  @NonNull
   private UUID railcarId;
+
   /**
    * The weight of the load, null if no load is provided for the vehicle.
    */
-  @Column
+  @Nullable
   private Integer loadWeight;
   /**
    * The load of the vehicle, null if no load is provided for the vehicle.
    */
-  @Column
-  @Enumerated(EnumType.STRING)
+  @Nullable
   private JourneyVehicleLoad load;
 }

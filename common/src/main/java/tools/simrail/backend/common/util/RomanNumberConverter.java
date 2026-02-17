@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.common.util;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A utility to convert roman numbers to integers.
@@ -40,10 +40,10 @@ public final class RomanNumberConverter {
    * Converts the given roman number string into an integer. Any extra chars that cannot be mapped to a number are
    * ignored.
    *
-   * @param romanNumber the romain number string to convert.
+   * @param romanNumber the roman number string to convert.
    * @return the integer representation of the given roman number string.
    */
-  public static int decodeRomanNumber(@Nonnull String romanNumber) {
+  public static int decodeRomanNumber(@NonNull String romanNumber) {
     var result = 0;
     var prevValue = 0;
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,10 +26,9 @@ package tools.simrail.backend.collector.cleanup;
 
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
-import java.time.ZoneOffset;
+import java.time.Instant;
 import java.time.temporal.ChronoUnit;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -44,25 +43,17 @@ class DatabaseCleanupTask {
 
   private static final short DELETE_BATCH_SIZE = 30_000; // must be less than 65.535 (psql limit)
 
-  private final CleanupJourneyRepository journeyRepository;
-  private final CleanupJourneyEventRepository journeyEventRepository;
-  private final CleanupJourneyVehicleRepository journeyVehicleRepository;
-
   private final Timer cleanupDurationTimer;
   private final Counter cleanupDeletionsTotalCounter;
+  private final CleanupJourneyRepository journeyRepository;
 
   @Autowired
-  public DatabaseCleanupTask(
-    @Nonnull CleanupJourneyRepository journeyRepository,
-    @Nonnull CleanupJourneyEventRepository journeyEventRepository,
-    @Nonnull CleanupJourneyVehicleRepository journeyVehicleRepository,
-    @Nonnull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
-    @Nonnull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter
+  DatabaseCleanupTask(
+    @NonNull CleanupJourneyRepository journeyRepository,
+    @NonNull @Qualifier("db_cleanup_duration_seconds") Timer cleanupDurationTimer,
+    @NonNull @Qualifier("db_cleanup_deletions_total") Counter cleanupDeletionsTotalCounter
   ) {
     this.journeyRepository = journeyRepository;
-    this.journeyEventRepository = journeyEventRepository;
-    this.journeyVehicleRepository = journeyVehicleRepository;
-
     this.cleanupDurationTimer = cleanupDurationTimer;
     this.cleanupDeletionsTotalCounter = cleanupDeletionsTotalCounter;
   }
@@ -72,15 +63,13 @@ class DatabaseCleanupTask {
   public void cleanupDatabase() {
     this.cleanupDurationTimer.record(() -> {
       // find the journeys without a data update in the last three months, remove all associated events & vehicles as well
-      var cleanupStartDate = OffsetDateTime.now(ZoneOffset.UTC).minusDays(90).truncatedTo(ChronoUnit.DAYS);
+      var cleanupStartDate = Instant.now().minus(90, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS);
       var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
       if (!journeyIdsToRemove.isEmpty()) {
         for (var batchStart = 0; batchStart < journeyIdsToRemove.size(); batchStart += DELETE_BATCH_SIZE) {
           var batchEnd = Math.min(journeyIdsToRemove.size(), batchStart + DELETE_BATCH_SIZE);
           var batch = journeyIdsToRemove.subList(batchStart, batchEnd);
-          this.journeyEventRepository.deleteAllByJourneyIdIn(batch);
-          this.journeyVehicleRepository.deleteAllByJourneyIdIn(batch);
-          this.journeyRepository.deleteAllByJourneyIdIn(batch);
+          this.journeyRepository.deleteAllByJourneyIdIn(batch); // implicitly deletes all references
         }
       }
 

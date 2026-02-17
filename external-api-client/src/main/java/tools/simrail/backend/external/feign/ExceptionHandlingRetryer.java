@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,7 @@ import feign.Retryer;
 import java.net.SocketException;
 import java.net.http.HttpTimeoutException;
 import javax.net.ssl.SSLException;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
@@ -44,7 +44,7 @@ public final class ExceptionHandlingRetryer implements Retryer {
   }
 
   @Override
-  public void continueOrPropagate(@NotNull RetryableException exception) {
+  public void continueOrPropagate(@NonNull RetryableException exception) {
     var cause = exception.getCause();
     if (cause instanceof HttpTimeoutException
       || cause instanceof SocketException
@@ -55,8 +55,10 @@ public final class ExceptionHandlingRetryer implements Retryer {
     throw exception;
   }
 
+  // CHECKSTYLE.OFF: clone method is used by feign, leave this optimization
   @Override
-  public @NotNull Retryer clone() {
+  public @NonNull Retryer clone() {
     return INSTANCE;
   }
+  // CHECKSTYLE.ON
 }

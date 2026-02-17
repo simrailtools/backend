@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.configuration;
 
-import jakarta.annotation.Nonnull;
 import java.util.Locale;
+import org.jspecify.annotations.NonNull;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.LocaleResolver;
@@ -41,7 +41,7 @@ class MiscConfiguration {
    * Fixes the language used for translations to english.
    */
   @Bean
-  public @Nonnull LocaleResolver localeResolver() {
+  public @NonNull LocaleResolver localeResolver() {
     return new FixedLocaleResolver(Locale.ENGLISH);
   }
 }

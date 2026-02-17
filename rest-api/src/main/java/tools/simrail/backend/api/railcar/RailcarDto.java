@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,26 +25,28 @@
 package tools.simrail.backend.api.railcar;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.railcar.RailcarType;
 
 /**
  * DTO for information about a railcar.
  */
-record RailcarDto(
+public record RailcarDto(
   @Schema(description = "The unique identifier of the railcar")
   @NotNull UUID id,
   @Schema(description = "The display name of the railcar")
-  @NotNull @NotBlank String name,
+  @NotNull @NotBlank String displayName,
+  @Schema(description = "The baptismal name of the locomotive / wagon, null if none", types = "null")
+  @Nullable String name,
   @Schema(description = "The grouping type of the railcar")
   @NotNull RailcarType type,
   @Schema(description = "The type identifier of the railcar")
   @NotNull @NotBlank String typeIdentifier,
-  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", types = {"null"})
+  @Schema(description = "The id of the DLC that is required for the railcar, null if included in the base game", types = "null")
   @Nullable String requiredDlcId,
   @Schema(description = "The designation of the railcar")
   @NotNull @NotBlank String designation,

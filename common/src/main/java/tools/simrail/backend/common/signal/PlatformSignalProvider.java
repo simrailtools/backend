@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,6 @@
 
 package tools.simrail.backend.common.signal;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.HashMap;
@@ -33,10 +31,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 
 /**
  * A service that provides platform information based on point ids and signal ids.
@@ -49,10 +49,10 @@ public final class PlatformSignalProvider {
 
   @Autowired
   public PlatformSignalProvider(
-    @Nonnull ObjectMapper objectMapper,
-    @Nonnull @Value("classpath:data/signals.json") Resource signalsResource
+    @NonNull ObjectMapper objectMapper,
+    @NonNull @Value("classpath:data/signals.json") Resource signalsResource
   ) throws IOException {
-    // deserialize the signals from the signals json bundled in the application jar file
+    // deserialize the signals from the signals JSON bundled in the application jar file
     // and map them in the format point id -> signal id -> signal
     var signalListType = objectMapper.getTypeFactory().constructCollectionType(List.class, PlatformSignal.class);
     try (var inputStream = signalsResource.getInputStream()) {
@@ -73,7 +73,7 @@ public final class PlatformSignalProvider {
    * @param signalId the id of the signal to get the information of.
    * @return an optional holding the signal info of the point and signal id, if one exists.
    */
-  public @Nonnull Optional<PlatformSignal> findSignalInfo(@Nonnull UUID pointId, @Nonnull String signalId) {
+  public @NonNull Optional<PlatformSignal> findSignalInfo(@NonNull UUID pointId, @NonNull String signalId) {
     return Optional
       .ofNullable(this.signalsByPointAndId.get(pointId))
       .map(signalIdToSignalMapping -> signalIdToSignalMapping.get(signalId));
@@ -85,7 +85,7 @@ public final class PlatformSignalProvider {
    * @param pointId the id of the point to get the signals of.
    * @return the signals that are located at the point, an empty list if there are none.
    */
-  public @Nonnull Collection<PlatformSignal> findSignalsByPoint(@Nonnull UUID pointId) {
+  public @NonNull Collection<PlatformSignal> findSignalsByPoint(@NonNull UUID pointId) {
     var signalsByPoint = this.signalsByPointAndId.get(pointId);
     return signalsByPoint == null ? List.of() : signalsByPoint.values();
   }

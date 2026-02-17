@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,23 +24,20 @@
 
 package tools.simrail.backend.api.exception;
 
-import jakarta.annotation.Nonnull;
-import java.io.Serial;
+import org.jspecify.annotations.NonNull;
+import org.springframework.http.HttpStatus;
 
 /**
- * An exception that indicates that a http request parameter is invalid, holding a descriptive message.
+ * An exception that indicates that an http request parameter is invalid, holding a descriptive message.
  */
-public final class IllegalRequestParameterException extends RuntimeException {
-
-  @Serial
-  private static final long serialVersionUID = 8873870848823453191L;
+public final class IllegalRequestParameterException extends ErrorResponseException {
 
   /**
    * Constructs a new illegal parameter exception.
    *
    * @param message the message of the exception, note that the message is directly exposed to the http request sender.
    */
-  public IllegalRequestParameterException(@Nonnull String message) {
-    super(message);
+  public IllegalRequestParameterException(@NonNull String message) {
+    super(HttpStatus.BAD_REQUEST, message);
   }
 }

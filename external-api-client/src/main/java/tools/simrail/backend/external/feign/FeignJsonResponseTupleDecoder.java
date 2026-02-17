@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -32,19 +32,44 @@ import java.io.IOException;
 import java.lang.reflect.ParameterizedType;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
  * Response decoder that can decode a FeignJsonResponseTuple or pass the request to the given downstream decoder.
  */
-public record FeignJsonResponseTupleDecoder(@NotNull Decoder downstream) implements Decoder {
+public record FeignJsonResponseTupleDecoder(@NonNull Decoder downstream) implements Decoder {
 
   private static final int MAX_BODY_CHARS_IN_ERR_MESSAGE = 250;
 
+  /**
+   * Builds a helpful error message from the given response, indicating why the decoding process was skipped.
+   *
+   * @param response the response that was received and caused the decoding to be skipped.
+   * @return a string with a helpful error message to indicate why the decoding was skipped.
+   */
+  private static @NonNull String buildErrorMessage(@NonNull Response response) {
+    String bodyAsString = null;
+    var body = response.body();
+    if (body != null) {
+      try {
+        var bodyBytes = Util.toByteArray(body.asInputStream());
+        bodyAsString = new String(bodyBytes, StandardCharsets.UTF_8);
+        if (bodyAsString.length() > MAX_BODY_CHARS_IN_ERR_MESSAGE) {
+          bodyAsString = bodyAsString.substring(0, MAX_BODY_CHARS_IN_ERR_MESSAGE) + "...";
+        }
+      } catch (IOException _) {
+      }
+    }
+
+    return String.format(
+      "Skipping decode due to receiving Response[status=%s; body=%s]",
+      response.status(), bodyAsString);
+  }
+
   @Override
-  public @Nullable Object decode(@NotNull Response response, @NotNull Type type) throws IOException, FeignException {
+  public @Nullable Object decode(@NonNull Response response, @NonNull Type type) throws IOException, FeignException {
     if (type instanceof ParameterizedType pt
       && pt.getRawType() instanceof Class<?> rawType
       && rawType == FeignJsonResponseTuple.class) {
@@ -62,30 +87,5 @@ public record FeignJsonResponseTupleDecoder(@NotNull Decoder downstream) impleme
       var originalException = new IllegalStateException(message);
       throw new StacklessRequestException(response.request(), originalException);
     }
-  }
-
-  /**
-   * Builds a helpful error message from the given response, indicating why the decoding process was skipped.
-   *
-   * @param response the response that was received and caused the decoding to be skipped.
-   * @return a string with a helpful error message to indicate why the decoding was skipped.
-   */
-  private static @NotNull String buildErrorMessage(@NotNull Response response) {
-    String bodyAsString = null;
-    var body = response.body();
-    if (body != null) {
-      try {
-        var bodyBytes = Util.toByteArray(body.asInputStream());
-        bodyAsString = new String(bodyBytes, StandardCharsets.UTF_8);
-        if (bodyAsString.length() > MAX_BODY_CHARS_IN_ERR_MESSAGE) {
-          bodyAsString = bodyAsString.substring(0, MAX_BODY_CHARS_IN_ERR_MESSAGE) + "...";
-        }
-      } catch (IOException _) {
-      }
-    }
-
-    return String.format(
-      "Skipping decode due to receiving Response[status=%s; body=%s]",
-      response.status(), bodyAsString);
   }
 }

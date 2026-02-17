@@ -1,0 +1,11 @@
+syntax = "proto3";
+package tools.simrail.backend;
+
+option java_multiple_files = false;
+option java_outer_classname = "CacheProto";
+option java_package = "tools.simrail.backend.common.proto";
+
+message JourneyChecksumData {
+  string foreign_run_id = 1;
+  string checksum = 2;
+}

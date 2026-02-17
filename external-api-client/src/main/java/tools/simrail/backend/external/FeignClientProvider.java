@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,25 @@
 
 package tools.simrail.backend.external;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.PropertyAccessor;
-import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.MapperFeature;
-import com.fasterxml.jackson.databind.PropertyNamingStrategies;
-import com.fasterxml.jackson.databind.SerializationFeature;
-import com.fasterxml.jackson.databind.json.JsonMapper;
-import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
-import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import feign.ExceptionPropagationPolicy;
 import feign.Feign;
 import feign.Logger;
-import feign.jackson.JacksonDecoder;
-import feign.jackson.JacksonEncoder;
 import feign.slf4j.Slf4jLogger;
 import java.util.Set;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
+import tools.jackson.databind.DeserializationFeature;
+import tools.jackson.databind.MapperFeature;
+import tools.jackson.databind.PropertyNamingStrategies;
+import tools.jackson.databind.cfg.DateTimeFeature;
+import tools.jackson.databind.json.JsonMapper;
 import tools.simrail.backend.external.feign.CustomFieldQueryMapEncoder;
 import tools.simrail.backend.external.feign.ExceptionHandlingRetryer;
 import tools.simrail.backend.external.feign.FeignJava11Client;
 import tools.simrail.backend.external.feign.FeignJsonResponseTupleDecoder;
 import tools.simrail.backend.external.feign.FeignResponseInterceptor;
+import tools.simrail.backend.external.feign.jackson.Jackson3Decoder;
+import tools.simrail.backend.external.feign.jackson.Jackson3Encoder;
 
 public final class FeignClientProvider {
 
@@ -57,7 +53,7 @@ public final class FeignClientProvider {
     throw new UnsupportedOperationException();
   }
 
-  public static @NotNull Feign.Builder prepareFeignInstance() {
+  public static Feign.@NonNull Builder prepareFeignInstance() {
     var callingClass = CLASS_REF_RETAINING_STACK_WALKER.getCallerClass();
     return Feign.builder()
       .logLevel(Logger.Level.FULL)
@@ -67,20 +63,17 @@ public final class FeignClientProvider {
       .exceptionPropagationPolicy(ExceptionPropagationPolicy.NONE);
   }
 
-  public static @NotNull Feign.Builder prepareJsonFeignInstance() {
-    // build json object mapper for encoding/decoding requests
+  public static Feign.@NonNull Builder prepareJsonFeignInstance() {
+    // build JSON object mapper for encoding/decoding requests
     var bodyMapper = JsonMapper.builder()
-      .addModule(new Jdk8Module())
-      .addModule(new JavaTimeModule())
-      .disable(SerializationFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .enable(DateTimeFeature.WRITE_DATES_WITH_ZONE_ID)
+      .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
+      .disable(DateTimeFeature.WRITE_DATES_AS_TIMESTAMPS)
+      .disable(DateTimeFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
       .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
       .disable(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES)
-      .disable(DeserializationFeature.ADJUST_DATES_TO_CONTEXT_TIME_ZONE)
-      .enable(MapperFeature.ACCEPT_CASE_INSENSITIVE_ENUMS)
-      .enable(SerializationFeature.WRITE_DATES_WITH_ZONE_ID)
-      .serializationInclusion(JsonInclude.Include.NON_NULL)
       .propertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
-      .visibility(PropertyAccessor.GETTER, JsonAutoDetect.Visibility.NONE)
+      .changeDefaultPropertyInclusion(value -> value.withValueInclusion(JsonInclude.Include.NON_NULL))
       .build();
 
     // create base feign instance
@@ -89,8 +82,8 @@ public final class FeignClientProvider {
       .logLevel(Logger.Level.FULL)
       .client(new FeignJava11Client())
       .logger(new Slf4jLogger(callingClass))
-      .encoder(new JacksonEncoder(bodyMapper))
-      .decoder(new FeignJsonResponseTupleDecoder(new JacksonDecoder(bodyMapper)))
+      .encoder(new Jackson3Encoder(bodyMapper))
+      .decoder(new FeignJsonResponseTupleDecoder(new Jackson3Decoder(bodyMapper)))
       .retryer(ExceptionHandlingRetryer.INSTANCE)
       .queryMapEncoder(new CustomFieldQueryMapEncoder())
       .responseInterceptor(new FeignResponseInterceptor())

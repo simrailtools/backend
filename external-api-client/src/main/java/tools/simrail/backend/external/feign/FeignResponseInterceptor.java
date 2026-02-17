@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,8 +28,8 @@ import feign.InvocationContext;
 import feign.Response;
 import feign.ResponseInterceptor;
 import feign.Util;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 
 /**
@@ -38,7 +38,7 @@ import tools.simrail.backend.external.feign.exception.StacklessRequestException;
 public final class FeignResponseInterceptor implements ResponseInterceptor {
 
   @Override
-  public @Nullable Object intercept(@NotNull InvocationContext context, @NotNull Chain chain) {
+  public @Nullable Object intercept(@NonNull InvocationContext context, @NonNull Chain chain) {
     var decoder = context.decoder();
     var response = context.response();
     var returnType = context.returnType();

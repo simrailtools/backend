@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,29 +27,35 @@ package tools.simrail.backend.collector.server;
 import io.micrometer.core.annotation.Timed;
 import io.micrometer.core.instrument.Gauge;
 import io.micrometer.core.instrument.MeterRegistry;
-import jakarta.annotation.Nonnull;
-import java.time.ZoneOffset;
+import io.nats.client.Connection;
+import jakarta.annotation.PostConstruct;
+import java.time.Duration;
+import java.time.Instant;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.event.EventSubjectFactory;
+import tools.simrail.backend.common.proto.EventBusProto;
 import tools.simrail.backend.common.scenery.SimRailServerSceneryProvider;
 import tools.simrail.backend.common.server.SimRailServerEntity;
-import tools.simrail.backend.common.server.SimRailServerRegion;
-import tools.simrail.backend.common.server.SimRailServerRepository;
 import tools.simrail.backend.common.server.SimRailServerScenery;
-import tools.simrail.backend.common.util.MongoIdDecodeUtil;
+import tools.simrail.backend.common.util.MonotonicInstantProvider;
+import tools.simrail.backend.common.util.StringUtils;
 import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
@@ -57,42 +63,68 @@ import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 @Service
 public class SimRailServerCollector implements SimRailServerService {
 
-  private static final Logger LOGGER = LoggerFactory.getLogger(SimRailServerCollector.class);
   // https://regex101.com/r/8kPxyF/2
   private static final Pattern SERVER_NAME_REGEX = Pattern.compile("^.+ \\((?<lang>.+)\\) ?(\\[(?<tags>.+)])?$");
 
+  private final Connection connection;
   private final UuidV5Factory serverIdFactory;
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPanelApiClient panelApiClient;
-  private final ServerUpdateHandler serverUpdateHandler;
-  private final SimRailServerRepository serverRepository;
+  private final CollectorServerService serverService;
   private final SimRailServerSceneryProvider sceneryProvider;
 
-  // tracks servers whose language/tags couldn't be parsed to only log a warning about this once
-  private final Set<UUID> warnedUnparsableServers = new HashSet<>();
+  private final Map<String, ServerUpdateHolder> updateHoldersByForeignId;
+  private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   private long collectionRuns = 0;
+  private Instant lastDatabaseUpdate;
   private volatile List<SimRailServerDescriptor> collectedServers = List.of();
 
   @Autowired
   SimRailServerCollector(
-    @Nonnull SimRailAwsApiClient awsApiClient,
-    @Nonnull SimRailPanelApiClient panelApiClient,
-    @Nonnull SimRailServerRepository serverRepository,
-    @Nonnull ServerUpdateHandler serverUpdateHandler,
-    @Nonnull SimRailServerSceneryProvider sceneryProvider,
-    @Nonnull MeterRegistry meterRegistry
+    @NonNull Connection connection,
+    @NonNull MeterRegistry meterRegistry,
+    @NonNull SimRailAwsApiClient awsApiClient,
+    @NonNull SimRailPanelApiClient panelApiClient,
+    @NonNull CollectorServerService serverService,
+    @NonNull SimRailServerSceneryProvider sceneryProvider,
+    @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
   ) {
+    this.connection = connection;
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
-    this.serverRepository = serverRepository;
-    this.serverUpdateHandler = serverUpdateHandler;
+    this.serverService = serverService;
     this.sceneryProvider = sceneryProvider;
+    this.serverDataCache = serverDataCache;
+
     this.serverIdFactory = new UuidV5Factory(SimRailServerEntity.ID_NAMESPACE);
+    this.updateHoldersByForeignId = new ConcurrentHashMap<>(20, 0.9f, 1);
 
     Gauge.builder("cached_active_servers_total", () -> this.collectedServers.size())
       .description("Total number of cached active SimRail servers")
       .register(meterRegistry);
+  }
+
+  @PostConstruct
+  public void reconstructUpdateHoldersFromCache() {
+    this.serverDataCache.pullCacheFromStorage(); // re-init data cache from underlying storage
+    var cachedValues = this.serverDataCache.cachedValuesSnapshot();
+    for (var cachedValue : cachedValues) {
+      var idHolder = cachedValue.getIds();
+      var sid = UUID.fromString(idHolder.getServerId());
+      var updateHolder = new ServerUpdateHolder(sid, idHolder.getForeignId());
+      this.updateHoldersByForeignId.put(idHolder.getForeignId(), updateHolder);
+
+      // reconstruct the update fields state from the journey data
+      var data = cachedValue.getServerData();
+      updateHolder.online.forceUpdateValue(data.getOnline());
+      updateHolder.utcOffsetSeconds.forceUpdateValue(data.getUtcOffsetSeconds());
+      updateHolder.tags.forceUpdateValue(new HashSet<>(data.getTagsList()));
+      updateHolder.scenery.forceUpdateValue(StringUtils.decodeEnum(data.getScenery(), SimRailServerScenery.FULL));
+      if (data.hasSpokenLanguage()) {
+        updateHolder.spokenLanguage.forceUpdateValue(data.getSpokenLanguage());
+      }
+    }
   }
 
   /**
@@ -103,121 +135,145 @@ public class SimRailServerCollector implements SimRailServerService {
   public void collectServerInformation() throws Exception {
     // collect further information about the server, such as the timezone
     // on every second collection run (every 60 seconds)
-    var errorDuringCollect = false;
-    var oldServerCount = this.collectedServers.size();
     var fullCollection = this.collectionRuns++ % 2 == 0;
+
+    // check if we should update the stored db data
+    var now = Instant.now();
+    var lastDbUpdate = this.lastDatabaseUpdate;
+    var shouldUpdateDatabase = lastDbUpdate == null || Duration.between(lastDbUpdate, now).abs().toMinutes() >= 5;
+    if (shouldUpdateDatabase) {
+      this.lastDatabaseUpdate = now;
+    }
 
     var response = this.panelApiClient.getServers();
     var servers = response.getEntries();
     if (!response.isSuccess() || servers == null || servers.isEmpty()) {
-      LOGGER.warn("API did not return a successful result while getting server list");
       return;
     }
 
     var foundServers = new ArrayList<SimRailServerDescriptor>();
     for (var index = 0; index < servers.size(); index++) {
-      // get or create the server entity, store the original variable information
       var server = servers.get(index);
-      var serverEntity = this.serverRepository.findByForeignId(server.getId()).orElseGet(() -> {
-        var newServer = new SimRailServerEntity();
-        newServer.setNew(true);
-        newServer.setForeignId(server.getId());
-        newServer.setTimezone(ZoneOffset.UTC.getId());
-        newServer.setId(this.serverIdFactory.create(server.getCode() + server.getId()));
-        return newServer;
-      });
-      var originalOnline = serverEntity.isOnline();
-      var originalDeleted = serverEntity.isDeleted();
-      var originalUtcOffset = serverEntity.getUtcOffsetHours();
-      var originalScenery = serverEntity.getScenery() != null ? serverEntity.getScenery().name() : null;
+      var updateHolder = this.updateHoldersByForeignId.get(server.getId());
+      var mightBeNewServer = updateHolder == null;
+      if (updateHolder == null) {
+        var sid = this.serverIdFactory.create(server.getCode() + server.getId());
+        updateHolder = new ServerUpdateHolder(sid, server.getId());
+        this.updateHoldersByForeignId.put(server.getId(), updateHolder);
+      }
 
-      // update the base information
-      serverEntity.setDeleted(false);
-      serverEntity.setCode(server.getCode());
-      serverEntity.setOnline(server.isOnline());
+      // update the server online status
+      updateHolder.online.updateValue(server.isOnline());
 
       // update the scenery used on the server
       var scenery = this.sceneryProvider
         .findSceneryByServerId(server.getId())
         .orElse(SimRailServerScenery.WARSAW_KATOWICE_KRAKOW);
-      serverEntity.setScenery(scenery);
-
-      // update the time when the server was initially registered in the SimRail backend
-      var registeredSince = MongoIdDecodeUtil.parseMongoId(server.getId());
-      serverEntity.setRegisteredSince(registeredSince);
-
-      // update the server region
-      var region = switch (server.getRegion()) {
-        case ASIA -> SimRailServerRegion.ASIA;
-        case EUROPE -> SimRailServerRegion.EUROPE;
-        case US_NORTH -> SimRailServerRegion.US_NORTH;
-      };
-      serverEntity.setRegion(region);
+      updateHolder.scenery.updateValue(scenery);
 
       // update spoken language and tags
-      var matcher = SERVER_NAME_REGEX.matcher(server.getName());
-      if (matcher.matches()) {
-        // get the server language, set it to null if the server is international as no specific language is spoken
-        var lang = matcher.group("lang").strip();
-        var spokenLang = server.getCode().startsWith("int") || lang.startsWith("International") ? null : lang;
-        serverEntity.setSpokenLanguage(spokenLang);
-
-        // update the tags of the server
-        var tags = Objects.requireNonNullElse(matcher.group("tags"), "");
-        var tagList = Arrays.stream(tags.split(","))
-          .map(String::strip)
-          .filter(tag -> !tag.isEmpty())
-          .toList();
-        var currentTags = serverEntity.getTags();
-        if (!tagList.equals(currentTags)) {
-          serverEntity.setTags(tagList);
-        }
+      var serverCode = server.getCode();
+      var serverName = server.getName();
+      if (serverCode.startsWith("xbx")) {
+        // Xbox servers are named differently
+        var nameParts = serverName.split(" ");
+        var lang = nameParts.length >= 2 ? nameParts[1] : null;
+        var spokenLang = lang == null || lang.equals("International") ? null : lang;
+        updateHolder.spokenLanguage.updateValue(spokenLang);
+        updateHolder.tags.updateValue(Set.of()); // Xbox servers don't have tags
       } else {
-        serverEntity.setTags(List.of());
-        if (this.warnedUnparsableServers.add(serverEntity.getId())) {
-          LOGGER.warn("Couldn't parse lang/tags from {}, assuming international server without tags", server.getName());
+        var matcher = SERVER_NAME_REGEX.matcher(serverName);
+        if (matcher.matches()) {
+          // usual server name format: DE1 (Deutsch) [KEINE EVENTS]
+          var lang = matcher.group("lang").strip();
+          var spokenLang = serverCode.startsWith("int") || lang.equals("International") ? null : lang;
+          updateHolder.spokenLanguage.updateValue(spokenLang);
+
+          // tags are optional, check if they are present
+          var tagPart = matcher.group("tags");
+          if (tagPart == null) {
+            updateHolder.tags.updateValue(Set.of());
+          } else {
+            var rawTags = tagPart.split(",");
+            var tags = Arrays.stream(rawTags)
+              .map(String::strip)
+              .filter(tag -> !tag.isEmpty())
+              .collect(Collectors.toSet());
+            updateHolder.tags.updateValue(tags);
+          }
+        } else {
+          // unusual name format, just assume international and no tags
+          updateHolder.spokenLanguage.updateValue(null);
+          updateHolder.tags.updateValue(Set.of());
         }
       }
 
-      ZoneOffset serverZoneOffset = null;
-      Long serverZoneOffsetSeconds = null;
-      if (fullCollection) {
-        // collect the server timezone identifier
-        var serverUtcOffset = this.awsApiClient.getServerTimeOffset(server.getCode());
-        serverZoneOffset = ZoneOffset.ofHours(serverUtcOffset);
-        serverEntity.setTimezone(serverZoneOffset.getId());
-
+      if (fullCollection || mightBeNewServer) {
         // collect the actual server timezone offset seconds
         var serverTimeResponse = this.awsApiClient.getServerTimeMillis(server.getCode());
-        serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
-
-        // mark if an error was encountered loading the server time
-        errorDuringCollect |= serverZoneOffsetSeconds != null;
+        var serverZoneOffsetSeconds = ServerTimeUtil.calculateTimezoneOffsetSeconds(serverTimeResponse);
 
         // convert the collected utc offset seconds to utc offset hours and update it in the server entity
         if (serverZoneOffsetSeconds != null) {
-          var utcOffsetHours = (int) Math.round(serverZoneOffsetSeconds / 3600.0); // 3600 - 1 hour in seconds
-          serverEntity.setUtcOffsetHours(utcOffsetHours);
+          updateHolder.utcOffsetSeconds.updateValue(serverZoneOffsetSeconds);
         }
       }
 
-      // save the entity and register it as discovered during the run if we did a full collection
-      var savedEntity = this.serverRepository.save(serverEntity);
-      if (serverZoneOffset != null && serverZoneOffsetSeconds != null) {
-        var serverDescriptor = new SimRailServerDescriptor(
-          savedEntity.getId(),
-          server.getId(),
-          server.getCode(),
-          serverZoneOffset,
-          serverZoneOffsetSeconds);
-        foundServers.add(serverDescriptor);
+      if (updateHolder.fieldGroup.consumeAnyDirty()) {
+        var prevUpdateFrame = this.serverDataCache.findBySecondaryKey(updateHolder.foreignId);
+        var updateFrameBuilder = switch (prevUpdateFrame) {
+          case EventBusProto.ServerUpdateFrame frame -> frame.toBuilder();
+          case null -> {
+            var sidString = updateHolder.id.toString();
+            var ids = EventBusProto.IdHolder.newBuilder()
+              .setDataId(sidString)
+              .setServerId(sidString)
+              .setForeignId(updateHolder.foreignId)
+              .build();
+            yield EventBusProto.ServerUpdateFrame.newBuilder().setIds(ids);
+          }
+        };
+
+        // apply the changed fields to the server data builder
+        var serverDataBuilder = updateFrameBuilder.getServerData().toBuilder();
+        updateHolder.online.ifDirty(serverDataBuilder::setOnline);
+        updateHolder.utcOffsetSeconds.ifDirty(serverDataBuilder::setUtcOffsetSeconds);
+        updateHolder.tags.ifDirty(tags -> serverDataBuilder.clearTags().addAllTags(tags));
+        updateHolder.spokenLanguage.ifDirty(language -> {
+          if (language == null) {
+            serverDataBuilder.clearSpokenLanguage();
+          } else {
+            serverDataBuilder.setSpokenLanguage(language);
+          }
+        });
+        updateHolder.scenery.ifDirty(serverScenery -> serverDataBuilder.setScenery(serverScenery.name()));
+
+        // insert the server data into the cache
+        var serverData = serverDataBuilder.build();
+        var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+          .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+          .build();
+        var updateFrame = updateFrameBuilder
+          .setBaseData(baseFrameData)
+          .setServerData(serverData)
+          .build();
+        this.serverDataCache.setCachedValue(updateFrame);
+
+        // send out server update frame
+        var subject = EventSubjectFactory.createServerUpdateSubjectV1(updateFrame.getIds().getServerId());
+        this.connection.publish(subject, updateFrame.toByteArray());
       }
 
-      // publish a possible change to all listeners
-      if (serverEntity.isNew() || originalDeleted) {
-        this.serverUpdateHandler.handleServerAdd(savedEntity);
-      } else {
-        this.serverUpdateHandler.handleServerUpdate(originalOnline, originalUtcOffset, originalScenery, savedEntity);
+      // update the server data in the database if it's either a new server or for a periodical update
+      if (mightBeNewServer || shouldUpdateDatabase) {
+        this.serverService.saveServer(server, updateHolder);
+      }
+
+      // register a server descriptor for the server during a full collection
+      if (fullCollection) {
+        var utcOffsetSeconds = updateHolder.utcOffsetSeconds.currentValue();
+        var sc = new SimRailServerDescriptor(updateHolder.id, updateHolder.foreignId, serverCode, utcOffsetSeconds);
+        foundServers.add(sc);
       }
 
       // add a small delay every 5 servers to prevent exceeding api quota limits
@@ -227,44 +283,62 @@ public class SimRailServerCollector implements SimRailServerService {
       }
     }
 
-    if (fullCollection && !errorDuringCollect) {
+    if (fullCollection) {
       // mark all servers which are not included in the response as deleted
-      var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).toList();
-      var missingServers = this.serverRepository.findAllByIdNotInAndNotDeleted(updatedServerIds);
-      for (var missingServer : missingServers) {
-        missingServer.setOnline(false);
-        missingServer.setDeleted(true);
-        this.serverRepository.save(missingServer);
-        this.serverUpdateHandler.handleServerRemove(missingServer);
-      }
-    }
+      var updatedServerIds = foundServers.stream().map(SimRailServerDescriptor::id).collect(Collectors.toSet());
+      this.serverService.markUncontainedServersAsDeleted(updatedServerIds);
 
-    var collectedServerCount = foundServers.size();
-    if (fullCollection && (collectedServerCount > oldServerCount || !errorDuringCollect)) {
-      // update the found servers during the run to make them available to readers
-      // only do this if no error was encountered during collection or collection
-      // being necessary due to no servers being found previously
+      // remove the removed servers from the
+      var updatedServerIdStrings = foundServers.stream()
+        .map(SimRailServerDescriptor::foreignId)
+        .collect(Collectors.toSet());
+      var removedServers = this.serverDataCache.findBySecondaryKeyNotIn(updatedServerIdStrings);
+      removedServers.forEach(cached -> {
+        this.serverDataCache.removeByPrimaryKey(cached.getIds().getDataId());
+
+        // send out journey removal frame
+        var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+          .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+          .build();
+        var serverRemoveFrame = EventBusProto.ServerRemoveFrame.newBuilder()
+          .setBaseData(baseFrameData)
+          .setServerId(cached.getIds().getServerId())
+          .build();
+        var subject = EventSubjectFactory.createServerRemoveSubjectV1(cached.getIds().getServerId());
+        this.connection.publish(subject, serverRemoveFrame.toByteArray());
+      });
+
+      // remove the unnecessary update holders from the local cache
+      for (var entry : this.updateHoldersByForeignId.entrySet()) {
+        var foreignId = entry.getKey();
+        var holder = entry.getValue();
+        if (!updatedServerIds.contains(holder.id)) {
+          this.updateHoldersByForeignId.remove(foreignId);
+        }
+      }
+
+      // update the list of servers that are known
       this.collectedServers = foundServers;
     }
   }
 
   @Override
-  public @Nonnull List<SimRailServerDescriptor> getServers() {
+  public @NonNull List<SimRailServerDescriptor> getServers() {
     return this.collectedServers;
   }
 
   @Override
-  public @Nonnull Optional<SimRailServerDescriptor> findServerByIntId(@Nonnull UUID id) {
+  public @NonNull Optional<SimRailServerDescriptor> findServerByIntId(@NonNull UUID id) {
     return this.collectedServers.stream().filter(desc -> desc.id().equals(id)).findFirst();
   }
 
   @Override
-  public @Nonnull Optional<SimRailServerDescriptor> findServerBySimRailId(@Nonnull String id) {
+  public @NonNull Optional<SimRailServerDescriptor> findServerBySimRailId(@NonNull String id) {
     return this.collectedServers.stream().filter(desc -> desc.foreignId().equals(id)).findFirst();
   }
 
   @Override
-  public @Nonnull Optional<SimRailServerDescriptor> findServerByCode(@Nonnull String code) {
+  public @NonNull Optional<SimRailServerDescriptor> findServerByCode(@NonNull String code) {
     return this.collectedServers.stream().filter(desc -> desc.code().equals(code)).findFirst();
   }
 }

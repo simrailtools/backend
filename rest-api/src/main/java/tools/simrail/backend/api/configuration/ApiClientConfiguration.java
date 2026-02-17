@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,31 @@
 
 package tools.simrail.backend.api.configuration;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.simrail.backend.external.brouter.BRouterApiClient;
-import tools.simrail.backend.external.steam.SteamApiClient;
+import tools.simrail.backend.external.playerdb.PlayerDbApiClient;
 
 @Configuration
 class ApiClientConfiguration {
 
   /**
-   * Configures the steam api client.
-   */
-  @Bean
-  public @Nonnull SteamApiClient steamApiClient(@Value("${STEAM_API_KEY}") String steamApiKey) {
-    return SteamApiClient.create(steamApiKey);
-  }
-
-  /**
    * Configures the BRouter api client.
    */
   @Bean
-  public @Nonnull BRouterApiClient bRouterApiClient() {
-    return BRouterApiClient.create();
+  public @NonNull BRouterApiClient bRouterApiClient(
+    @Value("${sit.brouter.url:https://brouter.simrail.tools}") String brouterBaseUrl
+  ) {
+    return BRouterApiClient.create(brouterBaseUrl);
+  }
+
+  /**
+   * Configures the PlayerDB api client.
+   */
+  @Bean
+  public @NonNull PlayerDbApiClient playerDbApiClient(@Value("${sit.playerdb.user-agent}") String userAgent) {
+    return PlayerDbApiClient.create(userAgent);
   }
 }

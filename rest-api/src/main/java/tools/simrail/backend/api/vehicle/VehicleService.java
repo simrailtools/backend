@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,28 +24,29 @@
 
 package tools.simrail.backend.api.vehicle;
 
-import jakarta.annotation.Nonnull;
 import java.util.Optional;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.api.vehicle.dto.VehicleCompositionDto;
-import tools.simrail.backend.api.vehicle.dto.VehicleCompositionDtoConverter;
+import tools.simrail.backend.api.vehicle.dto.VehicleSequenceDto;
+import tools.simrail.backend.api.vehicle.dto.VehicleSequenceDtoConverter;
+import tools.simrail.backend.common.vehicle.JourneyVehicleSequenceRepository;
 
 @Service
 class VehicleService {
 
-  private final ApiVehicleRepository vehicleRepository;
-  private final VehicleCompositionDtoConverter vehicleCompositionConverter;
+  private final JourneyVehicleSequenceRepository vehicleRepository;
+  private final VehicleSequenceDtoConverter vehicleSequenceDtoConverter;
 
   @Autowired
-  public VehicleService(
-    @Nonnull ApiVehicleRepository vehicleRepository,
-    @Nonnull VehicleCompositionDtoConverter vehicleCompositionConverter
+  VehicleService(
+    @NonNull JourneyVehicleSequenceRepository vehicleRepository,
+    @NonNull VehicleSequenceDtoConverter vehicleSequenceDtoConverter
   ) {
     this.vehicleRepository = vehicleRepository;
-    this.vehicleCompositionConverter = vehicleCompositionConverter;
+    this.vehicleSequenceDtoConverter = vehicleSequenceDtoConverter;
   }
 
   /**
@@ -55,10 +56,7 @@ class VehicleService {
    * @return the vehicle composition of the journey with the given id, if one exists.
    */
   @Cacheable(cacheNames = "vehicle_sequence_cache", key = "'by_jid_' + #journeyId")
-  public @Nonnull Optional<VehicleCompositionDto> findByJourneyId(@Nonnull UUID journeyId) {
-    var fetchedVehicles = this.vehicleRepository.findJourneyVehiclesByJourneyIdOrderByIndexInGroup(journeyId);
-    return Optional.of(fetchedVehicles)
-      .filter(vehicles -> !vehicles.isEmpty())
-      .map(this.vehicleCompositionConverter);
+  public @NonNull Optional<VehicleSequenceDto> findByJourneyId(@NonNull UUID journeyId) {
+    return this.vehicleRepository.findByJourneyId(journeyId).map(this.vehicleSequenceDtoConverter);
   }
 }

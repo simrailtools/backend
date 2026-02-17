@@ -1,0 +1,59 @@
+sit:
+  brouter:
+    url: 'https://brouter.simrail.tools'
+
+logging:
+  pattern:
+    console: '%yellow(%date{dd.MM.yy HH:mm:ss}) [%highlight(%5p)] %cyan(%-40.40logger{0})[%magenta(%4.4line)]: %msg %ex%n'
+
+server:
+  # address gets configured in IPv4AddressWebServerCustomizer
+  port: ${PORT:8080}
+  http2:
+    enabled: true
+  tomcat:
+    accesslog:
+      enabled: false
+
+spring:
+  sql:
+    init:
+      mode: never
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: none
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      minimum-idle: 5
+      maximum-pool-size: 50
+      connection-timeout: 15000
+  web:
+    error:
+      path: '/error'
+      include-exception: false
+      include-stacktrace: never
+      include-binding-errors: never
+      whitelabel:
+        enabled: false
+  mvc:
+    problemdetails:
+      enabled: true
+
+springdoc:
+  disable-i18n: true
+  writer-with-default-pretty-printer: true
+  api-docs:
+    enabled: true
+    path: '/docs/openapi'
+    version: openapi_3_1
+
+management:
+  server:
+    port: 8085
+  prometheus:
+    metrics:
+      export:
+        step: 30s
+        enabled: true

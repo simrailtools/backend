@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,14 +26,12 @@ package tools.simrail.backend.external.sraws;
 
 import feign.Param;
 import feign.RequestLine;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 
 public interface SimRailIntAwsApiClient {
 
-  @Contract(" -> new")
-  static @NotNull SimRailIntAwsApiClient create() {
+  static @NonNull SimRailIntAwsApiClient create() {
     return FeignClientProvider.prepareFeignInstance()
       .target(SimRailIntAwsApiClient.class, "https://api1.aws.simrail.eu:8083");
   }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,27 +25,28 @@
 package tools.simrail.backend.api.user;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
+import org.hibernate.validator.constraints.URL;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.api.shared.UserPlatform;
 
 /**
  * DTO for data about a single steam profile.
  */
-record SimRailUserDto(
-  @Schema(description = "The id of the steam profile")
-  @NotNull @Pattern(regexp = "^7656119\\d{10}$") String id,
-  @Schema(description = "The name of the steam profile")
+public record SimRailUserDto(
+  @Schema(description = "The id of the user")
+  @NotNull String id,
+  @Schema(description = "The platform the user is playing on")
+  @NotNull UserPlatform platform,
+  @Schema(description = "The name of the user")
   @NotNull @NotBlank String name,
-  @Schema(description = "The avatar hash of the profile, can be used to retrieve the image from Steam")
-  @NotNull @NotBlank String avatarHash,
-  @Schema(description = "The url to the profile")
-  @NotNull @NotBlank String profileUrl,
-  @Schema(description = "The ISO 3166-1 alpha-2 country code where the user resides, null if not visible or set", types = {"null"})
-  @Nullable String countryCode,
-  @Schema(description = "Indicates if the steam profile page is publicly visible")
-  @NotNull boolean profileVisible
+  @Schema(description = "The url to the profile of the user")
+  @NotNull @NotBlank @URL String profileUrl,
+  @Schema(description = "The url to the avatar of the user")
+  @NotNull @NotBlank @URL String avatarUrl,
+  @Schema(description = "The location of the user (in some form), null if not known", types = "null")
+  @Nullable String location
 ) {
 
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,24 @@
 
 package tools.simrail.backend.common.dispatchpost;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
+import jakarta.persistence.AttributeOverride;
+import jakarta.persistence.AttributeOverrides;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
-import jakarta.persistence.Index;
-import jakarta.persistence.OrderColumn;
-import jakarta.persistence.Table;
-import jakarta.persistence.Transient;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.Objects;
 import java.util.Set;
 import java.util.UUID;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.annotations.UpdateTimestamp;
+import org.hibernate.type.SqlTypes;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.shared.GeoPositionEntity;
 
 /**
@@ -53,11 +51,6 @@ import tools.simrail.backend.common.shared.GeoPositionEntity;
 @Setter
 @NoArgsConstructor
 @Entity(name = "sr_dispatch_post")
-@Table(indexes = {
-  @Index(columnList = "pointId"),
-  @Index(columnList = "foreignId"),
-  @Index(columnList = "serverId, difficultyLevel, pointId, deleted, registeredSince, id"),
-})
 public final class SimRailDispatchPostEntity {
 
   /**
@@ -69,87 +62,67 @@ public final class SimRailDispatchPostEntity {
    * The unique identifier of the dispatch post.
    */
   @Id
-  @Nonnull
+  @Column(name = "id")
   private UUID id;
   /**
    * The id of the point that is associated with the station.
    */
-  @Nonnull
-  @Column(nullable = false)
+  @Column(name = "point_id")
   private UUID pointId;
   /**
    * The foreign (mongo identifier) of the dispatch post provided by the SimRail api.
    */
-  @Nonnull
-  @Column(nullable = false, updatable = false, length = 24)
+  @Column(name = "foreign_id")
   private String foreignId;
+  /**
+   * The server code on which this dispatch post is located.
+   */
+  @Column(name = "server_id")
+  private UUID serverId;
 
   /**
    * The timestamp when this dispatch post was last updated.
    */
-  @Nonnull
   @UpdateTimestamp
-  @Column(nullable = false)
-  private OffsetDateTime updateTime;
+  @Column(name = "update_time")
+  private Instant updateTime;
   /**
    * The time when the dispatch post was initially registered in the SimRail backend.
    */
-  @Nonnull
-  @Column(nullable = false)
-  private OffsetDateTime registeredSince;
+  @Column(name = "registered_since")
+  private Instant registeredSince;
 
   /**
    * The name of the dispatch post.
    */
-  @Nonnull
-  @Column(nullable = false)
+  @Column(name = "name")
   private String name;
-  /**
-   * The server code on which this dispatch post is located.
-   */
-  @Nonnull
-  @Column(nullable = false, updatable = false)
-  private UUID serverId;
-  /**
-   * If the dispatch post is no longer registered in the SimRail backend.
-   */
-  @Column
-  private boolean deleted;
   /**
    * The difficulty level of the station.
    */
-  @Column
+  @Column(name = "difficulty_level")
   private int difficultyLevel;
   /**
    * The geo position where the dispatch post building is located.
    */
-  @Nonnull
   @Embedded
+  @AttributeOverrides({
+    @AttributeOverride(name = "latitude", column = @Column(name = "pos_latitude")),
+    @AttributeOverride(name = "longitude", column = @Column(name = "pos_longitude"))
+  })
   private GeoPositionEntity position;
   /**
    * The urls to images related to the dispatch post.
    */
-  @Nonnull
-  @Column(nullable = false)
-  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
+  @Column(name = "image_urls")
+  @JdbcTypeCode(SqlTypes.JSON)
   private Set<String> imageUrls;
-  /**
-   * The steam ids of the player(s) that are currently dispatching the station. Empty if the station is dispatched
-   * automatically.
-   */
-  // impl note: this is a set as there might be multiple dispatchers for a station coming in the future,
-  //            confirmed in a recent blog post, plus the api returns an array the dispatchers anyway
-  @Nonnull
-  @OrderColumn
-  @Column(nullable = false)
-  @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
-  private Set<String> dispatcherSteamIds;
 
   /**
-   * Internal marker to indicate if the post entity was newly created when being collected.
+   * If the dispatch post is no longer registered in the SimRail backend.
    */
-  @Transient
-  private boolean isNew;
+  @Column(name = "deleted")
+  private boolean deleted;
 
   /**
    * {@inheritDoc}
@@ -162,7 +135,7 @@ public final class SimRailDispatchPostEntity {
     if (!(o instanceof SimRailDispatchPostEntity entity)) {
       return false;
     }
-    return Objects.equals(this.id, entity.getId());
+    return this.id != null && Objects.equals(this.id, entity.getId());
   }
 
   /**
@@ -177,7 +150,7 @@ public final class SimRailDispatchPostEntity {
    * {@inheritDoc}
    */
   @Override
-  public @Nonnull String toString() {
+  public @NonNull String toString() {
     return "DispatchPostEntity{id=" + this.id + ", name=" + this.name + "}";
   }
 }

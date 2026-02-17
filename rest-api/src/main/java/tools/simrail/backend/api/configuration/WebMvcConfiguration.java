@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.configuration;
 
-import jakarta.annotation.Nonnull;
 import java.time.Duration;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.CacheControl;
@@ -40,7 +40,7 @@ class WebMvcConfiguration implements WebMvcConfigurer {
   private final ETagGenerator etagGenerator;
 
   @Autowired
-  public WebMvcConfiguration(@Nonnull ETagGenerator etagGenerator) {
+  WebMvcConfiguration(@NonNull ETagGenerator etagGenerator) {
     this.etagGenerator = etagGenerator;
   }
 
@@ -48,7 +48,7 @@ class WebMvcConfiguration implements WebMvcConfigurer {
    * Configures the resource handlers for the documentation pages.
    */
   @Override
-  public void addResourceHandlers(@Nonnull ResourceHandlerRegistry registry) {
+  public void addResourceHandlers(@NonNull ResourceHandlerRegistry registry) {
     registry
       .addResourceHandler("/docs/**")
       .addResourceLocations("classpath:/resources/docs/")
@@ -60,7 +60,7 @@ class WebMvcConfiguration implements WebMvcConfigurer {
    * Configures a redirect of {@code /docs} and {@code /docs/} to {@code /docs/index.html}.
    */
   @Override
-  public void addViewControllers(@Nonnull ViewControllerRegistry registry) {
+  public void addViewControllers(@NonNull ViewControllerRegistry registry) {
     registry.addRedirectViewController("/docs", "/docs/index.html");
     registry.addRedirectViewController("/docs/", "/docs/index.html");
   }

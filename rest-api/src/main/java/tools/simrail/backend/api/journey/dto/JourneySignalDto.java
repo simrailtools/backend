@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,19 +25,19 @@
 package tools.simrail.backend.api.journey.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * DTO for a journey signal.
  */
 public record JourneySignalDto(
   @Schema(description = "The id (name) of the signal")
-  @NotNull @NotBlank String name,
-  @Schema(description = "The allowed speed of passing the signal, null in case it shows a Vmax aspect", types = {"null"})
-  @Nullable Short maxSpeed,
+  @NotNull @NotBlank String id,
+  @Schema(description = "The allowed speed of passing the signal, null if no speed reduction", types = "null")
+  @Nullable @Min(0) Short maxSpeed,
   @Schema(description = "The distance of the journey to the signal, in 10 meter steps")
   @NotNull @Min(0) int distance
 ) {

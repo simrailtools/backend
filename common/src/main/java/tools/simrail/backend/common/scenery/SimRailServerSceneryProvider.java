@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,15 +24,15 @@
 
 package tools.simrail.backend.common.scenery;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Optional;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 import tools.simrail.backend.common.server.SimRailServerScenery;
 
 @Service
@@ -43,7 +43,7 @@ public final class SimRailServerSceneryProvider {
 
   @Autowired
   public SimRailServerSceneryProvider(
-    @Nonnull ObjectMapper objectMapper,
+    @NonNull ObjectMapper objectMapper,
     @Value("classpath:data/server_scenery.json") Resource sceneryResource
   ) throws IOException {
     var serverIdToSceneryMapType = objectMapper.getTypeFactory()
@@ -59,7 +59,7 @@ public final class SimRailServerSceneryProvider {
    * @param serverId the SimRail id of the server to get the scenery of.
    * @return an optional holding the scenery of the server if one exists.
    */
-  public @Nonnull Optional<SimRailServerScenery> findSceneryByServerId(@Nonnull String serverId) {
+  public @NonNull Optional<SimRailServerScenery> findSceneryByServerId(@NonNull String serverId) {
     return Optional.ofNullable(this.sceneryByServerId.get(serverId));
   }
 }

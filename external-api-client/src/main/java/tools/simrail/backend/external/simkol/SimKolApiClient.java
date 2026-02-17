@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,16 +27,14 @@ package tools.simrail.backend.external.simkol;
 import feign.Headers;
 import feign.RequestLine;
 import java.util.List;
-import org.jetbrains.annotations.Contract;
-import org.jetbrains.annotations.NotNull;
+import org.jspecify.annotations.NonNull;
 import tools.simrail.backend.external.FeignClientProvider;
 import tools.simrail.backend.external.simkol.model.SimKolSpeedLimit;
 
-@Headers({"Accept: application/json"})
+@Headers("Accept: application/json")
 public interface SimKolApiClient {
 
-  @Contract("-> new")
-  static @NotNull SimKolApiClient create() {
+  static @NonNull SimKolApiClient create() {
     return FeignClientProvider.prepareJsonFeignInstance()
       .target(SimKolApiClient.class, "https://webhost.simkol.pl");
   }
@@ -46,7 +44,7 @@ public interface SimKolApiClient {
    *
    * @return the speed limits that globally apply to all tracks.
    */
-  @NotNull
+  @NonNull
   @RequestLine("GET /speeds.json")
   List<SimKolSpeedLimit> getSpeedLimits();
 }

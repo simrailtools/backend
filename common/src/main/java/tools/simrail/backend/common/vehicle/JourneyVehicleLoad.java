@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.common.vehicle;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 
 /**
  * An enumeration of the different loads that can be transported by a vehicle.
@@ -60,7 +60,7 @@ public enum JourneyVehicleLoad {
    * @param apiLoadName the name of the load returned by the SimRail api.
    * @return the vehicle load constant corresponding to the given load name.
    */
-  public static @Nonnull JourneyVehicleLoad mapApiLoadType(@Nonnull String apiLoadName) {
+  public static @NonNull JourneyVehicleLoad mapApiLoadType(@NonNull String apiLoadName) {
     return switch (apiLoadName) {
       // 412W
       case "Tie" -> TIE;

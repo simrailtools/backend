@@ -1,0 +1,35 @@
+server:
+  port: 8081
+
+spring:
+  datasource:
+    username: stb
+    password: stb_very_secu1e_passw0rd
+    url: 'jdbc:postgresql://127.0.0.1:51800/simrailtools'
+  application:
+    admin:
+      enabled: true
+
+sit:
+  nats:
+    url: 'nats://stb:stb_very_secu1e_passw0rd@127.0.0.1:51802'
+  valkey:
+    url: 'valkey://stb:stb_very_secu1e_passw0rd@127.0.0.1:51801'
+  playerdb:
+    user-agent: 'SimRailInformationTools Backend (Local Dev)'
+
+management:
+  endpoints:
+    web:
+      base-path: '/admin'
+      exposure:
+        include: '*'
+    access:
+      default: unrestricted
+  endpoint:
+    env:
+      show-values: always
+    health:
+      show-details: always
+    configprops:
+      show-values: always

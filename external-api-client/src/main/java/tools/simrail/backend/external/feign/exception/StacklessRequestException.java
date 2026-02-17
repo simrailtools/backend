@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -27,8 +27,8 @@ package tools.simrail.backend.external.feign.exception;
 import feign.Request;
 import java.io.Serial;
 import java.util.regex.Pattern;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Stackless exception to throw when an http request fails.
@@ -46,7 +46,7 @@ public final class StacklessRequestException extends RuntimeException {
    * @param request           the request that failed.
    * @param originalException the original exception that was thrown.
    */
-  public StacklessRequestException(@NotNull Request request, @NotNull Throwable originalException) {
+  public StacklessRequestException(@NonNull Request request, @NonNull Throwable originalException) {
     var origExMsg = originalException.getMessage();
     var origExMsgCleaned = cleanExceptionMessage(origExMsg);
     var message = String.format(
@@ -71,16 +71,16 @@ public final class StacklessRequestException extends RuntimeException {
   }
 
   @Override
-  public @NotNull Throwable initCause(@Nullable Throwable cause) {
+  public @NonNull Throwable initCause(@Nullable Throwable cause) {
     return this;
   }
 
   @Override
-  public @NotNull Throwable fillInStackTrace() {
+  public @NonNull Throwable fillInStackTrace() {
     return this;
   }
 
   @Override
-  public void setStackTrace(@NotNull StackTraceElement[] stackTrace) {
+  public void setStackTrace(@NonNull StackTraceElement[] stackTrace) {
   }
 }

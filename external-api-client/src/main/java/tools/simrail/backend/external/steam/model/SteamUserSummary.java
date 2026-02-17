@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,6 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.ApiStatus;
 
 /**
  * The summary data returned about a player from the steam web api endpoint.
@@ -100,7 +99,6 @@ public final class SteamUserSummary {
    *
    * @param profileState the profile state. Can be {@code 1} or {@code 0}.
    */
-  @ApiStatus.Internal
   @JsonProperty("profilestate")
   public void deserializeProfileState(int profileState) {
     this.communityProfileSetup = profileState == 1;
@@ -111,7 +109,6 @@ public final class SteamUserSummary {
    *
    * @param communityVisibilityState the visibility state. Can be {@code 1} (private) or {@code 3} (public).
    */
-  @ApiStatus.Internal
   @JsonProperty("communityvisibilitystate")
   public void deserializeCommunityVisibilityState(int communityVisibilityState) {
     this.communityProfileVisible = communityVisibilityState == 3;

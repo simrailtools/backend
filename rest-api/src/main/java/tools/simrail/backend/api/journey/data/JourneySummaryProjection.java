@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.api.journey.data;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 
 /**
  * Projection of a journey entity that only contains fields needed for summary requests (e.g. by-relation).
@@ -39,7 +39,7 @@ public interface JourneySummaryProjection {
    *
    * @return the id of the journey.
    */
-  @Nonnull
+  @NonNull
   UUID getId();
 
   /**
@@ -47,7 +47,7 @@ public interface JourneySummaryProjection {
    *
    * @return the id of the server on which the journey happens.
    */
-  @Nonnull
+  @NonNull
   UUID getServerId();
 
   /**
@@ -56,7 +56,7 @@ public interface JourneySummaryProjection {
    * @return the time when the journey was first active.
    */
   @Nullable
-  OffsetDateTime getFirstSeenTime();
+  Instant getFirstSeenTime();
 
   /**
    * Get the time when the journey was last active, null if the journey wasn't active yet or is still active.
@@ -64,12 +64,12 @@ public interface JourneySummaryProjection {
    * @return the time when the journey was last active.
    */
   @Nullable
-  OffsetDateTime getLastSeenTime();
+  Instant getLastSeenTime();
 
   /**
-   * Get if the complete journey is cancelled and will not happen.
+   * Get if the complete journey is canceled and will not happen.
    *
-   * @return if the complete journey is cancelled and will not happen.
+   * @return if the complete journey is canceled and will not happen.
    */
   boolean isCancelled();
 }

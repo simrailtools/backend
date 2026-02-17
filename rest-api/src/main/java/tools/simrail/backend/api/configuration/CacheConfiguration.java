@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,14 @@
 package tools.simrail.backend.api.configuration;
 
 import com.github.benmanes.caffeine.cache.Caffeine;
-import jakarta.annotation.Nonnull;
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
+import org.jspecify.annotations.NonNull;
 import org.springframework.cache.Cache;
+import org.springframework.cache.CacheManager;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.caffeine.CaffeineCache;
+import org.springframework.cache.support.SimpleCacheManager;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,10 +41,20 @@ import org.springframework.context.annotation.Configuration;
 class CacheConfiguration {
 
   /**
+   * Cache manager for all internal caches (non-dynamic).
+   */
+  @Bean
+  public @NonNull CacheManager cacheManager(@NonNull Collection<Cache> caches) {
+    var cacheManager = new SimpleCacheManager();
+    cacheManager.setCaches(caches);
+    return cacheManager;
+  }
+
+  /**
    * Cache for server data (data expires after 10 seconds in the cache).
    */
   @Bean
-  public @Nonnull Cache serverCache() {
+  public @NonNull Cache serverCache() {
     return new CaffeineCache(
       "server_cache",
       Caffeine.newBuilder()
@@ -54,7 +67,7 @@ class CacheConfiguration {
    * Cache for journey data (data expires after 5 seconds in the cache).
    */
   @Bean
-  public @Nonnull Cache journeyCache() {
+  public @NonNull Cache journeyCache() {
     return new CaffeineCache(
       "journey_cache",
       Caffeine.newBuilder()
@@ -64,23 +77,10 @@ class CacheConfiguration {
   }
 
   /**
-   * Cache for actives journeys (data expires after 15 seconds in the cache).
-   */
-  @Bean
-  public @Nonnull Cache activeJourneyCache() {
-    return new CaffeineCache(
-      "active_journey_cache",
-      Caffeine.newBuilder()
-        .recordStats()
-        .expireAfterWrite(15, TimeUnit.SECONDS)
-        .build());
-  }
-
-  /**
    * Cache for journey search data (data expires after 5 minutes in the cache).
    */
   @Bean
-  public @Nonnull Cache journeySearchCache() {
+  public @NonNull Cache journeySearchCache() {
     return new CaffeineCache(
       "journey_search_cache",
       Caffeine.newBuilder()
@@ -94,7 +94,7 @@ class CacheConfiguration {
    * application restart which clears the cache.
    */
   @Bean
-  public @Nonnull Cache pointCache() {
+  public @NonNull Cache pointCache() {
     return new CaffeineCache(
       "point_cache",
       Caffeine.newBuilder()
@@ -107,7 +107,7 @@ class CacheConfiguration {
    * Cache for dispatch post information (expires after 5 seconds to always provide realtime information).
    */
   @Bean
-  public @Nonnull Cache dispatchPostCache() {
+  public @NonNull Cache dispatchPostCache() {
     return new CaffeineCache(
       "dispatch_post_cache",
       Caffeine.newBuilder()
@@ -120,7 +120,7 @@ class CacheConfiguration {
    * Cache for vehicle sequences (expires after 2 minutes).
    */
   @Bean
-  public @Nonnull Cache vehicleSequenceCache() {
+  public @NonNull Cache vehicleSequenceCache() {
     return new CaffeineCache(
       "vehicle_sequence_cache",
       Caffeine.newBuilder()
@@ -133,7 +133,7 @@ class CacheConfiguration {
    * Cache for user information (expires after 1.5 hours).
    */
   @Bean
-  public @Nonnull Cache userCache() {
+  public @NonNull Cache userCache() {
     return new CaffeineCache(
       "user_cache",
       Caffeine.newBuilder()
@@ -146,7 +146,7 @@ class CacheConfiguration {
    * Cache for the journey polyline.
    */
   @Bean
-  public @Nonnull Cache journeyPolylineCache() {
+  public @NonNull Cache journeyPolylineCache() {
     return new CaffeineCache(
       "journey_polyline_cache",
       Caffeine.newBuilder()
@@ -159,7 +159,7 @@ class CacheConfiguration {
    * Cache for the polyline along a route of points.
    */
   @Bean
-  public @Nonnull Cache pointsPolylineCache() {
+  public @NonNull Cache pointsPolylineCache() {
     return new CaffeineCache(
       "points_polyline_cache",
       Caffeine.newBuilder()
@@ -173,7 +173,7 @@ class CacheConfiguration {
    * Cache for board entries, expiring 30 seconds after writing.
    */
   @Bean
-  public @Nonnull Cache boardsCache() {
+  public @NonNull Cache boardsCache() {
     return new CaffeineCache(
       "boards_cache",
       Caffeine.newBuilder()

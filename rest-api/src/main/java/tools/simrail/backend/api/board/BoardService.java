@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,17 @@
 
 package tools.simrail.backend.api.board;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.time.Duration;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Set;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
@@ -50,8 +51,7 @@ import tools.simrail.backend.common.point.SimRailPointProvider;
 @Service
 class BoardService {
 
-  private static final List<JourneyTransportType> ALL_TRANSPORT_TYPES =
-    List.copyOf(EnumSet.allOf(JourneyTransportType.class));
+  private static final Set<JourneyTransportType> ALL_TRANSPORT_TYPES = EnumSet.allOf(JourneyTransportType.class);
 
   private static final int MIN_TIME_SPAN_MINUTES = 5;
   private static final long MAX_TIME_SPAN_MINUTES = TimeUnit.HOURS.toMinutes(6);
@@ -66,11 +66,11 @@ class BoardService {
   private final BoardEntryDtoConverter boardEntryDtoConverter;
 
   @Autowired
-  public BoardService(
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull SimRailServerTimeService serverTimeService,
-    @Nonnull BoardJourneyRepository boardJourneyRepository,
-    @Nonnull BoardEntryDtoConverter boardEntryDtoConverter
+  BoardService(
+    @NonNull SimRailPointProvider pointProvider,
+    @NonNull SimRailServerTimeService serverTimeService,
+    @NonNull BoardJourneyRepository boardJourneyRepository,
+    @NonNull BoardEntryDtoConverter boardEntryDtoConverter
   ) {
     this.pointProvider = pointProvider;
     this.serverTimeService = serverTimeService;
@@ -89,22 +89,22 @@ class BoardService {
    * @param transportTypes the requested transport types.
    * @return an object holding the given request parameters for further requesting of data.
    */
-  public @Nonnull BoardRequestParameters buildRequestParameters(
-    @Nonnull String serverId,
-    @Nonnull String pointId,
-    @Nullable OffsetDateTime timeStart,
-    @Nullable OffsetDateTime timeEnd,
-    @Nullable List<JourneyTransportType> transportTypes
+  public @NonNull BoardRequestParameters buildRequestParameters(
+    @NonNull String serverId,
+    @NonNull String pointId,
+    @Nullable LocalDateTime timeStart,
+    @Nullable LocalDateTime timeEnd,
+    @Nullable Set<JourneyTransportType> transportTypes
   ) {
     // resolve and verify server & point id
-    var serverIdAndTime = this.serverTimeService.resolveServerTime(serverId)
+    var serverTime = this.serverTimeService.resolveServerTime(serverId)
       .orElseThrow(() -> new IllegalArgumentException("Invalid server id provided"));
     var point = this.pointProvider.findPointByIntId(UUID.fromString(pointId))
       .orElseThrow(() -> new IllegalRequestParameterException("Invalid point id provided"));
 
     // default start time to server time and end time to start + 30 min if not provided
     if (timeStart == null) {
-      timeStart = serverIdAndTime.getSecond();
+      timeStart = serverTime;
     }
     if (timeEnd == null) {
       timeEnd = timeStart.plusMinutes(30);
@@ -119,7 +119,7 @@ class BoardService {
     }
 
     // check that the start time is actually within the bounds of data availability
-    var daysDiffToServerTime = Duration.between(serverIdAndTime.getSecond(), timeStart).toDays();
+    var daysDiffToServerTime = Duration.between(serverTime, timeStart).toDays();
     if (daysDiffToServerTime < MAX_DAYS_IN_PAST || daysDiffToServerTime > MAX_DAYS_IN_FUTURE) {
       throw new IllegalRequestParameterException("Start time is out of permitted range");
     }
@@ -132,7 +132,10 @@ class BoardService {
     // strip seconds / milliseconds parts from start/end time
     timeStart = timeStart.truncatedTo(ChronoUnit.MINUTES);
     timeEnd = timeEnd.truncatedTo(ChronoUnit.MINUTES);
-    return new BoardRequestParameters(serverIdAndTime.getFirst(), point.getId(), timeStart, timeEnd, transportTypes);
+
+    var parsedServerId = UUID.fromString(serverId);
+    var transportTypeArray = transportTypes.stream().map(Enum::name).toArray(String[]::new);
+    return new BoardRequestParameters(parsedServerId, point.getId(), timeStart, timeEnd, transportTypeArray);
   }
 
   /**
@@ -142,7 +145,7 @@ class BoardService {
    * @return all arrivals that are matching the given request parameters.
    */
   @Cacheable(cacheNames = "boards_cache", key = "'arr_' + #requestParameters")
-  public @Nonnull List<BoardEntryDto> listArrivals(@Nonnull BoardRequestParameters requestParameters) {
+  public @NonNull List<BoardEntryDto> listArrivals(@NonNull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getArrivals(
         requestParameters.serverId(),
         requestParameters.pointId(),
@@ -161,7 +164,7 @@ class BoardService {
    * @return all departures that are matching the given request parameters.
    */
   @Cacheable(cacheNames = "boards_cache", key = "'dep_' + #requestParameters")
-  public @Nonnull List<BoardEntryDto> listDepartures(@Nonnull BoardRequestParameters requestParameters) {
+  public @NonNull List<BoardEntryDto> listDepartures(@NonNull BoardRequestParameters requestParameters) {
     var entriesByJourney = this.boardJourneyRepository.getDepartures(
         requestParameters.serverId(),
         requestParameters.pointId(),

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,12 +24,11 @@
 
 package tools.simrail.backend.api.board.converter;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.board.data.BoardJourneyProjection;
 import tools.simrail.backend.api.board.dto.BoardTransportDto;
-import tools.simrail.backend.common.journey.JourneyTransportType;
 
 /**
  * Converter for journey projections to dto.
@@ -38,14 +37,13 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 public final class BoardTransportDtoConverter implements Function<BoardJourneyProjection, BoardTransportDto> {
 
   @Override
-  public @Nonnull BoardTransportDto apply(@Nonnull BoardJourneyProjection projection) {
-    var journeyTransportType = JourneyTransportType.VALUES[projection.getInitialTransportType()];
+  public @NonNull BoardTransportDto apply(@NonNull BoardJourneyProjection projection) {
     return new BoardTransportDto(
       projection.getInitialTransportCategory(),
       projection.getInitialTransportNumber(),
       projection.getInitialTransportLine(),
       projection.getInitialTransportLabel(),
-      journeyTransportType,
+      projection.getInitialTransportType(),
       projection.getInitialTransportMaxSpeed());
   }
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,17 +24,17 @@
 
 package tools.simrail.backend.external.brouter;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.util.List;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import tools.jackson.databind.json.JsonMapper;
 import tools.simrail.backend.external.brouter.request.BRouterRouteRequest;
 
 public final class BRouterApiClientTest {
 
   @Test
   void testRouting() {
-    var client = BRouterApiClient.create();
+    var client = BRouterApiClient.create("https://brouter.simrail.tools");
     var jsonMapper = JsonMapper.builder().build();
     var waypoints = List.of(
       new BRouterRouteRequest.GeoPosition(50.481008999348, 19.4231231),
@@ -49,7 +49,7 @@ public final class BRouterApiClientTest {
       .withOutputFormat(BRouterRouteRequest.OutputFormat.GEOJSON);
     var data = Assertions.assertDoesNotThrow(() -> client.route(routeRequest));
     var parsed = Assertions.assertDoesNotThrow(() -> jsonMapper.readTree(data));
-    Assertions.assertEquals("FeatureCollection", parsed.path("type").asText());
+    Assertions.assertEquals("FeatureCollection", parsed.path("type").asString());
     Assertions.assertTrue(parsed.has("features"));
   }
 }

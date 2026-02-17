@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.common.util;
 
-import jakarta.annotation.Nonnull;
 import java.util.regex.Pattern;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Various utilities for working with strings.
@@ -45,8 +45,26 @@ public final class StringUtils {
    * @param input the string to parse as a number.
    * @return the number parsed from the given input.
    */
-  public static int parseIntSafe(@Nonnull String input) {
+  public static int parseIntSafe(@NonNull String input) {
     var cleanedInput = NON_NUMBER_PATTERN.matcher(input).replaceAll("");
     return cleanedInput.isEmpty() ? 0 : Integer.parseInt(cleanedInput);
+  }
+
+  /**
+   * Get an enum constant with the given name, returning the given fallback if the constant does not exist. The enum
+   * type is derived from the given fallback constant.
+   *
+   * @param name     the name of the enum constant to get.
+   * @param fallback the fallback enum constant to return if no constant with the given name exists.
+   * @param <T>      the enum type.
+   * @return the enum constant with the given name or the given fallback if it does not exist.
+   */
+  public static @NonNull <T extends Enum<T>> T decodeEnum(@NonNull String name, @NonNull T fallback) {
+    try {
+      var enumType = fallback.getDeclaringClass();
+      return Enum.valueOf(enumType, name);
+    } catch (IllegalArgumentException _) {
+      return fallback;
+    }
   }
 }

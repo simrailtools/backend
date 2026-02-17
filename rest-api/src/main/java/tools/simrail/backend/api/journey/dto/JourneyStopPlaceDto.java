@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,6 +28,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import java.util.UUID;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 
 public record JourneyStopPlaceDto(
   @Schema(description = "The id of the stop place")
@@ -35,7 +36,7 @@ public record JourneyStopPlaceDto(
   @Schema(description = "The name of the stop place")
   @NotNull @NotBlank String name,
   @Schema(description = "The position where the stop place is located")
-  @NotNull JourneyGeoPositionDto position,
+  @NotNull GeoPositionDto position,
   @Schema(description = "Indicates if the point is a stop place (without switches) or a full station")
   @NotNull boolean stopPlace,
   @Schema(description = "If the stop place is within the playable border of the map")

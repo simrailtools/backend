@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,17 @@
 
 package tools.simrail.backend.api.dispatchpost.dto;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.shared.GeoPositionDtoConverter;
+import tools.simrail.backend.api.shared.UserDtoConverter;
+import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Converter for dispatch post entities to DTOs.
@@ -35,10 +42,29 @@ import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
 @Component
 public final class DispatchPostInfoDtoConverter implements Function<SimRailDispatchPostEntity, DispatchPostInfoDto> {
 
+  private final UserDtoConverter userDtoConverter;
+  private final GeoPositionDtoConverter geoPositionDtoConverter;
+  private final DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache;
+
+  @Autowired
+  public DispatchPostInfoDtoConverter(
+    @NonNull UserDtoConverter userDtoConverter,
+    @NonNull GeoPositionDtoConverter geoPositionDtoConverter,
+    @NonNull @Qualifier("dispatch_post_cache") DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache
+  ) {
+    this.userDtoConverter = userDtoConverter;
+    this.geoPositionDtoConverter = geoPositionDtoConverter;
+    this.dispatchPostDataCache = dispatchPostDataCache;
+  }
+
+  /**
+   * {@inheritDoc}
+   */
   @Override
-  public @Nonnull DispatchPostInfoDto apply(@Nonnull SimRailDispatchPostEntity entity) {
-    var position = entity.getPosition();
-    var convertedPosition = new DispatchPointGeoPositionDto(position.getLatitude(), position.getLongitude());
+  public @NonNull DispatchPostInfoDto apply(@NonNull SimRailDispatchPostEntity entity) {
+    var position = this.geoPositionDtoConverter.convert(entity.getPosition());
+    var cachedRtData = this.dispatchPostDataCache.findByPrimaryKey(entity.getId().toString());
+    var realtimeDataDto = this.convertRtData(cachedRtData);
     return new DispatchPostInfoDto(
       entity.getId(),
       entity.getName(),
@@ -46,10 +72,27 @@ public final class DispatchPostInfoDtoConverter implements Function<SimRailDispa
       entity.getServerId(),
       entity.getUpdateTime(),
       entity.getRegisteredSince(),
-      convertedPosition,
+      position,
       entity.getImageUrls(),
-      entity.getDispatcherSteamIds(),
       entity.getDifficultyLevel(),
+      realtimeDataDto,
       entity.isDeleted());
+  }
+
+  /**
+   * Converts the cached realtime data of a journey into a DTO.
+   */
+  private @NonNull DispatchPostRealtimeDataDto convertRtData(EventBusProto.@Nullable DispatchPostUpdateFrame data) {
+    if (data == null) {
+      return new DispatchPostRealtimeDataDto(null);
+    }
+
+    var postData = data.getDispatchPostData();
+    if (!postData.hasDispatcher()) {
+      return new DispatchPostRealtimeDataDto(null);
+    }
+
+    var dispatcher = this.userDtoConverter.apply(postData.getDispatcher());
+    return new DispatchPostRealtimeDataDto(dispatcher);
   }
 }

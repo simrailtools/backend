@@ -1,0 +1,1 @@
+- add platform position (left, right or both) to signal provider (when possible)

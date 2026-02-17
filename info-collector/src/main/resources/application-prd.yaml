@@ -1,0 +1,22 @@
+management:
+  endpoints:
+    access:
+      default: none
+      max-permitted: read-only
+    web:
+      base-path: '/admin'
+      discovery:
+        enabled: false
+      exposure:
+        include: 'health,prometheus'
+  endpoint:
+    health:
+      access: read_only
+      show-details: never
+      probes:
+        enabled: true
+      show-components: never
+      cache:
+        time-to-live: 10s
+    prometheus:
+      access: read_only

@@ -1,0 +1,16 @@
+# everything ignored by default
+*
+
+# only copy stuff that's actually needed
+!*.gradle.kts
+!gradle/
+!gradle.properties
+!gradlew
+!license*.txt
+!.data/
+!.flyway/
+!.proto/
+!common/
+!external-api-client/
+!info-collector/
+!rest-api/

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.collector.cleanup;
 
-import java.time.OffsetDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -41,8 +41,8 @@ interface CleanupJourneyRepository extends JourneyRepository {
    * @param cleanupStartTime the start time to find journeys without a data update from.
    * @return the ids of the journeys that didn't receive an update after the given time.
    */
-  @Query(value = "SELECT j.id FROM sit_journey j WHERE j.update_time < CAST(:time AS TIMESTAMP)", nativeQuery = true)
-  List<UUID> findJourneyIdsByCleanupStartDate(@Param("time") OffsetDateTime cleanupStartTime);
+  @Query(value = "SELECT j.id FROM sit_journey j WHERE j.update_time < :time", nativeQuery = true)
+  List<UUID> findJourneyIdsByCleanupStartDate(@Param("time") Instant cleanupStartTime);
 
   /**
    * Deletes all journeys with one of the given ids.

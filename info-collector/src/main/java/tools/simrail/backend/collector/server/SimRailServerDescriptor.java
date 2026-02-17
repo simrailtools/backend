@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,27 +24,24 @@
 
 package tools.simrail.backend.collector.server;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A descriptor of a server that was retrieved on the last collection run.
  *
- * @param id                      our id of the server.
- * @param foreignId               the SimRail backend id of the server.
- * @param code                    the server code.
- * @param timezoneOffset          the timezone offset of the server.
- * @param serverTimeOffsetSeconds the offset seconds of the server time from UTC.
+ * @param id                         our id of the server.
+ * @param foreignId                  the SimRail backend id of the server.
+ * @param code                       the server code.
+ * @param serverTimeUtcOffsetSeconds the offset seconds of the server time from UTC.
  */
 public record SimRailServerDescriptor(
-  @Nonnull UUID id,
-  @Nonnull String foreignId,
-  @Nonnull String code,
-  @Nonnull ZoneOffset timezoneOffset,
-  long serverTimeOffsetSeconds
+  @NonNull UUID id,
+  @NonNull String foreignId,
+  @NonNull String code,
+  long serverTimeUtcOffsetSeconds
 ) {
 
   /**
@@ -52,10 +49,7 @@ public record SimRailServerDescriptor(
    *
    * @return the current date and time on this server.
    */
-  public @Nonnull OffsetDateTime currentTime() {
-    return ZonedDateTime.now(ZoneOffset.UTC)
-      .plusSeconds(this.serverTimeOffsetSeconds)
-      .withZoneSameLocal(this.timezoneOffset)
-      .toOffsetDateTime();
+  public @NonNull LocalDateTime currentTime() {
+    return LocalDateTime.now(ZoneOffset.UTC).plusSeconds(this.serverTimeUtcOffsetSeconds);
   }
 }

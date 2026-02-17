@@ -1,31 +1,56 @@
 name: simrail-tools-backend
 services:
   postgres:
-    image: docker.io/postgres:latest
+    image: docker.io/postgres:18-trixie
     restart: unless-stopped
     shm_size: 128mb
     ports:
-      - "127.0.0.1:5432:5432"
+      - "127.0.0.1:51800:5432"
     volumes:
-      - "./volumes/postgres-data:/var/lib/postgresql/data"
+      - "./volumes/postgres-data:/var/lib/postgresql"
     command: >
+      -c timezone=UTC
+      -c max_connections=200
       -c synchronous_commit=off
-      -c max_wal_size=10GB
-      -c checkpoint_timeout=10min
-      -c checkpoint_completion_target=0.9
       -c logging_collector=on
       -c log_destination=stderr
-      -c log_min_duration_statement=15s
+      -c log_min_duration_statement=5s
     environment:
       POSTGRES_USER: "stb"
       POSTGRES_PASSWORD: "stb_very_secu1e_passw0rd"
       POSTGRES_DB: "simrailtools"
 
+  valkey:
+    image: docker.io/valkey/valkey:9-trixie
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:51801:6379"
+    volumes:
+      - "./volumes/valkey-data:/data"
+    command: >
+      valkey-server
+      --appendonly yes
+      --appendfsync everysec
+      --protected-mode yes
+      --user default on \>stb_very_secu1e_passw0rd allkeys +@all
+      --user stb on \>stb_very_secu1e_passw0rd allkeys +@all -@admin -@dangerous -@pubsub
+
+  nats:
+    image: docker.io/nats:2-scratch
+    restart: unless-stopped
+    ports:
+      - "127.0.0.1:51802:4222"
+      - "127.0.0.1:51803:9222"
+    volumes:
+      - "./conf/nats.conf:/etc/nats/nats.conf:ro"
+    command: >
+      -config /etc/nats/nats.conf
+
   prometheus:
     image: docker.io/prom/prometheus:latest
     restart: unless-stopped
     ports:
-      - "127.0.0.1:9090:9090"
+      - "127.0.0.1:51810:9090"
     volumes:
       - "./volumes/prometheus-data:/prometheus"
       - "./conf/prometheus.yml:/etc/prometheus/prometheus.yml:ro"
@@ -36,7 +61,7 @@ services:
     depends_on:
       - prometheus
     ports:
-      - "127.0.0.1:9091:3000"
+      - "127.0.0.1:51811:3000"
     environment:
       GF_SECURITY_ADMIN_USER: "stb"
       GF_SECURITY_ADMIN_PASSWORD: "stb_very_secu1e_passw0rd"

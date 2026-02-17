@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,8 +24,8 @@
 
 package tools.simrail.backend.api.journey.converter;
 
-import jakarta.annotation.Nonnull;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.journey.dto.JourneyStopInfoDto;
 import tools.simrail.backend.common.journey.JourneyPassengerStopInfo;
@@ -37,7 +37,7 @@ import tools.simrail.backend.common.journey.JourneyPassengerStopInfo;
 public final class JourneyStopInfoDtoConverter implements Function<JourneyPassengerStopInfo, JourneyStopInfoDto> {
 
   @Override
-  public @Nonnull JourneyStopInfoDto apply(@Nonnull JourneyPassengerStopInfo stopInfo) {
+  public @NonNull JourneyStopInfoDto apply(@NonNull JourneyPassengerStopInfo stopInfo) {
     return new JourneyStopInfoDto(stopInfo.getPlatform(), stopInfo.getTrack());
   }
 }

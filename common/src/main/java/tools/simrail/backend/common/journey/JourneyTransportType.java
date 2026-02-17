@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.common.journey;
 
-import jakarta.annotation.Nonnull;
 import java.util.Locale;
 import java.util.Objects;
+import org.jspecify.annotations.NonNull;
 
 /**
  * A list of higher-level categories for a journey transport.
@@ -90,18 +90,13 @@ public enum JourneyTransportType {
   MAINTENANCE_TRAIN;
 
   /**
-   * JVM-static values array to prevent copies during access.
-   */
-  public static final JourneyTransportType[] VALUES = JourneyTransportType.values();
-
-  /**
    * Maps the given train type (3 characters long) string to transport type.
    *
    * @param trainType the train type to map.
    * @return the mapped transport type.
    * @throws IllegalArgumentException if the given train type cannot be mapped.
    */
-  public static @Nonnull JourneyTransportType fromTrainType(@Nonnull String trainType) {
+  public static @NonNull JourneyTransportType fromTrainType(@NonNull String trainType) {
     // train types must be 3 characters long
     Objects.checkIndex(2, trainType.length());
     var trainTypeIdentifier = trainType.substring(0, 2);
@@ -124,7 +119,7 @@ public enum JourneyTransportType {
       case "TB", "TD", "TP", "TN", "TM", "TL" -> NATIONAL_CARGO_TRAIN;
 
       // maintenance trains
-      case "ZG", "ZN", "ZX", "ZH" -> MAINTENANCE_TRAIN;
+      case "ZG", "ZN", "ZX", "ZH", "ZU" -> MAINTENANCE_TRAIN;
 
       // unknown train type
       default -> throw new IllegalArgumentException("Unknown train type identifier: " + trainTypeIdentifier);

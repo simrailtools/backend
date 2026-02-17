@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,18 +24,18 @@
 
 package tools.simrail.backend.common.point;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 import lombok.Getter;
+import org.jspecify.annotations.NonNull;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.ObjectMapper;
 import tools.simrail.backend.common.util.GeoUtil;
 
 /**
@@ -50,10 +50,10 @@ public final class SimRailPointProvider {
 
   @Autowired
   public SimRailPointProvider(
-    @Nonnull ObjectMapper objectMapper,
+    @NonNull ObjectMapper objectMapper,
     @Value("classpath:data/points.json") Resource pointsResource
   ) throws IOException {
-    // deserialize the points from the points json bundled in the application jar file
+    // deserialize the points from the points JSON bundled in the application jar file
     var pointListType = objectMapper.getTypeFactory().constructCollectionType(List.class, SimRailPoint.class);
     try (var inputStream = pointsResource.getInputStream()) {
       this.points = objectMapper.readValue(inputStream, pointListType);
@@ -66,7 +66,7 @@ public final class SimRailPointProvider {
    * @param id the internal id of the point to get.
    * @return an optional holding the point if one with the given internal id exists.
    */
-  public @Nonnull Optional<SimRailPoint> findPointByIntId(@Nonnull UUID id) {
+  public @NonNull Optional<SimRailPoint> findPointByIntId(@NonNull UUID id) {
     return this.points.stream().filter(point -> point.getId().equals(id)).findFirst();
   }
 
@@ -76,7 +76,7 @@ public final class SimRailPointProvider {
    * @param pointId the SimRail point id of the point to get.
    * @return an optional holding the point if one with the given SimRail point id exists.
    */
-  public @Nonnull Optional<SimRailPoint> findPointByPointId(@Nonnull String pointId) {
+  public @NonNull Optional<SimRailPoint> findPointByPointId(@NonNull String pointId) {
     return this.points.stream().filter(point -> point.getSimRailPointIds().contains(pointId)).findFirst();
   }
 
@@ -86,7 +86,7 @@ public final class SimRailPointProvider {
    * @param name the name of the point to get.
    * @return an optional holding the point if one with the given name exists.
    */
-  public @Nonnull Optional<SimRailPoint> findPointByName(@Nonnull String name) {
+  public @NonNull Optional<SimRailPoint> findPointByName(@NonNull String name) {
     return this.points.stream().filter(point -> point.getName().equals(name)).findFirst();
   }
 
@@ -97,7 +97,7 @@ public final class SimRailPointProvider {
    * @param latitude  the latitude that should be in the bounding box of the point.
    * @return an optional holding the point whose bounding box contains the given coordinate if one exists.
    */
-  public @Nonnull Optional<SimRailPoint> findPointWherePosInBounds(double longitude, double latitude) {
+  public @NonNull Optional<SimRailPoint> findPointWherePosInBounds(double longitude, double latitude) {
     var pointCoordinate = new Coordinate(longitude, latitude);
     var geoPoint = GeoUtil.GEOMETRY_FACTORY.createPoint(pointCoordinate);
     return this.points.stream().filter(point -> point.getBoundingBox().contains(geoPoint)).findFirst();

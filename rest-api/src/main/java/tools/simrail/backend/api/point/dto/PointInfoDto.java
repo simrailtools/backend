@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,14 @@
 package tools.simrail.backend.api.point.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.api.shared.GeoPositionDto;
 
 /**
  * DTO for a point in SimRail.
@@ -44,8 +45,8 @@ public record PointInfoDto(
   @Schema(description = "The ISO 3166-1 alpha-3 country code where the point is located")
   @NotNull @Size(min = 3, max = 3) String country,
   @Schema(description = "The position where the point located")
-  @NotNull PointGeoPositionDto position,
-  @Schema(description = "The UIC reference of the point, might not null in case it is unknown", types = {"null"})
+  @NotNull GeoPositionDto position,
+  @Schema(description = "The UIC reference of the point, might not null in case it is unknown", types = "null")
   @Nullable String uicRef,
   @Schema(description = "The OSM node id of the point")
   @NotNull long osmNodeId,

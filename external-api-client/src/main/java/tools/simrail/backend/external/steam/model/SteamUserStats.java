@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -29,7 +29,6 @@ import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.jetbrains.annotations.ApiStatus;
 
 @Data
 @NoArgsConstructor
@@ -97,11 +96,10 @@ public final class SteamUserStats {
     private boolean achieved;
 
     /**
-     * Deserializes the achievement status of this achievement.
+     * Deserializes the achievement status of this achievement. For internal use only.
      *
      * @param achieved the status of this achievement. Can be {@code 0} (not achieved) or {@code 1} (achieved).
      */
-    @ApiStatus.Internal
     @JsonProperty("achieved")
     public void deserializeAchieved(int achieved) {
       this.achieved = achieved == 1;

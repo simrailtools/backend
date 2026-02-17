@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,29 +24,37 @@
 
 package tools.simrail.backend.collector.vehicle;
 
+import feign.FeignException;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.EntityManager;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.StringJoiner;
+import java.util.Objects;
+import java.util.Set;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+import java.util.function.Function;
+import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.support.TransactionTemplate;
+import tools.simrail.backend.collector.journey.JourneyIdService;
 import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
 import tools.simrail.backend.common.railcar.RailcarProvider;
 import tools.simrail.backend.common.util.StringUtils;
 import tools.simrail.backend.common.vehicle.JourneyVehicle;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
+import tools.simrail.backend.common.vehicle.JourneyVehicleSequenceEntity;
 import tools.simrail.backend.common.vehicle.JourneyVehicleStatus;
 import tools.simrail.backend.external.sraws.SimRailAwsApiClient;
 import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
@@ -56,38 +64,58 @@ import tools.simrail.backend.external.srpanel.model.SimRailPanelTrain;
 @Component
 class JourneyVehicleCollector {
 
+  private static final int BATCH_SIZE = 100;
   private static final Logger LOGGER = LoggerFactory.getLogger(JourneyVehicleCollector.class);
 
   private final SimRailAwsApiClient awsApiClient;
   private final SimRailPanelApiClient panelApiClient;
 
-  private final EntityManager entityManager;
   private final RailcarProvider railcarProvider;
+  private final JourneyIdService journeyIdService;
   private final SimRailServerService serverService;
-  private final CollectorJourneyVehicleService journeyVehicleService;
+  private final TransactionTemplate transactionTemplate;
+  private final CollectorVehicleRepository vehicleRepository;
 
   private final Meter.MeterProvider<Timer> actualCompositionCollectTimer;
   private final Meter.MeterProvider<Timer> predictedCompositionCollectTimer;
 
   @Autowired
-  public JourneyVehicleCollector(
-    @Nonnull SimRailAwsApiClient awsApiClient,
-    @Nonnull SimRailPanelApiClient panelApiClient,
-    @Nonnull EntityManager entityManager,
-    @Nonnull RailcarProvider railcarProvider,
-    @Nonnull SimRailServerService serverService,
-    @Nonnull CollectorJourneyVehicleService journeyVehicleService,
-    @Nonnull @Qualifier("actual_vc_collect_duration") Meter.MeterProvider<Timer> actualCompositionCollectTimer,
-    @Nonnull @Qualifier("predicted_vc_collect_duration") Meter.MeterProvider<Timer> predictedCompositionCollectTimer
+  JourneyVehicleCollector(
+    @NonNull SimRailAwsApiClient awsApiClient,
+    @NonNull SimRailPanelApiClient panelApiClient,
+    @NonNull RailcarProvider railcarProvider,
+    @NonNull JourneyIdService journeyIdService,
+    @NonNull SimRailServerService serverService,
+    @NonNull TransactionTemplate transactionTemplate,
+    @NonNull CollectorVehicleRepository vehicleRepository,
+    @Qualifier("actual_vc_collect_duration") Meter.@NonNull MeterProvider<Timer> actualCompositionCollectTimer,
+    @Qualifier("predicted_vc_collect_duration") Meter.@NonNull MeterProvider<Timer> predictedCompositionCollectTimer
   ) {
     this.awsApiClient = awsApiClient;
     this.panelApiClient = panelApiClient;
-    this.entityManager = entityManager;
     this.railcarProvider = railcarProvider;
+    this.journeyIdService = journeyIdService;
     this.serverService = serverService;
-    this.journeyVehicleService = journeyVehicleService;
+    this.transactionTemplate = transactionTemplate;
+    this.vehicleRepository = vehicleRepository;
     this.actualCompositionCollectTimer = actualCompositionCollectTimer;
     this.predictedCompositionCollectTimer = predictedCompositionCollectTimer;
+  }
+
+  /**
+   * Generates the resolve key for a vehicle sequence.
+   *
+   * @param serverId       the id of the server where the journey is on.
+   * @param trainNum       the number of the train that is associated with the sequence.
+   * @param firstEventTime the time of the first event of the journey.
+   * @return a resolve key for a journey based on the given parameters.
+   */
+  private static @NonNull String generateResolveKey(
+    @NonNull UUID serverId,
+    @NonNull String trainNum,
+    @NonNull LocalDateTime firstEventTime
+  ) {
+    return serverId + trainNum + firstEventTime;
   }
 
   @Scheduled(initialDelay = 1, fixedDelay = 5, timeUnit = TimeUnit.MINUTES, scheduler = "vehicle_collect_scheduler")
@@ -96,23 +124,34 @@ class JourneyVehicleCollector {
     var servers = this.serverService.getServers();
     for (var server : servers) {
       var span = Timer.start();
-      var runs = this.awsApiClient.getTrainRuns(server.code());
-      this.collectVehiclesFromTimetable(server, runs);
-      span.stop(this.predictedCompositionCollectTimer.withTag("server_code", server.code()));
+      try {
+        var runs = this.awsApiClient.getTrainRuns(server.code());
+        if (runs != null && !runs.isEmpty()) {
+          this.transactionTemplate.executeWithoutResult(_ -> this.collectVehiclesFromTimetable(server, runs));
+        }
+      } catch (FeignException _) {
+        // ignore upstream api issues
+      } finally {
+        var timer = this.predictedCompositionCollectTimer.withTag("server_code", server.code());
+        span.stop(timer);
+      }
     }
 
     // collect the real vehicle compositions
     for (var server : servers) {
       var span = Timer.start();
-      var response = this.panelApiClient.getTrains(server.code(), null).body();
-      var activeTrains = response == null ? null : response.getEntries();
-      if (activeTrains == null || activeTrains.isEmpty()) {
-        LOGGER.warn("SimRail api returned no active trains for server {}", server.code());
-        continue;
+      try {
+        var response = this.panelApiClient.getTrains(server.code(), null).body();
+        var trains = response != null ? response.getEntries() : null;
+        if (trains != null && !trains.isEmpty()) {
+          this.transactionTemplate.executeWithoutResult(_ -> this.collectVehiclesFromLiveData(server, trains));
+        }
+      } catch (FeignException _) {
+        // ignore upstream api issues
+      } finally {
+        var timer = this.actualCompositionCollectTimer.withTag("server_code", server.code());
+        span.stop(timer);
       }
-
-      this.collectVehiclesFromLiveData(server, activeTrains);
-      span.stop(this.actualCompositionCollectTimer.withTag("server_code", server.code()));
     }
   }
 
@@ -123,146 +162,84 @@ class JourneyVehicleCollector {
    * @param trainRuns the runs that are planned on the given server.
    */
   private void collectVehiclesFromTimetable(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailAwsTrainRun> trainRuns
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<SimRailAwsTrainRun> trainRuns
   ) {
     // resolve the journeys that already have a vehicle mapping
-    var runIds = trainRuns.stream().map(SimRailAwsTrainRun::getRunId).toList();
-    var runIdToJourneyIdMapping = this.journeyVehicleService.findRunsWithoutComposition(server.id(), runIds);
+    var journeyEntries = trainRuns.stream()
+      .filter(run -> !run.getTimetable().isEmpty())
+      .map(run -> {
+        var firstTimetableEntry = run.getTimetable().getFirst();
+        var journeyId = this.journeyIdService.generateJourneyId(server.id(), run.getRunId());
+        return Map.entry(journeyId, firstTimetableEntry);
+      })
+      .collect(Collectors.toMap(Map.Entry::getKey, Function.identity()));
+    if (journeyEntries.isEmpty()) {
+      return;
+    }
 
-    // create predicated journey vehicle entry for each run without a stored composition
-    var runsWithoutComposition = trainRuns.stream()
-      .filter(run -> runIdToJourneyIdMapping.containsKey(run.getRunId()))
-      .toList();
-    var previousCompositions = this.findPreviousVehicleCompositions(server, runsWithoutComposition);
-    for (var run : runsWithoutComposition) {
-      // resolve the journey id associated with the run, if the run id is not present in the
-      // mapping it either means that the journey is not yet registered or a composition is already stored
-      var journeyId = runIdToJourneyIdMapping.get(run.getRunId());
-      if (journeyId == null) {
+    var newSequences = new ArrayList<JourneyVehicleSequenceEntity>();
+    var journeyEntriesList = List.copyOf(journeyEntries.values()); // copy to list for simplicity
+    for (var startIdx = 0; startIdx < journeyEntriesList.size(); startIdx += BATCH_SIZE) {
+      var endIdx = Math.min(startIdx + BATCH_SIZE, journeyEntriesList.size());
+      var journeyBatch = journeyEntriesList.subList(startIdx, endIdx);
+
+      // find all the ids of the journeys that don't have an associated journey sequence yet
+      var journeyIds = journeyBatch.stream().map(Map.Entry::getKey).toArray(UUID[]::new);
+      var journeyIdsWithoutSequence = this.vehicleRepository.findMissingJourneyIds(journeyIds);
+      if (journeyIdsWithoutSequence.isEmpty()) {
         continue;
       }
 
-      // timetable can sometimes be empty (probably a testing thing), just ignore these journeys
-      var timetable = run.getTimetable();
-      if (timetable.isEmpty()) {
-        continue;
+      // build a mapping for previous resolve key -> resolving journey id
+      var journeyByPreviousResolveKey = new HashMap<String, Map.Entry<UUID, String>>();
+      for (var journeyId : journeyIdsWithoutSequence) {
+        var entry = journeyEntries.get(journeyId);
+        var timetableEntry = entry.getValue();
+        var timetableEntryTime = Objects.requireNonNullElse(
+          timetableEntry.getArrivalTime(),
+          timetableEntry.getDepartureTime());
+        var previousDayTime = timetableEntryTime.minusDays(1);
+        var prevResolveKey = generateResolveKey(server.id(), timetableEntry.getTrainNumber(), previousDayTime);
+        var currResolveKey = generateResolveKey(server.id(), timetableEntry.getTrainNumber(), timetableEntryTime);
+        journeyByPreviousResolveKey.put(prevResolveKey, Map.entry(journeyId, currResolveKey));
       }
 
-      // find the previous vehicles (previous day) and insert a predicted vehicle composition
-      var firstEvent = timetable.getFirst();
-      var previousJourneyKey = String.format("%s_%s", firstEvent.getTrainType(), firstEvent.getTrainNumber());
-      var previousVehicles = previousCompositions.get(previousJourneyKey);
-      if (previousVehicles == null || previousVehicles.isEmpty()) {
-        var unknownVehicle = new JourneyVehicle();
-        unknownVehicle.setIndexInGroup(0);
-        unknownVehicle.setJourneyId(journeyId);
-        unknownVehicle.setStatus(JourneyVehicleStatus.UNKNOWN);
-        this.journeyVehicleService.saveJourneyVehicles(journeyId, List.of(unknownVehicle));
-      } else {
-        var currentEventVehicles = previousVehicles.stream()
-          .map(vehicle -> {
-            var newVehicle = new JourneyVehicle();
-            newVehicle.setJourneyId(journeyId);
-            newVehicle.setStatus(JourneyVehicleStatus.PREDICTION);
-            newVehicle.setIndexInGroup(vehicle.indexInGroup());
-            newVehicle.setRailcarId(vehicle.railcarId());
-            newVehicle.setLoadWeight(vehicle.loadWeight());
-            newVehicle.setLoad(vehicle.load());
-            return newVehicle;
-          })
-          .toList();
-        this.journeyVehicleService.saveJourneyVehicles(journeyId, currentEventVehicles);
-      }
-    }
-  }
+      // try to resolve the previous vehicle sequences by the resolved resolve keys
+      var previousSequences = this.vehicleRepository.findAllBySequenceResolveKeyIn(journeyByPreviousResolveKey.keySet())
+        .stream()
+        .collect(Collectors.toMap(JourneyVehicleSequenceEntity::getSequenceResolveKey, Function.identity(), (l, r) -> {
+          var leftUpdateTime = l.getUpdateTime();
+          var rightUpdateTime = r.getUpdateTime();
+          var leftIsNewer = leftUpdateTime.compareTo(rightUpdateTime) >= 0;
+          return leftIsNewer ? l : r;
+        }));
+      for (var entry : journeyByPreviousResolveKey.entrySet()) {
+        var journeyId = entry.getValue().getKey();
+        var resolveKey = entry.getValue().getValue();
+        var previousSequence = previousSequences.get(entry.getKey());
 
-  /**
-   * Resolves the stored vehicle composition of the previous day for the given train runs. The result is a mapping
-   * between a key identifying the run (in the form of {@code [journey category]_[journey number]}) to the vehicles used
-   * for the previous run. The map does not contain an entry if no composition for the previous day is stored.
-   *
-   * @param trainRuns the runs to resolve the previous vehicle composition of.
-   * @return a mapping between a journey identifier and the previous vehicle composition, as described above.
-   */
-  @SuppressWarnings("unchecked")
-  private @Nonnull Map<String, List<CollectorJourneyVehicleProjection>> findPreviousVehicleCompositions(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailAwsTrainRun> trainRuns
-  ) {
-    // if no train runs are given there is nothing to select
-    var relevantTrainRuns = trainRuns.stream().filter(run -> !run.getTimetable().isEmpty()).toList();
-    if (relevantTrainRuns.isEmpty()) {
-      return Map.of();
-    }
+        // build the base sequence data
+        var sequence = new JourneyVehicleSequenceEntity();
+        sequence.setJourneyId(journeyId);
+        sequence.setSequenceResolveKey(resolveKey);
 
-    // the base queries being formatted for selection
-    // the 'baseQuery' is the base defining how to select the entries
-    // the 'baseCriteria' is the base filter criteria being inserted for each given train run
-    var baseQuery = """
-      SELECT jv.id,
-             jv.index_in_group,
-             jv.load,
-             jv.load_weight,
-             jv.railcar_id,
-             j.id,
-             je.transport_category,
-             je.transport_number
-      FROM sit_vehicle jv
-      RIGHT JOIN sit_journey j ON jv.journey_id = j.id
-      RIGHT JOIN sit_journey_event je ON je.journey_id = j.id AND je.event_index = 0
-      WHERE
-        j.server_id = '%s'
-        AND jv.id IS NOT NULL
-        AND (%s)
-      """;
-    var baseCriteria = """
-      (je.transport_category = '%s'
-        AND je.transport_number = '%s'
-        AND (je.scheduled_time >= CAST('%s' AS TIMESTAMP) AND
-          je.scheduled_time < CAST('%s' AS TIMESTAMP) + INTERVAL '1 day'))
-      """;
-
-    // build a filter criteria entry for each given train run
-    var criteriaBuilder = new StringJoiner(" OR ");
-    for (var run : relevantTrainRuns) {
-      var firstEvent = run.getTimetable().getFirst();
-      var firstEventTime = OffsetDateTime.of(firstEvent.getDepartureTime(), server.timezoneOffset());
-      var previousEventDate = firstEventTime.minusDays(1).toLocalDate();
-      var formattedCriteria = String.format(
-        baseCriteria,
-        firstEvent.getTrainType(), firstEvent.getTrainNumber(), previousEventDate, previousEventDate);
-      criteriaBuilder.add(formattedCriteria);
-    }
-
-    // build the full query, execute it and group the result vehicles by their journey id
-    var query = String.format(baseQuery, server.id(), criteriaBuilder);
-    var result = (List<Object[]>) this.entityManager.createNativeQuery(query).getResultList();
-
-    // map each result to a unique key for the associated journey
-    var mappedResults = new HashMap<String, List<CollectorJourneyVehicleProjection>>();
-    for (var tuple : result) {
-      var key = String.format("%s_%s", tuple[6], tuple[7]); // <journey cat>_<journey num>
-      var vehicleProjection = CollectorJourneyVehicleProjection.fromSqlTuple(tuple);
-
-      // register the vehicle projection by the given key for the projection. check that only
-      // one journey provides the information about the vehicles which should usually be the
-      // case, but can happen in case the time of a server changes which causes two journeys
-      // to be present for the previous day of the requested journey
-      var targetList = mappedResults.get(key);
-      if (targetList == null) {
-        var newTargetList = new ArrayList<CollectorJourneyVehicleProjection>();
-        newTargetList.add(vehicleProjection);
-        mappedResults.put(key, newTargetList);
-      } else {
-        var firstEntry = targetList.getFirst();
-        if (firstEntry.associatedJourneyId().equals(vehicleProjection.associatedJourneyId())) {
-          targetList.add(vehicleProjection);
+        if (previousSequence == null) {
+          // if no previous sequence is known, just mark the sequence status as unknown
+          sequence.setStatus(JourneyVehicleStatus.UNKNOWN);
+          sequence.setVehicles(Set.of());
+        } else {
+          // previous sequence is known, copy over the vehicles
+          sequence.setStatus(JourneyVehicleStatus.PREDICTION);
+          sequence.setVehicles(previousSequence.getVehicles());
         }
+
+        // add the sequence for storing
+        newSequences.add(sequence);
       }
     }
 
-    return mappedResults;
+    this.vehicleRepository.saveAll(newSequences);
   }
 
   /**
@@ -272,19 +249,22 @@ class JourneyVehicleCollector {
    * @param activeTrains the trains that are actively running on the given server.
    */
   private void collectVehiclesFromLiveData(
-    @Nonnull SimRailServerDescriptor server,
-    @Nonnull List<SimRailPanelTrain> activeTrains
+    @NonNull SimRailServerDescriptor server,
+    @NonNull List<SimRailPanelTrain> activeTrains
   ) {
-    var runIds = activeTrains.stream().map(SimRailPanelTrain::getRunId).toList();
-    var runIdToJourneyIdMapping = this.journeyVehicleService.findRunsWithoutConfirmedComposition(server.id(), runIds);
-    for (var activeTrain : activeTrains) {
-      // resolve the journey id associated with the run, if the run id is not present in the
-      // mapping it either means that the journey is not yet registered or a composition is already stored
-      var journeyId = runIdToJourneyIdMapping.get(activeTrain.getRunId());
-      if (journeyId == null) {
-        continue;
-      }
+    // map the trains to a journey id -> vehicles mapping, then resolve the unconfirmed vehicle sequences
+    var vehiclesByJourneyId = activeTrains.stream()
+      .map(train -> {
+        var journeyId = this.journeyIdService.generateJourneyId(server.id(), train.getRunId());
+        return Map.entry(journeyId, train.getVehicles());
+      })
+      .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    var unconfirmedSequences = this.vehicleRepository.findAllUnconfirmedByJourneyIdIn(vehiclesByJourneyId.keySet());
+    if (unconfirmedSequences.isEmpty()) {
+      return;
+    }
 
+    for (var sequence : unconfirmedSequences) {
       // parse the vehicle data, which is either a single string (no brake setting/load)
       // or multiple parts separated by a colon (':'), the last part might hold the weight and load
       // for example:
@@ -292,8 +272,8 @@ class JourneyVehicleCollector {
       // "412W/412W_33515356394-5" - just a wagon, no further data supplied
       // "408S/408S:P:50" - wagon, brake setting P, 50 tons loaded (unknown load)
       // "441V/441V_31516635283-3:P:43@Coal" - wagon, brake setting P, 43 tons of coal loaded
-      var vehicles = activeTrain.getVehicles();
-      var convertedVehicles = new ArrayList<JourneyVehicle>();
+      var vehicles = vehiclesByJourneyId.get(sequence.getJourneyId());
+      var convertedVehicles = new HashSet<JourneyVehicle>();
       for (var index = 0; index < vehicles.size(); index++) {
         // get the railcar associated with the vehicle, skip the vehicle if the railcar is unknown
         var vehicleData = vehicles.get(index);
@@ -306,9 +286,7 @@ class JourneyVehicleCollector {
 
         // create base information about the vehicle & register it
         var vehicle = new JourneyVehicle();
-        vehicle.setIndexInGroup(index);
-        vehicle.setJourneyId(journeyId);
-        vehicle.setStatus(JourneyVehicleStatus.REAL);
+        vehicle.setIndexInSequence(index);
         vehicle.setRailcarId(vehicleRailcar.getId());
         convertedVehicles.add(vehicle);
 
@@ -349,8 +327,11 @@ class JourneyVehicleCollector {
         }
       }
 
-      // register the vehicles for the journey
-      this.journeyVehicleService.saveJourneyVehicles(journeyId, convertedVehicles);
+      // set the vehicles of the sequence, mark the sequence status as REAL
+      sequence.setVehicles(convertedVehicles);
+      sequence.setStatus(JourneyVehicleStatus.REAL);
     }
+
+    this.vehicleRepository.saveAll(unconfirmedSequences);
   }
 }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,33 +24,27 @@
 
 package tools.simrail.backend.api.server;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
-import java.time.ZoneId;
+import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.Optional;
-import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
-import org.springframework.data.util.Pair;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
-import tools.simrail.backend.api.eventbus.cache.SitSnapshotCache;
-import tools.simrail.backend.common.server.SimRailServerRepository;
+import tools.simrail.backend.common.cache.DataCache;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 @Service
 public class SimRailServerTimeService {
 
-  private final SitSnapshotCache snapshotCache;
-  private final SimRailServerRepository serverRepository;
+  private final DataCache<EventBusProto.ServerUpdateFrame> serverDataCache;
 
   @Autowired
   public SimRailServerTimeService(
-    @Nonnull SitSnapshotCache snapshotCache,
-    @Nonnull SimRailServerRepository serverRepository
+    @NonNull @Qualifier("server_data_cache") DataCache<EventBusProto.ServerUpdateFrame> serverDataCache
   ) {
-    this.snapshotCache = snapshotCache;
-    this.serverRepository = serverRepository;
+    this.serverDataCache = serverDataCache;
   }
 
   /**
@@ -60,33 +54,17 @@ public class SimRailServerTimeService {
    * @param serverId the id of the server to get the snapshot and time of.
    * @return a pair holding the parsed server id and time of the server with the given id.
    */
-  @Nonnull
-  @Cacheable(cacheNames = "server_cache", key = "'st_' + #serverId")
-  public Optional<Pair<UUID, OffsetDateTime>> resolveServerTime(@Nonnull String serverId) {
-    return this.snapshotCache.findCachedServer(serverId).map(serverSnapshot -> {
-      var serverTime = this.calculateServerTime(serverSnapshot.getTimezoneId(), serverSnapshot.getUtcOffsetHours());
-      return Pair.of(serverSnapshot.getServerId(), serverTime);
-    }).or(() -> {
-      var parsedServerId = UUID.fromString(serverId);
-      return this.serverRepository.findById(parsedServerId).map(server -> {
-        var serverTime = this.calculateServerTime(server.getTimezone(), server.getUtcOffsetHours());
-        return Pair.of(server.getId(), serverTime);
-      });
-    });
-  }
+  @NonNull
+  public Optional<LocalDateTime> resolveServerTime(@NonNull String serverId) {
+    var cachedData = this.serverDataCache.findByPrimaryKey(serverId);
+    if (cachedData == null) {
+      return Optional.empty();
+    }
 
-  /**
-   * Calculates the current offset date time on a server based on the timezone identifier and utc offset hours.
-   *
-   * @param timezoneId     the id of the timezone on the server.
-   * @param utcOffsetHours the server time offset from utc in hours.
-   * @return the current time on the server based on the timezone id and utc offset hours.
-   */
-  private @Nonnull OffsetDateTime calculateServerTime(@Nonnull String timezoneId, int utcOffsetHours) {
-    var serverTimezone = ZoneId.of(timezoneId);
-    return ZonedDateTime.now(ZoneOffset.UTC)
-      .plusHours(utcOffsetHours)
-      .withZoneSameLocal(serverTimezone)
-      .toOffsetDateTime();
+    var utcOffsetSeconds = cachedData.getServerData().getUtcOffsetSeconds();
+    var currentServerTime = LocalDateTime.now(ZoneOffset.UTC)
+      .plusSeconds(utcOffsetSeconds)
+      .truncatedTo(ChronoUnit.SECONDS);
+    return Optional.of(currentServerTime);
   }
 }

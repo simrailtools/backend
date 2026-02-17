@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.common.config;
 
-import jakarta.annotation.Nonnull;
 import java.net.Inet4Address;
+import org.jspecify.annotations.NonNull;
 import org.springframework.boot.web.server.WebServerFactoryCustomizer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.boot.web.server.servlet.ConfigurableServletWebServerFactory;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
 
@@ -42,7 +42,7 @@ public class IPv4AddressWebServerCustomizer implements WebServerFactoryCustomize
    * {@inheritDoc}
    */
   @Override
-  public void customize(@Nonnull ConfigurableServletWebServerFactory factory) {
+  public void customize(@NonNull ConfigurableServletWebServerFactory factory) {
     var address = Inet4Address.ofLiteral("0.0.0.0");
     factory.setAddress(address);
   }

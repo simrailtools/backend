@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -35,8 +35,8 @@ import io.swagger.v3.oas.models.media.ObjectSchema;
 import io.swagger.v3.oas.models.media.Schema;
 import io.swagger.v3.oas.models.media.StringSchema;
 import io.swagger.v3.oas.models.servers.Server;
-import jakarta.annotation.Nonnull;
 import java.util.List;
+import org.jspecify.annotations.NonNull;
 import org.springdoc.core.customizers.OpenApiCustomizer;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -49,7 +49,7 @@ class OpenApiDocumentation {
    * Configures the base OpenAPI spec data.
    */
   @Bean
-  public @Nonnull OpenAPI openAPI(@Value("${info.app.version:dev-local}") String version) {
+  public @NonNull OpenAPI openAPI(@Value("${info.app.version:dev-local}") String version) {
     return new OpenAPI()
       .info(new Info()
         .version(version)
@@ -58,10 +58,9 @@ class OpenApiDocumentation {
           .name("Creative Commons Attribution 4.0 International"))
         .title("SimRailInformationTools (SIT) API")
         .description("""
-           The SimRailInformationTools (SIT) API provides a comprehensive suite of endpoints designed to access detailed
-           data about various aspects of the SimRail ecosystem. This API offers functionalities to interact with vehicles,
-           railcars, journeys, users, dispatch posts, and more.
-          
+          The SimRailInformationTools (SIT) API provides a comprehensive suite of endpoints designed to access detailed
+          data about various aspects of the SimRail ecosystem. This API offers functionalities to interact with vehicles,
+          railcars, journeys, users, dispatch posts, and more.
           Information capabilities:
            - Vehicles and Railcars: Technical Specification, Journey Compositions, Usage in Journeys, etc.
            - Journeys: Live, Historic & Future Detail Data about Journeys, Finding/Resolving of Journeys, etc.
@@ -69,8 +68,6 @@ class OpenApiDocumentation {
            - Dispatch Posts: Live & Historic Information about Dispatch Posts
            - Points: Detail Information about Points for Journeys Timetables
            - Events: Websocket providing Live Data Changes for Journeys, Dispatch Posts and Servers
-          
-          You can find the SIT-Event documentation [here](https://github.com/simrailtools/backend/blob/main/rest-api/sit-event-docs.md).
           """))
       .servers(List.of(new Server()
         .description("Default Backend")
@@ -81,7 +78,7 @@ class OpenApiDocumentation {
    * Customizer for automatic problem responses for all error response codes (except 404).
    */
   @Bean
-  public @Nonnull OpenApiCustomizer errorResponsesCustomizer() {
+  public @NonNull OpenApiCustomizer errorResponsesCustomizer() {
     return openAPI -> {
       // add the problem detail schema to the spec
       var problemDetailSchema = new ObjectSchema()

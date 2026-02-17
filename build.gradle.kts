@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -78,8 +78,9 @@ subprojects {
   }
 
   tasks.withType<JavaCompile> {
-    sourceCompatibility = JavaVersion.VERSION_24.toString()
-    targetCompatibility = JavaVersion.VERSION_24.toString()
+    // Hint for the CodeQL autobuilder: sourceCompatibility = 25
+    sourceCompatibility = JavaVersion.VERSION_25.toString()
+    targetCompatibility = JavaVersion.VERSION_25.toString()
 
     options.encoding = "UTF-8"
     options.isIncremental = true
@@ -90,7 +91,8 @@ subprojects {
     options.compilerArgs.addAll(
       listOf(
         "-Xlint:all",         // enable all warnings
-        "-Xlint:-preview",    // reduce warning size for the following warning types
+        "-Xlint:-serial",     // reduce warning size for the following warning types
+        "-Xlint:-preview",
         "-Xlint:-unchecked",
         "-Xlint:-classfile",
         "-Xlint:-processing",
@@ -141,7 +143,7 @@ subprojects {
       lineEndings = LineEnding.UNIX
       encoding = StandardCharsets.UTF_8
       licenseHeaderFile(rootProject.file("license_header.txt"))
-      targetExclude("**/backend/common/rpc/**")
+      targetExclude("**/backend/common/proto/**")
     }
   }
 

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -53,6 +53,11 @@ public final class Railcar {
    */
   @JsonProperty("display_name")
   private String displayName;
+  /**
+   * The baptismal name of the locomotive / wagon. Can be {@code null} if none.
+   */
+  @JsonProperty("name")
+  private String name;
   /**
    * The Steam id of the DLC that is required to get access to this railcar in SimRail, null if no DLC is needed.
    */

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,9 +24,9 @@
 
 package tools.simrail.backend.api.util;
 
-import jakarta.annotation.Nonnull;
 import java.io.IOException;
 import java.util.function.Function;
+import org.jspecify.annotations.NonNull;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 import org.springframework.util.DigestUtils;
@@ -38,7 +38,7 @@ import org.springframework.util.DigestUtils;
 public final class ETagGenerator implements Function<Resource, String> {
 
   @Override
-  public @Nonnull String apply(@Nonnull Resource resource) {
+  public @NonNull String apply(@NonNull Resource resource) {
     try (var inputStream = resource.getInputStream()) {
       // 35 is the length of "0 + 32bits md5 hash + "
       var stringBuilder = new StringBuilder(35);

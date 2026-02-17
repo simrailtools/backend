@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,9 @@
 
 package tools.simrail.backend.api.board.request;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.LocalDateTime;
 import java.util.UUID;
-import tools.simrail.backend.common.journey.JourneyTransportType;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Extracted and parsed request parameters for an arrival/departure board.
@@ -40,11 +38,11 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
  * @param transportTypes the transport types to include in the board.
  */
 public record BoardRequestParameters(
-  @Nonnull UUID serverId,
-  @Nonnull UUID pointId,
-  @Nonnull OffsetDateTime timeStart,
-  @Nonnull OffsetDateTime timeEnd,
-  @Nonnull List<JourneyTransportType> transportTypes
+  @NonNull UUID serverId,
+  @NonNull UUID pointId,
+  @NonNull LocalDateTime timeStart,
+  @NonNull LocalDateTime timeEnd,
+  @NonNull String[] transportTypes
 ) {
 
 }

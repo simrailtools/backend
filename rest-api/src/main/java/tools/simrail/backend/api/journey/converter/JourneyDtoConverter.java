@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,35 +24,41 @@
 
 package tools.simrail.backend.api.journey.converter;
 
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
-import java.util.Optional;
-import java.util.function.Function;
+import java.util.function.BiFunction;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.journey.dto.JourneyDto;
-import tools.simrail.backend.api.journey.dto.JourneyGeoPositionDto;
-import tools.simrail.backend.api.journey.dto.JourneyLiveDataDto;
-import tools.simrail.backend.api.journey.dto.JourneySignalDto;
 import tools.simrail.backend.common.journey.JourneyEntity;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Converter for journey entities to DTOs.
  */
 @Component
-public final class JourneyDtoConverter implements Function<JourneyEntity, JourneyDto> {
+public final class JourneyDtoConverter
+  implements BiFunction<JourneyEntity, EventBusProto.JourneyUpdateFrame, JourneyDto> {
 
+  private final JourneyLiveDataDtoConverter liveDataDtoConverter;
   private final JourneyEventDtoConverter journeyEventDtoConverter;
 
   @Autowired
-  public JourneyDtoConverter(@Nonnull JourneyEventDtoConverter journeyEventDtoConverter) {
+  public JourneyDtoConverter(
+    @NonNull JourneyLiveDataDtoConverter liveDataDtoConverter,
+    @NonNull JourneyEventDtoConverter journeyEventDtoConverter
+  ) {
+    this.liveDataDtoConverter = liveDataDtoConverter;
     this.journeyEventDtoConverter = journeyEventDtoConverter;
   }
 
   @Override
-  public @Nonnull JourneyDto apply(@Nonnull JourneyEntity journey) {
-    var liveData = this.extractLiveData(journey);
+  public @NonNull JourneyDto apply(
+    @NonNull JourneyEntity journey,
+    EventBusProto.@Nullable JourneyUpdateFrame liveData
+  ) {
     var events = journey.getEvents().stream().map(this.journeyEventDtoConverter).toList();
+    var liveDataDto = liveData != null ? this.liveDataDtoConverter.apply(liveData.getJourneyData()) : null;
     return new JourneyDto(
       journey.getId(),
       journey.getServerId(),
@@ -60,28 +66,8 @@ public final class JourneyDtoConverter implements Function<JourneyEntity, Journe
       journey.getFirstSeenTime(),
       journey.getLastSeenTime(),
       journey.isCancelled(),
-      liveData,
+      liveDataDto,
       events
     );
-  }
-
-  private @Nullable JourneyLiveDataDto extractLiveData(@Nonnull JourneyEntity journey) {
-    // validate that speed and position are present
-    var speed = journey.getSpeed();
-    var position = journey.getPosition();
-    if (speed == null || position == null) {
-      return null;
-    }
-
-    // convert the next signal and journey position
-    var nextSignal = Optional.ofNullable(journey.getNextSignal())
-      .filter(signal -> signal.getName() != null)
-      .map(signal -> new JourneySignalDto(
-        signal.getName(),
-        signal.getMaxAllowedSpeed(),
-        signal.getDistance()))
-      .orElse(null);
-    var journeyPosition = new JourneyGeoPositionDto(position.getLatitude(), position.getLongitude());
-    return new JourneyLiveDataDto(speed, journeyPosition, journey.getDriverSteamId(), nextSignal);
   }
 }

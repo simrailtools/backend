@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,7 @@
 
 package tools.simrail.backend.api.journey.converter;
 
-import jakarta.annotation.Nonnull;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import tools.simrail.backend.api.journey.data.JourneyEventSummaryProjection;
@@ -33,8 +33,12 @@ import tools.simrail.backend.api.journey.data.JourneyWithEventSummaryProjection;
 import tools.simrail.backend.api.journey.dto.JourneyEventDescriptorDto;
 import tools.simrail.backend.api.journey.dto.JourneyStopPlaceSummaryDto;
 import tools.simrail.backend.api.journey.dto.JourneySummaryDto;
-import tools.simrail.backend.api.journey.dto.JourneySummaryWithPlayableEventDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithEventDto;
+import tools.simrail.backend.api.journey.dto.JourneySummaryWithLiveDataDto;
 import tools.simrail.backend.api.journey.dto.JourneyTerminalEventDto;
+import tools.simrail.backend.api.journey.dto.JourneyTransportSummaryDto;
+import tools.simrail.backend.common.point.SimRailPointProvider;
+import tools.simrail.backend.common.proto.EventBusProto;
 
 /**
  * Converter for journey summaries to a DTO.
@@ -42,25 +46,25 @@ import tools.simrail.backend.api.journey.dto.JourneyTerminalEventDto;
 @Component
 public final class JourneySummaryDtoConverter {
 
-  private final JourneyStopPlaceSummaryDtoConverter stopPlaceDtoConverter;
-  private final JourneyTransportSummaryDtoConverter transportDtoConverter;
+  private final SimRailPointProvider pointProvider;
+  private final JourneyLiveDataDtoConverter liveDataDtoConverter;
 
   @Autowired
   public JourneySummaryDtoConverter(
-    @Nonnull JourneyStopPlaceSummaryDtoConverter stopPlaceDtoConverter,
-    @Nonnull JourneyTransportSummaryDtoConverter transportDtoConverter
+    @NonNull SimRailPointProvider pointProvider,
+    @NonNull JourneyLiveDataDtoConverter liveDataDtoConverter
   ) {
-    this.stopPlaceDtoConverter = stopPlaceDtoConverter;
-    this.transportDtoConverter = transportDtoConverter;
+    this.pointProvider = pointProvider;
+    this.liveDataDtoConverter = liveDataDtoConverter;
   }
 
   /**
    * Converts a journey and its associated first/last event into a DTO.
    */
-  public @Nonnull JourneySummaryDto convert(
-    @Nonnull JourneySummaryProjection journey,
-    @Nonnull JourneyEventSummaryProjection firstEvent,
-    @Nonnull JourneyEventSummaryProjection lastEvent
+  public @NonNull JourneySummaryDto convert(
+    @NonNull JourneySummaryProjection journey,
+    @NonNull JourneyEventSummaryProjection firstEvent,
+    @NonNull JourneyEventSummaryProjection lastEvent
   ) {
     var originEvent = this.convertSummaryEvent(firstEvent);
     var destinationEvent = this.convertSummaryEvent(lastEvent);
@@ -77,39 +81,90 @@ public final class JourneySummaryDtoConverter {
   /**
    * Converts a journey and its associated first/last event into a DTO.
    */
-  public @Nonnull JourneySummaryWithPlayableEventDto convert(
-    @Nonnull JourneyWithEventSummaryProjection journey,
-    @Nonnull JourneyEventSummaryProjection firstEvent,
-    @Nonnull JourneyEventSummaryProjection lastEvent
+  public @NonNull JourneySummaryWithEventDto convert(
+    @NonNull JourneyWithEventSummaryProjection journey,
+    @NonNull JourneyEventSummaryProjection firstEvent,
+    @NonNull JourneyEventSummaryProjection lastEvent
   ) {
     var originEvent = this.convertSummaryEvent(firstEvent);
     var destinationEvent = this.convertSummaryEvent(lastEvent);
     var firstPlayableEvent = this.convertFirstEvent(journey);
-    return new JourneySummaryWithPlayableEventDto(
+    return new JourneySummaryWithEventDto(
       journey.getId(),
       journey.getServerId(),
       journey.getFirstSeenTime(),
       journey.getLastSeenTime(),
-      journey.isFeCancelled(),
+      journey.isEventCancelled(),
       originEvent,
       destinationEvent,
       firstPlayableEvent);
   }
 
   /**
+   * Converts a journey, its associated first/last event and the live data into a DTO.
+   */
+  public @NonNull JourneySummaryWithLiveDataDto convert(
+    @NonNull JourneySummaryProjection journey,
+    @NonNull JourneyEventSummaryProjection firstEvent,
+    @NonNull JourneyEventSummaryProjection lastEvent,
+    EventBusProto.@NonNull JourneyData liveData
+  ) {
+    var originEvent = this.convertSummaryEvent(firstEvent);
+    var destinationEvent = this.convertSummaryEvent(lastEvent);
+    var liveDataDto = this.liveDataDtoConverter.apply(liveData);
+    return new JourneySummaryWithLiveDataDto(
+      journey.getId(),
+      journey.getServerId(),
+      journey.getFirstSeenTime(),
+      journey.getLastSeenTime(),
+      journey.isCancelled(),
+      originEvent,
+      destinationEvent,
+      liveDataDto);
+  }
+
+  /**
    * Converts a single event summary projection into a terminal event DTO.
    */
-  private @Nonnull JourneyTerminalEventDto convertSummaryEvent(@Nonnull JourneyEventSummaryProjection summary) {
-    var transport = this.transportDtoConverter.apply(summary.getTransport());
-    var stopPlace = this.stopPlaceDtoConverter.apply(summary.getStopDescriptor());
+  private @NonNull JourneyTerminalEventDto convertSummaryEvent(@NonNull JourneyEventSummaryProjection summary) {
+    var transport = this.convertTransportFromEventSummary(summary);
+    var stopPlace = this.convertStopPlaceFromEventSummary(summary);
     return new JourneyTerminalEventDto(stopPlace, summary.getScheduledTime(), transport, summary.isCancelled());
   }
 
   /**
    * Converts the first playable event that is encapsulated in the given journey projection.
    */
-  private @Nonnull JourneyEventDescriptorDto convertFirstEvent(@Nonnull JourneyWithEventSummaryProjection summary) {
-    var stopPlace = new JourneyStopPlaceSummaryDto(summary.getFePointId(), summary.getFePointName(), true);
-    return new JourneyEventDescriptorDto(stopPlace, summary.getFeScheduledTime(), summary.isFeCancelled());
+  private @NonNull JourneyEventDescriptorDto convertFirstEvent(@NonNull JourneyWithEventSummaryProjection summary) {
+    var point = this.pointProvider.findPointByIntId(summary.getEventPointId()).orElseThrow(); // must be present
+    var stopPlace = new JourneyStopPlaceSummaryDto(
+      summary.getEventPointId(),
+      point.getName(),
+      summary.isEventPointPlayable());
+    return new JourneyEventDescriptorDto(stopPlace, summary.getEventScheduledTime(), summary.isEventCancelled());
+  }
+
+  /**
+   * Converts the stop place info from the given event summary into a stop place summary dto.
+   */
+  private @NonNull JourneyStopPlaceSummaryDto convertStopPlaceFromEventSummary(
+    @NonNull JourneyEventSummaryProjection summary
+  ) {
+    var point = this.pointProvider.findPointByIntId(summary.getPointId()).orElseThrow(); // must be present
+    return new JourneyStopPlaceSummaryDto(point.getId(), point.getName(), summary.isPointPlayable());
+  }
+
+  /**
+   * Converts an event summary into a transport dto.
+   */
+  private @NonNull JourneyTransportSummaryDto convertTransportFromEventSummary(
+    @NonNull JourneyEventSummaryProjection summary
+  ) {
+    return new JourneyTransportSummaryDto(
+      summary.getTransportCategory(),
+      summary.getTransportNumber(),
+      summary.getTransportLine(),
+      summary.getTransportLabel(),
+      summary.getTransportType());
   }
 }

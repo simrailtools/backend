@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,30 +26,31 @@ package tools.simrail.backend.collector.dispatchpost;
 
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.Nonnull;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
+import io.nats.client.Connection;
+import jakarta.annotation.PostConstruct;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
-import java.util.function.Function;
 import java.util.stream.Collectors;
+import org.jspecify.annotations.NonNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
-import tools.simrail.backend.collector.metric.PerServerGauge;
+import org.springframework.util.CollectionUtils;
+import tools.simrail.backend.collector.server.SimRailServerDescriptor;
 import tools.simrail.backend.collector.server.SimRailServerService;
+import tools.simrail.backend.collector.util.PerServerGauge;
+import tools.simrail.backend.collector.util.UserFactory;
+import tools.simrail.backend.common.cache.DataCache;
 import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostEntity;
-import tools.simrail.backend.common.dispatchpost.SimRailDispatchPostRepository;
-import tools.simrail.backend.common.point.SimRailPointProvider;
-import tools.simrail.backend.common.shared.GeoPositionEntity;
-import tools.simrail.backend.common.util.MongoIdDecodeUtil;
+import tools.simrail.backend.common.event.EventSubjectFactory;
+import tools.simrail.backend.common.proto.EventBusProto;
+import tools.simrail.backend.common.util.MonotonicInstantProvider;
 import tools.simrail.backend.common.util.UuidV5Factory;
 import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
@@ -59,37 +60,63 @@ final class SimRailDispatchPostCollector {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(SimRailDispatchPostCollector.class);
 
-  private final SimRailPointProvider pointProvider;
+  private final Connection connection;
   private final SimRailServerService serverService;
   private final UuidV5Factory dispatchPostIdFactory;
   private final SimRailPanelApiClient panelApiClient;
-  private final Map<UUID, String> postDataEtagByServer;
-  private final DispatchPostUpdateHandler dispatchPostUpdateHandler;
-  private final SimRailDispatchPostRepository dispatchPostRepository;
+  private final CollectorDispatchPostService dispatchPostService;
+
+  private final Map<UUID, ServerCollectorData> serverCollectorData;
+  private final DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache;
 
   private final PerServerGauge collectedDispatchPostCounter;
   private final Meter.MeterProvider<Timer> collectionDurationTimer;
 
   @Autowired
-  public SimRailDispatchPostCollector(
-    @Nonnull SimRailPointProvider pointProvider,
-    @Nonnull SimRailServerService serverService,
-    @Nonnull SimRailPanelApiClient panelApiClient,
-    @Nonnull DispatchPostUpdateHandler dispatchPostUpdateHandler,
-    @Nonnull SimRailDispatchPostRepository dispatchPostRepository,
-    @Nonnull @Qualifier("dispatch_post_collected_total") PerServerGauge collectedDispatchPostCounter,
-    @Nonnull @Qualifier("dispatch_post_collection_duration") Meter.MeterProvider<Timer> collectionDurationTimer
+  SimRailDispatchPostCollector(
+    @NonNull Connection connection,
+    @NonNull SimRailServerService serverService,
+    @NonNull SimRailPanelApiClient panelApiClient,
+    @NonNull CollectorDispatchPostService dispatchPostService,
+    @NonNull @Qualifier("dispatch_post_cache") DataCache<EventBusProto.DispatchPostUpdateFrame> dispatchPostDataCache,
+    @NonNull @Qualifier("dispatch_post_collected_total") PerServerGauge collectedDispatchPostCounter,
+    @Qualifier("dispatch_post_collection_duration") Meter.@NonNull MeterProvider<Timer> collectionDurationTimer
   ) {
-    this.pointProvider = pointProvider;
+    this.connection = connection;
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
-    this.postDataEtagByServer = new HashMap<>();
-    this.dispatchPostRepository = dispatchPostRepository;
-    this.dispatchPostUpdateHandler = dispatchPostUpdateHandler;
+    this.dispatchPostService = dispatchPostService;
     this.dispatchPostIdFactory = new UuidV5Factory(SimRailDispatchPostEntity.ID_NAMESPACE);
+
+    this.dispatchPostDataCache = dispatchPostDataCache;
+    this.serverCollectorData = new ConcurrentHashMap<>(20, 0.9f, 1);
 
     this.collectionDurationTimer = collectionDurationTimer;
     this.collectedDispatchPostCounter = collectedDispatchPostCounter;
+  }
+
+  @PostConstruct
+  public void reconstructUpdateHoldersFromCache() {
+    this.dispatchPostDataCache.pullCacheFromStorage(); // re-init data cache from underlying storage
+    var cachedValues = this.dispatchPostDataCache.cachedValuesSnapshot();
+    for (var cachedValue : cachedValues) {
+      // ensure a collector data holder is present for the server
+      var idHolder = cachedValue.getIds();
+      var sid = UUID.fromString(idHolder.getServerId());
+      var serverDataHolder = this.serverCollectorData.computeIfAbsent(sid, _ -> new ServerCollectorData());
+
+      // register an update holder for the dispatch post
+      var postId = UUID.fromString(idHolder.getDataId());
+      var cacheKey = DispatchPostUpdateHolder.createSecondaryCacheKey(idHolder.getServerId(), idHolder.getForeignId());
+      var updateHolder = new DispatchPostUpdateHolder(postId, idHolder.getForeignId(), cacheKey);
+      serverDataHolder.updateHoldersByForeignId.put(idHolder.getForeignId(), updateHolder);
+
+      // reconstruct the update fields state from the dispatch post data
+      var data = cachedValue.getDispatchPostData();
+      if (data.hasDispatcher()) {
+        updateHolder.dispatcher.forceUpdateValue(data.getDispatcher());
+      }
+    }
   }
 
   @Scheduled(
@@ -101,114 +128,145 @@ final class SimRailDispatchPostCollector {
   public void collectDispatchPostInformation() {
     var servers = this.serverService.getServers();
     for (var server : servers) {
-      // get the train positions from upstream api, don't do anything if data didn't change
       var sample = Timer.start();
-      var etag = this.postDataEtagByServer.get(server.id());
-      var responseTuple = this.panelApiClient.getDispatchPosts(server.code(), etag);
-      responseTuple
-        .firstHeaderValue(HttpHeaders.ETAG)
-        .ifPresent(responseEtag -> this.postDataEtagByServer.put(server.id(), responseEtag));
-      if (responseTuple.response().status() == HttpStatus.NOT_MODIFIED.value()) {
-        continue;
+      try {
+        var collectedDispatchPostCount = this.collectServerDispatchPosts(server);
+        if (collectedDispatchPostCount > 0) {
+          this.collectedDispatchPostCounter.setValue(server, collectedDispatchPostCount);
+        }
+      } catch (Exception exception) {
+        LOGGER.error("Caught exception while collecting dispatch posts", exception);
+      } finally {
+        var timer = this.collectionDurationTimer.withTag("server_code", server.code());
+        sample.stop(timer);
       }
-
-      var response = responseTuple.body();
-      var dispatchPosts = response == null ? null : response.getEntries();
-      if (dispatchPosts == null || dispatchPosts.isEmpty()) {
-        LOGGER.warn("API did not return a successful result while getting dispatch post list on {}", server.code());
-        continue;
-      }
-
-      //
-      var registeredDispatchPostsByForeignId = this.dispatchPostRepository.findAllByServerId(server.id())
-        .stream()
-        .collect(Collectors.toMap(SimRailDispatchPostEntity::getForeignId, Function.identity()));
-      for (var dispatchPost : dispatchPosts) {
-        var postEntity = registeredDispatchPostsByForeignId.remove(dispatchPost.getId());
-        if (postEntity == null) {
-          // dispatch post is not yet registered, create a new entity for it
-          postEntity = new SimRailDispatchPostEntity();
-          postEntity.setNew(true);
-          postEntity.setServerId(server.id());
-          postEntity.setForeignId(dispatchPost.getId());
-
-          var idName = server.code() + dispatchPost.getStationName() + dispatchPost.getId();
-          postEntity.setId(this.dispatchPostIdFactory.create(idName));
-        }
-
-        // store if the post was deleted before, and then remove the marking
-        // this can happen if a posts gets removed and then re-added
-        var postWasDeleted = postEntity.isDeleted();
-        postEntity.setDeleted(false);
-
-        // update the base information
-        postEntity.setName(dispatchPost.getStationName());
-        postEntity.setDifficultyLevel(dispatchPost.getDifficulty());
-        postEntity.setPosition(new GeoPositionEntity(
-          dispatchPost.getPositionLatitude(),
-          dispatchPost.getPositionLongitude()));
-
-        // override position for Miechów as the upstream provided position is way off (in the middle of a field)
-        // TODO: remove when position is fixed in upstream
-        if (dispatchPost.getId().equals("675330d44337b38ac4027545")) {
-          postEntity.setPosition(new GeoPositionEntity(50.354694, 20.011680));
-        }
-
-        // update the time when the post was initially registered in the SimRail backend
-        var registeredSince = MongoIdDecodeUtil.parseMongoId(dispatchPost.getId());
-        postEntity.setRegisteredSince(registeredSince);
-
-        // update the associated point id
-        var point = this.pointProvider.findPointByName(dispatchPost.getStationName()).orElse(null);
-        if (point == null) {
-          LOGGER.warn("Found dispatch post {} with no associated point", dispatchPost.getStationName());
-          continue;
-        }
-        postEntity.setPointId(point.getId());
-
-        // update the image urls of the post (in case they changed)
-        var allImages = List.of(
-          dispatchPost.getImage1Url(),
-          dispatchPost.getImage2Url(),
-          dispatchPost.getImage3Url());
-        var newImageUrls = new HashSet<>(allImages);
-        var currentImageUrls = postEntity.getImageUrls();
-        if (!newImageUrls.equals(currentImageUrls)) {
-          postEntity.setImageUrls(newImageUrls);
-        }
-
-        // update the collection of steam ids that are currently dispatching the post (in case they changed)
-        var newDispatcherSteamIds = dispatchPost.getDispatchers().stream()
-          .map(SimRailPanelDispatchPost.Dispatcher::getSteamId)
-          .collect(Collectors.toSet());
-        var currentDispatcherSteamIds = postEntity.getDispatcherSteamIds();
-        if (!newDispatcherSteamIds.equals(currentDispatcherSteamIds)) {
-          postEntity.setDispatcherSteamIds(newDispatcherSteamIds);
-          if (!postEntity.isNew()) {
-            // if the post entity is new we will send out an update separately
-            this.dispatchPostUpdateHandler.handleDispatchPostUpdate(postEntity);
-          }
-        }
-
-        // save the updated post entity, send out and info if the post is newly registered
-        var savedEntity = this.dispatchPostRepository.save(postEntity);
-        if (postEntity.isNew() || postWasDeleted) {
-          this.dispatchPostUpdateHandler.handleDispatchPostAdd(savedEntity);
-        }
-      }
-
-      // mark all dispatch posts that weren't removed in the collection cycle as deleted
-      var remainingRegisteredPosts = registeredDispatchPostsByForeignId.values();
-      if (!remainingRegisteredPosts.isEmpty()) {
-        remainingRegisteredPosts.forEach(post -> {
-          post.setDeleted(true);
-          this.dispatchPostUpdateHandler.handleDispatchPostRemove(post);
-        });
-        this.dispatchPostRepository.saveAll(remainingRegisteredPosts);
-      }
-
-      this.collectedDispatchPostCounter.setValue(server, dispatchPosts.size());
-      sample.stop(this.collectionDurationTimer.withTag("server_code", server.code()));
     }
+  }
+
+  private int collectServerDispatchPosts(@NonNull SimRailServerDescriptor server) {
+    // get the post data from upstream api, don't do anything if data didn't change
+    var collectorData = this.serverCollectorData.computeIfAbsent(server.id(), _ -> new ServerCollectorData());
+    var responseTuple = this.panelApiClient.getDispatchPosts(server.code(), collectorData.getDispatchPostEtag());
+    collectorData.updateDispatchPostEtag(responseTuple);
+    if (responseTuple.response().status() == HttpStatus.NOT_MODIFIED.value()) {
+      return 0;
+    }
+
+    // get the posts that are currently active on the target server, the returned
+    // list can be empty if, for example, the server is currently down
+    var response = responseTuple.body();
+    var dispatchPosts = response == null ? null : response.getEntries();
+    if (dispatchPosts == null || dispatchPosts.isEmpty()) {
+      return 0;
+    }
+
+    var shouldUpdateDatabase = collectorData.shouldUpdateDatabase();
+    for (var dispatchPost : dispatchPosts) {
+      var updateHolder = collectorData.updateHoldersByForeignId.get(dispatchPost.getId());
+      if (updateHolder == null) {
+        var postId = this.dispatchPostIdFactory.create(server.code() + dispatchPost.getId());
+        var cacheKey = DispatchPostUpdateHolder.createSecondaryCacheKey(server.id().toString(), dispatchPost.getId());
+        updateHolder = new DispatchPostUpdateHolder(postId, dispatchPost.getId(), cacheKey);
+        collectorData.updateHoldersByForeignId.put(dispatchPost.getId(), updateHolder);
+      }
+
+      // extract the dispatching user
+      var dispatcher = CollectionUtils.firstElement(dispatchPost.getDispatchers());
+      var dispatchingUser = switch (dispatcher) {
+        case null -> null;
+        case SimRailPanelDispatchPost.Dispatcher _ -> UserFactory.constructUser(
+          EventBusProto.UserPlatform.STEAM, dispatcher.getSteamId(),
+          EventBusProto.UserPlatform.XBOX, dispatcher.getXboxId());
+      };
+      updateHolder.dispatcher.updateValue(dispatchingUser);
+
+      // update the cached dispatch post data if any field is dirty
+      var prevUpdateFrame = this.dispatchPostDataCache.findBySecondaryKey(updateHolder.secondaryCacheKey);
+      var mightBeNewDispatchPost = prevUpdateFrame == null;
+      if (updateHolder.fieldGroup.consumeAnyDirty()) {
+        var updateFrameBuilder = switch (prevUpdateFrame) {
+          case EventBusProto.DispatchPostUpdateFrame data -> data.toBuilder();
+          case null -> {
+            var ids = EventBusProto.IdHolder.newBuilder()
+              .setDataId(updateHolder.id.toString())
+              .setServerId(server.id().toString())
+              .setForeignId(updateHolder.foreignId)
+              .build();
+            yield EventBusProto.DispatchPostUpdateFrame.newBuilder().setIds(ids);
+          }
+        };
+
+        // update the dispatch post data
+        var dispatchPostDataBuilder = updateFrameBuilder.getDispatchPostData().toBuilder();
+        updateHolder.dispatcher.ifDirty(user -> {
+          if (user == null) {
+            dispatchPostDataBuilder.clearDispatcher();
+          } else {
+            dispatchPostDataBuilder.setDispatcher(user);
+          }
+        });
+
+        // insert the dispatch post data into the cache
+        var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+          .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+          .build();
+        var updateFrame = updateFrameBuilder
+          .setBaseData(baseFrameData)
+          .setDispatchPostData(dispatchPostDataBuilder.build())
+          .build();
+        this.dispatchPostDataCache.setCachedValue(updateFrame);
+
+        // send out journey update frame
+        var subject = EventSubjectFactory.createDispatchPostUpdateSubjectV1(
+          updateFrame.getIds().getServerId(),
+          updateFrame.getIds().getDataId());
+        this.connection.publish(subject, updateFrame.toByteArray());
+      }
+
+      // update the dispatch post in the database if required
+      if (shouldUpdateDatabase || mightBeNewDispatchPost) {
+        this.dispatchPostService.saveDispatchPost(server, dispatchPost, updateHolder);
+      }
+    }
+
+    // send out deletion frames for all deleted servers
+    var serverIdString = server.id().toString();
+    var allCollectedCacheKeys = dispatchPosts.stream()
+      .map(post -> DispatchPostUpdateHolder.createSecondaryCacheKey(server.id().toString(), post.getId()))
+      .collect(Collectors.toSet());
+    var removedPosts = this.dispatchPostDataCache.findBySecondaryKeyNotIn(allCollectedCacheKeys);
+    removedPosts
+      .filter(post -> post.getIds().getServerId().equals(serverIdString))
+      .forEach(post -> {
+        this.dispatchPostDataCache.removeByPrimaryKey(post.getIds().getDataId());
+
+        // send out dispatch post removal frame
+        var baseFrameData = EventBusProto.BaseFrameData.newBuilder()
+          .setTimestamp(MonotonicInstantProvider.monotonicTimeMillis())
+          .build();
+        var dispatchPostRemoveFrame = EventBusProto.DispatchPostRemoveFrame.newBuilder()
+          .setBaseData(baseFrameData)
+          .setPostId(post.getIds().getServerId())
+          .build();
+        var subject = EventSubjectFactory.createDispatchPostRemoveSubjectV1(
+          post.getIds().getServerId(),
+          post.getIds().getDataId());
+        this.connection.publish(subject, dispatchPostRemoveFrame.toByteArray());
+      });
+
+    // remove the removed posts from the server data holder lookup
+    var existingPostIds = dispatchPosts.stream().map(SimRailPanelDispatchPost::getId).collect(Collectors.toSet());
+    for (var holder : collectorData.updateHoldersByForeignId.values()) {
+      if (!existingPostIds.contains(holder.foreignId)) {
+        collectorData.updateHoldersByForeignId.remove(holder.foreignId);
+      }
+    }
+
+    // mark all removed dispatch posts as deleted
+    if (shouldUpdateDatabase) {
+      this.dispatchPostService.markUncontainedDispatchPostsAsDeleted(server.id(), existingPostIds);
+    }
+
+    return dispatchPosts.size();
   }
 }

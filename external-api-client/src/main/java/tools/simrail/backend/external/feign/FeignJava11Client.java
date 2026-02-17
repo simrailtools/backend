@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -28,7 +28,7 @@ import feign.http2client.Http2Client;
 import java.net.http.HttpClient;
 import java.time.Duration;
 
-public final class FeignJava11Client extends Http2Client {
+public class FeignJava11Client extends Http2Client {
 
   public FeignJava11Client() {
     super(HttpClient.newBuilder()

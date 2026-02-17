@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,7 +24,6 @@
 
 package tools.simrail.backend.common.railcar;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -34,8 +33,9 @@ import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
+import tools.jackson.databind.json.JsonMapper;
 
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.NONE, classes = {
   RailcarProvider.class,
@@ -49,7 +49,7 @@ public final class RailcarProviderTest {
   @Test
   void testAllRailcarsWereLoaded() {
     var railcars = this.railcarProvider.railcars;
-    Assertions.assertEquals(106, railcars.size());
+    Assertions.assertEquals(117, railcars.size());
   }
 
   @Test
@@ -146,7 +146,7 @@ public final class RailcarProviderTest {
     for (var activeTrain : activeTrains) {
       var trainRailcars = activeTrain.get("Vehicles");
       for (var trainRailcar : trainRailcars) {
-        var railcarDescriptor = trainRailcar.asText();
+        var railcarDescriptor = trainRailcar.asString();
         var railcardApiId = railcarDescriptor.split(":")[0];
         var railcar = this.railcarProvider.findRailcarByApiId(railcardApiId);
         Assertions.assertTrue(railcar.isPresent(), "Missing railcar " + railcardApiId);

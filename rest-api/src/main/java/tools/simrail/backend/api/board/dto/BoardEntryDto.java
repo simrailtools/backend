@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -26,11 +26,11 @@ package tools.simrail.backend.api.board.dto;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.journey.JourneyStopType;
 import tools.simrail.backend.common.journey.JourneyTimeType;
 
@@ -46,10 +46,10 @@ public record BoardEntryDto(
   @NotNull boolean cancelled,
   @Schema(description = "Indicates if the event is additional (not part of the scheduled route)")
   @NotNull boolean additional,
-  @Schema(description = "Scheduled time of the event (ISO-8601 with offset)")
-  @NotNull OffsetDateTime scheduledTime,
-  @Schema(description = "Best known time of the event (ISO-8601 with offset), precision is described by the time type field")
-  @NotNull OffsetDateTime realtimeTime,
+  @Schema(description = "Scheduled time of the event (ISO-8601) in local server time")
+  @NotNull LocalDateTime scheduledTime,
+  @Schema(description = "Best known time of the event (ISO-8601) in local server time, precision is described by the time type field")
+  @NotNull LocalDateTime realtimeTime,
   @Schema(description = "The precision of the realtime time of the event")
   @NotNull JourneyTimeType realtimeTimeType,
   @Schema(description = "The scheduled stop type for the journey at the event")

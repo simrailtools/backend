@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,16 @@
 
 package tools.simrail.backend.common.border;
 
-import com.fasterxml.jackson.databind.json.JsonMapper;
 import java.io.IOException;
 import java.util.HashSet;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.autoconfigure.jackson.JacksonAutoConfiguration;
+import org.springframework.boot.jackson.autoconfigure.JacksonAutoConfiguration;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.core.io.Resource;
+import tools.jackson.databind.json.JsonMapper;
 import tools.simrail.backend.common.TimetableHolder;
 import tools.simrail.backend.common.point.SimRailPointProvider;
 
@@ -54,7 +54,7 @@ public final class MapBorderPointProviderTest {
   @Test
   void testAllBorderPointsWereLoaded() {
     var borderPoints = this.borderPointProvider.mapBorderPointIds;
-    Assertions.assertEquals(47, borderPoints.size());
+    Assertions.assertEquals(52, borderPoints.size());
   }
 
   @Test
@@ -66,7 +66,7 @@ public final class MapBorderPointProviderTest {
       for (var borderPoint : borderPoints) {
         var pointIds = borderPoint.get("ext_point_ids");
         for (var pointIdNode : pointIds) {
-          var pointId = pointIdNode.asText();
+          var pointId = pointIdNode.asString();
           if (!seenPointIds.add(pointId)) {
             Assertions.fail("Duplicate border point id: " + pointId);
           }
@@ -91,30 +91,44 @@ public final class MapBorderPointProviderTest {
   void testAllTimetableEntriesHaveBorderPoints() {
     var trainRuns = TimetableHolder.getDefaultServerTimetable();
     for (var trainRun : trainRuns) {
-      String startPointId = null;
-      String endPointId = null;
-
       var timetable = trainRun.get("timetable");
-      var trainRunId = trainRun.get("runId").asText();
+      var trainRunId = trainRun.get("runId").asString();
       if (timetable.isEmpty()) {
         continue;
       }
 
-      for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asText();
-        var isBorderPoint = this.borderPointProvider.isMapBorderPoint(pointId);
-        if (isBorderPoint) {
-          if (startPointId == null) {
-            startPointId = pointId;
-          } else {
-            endPointId = pointId;
+      MapBorderPoint start = null;
+      MapBorderPoint end = null;
+      for (var index = 0; index < timetable.size(); index++) {
+        var timetableEntry = timetable.get(index);
+        var pointId = timetableEntry.get("pointId").asString();
+        var borderPoint = this.borderPointProvider.findMapBorderPoint(pointId).orElse(null);
+        if (borderPoint == null) {
+          continue;
+        }
+
+        // check that the next point actually matches, otherwise continue (next point only matters for the start point)
+        if (start == null) {
+          var requiredNext = borderPoint.getRequiredNextPoints();
+          if (requiredNext != null) {
+            var nextEntry = timetable.get(index + 1);
+            if (nextEntry == null || !requiredNext.contains(nextEntry.get("pointId").asString())) {
+              continue;
+            }
           }
+        }
+
+        // either use the current border point as the start or end for the journey
+        if (start == null) {
+          start = borderPoint;
+        } else {
+          end = borderPoint;
         }
       }
 
-      Assertions.assertNotNull(startPointId, trainRunId);
-      Assertions.assertNotNull(endPointId, trainRunId);
-      Assertions.assertNotEquals(startPointId, endPointId, trainRunId);
+      Assertions.assertNotNull(start, trainRunId);
+      Assertions.assertNotNull(end, trainRunId);
+      Assertions.assertNotEquals(start, end, trainRunId);
     }
   }
 }

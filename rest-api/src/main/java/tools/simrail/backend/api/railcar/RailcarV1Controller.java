@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -30,15 +30,14 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +48,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.common.railcar.RailcarProvider;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-railcars/v1/")
@@ -60,9 +58,9 @@ class RailcarV1Controller {
   private final RailcarDtoConverter railcarConverter;
 
   @Autowired
-  public RailcarV1Controller(
-    @Nonnull RailcarProvider railcarProvider,
-    @Nonnull RailcarDtoConverter railcarConverter
+  RailcarV1Controller(
+    @NonNull RailcarProvider railcarProvider,
+    @NonNull RailcarDtoConverter railcarConverter
   ) {
     this.railcarProvider = railcarProvider;
     this.railcarConverter = railcarConverter;
@@ -95,7 +93,7 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<RailcarDto> findRailcarById(
+  public @NonNull Optional<RailcarDto> findRailcarById(
     @PathVariable("id") @UUID(version = 4, allowNil = false) String id
   ) {
     return this.railcarProvider.findRailcarById(java.util.UUID.fromString(id)).map(this.railcarConverter);
@@ -128,7 +126,7 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull Optional<RailcarDto> findRailcarByApiName(@RequestParam("id") @NotBlank String id) {
+  public @NonNull Optional<RailcarDto> findRailcarByApiName(@RequestParam("id") @NotBlank String id) {
     return this.railcarProvider.findRailcarByApiId(id).map(this.railcarConverter);
   }
 
@@ -155,7 +153,7 @@ class RailcarV1Controller {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull List<RailcarDto> findRailcarsByIds(
+  public @NonNull List<RailcarDto> findRailcarsByIds(
     @RequestBody @Size(min = 1, max = 250) Set<@UUID(version = 4, allowNil = false) String> ids
   ) {
     return ids.stream()

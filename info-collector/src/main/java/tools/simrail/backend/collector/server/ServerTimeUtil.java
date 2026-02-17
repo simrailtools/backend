@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,13 +25,13 @@
 package tools.simrail.backend.collector.server;
 
 import feign.Response;
-import jakarta.annotation.Nonnull;
-import jakarta.annotation.Nullable;
 import java.nio.charset.StandardCharsets;
 import java.time.Duration;
 import java.time.Instant;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
+import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.springframework.http.HttpHeaders;
 
 final class ServerTimeUtil {
@@ -46,7 +46,7 @@ final class ServerTimeUtil {
    * @param serverTimeResponse the response from the SimRail api time endpoint.
    * @return the time difference between UTC and the server time, in seconds.
    */
-  public static @Nullable Long calculateTimezoneOffsetSeconds(@Nonnull Response serverTimeResponse) {
+  public static @Nullable Long calculateTimezoneOffsetSeconds(@NonNull Response serverTimeResponse) {
     try (var bodyStream = serverTimeResponse.body().asInputStream()) {
       // parse the server time returned in the response body
       var serverTimeBytes = bodyStream.readAllBytes();
@@ -70,5 +70,15 @@ final class ServerTimeUtil {
     } catch (Exception exception) {
       throw new IllegalStateException("Unable to parse server time response", exception);
     }
+  }
+
+  /**
+   * Converts the given second value to the closest hour value.
+   *
+   * @param seconds the seconds to convert to hours.
+   * @return the closest hour value based on the given seconds.
+   */
+  public static int convertToHours(long seconds) {
+    return (int) Math.round(seconds / 3600.0); // 3600 - 1 hour in seconds
   }
 }

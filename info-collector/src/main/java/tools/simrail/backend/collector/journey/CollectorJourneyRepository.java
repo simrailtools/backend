@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,16 +24,14 @@
 
 package tools.simrail.backend.collector.journey;
 
-import jakarta.annotation.Nonnull;
-import java.time.OffsetDateTime;
+import java.time.LocalDateTime;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-import org.springframework.transaction.annotation.Transactional;
-import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyRepository;
 
 /**
@@ -41,74 +39,62 @@ import tools.simrail.backend.common.journey.JourneyRepository;
  */
 interface CollectorJourneyRepository extends JourneyRepository {
 
-  @Nonnull
-  List<JourneyEntity> findAllByForeignRunIdIn(Collection<UUID> foreignRunIds);
-
-  @Nonnull
-  List<JourneyEntity> findAllByFirstSeenTimeIsNotNullAndLastSeenTimeIsNull();
-
-  @Nonnull
-  List<JourneyEntity> findAllByServerIdAndFirstSeenTimeIsNotNullAndLastSeenTimeIsNull(@Nonnull UUID serverId);
-
-  @Nonnull
-  List<JourneyEntity> findAllByServerIdAndForeignRunIdIn(UUID serverId, Collection<UUID> foreignRunIds);
-
   /**
    * Finds all journeys on the specified server whose first playable event was not reached before the given time.
    *
-   * @param serverTime the time of the server to check against.
    * @param serverId   the id of the server to return the journeys of.
+   * @param cutoffTime the deadline to find journeys that didn't spawn before.
    */
+  @NonNull
   @Query(value = """
-    WITH second_departures_in_border AS (
+    WITH first_playable AS (
       SELECT
-        e.journey_id
-      FROM sit_journey_event e
-      WHERE
-        e.event_index = (
-          SELECT e2.event_index
-          FROM sit_journey_event e2
-          WHERE e2.journey_id = e.journey_id
-            AND e2.event_type = 1 -- departure event
-            AND e2.point_playable = TRUE
-          ORDER BY event_index
-          OFFSET 1
-          LIMIT 1
-        )
-        AND e.cancelled = false
-        AND e.scheduled_time < :time
+        e.journey_id,
+        e.id AS event_id,
+        e.event_index,
+        e.scheduled_time,
+        e.cancelled,
+        e.realtime_time_type
+      FROM (
+        SELECT e.*, ROW_NUMBER() OVER (PARTITION BY e.journey_id ORDER BY e.event_index) AS rn
+        FROM sit_journey_event e
+        WHERE e.in_playable_border = TRUE
+      ) e
+      WHERE e.rn = 1
     )
-    SELECT j.id
+    SELECT j.id AS journey_id
     FROM sit_journey j
-    JOIN second_departures_in_border ib ON ib.journey_id = j.id
-    WHERE
-      -- no need to select lastSeenTime here, but this way an index can be used more effectively
-      j.server_id = :serverId
-      AND j.first_seen_time IS NULL
-      AND j.last_seen_time IS NULL
+    JOIN first_playable fp ON fp.journey_id = j.id
+    WHERE j.server_id = :serverId
+      AND j.cancelled = FALSE
+      AND fp.cancelled = FALSE
+      AND fp.realtime_time_type <> 'REAL'
+      AND fp.scheduled_time < :cutoff
     """, nativeQuery = true)
-  List<UUID> findJourneysThatDidNotSpawn(@Param("time") OffsetDateTime serverTime, @Param("serverId") UUID serverId);
+  List<UUID> findJourneysThatDidNotSpawn(@Param("serverId") UUID serverId, @Param("cutoff") LocalDateTime cutoffTime);
 
   /**
-   * Marks the journeys with the given journey ids as canceled.
+   * Deletes all journeys from the database whose foreign run id is in the given collection and whose first seen time is
+   * not yet set to a value.
    *
-   * @param currentTime the current time to set as the last updated time of the journey.
-   * @param journeyIds  the ids of the journeys to mark as canceled.
+   * @param runIds the ids of the runs to possibly delete from the database.
    */
   @Modifying
-  @Transactional
-  @Query("UPDATE sit_journey j SET j.cancelled = TRUE, j.updateTime = :time WHERE j.id IN :journeyIds")
-  void markJourneysAsCancelled(
-    @Param("time") OffsetDateTime currentTime,
-    @Param("journeyIds") Collection<UUID> journeyIds);
+  @Query(value = "DELETE FROM sit_journey j WHERE j.foreign_run_id IN :runIds AND j.first_seen_time IS NULL", nativeQuery = true)
+  void deleteUnstartedJourneysByRunIds(@Param("runIds") Collection<UUID> runIds);
 
   /**
-   * Marks the journey events associated with one of the given journeys as canceled.
+   * Finds the subset of the given foreign run ids that are not stored in the database.
    *
-   * @param journeyIds the ids of the journeys whose events should be marked as canceled.
+   * @param foreignRunIds the ids to find the subset of not stored ids of.
+   * @return a subset of the given collection holding all ids that are not currently stored in the database.
    */
-  @Modifying
-  @Transactional
-  @Query("UPDATE sit_journey_event je SET je.cancelled = TRUE WHERE je.journeyId IN :journeyIds")
-  void markJourneyEventsAsCancelled(@Param("journeyIds") Collection<UUID> journeyIds);
+  // "Condition 'sj.foreign_run_id IS NULL' is always 'false'" is actually wrong, don't listen to it ¯\_(ツ)_/¯
+  @Query(value = """
+    SELECT j.foreign_run_id
+    FROM unnest(cast(:runIds as uuid[])) as j(foreign_run_id)
+    LEFT JOIN sit_journey sj ON sj.foreign_run_id = j.foreign_run_id
+    WHERE sj.foreign_run_id IS NULL
+    """, nativeQuery = true)
+  List<UUID> findMissingRunIds(@Param("runIds") UUID[] foreignRunIds);
 }

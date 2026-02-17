@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -51,20 +51,18 @@ public final class SimRailAwsTrainRun {
   @JsonProperty("trainName")
   private String trainDisplayName;
   /**
-   * The number of the train within poland.
+   * The number of the train within Poland.
    */
   @JsonProperty("trainNoLocal")
   private String trainNumber;
   /**
    * The internation train number, currently not in use.
    */
-  @Deprecated
   @JsonProperty("trainNoInternational")
   private String trainNumberInternational;
   /**
    * The number of the train that this train will convert to at the final station, currently not in use.
    */
-  @Deprecated
   @JsonProperty("continuesAs")
   private String continuationTrainNumber;
 

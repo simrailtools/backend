@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,9 +25,10 @@
 package tools.simrail.backend.api.vehicle.dto;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
+import org.jspecify.annotations.Nullable;
+import tools.simrail.backend.api.railcar.RailcarDto;
 import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 
 /**
@@ -36,12 +37,12 @@ import tools.simrail.backend.common.vehicle.JourneyVehicleLoad;
 public record VehicleDto(
   @Schema(description = "The index (0 based) where the vehicle is located in the composition")
   @NotNull @Min(0) int indexInGroup,
-  @Schema(description = "The load weight of the vehicle, can be null in case nothing is loaded", types = {"null"})
+  @Schema(description = "The load weight of the vehicle, can be null in case nothing is loaded", types = "null")
   @Nullable Integer loadWeight,
-  @Schema(description = "The load of the vehicle, can be null in case nothing is loaded", types = {"null"})
+  @Schema(description = "The load of the vehicle, can be null in case nothing is loaded", types = "null")
   @Nullable JourneyVehicleLoad load,
   @Schema(description = "Summary information about the railcar used for this vehicle")
-  @NotNull VehicleRailcarSummaryDto railcar
+  @NotNull RailcarDto railcar
 ) {
 
 }

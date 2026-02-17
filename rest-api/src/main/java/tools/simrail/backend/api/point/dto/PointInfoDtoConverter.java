@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,11 +24,13 @@
 
 package tools.simrail.backend.api.point.dto;
 
-import jakarta.annotation.Nonnull;
 import java.util.Collection;
 import java.util.Comparator;
 import java.util.function.BiFunction;
+import org.jspecify.annotations.NonNull;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import tools.simrail.backend.api.shared.GeoPositionDtoConverter;
 import tools.simrail.backend.common.point.SimRailPoint;
 import tools.simrail.backend.common.signal.PlatformSignal;
 
@@ -39,27 +41,29 @@ import tools.simrail.backend.common.signal.PlatformSignal;
 public final class PointInfoDtoConverter implements BiFunction<SimRailPoint, Collection<PlatformSignal>, PointInfoDto> {
 
   private static final Comparator<PointPlatformInfoDto> PLATFORM_COMPARATOR =
-    Comparator.comparingInt(PointPlatformInfoDto::track);
+    Comparator.comparingInt(PointPlatformInfoDto::track).thenComparing(PointPlatformInfoDto::platform);
+
+  private final GeoPositionDtoConverter geoPositionDtoConverter;
+
+  @Autowired
+  public PointInfoDtoConverter(@NonNull GeoPositionDtoConverter geoPositionDtoConverter) {
+    this.geoPositionDtoConverter = geoPositionDtoConverter;
+  }
 
   @Override
-  public @Nonnull PointInfoDto apply(@Nonnull SimRailPoint point, @Nonnull Collection<PlatformSignal> platformSignals) {
-    // convert and sort the platforms at the point
+  public @NonNull PointInfoDto apply(@NonNull SimRailPoint point, @NonNull Collection<PlatformSignal> platformSignals) {
     var convertedPlatforms = platformSignals.stream()
       .map(signal -> new PointPlatformInfoDto(signal.getTrack(), signal.getPlatform()))
       .distinct()
       .sorted(PLATFORM_COMPARATOR)
       .toList();
 
-    // convert the point position
-    var pointPosition = point.getPosition();
-    var convertedPosition = new PointGeoPositionDto(pointPosition.getLatitude(), pointPosition.getLongitude());
-
-    // construct the final point dto
+    var position = this.geoPositionDtoConverter.convert(point.getPosition());
     return new PointInfoDto(
       point.getId(),
       point.getName(),
       point.getCountry(),
-      convertedPosition,
+      position,
       point.getUicRef(),
       point.getOsmNodeId(),
       point.getMaxSpeed(),

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,26 +24,26 @@
 
 package tools.simrail.backend.common.point;
 
-import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.databind.DeserializationContext;
-import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.fasterxml.jackson.databind.node.ArrayNode;
-import com.fasterxml.jackson.databind.node.NumericNode;
-import jakarta.annotation.Nonnull;
-import java.io.IOException;
+import org.jspecify.annotations.NonNull;
 import org.locationtech.jts.geom.Coordinate;
+import tools.jackson.core.JacksonException;
+import tools.jackson.core.JsonParser;
+import tools.jackson.databind.DeserializationContext;
+import tools.jackson.databind.ValueDeserializer;
+import tools.jackson.databind.node.ArrayNode;
+import tools.jackson.databind.node.NumericNode;
 import tools.simrail.backend.common.util.GeoUtil;
 
 /**
  * Deserializes a polygon from a list of points (in format Double[][]).
  */
-final class SimRailPointBBDeserializer extends JsonDeserializer<OptimizedBoundingBox> {
+final class SimRailPointBBDeserializer extends ValueDeserializer<OptimizedBoundingBox> {
 
   @Override
-  public @Nonnull OptimizedBoundingBox deserialize(
-    @Nonnull JsonParser parser,
-    @Nonnull DeserializationContext context
-  ) throws IOException {
+  public @NonNull OptimizedBoundingBox deserialize(
+    @NonNull JsonParser parser,
+    @NonNull DeserializationContext context
+  ) throws JacksonException {
     var polyInput = (ArrayNode) parser.readValueAsTree();
     var polyInputCount = polyInput.size();
     var polyCoordinates = new Coordinate[polyInputCount];

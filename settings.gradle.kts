@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -44,6 +44,13 @@ dependencyResolutionManagement {
     maven {
       name = "Spring Snapshots"
       url = uri("https://repo.spring.io/snapshot")
+    }
+    maven {
+      name = "jitpack"
+      url = uri("https://jitpack.io/")
+      mavenContent {
+        includeGroup("com.github.WilliamAGH.swagger-core")
+      }
     }
   }
 }

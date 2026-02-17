@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,11 +25,11 @@
 package tools.simrail.backend.common.border;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.annotation.Nullable;
-import java.util.List;
+import java.util.Set;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.jspecify.annotations.Nullable;
 
 /**
  * A point on the SimRail map that is at the border of the map.
@@ -48,11 +48,11 @@ public final class MapBorderPoint {
    * The external (SimRail) point ids.
    */
   @JsonProperty("ext_point_ids")
-  private List<String> simRailPointIds;
+  private Set<String> simRailPointIds;
   /**
    * The points that must follow the current point to be in the border. Can be null if none are required.
    */
   @Nullable
   @JsonProperty("in_border_if_next")
-  private List<String> requiredNextPoints;
+  private Set<String> requiredNextPoints;
 }

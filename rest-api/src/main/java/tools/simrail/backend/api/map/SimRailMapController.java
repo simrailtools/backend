@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -31,14 +31,13 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.annotation.Nonnull;
 import java.time.Duration;
 import org.hibernate.validator.constraints.UUID;
+import org.jspecify.annotations.NonNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.CacheControl;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -49,7 +48,6 @@ import org.springframework.web.bind.annotation.RestController;
 import tools.simrail.backend.api.map.dto.MapJourneyRouteDto;
 import tools.simrail.backend.api.map.geojson.MapJourneyRouteGeoJsonConverter;
 
-@Validated
 @CrossOrigin
 @RestController
 @RequestMapping("/sit-maps/v1/")
@@ -65,9 +63,9 @@ class SimRailMapController {
   private final MapJourneyRouteGeoJsonConverter journeyRouteGeoJsonConverter;
 
   @Autowired
-  public SimRailMapController(
-    @Nonnull SimRailMapService mapService,
-    @Nonnull MapJourneyRouteGeoJsonConverter journeyRouteGeoJsonConverter
+  SimRailMapController(
+    @NonNull SimRailMapService mapService,
+    @NonNull MapJourneyRouteGeoJsonConverter journeyRouteGeoJsonConverter
   ) {
     this.mapService = mapService;
     this.journeyRouteGeoJsonConverter = journeyRouteGeoJsonConverter;
@@ -105,7 +103,7 @@ class SimRailMapController {
             schema = @Schema(implementation = MapJourneyRouteDto.class)),
           @Content(
             mediaType = "application/geo+json",
-            schema = @Schema(hidden = true)),
+            schema = @Schema(types = "string")),
         }),
       @ApiResponse(
         responseCode = "400",
@@ -121,7 +119,7 @@ class SimRailMapController {
         content = @Content(schema = @Schema(hidden = true))),
     }
   )
-  public @Nonnull ResponseEntity<?> findMapPolylineByJourney(
+  public @NonNull ResponseEntity<?> findMapPolylineByJourney(
     @PathVariable("id") @UUID(version = 5, allowNil = false) String id,
     @RequestParam(value = "includeCancelled", required = false) boolean includeCancelled,
     @RequestParam(value = "includeAdditional", required = false) boolean includeAdditional,
@@ -131,7 +129,7 @@ class SimRailMapController {
     var journeyId = java.util.UUID.fromString(id);
     return this.mapService.polylineByJourneyId(journeyId, includeCancelled, includeAdditional, allowFallbackComputation)
       .map(routeInfo -> {
-        // if geojson was requested instead of normal json
+        // if geojson was requested instead of normal JSON
         var geoJsonRequested = acceptHeader.equalsIgnoreCase("application/geo+json");
 
         // scheduled polyline (without additional events) cannot change, can be cached for a day by the caller
@@ -140,7 +138,7 @@ class SimRailMapController {
           ? CacheControl.noCache()
           : CacheControl.maxAge(Duration.ofDays(1));
 
-        // convert the response to geojson if requested, in all other cases just respond with json
+        // convert the response to geojson if requested, in all other cases just respond with JSON
         if (geoJsonRequested) {
           var responseAsGeojson = this.journeyRouteGeoJsonConverter.convertToGeojson(routeInfo);
           return ResponseEntity.ok()

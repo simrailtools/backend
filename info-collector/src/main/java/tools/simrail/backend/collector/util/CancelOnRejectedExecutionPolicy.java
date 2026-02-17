@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -24,10 +24,10 @@
 
 package tools.simrail.backend.collector.util;
 
-import jakarta.annotation.Nonnull;
 import java.util.concurrent.Future;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.ThreadPoolExecutor;
+import org.jspecify.annotations.NonNull;
 
 /**
  * Rejected execution handler that cancels futures to indicate the rejection.
@@ -38,7 +38,7 @@ public final class CancelOnRejectedExecutionPolicy implements RejectedExecutionH
    * {@inheritDoc}
    */
   @Override
-  public void rejectedExecution(@Nonnull Runnable task, @Nonnull ThreadPoolExecutor executor) {
+  public void rejectedExecution(@NonNull Runnable task, @NonNull ThreadPoolExecutor executor) {
     if (task instanceof Future<?> future) {
       future.cancel(true);
     }

@@ -1,7 +1,7 @@
 /*
  * This file is part of simrail-tools-backend, licensed under the MIT License (MIT).
  *
- * Copyright (c) 2024-2025 Pasqual Koschmieder and contributors
+ * Copyright (c) 2024-present Pasqual Koschmieder and contributors
  *
  * Permission is hereby granted, free of charge, to any person obtaining a copy
  * of this software and associated documentation files (the "Software"), to deal
@@ -25,12 +25,12 @@
 package tools.simrail.backend.api.server;
 
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
-import java.time.OffsetDateTime;
-import java.util.List;
+import java.time.Instant;
+import java.util.Set;
 import java.util.UUID;
+import org.jspecify.annotations.Nullable;
 import tools.simrail.backend.common.server.SimRailServerRegion;
 import tools.simrail.backend.common.server.SimRailServerScenery;
 
@@ -42,22 +42,20 @@ record SimRailServerDto(
   @NotNull UUID id,
   @Schema(description = "The code of the server")
   @NotNull @NotBlank String code,
-  @Schema(description = "The timezone id of the server according to the ISO-8601 specification")
-  @NotNull @NotBlank String timezoneId,
-  @Schema(description = "The difference in hours between the UTC time and the time on the server")
+  @Schema(description = "The offset of the server time from utc in hours")
   @NotNull int utcOffsetHours,
   @Schema(description = "The region where the server is located")
   @NotNull SimRailServerRegion region,
   @Schema(description = "Tags of the server, for example providing detail information about the moderation status")
-  @NotNull List<String> tags,
-  @Schema(description = "The language spoken on the server, null if the server is international and not specialised", types = {"null"})
+  @NotNull Set<String> tags,
+  @Schema(description = "The language spoken on the server, null for all languages", types = "null")
   @Nullable String spokenLanguage,
   @Schema(description = "The scenery (map part) that is available on the server")
   @NotNull SimRailServerScenery scenery,
-  @Schema(description = "The time (ISO-8601 with offset) when the data of the server was last updated")
-  @NotNull OffsetDateTime lastUpdated,
-  @Schema(description = "The time (ISO-8601 with offset) when the server was initially registered in the SimRail backend")
-  @NotNull OffsetDateTime registeredSince,
+  @Schema(description = "The instant (ISO-8601) when the data of the server was last updated")
+  @NotNull Instant lastUpdated,
+  @Schema(description = "The instant (ISO-8601) when the server was initially registered in the SimRail backend")
+  @NotNull Instant registeredSince,
   @Schema(description = "If the server was online during the last collection")
   @NotNull boolean online,
   @Schema(description = "If the server is no longer registered in the SimRail backend")
