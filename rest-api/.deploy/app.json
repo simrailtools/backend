@@ -6,8 +6,8 @@
   "healthchecks": {
     "web": [
       {
-        "wait": 3,
-        "attempts": 20,
+        "wait": 5,
+        "attempts": 50,
         "initialDelay": 5,
         "type": "startup",
         "port": 8085,
