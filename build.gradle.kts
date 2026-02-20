@@ -104,7 +104,7 @@ subprojects {
   tasks.withType<ProcessResources> {
     val tokens = mapOf("project.version" to version)
     inputs.properties(tokens)
-    filesMatching("*.properties") {
+    filesMatching("*.yaml") {
       filter(ReplaceTokens::class, mapOf("tokens" to tokens))
     }
   }
