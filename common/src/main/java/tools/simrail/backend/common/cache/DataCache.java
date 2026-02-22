@@ -307,11 +307,11 @@ public final class DataCache<T extends MessageLite> {
     var start = System.nanoTime();
 
     var keySearchPattern = this.generateFullKey("*", KEY_TYPE_PRIMARY);
-    var keyScanOptions = KeysScanOptions.defaults().pattern(keySearchPattern).chunkSize(100);
+    var keyScanOptions = KeysScanOptions.defaults().pattern(keySearchPattern).chunkSize(5000);
     try (var storedKeysStream = this.redisson.getKeys().getKeysStream(keyScanOptions)) {
       var bucketOps = this.redisson.getBuckets(ByteArrayCodec.INSTANCE);
       storedKeysStream
-        .gather(Gatherers.windowFixed(100))
+        .gather(Gatherers.windowFixed(5000))
         .map(keys -> {
           var keysArray = keys.toArray(String[]::new);
           return bucketOps.<byte[]>get(keysArray);
