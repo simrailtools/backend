@@ -63,7 +63,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(665, points.size());
+    Assertions.assertEquals(701, points.size());
   }
 
   @Test
@@ -213,7 +213,7 @@ public final class SimRailPointProviderTest {
     knownMissingPoints.forEach(missingPoints::remove);
     Assertions.assertTrue(missingPoints.isEmpty(), () -> {
       var allMissingPointNames = String.join(", ", missingPoints);
-      return "Found unexpected count of missing points: " + allMissingPointNames;
+      return "Found unexpected missing points: " + allMissingPointNames;
     });
   }
 
