@@ -31,6 +31,7 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Function;
 import java.util.function.ToLongFunction;
 import java.util.stream.Gatherers;
@@ -303,6 +304,8 @@ public final class DataCache<T extends MessageLite> {
     // and the data pulled from the storage should be in here after invocation
     this.localCache.clear();
 
+    var start = System.nanoTime();
+
     var keySearchPattern = this.generateFullKey("*", KEY_TYPE_PRIMARY);
     var keyScanOptions = KeysScanOptions.defaults().pattern(keySearchPattern).chunkSize(100);
     try (var storedKeysStream = this.redisson.getKeys().getKeysStream(keyScanOptions)) {
@@ -323,6 +326,9 @@ public final class DataCache<T extends MessageLite> {
           }
         });
     }
+
+    var caller = Thread.currentThread().getStackTrace()[1];
+    System.out.println(" --> " + caller.getClassName() + "_" + caller.getMethodName() + " -- " + TimeUnit.NANOSECONDS.toMillis(System.nanoTime() - start) + "ms");
   }
 
   /**

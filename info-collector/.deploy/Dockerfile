@@ -8,4 +8,4 @@ FROM azul/zulu-openjdk-alpine:25-jre-headless-latest
 WORKDIR /app
 
 COPY --from=builder /build/info-collector/build/libs/docker/info-collector.jar ./
-CMD ["java", "-Duser.timezone=UTC", "-Dspring.profiles.active=common,prd", "-Xms512M", "-XX:+UseZGC", "-XX:+PerfDisableSharedMem", "-XX:+UseCompactObjectHeaders", "--enable-preview", "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow", "-jar", "/app/info-collector.jar", "--trace"]
+CMD ["java", "-Duser.timezone=UTC", "-Dspring.profiles.active=common,prd", "-Xms512M", "-XX:+UseZGC", "-XX:+PerfDisableSharedMem", "-XX:+UseCompactObjectHeaders", "--enable-preview", "--enable-native-access=ALL-UNNAMED", "--sun-misc-unsafe-memory-access=allow", "-jar", "/app/info-collector.jar"]
