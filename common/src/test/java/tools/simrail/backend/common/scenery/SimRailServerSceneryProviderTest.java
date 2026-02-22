@@ -49,7 +49,7 @@ public class SimRailServerSceneryProviderTest {
   @Test
   void testAllSceneriesWereLoaded() {
     var sceneries = this.sceneryProvider.sceneryByServerId;
-    Assertions.assertEquals(19, sceneries.size());
+    Assertions.assertEquals(20, sceneries.size());
   }
 
   @Test

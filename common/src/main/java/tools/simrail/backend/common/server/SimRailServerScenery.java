@@ -49,4 +49,8 @@ public enum SimRailServerScenery {
    * Map between Warsaw-Katowice and Warsaw-Krakow.
    */
   WARSAW_KATOWICE_KRAKOW,
+  /**
+   * Map between Katowice-Psary and Katowice-Kozlow.
+   */
+  KATOWICE_PSARY_KOZLOW,
 }
