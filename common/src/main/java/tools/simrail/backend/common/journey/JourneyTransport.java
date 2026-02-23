@@ -50,7 +50,7 @@ public final class JourneyTransport {
    * The external category of the transport, for example 'IC'. Null if the same as the internal category.
    */
   @Column
-  private String externalCategory;
+  private String categoryExternal;
   /**
    * Number of the transport used for the journey.
    */

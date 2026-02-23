@@ -144,7 +144,7 @@ public final class JourneyEventEntity implements Persistable<UUID> {
     @AttributeOverride(name = "number", column = @Column(name = "transport_number")),
     @AttributeOverride(name = "category", column = @Column(name = "transport_category")),
     @AttributeOverride(name = "maxSpeed", column = @Column(name = "transport_max_speed")),
-    @AttributeOverride(name = "externalCategory", column = @Column(name = "transport_category_external")),
+    @AttributeOverride(name = "categoryExternal", column = @Column(name = "transport_category_external")),
   })
   private JourneyTransport transport;
 

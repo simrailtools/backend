@@ -411,7 +411,7 @@ class SimRailServerTimetableCollector {
     // set the external category of the journey only if it is different to the main category
     var externalCategory = nameParseResult.category();
     if (externalCategory != null && !externalCategory.equals(category)) {
-      transportEntity.setExternalCategory(externalCategory);
+      transportEntity.setCategoryExternal(externalCategory);
     }
 
     eventEntity.setTransport(transportEntity);
