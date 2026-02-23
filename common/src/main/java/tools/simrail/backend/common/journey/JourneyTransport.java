@@ -47,16 +47,23 @@ public final class JourneyTransport {
   @Column
   private String category;
   /**
+   * The external category of the transport, for example 'IC'. Null if the same as the internal category.
+   */
+  @Column
+  private String externalCategory;
+  /**
    * Number of the transport used for the journey.
    */
   @Column
   private String number;
+
   /**
    * A higher-level category of the transport.
    */
   @Column
   @Enumerated(EnumType.STRING)
   private JourneyTransportType type;
+
   /**
    * Line information for repeating transports, null if no line is associated with the transport.
    */
@@ -67,6 +74,7 @@ public final class JourneyTransport {
    */
   @Column
   private String label;
+
   /**
    * The maximum speed that this transport is allowed to drive at the associated point.
    */

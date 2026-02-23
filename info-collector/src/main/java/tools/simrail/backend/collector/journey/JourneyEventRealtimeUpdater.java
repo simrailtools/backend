@@ -481,6 +481,7 @@ final class JourneyEventRealtimeUpdater {
     var previousTransport = prevEvent.getTransport();
     var currentTransport = new JourneyTransport(
       previousTransport.getCategory(),
+      previousTransport.getExternalCategory(),
       previousTransport.getNumber(),
       previousTransport.getType(),
       previousTransport.getLine(),

@@ -185,6 +185,14 @@ public interface BoardJourneyProjection {
   String getInitialTransportCategory();
 
   /**
+   * Get the external transport category of the initially matched event.
+   *
+   * @return the external transport category of the initially matched event.
+   */
+  @NonNull
+  String getInitialTransportCategoryExternal();
+
+  /**
    * Get the transport number of the initially matched event.
    *
    * @return the transport number of the initially matched event.

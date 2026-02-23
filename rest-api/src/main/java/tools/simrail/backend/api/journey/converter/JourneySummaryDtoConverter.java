@@ -162,6 +162,7 @@ public final class JourneySummaryDtoConverter {
   ) {
     return new JourneyTransportSummaryDto(
       summary.getTransportCategory(),
+      summary.getTransportCategoryExternal(),
       summary.getTransportNumber(),
       summary.getTransportLine(),
       summary.getTransportLabel(),
