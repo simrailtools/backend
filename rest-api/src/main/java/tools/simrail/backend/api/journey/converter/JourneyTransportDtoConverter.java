@@ -40,6 +40,7 @@ public final class JourneyTransportDtoConverter implements Function<JourneyTrans
   public @NonNull JourneyTransportDto apply(@NonNull JourneyTransport transport) {
     return new JourneyTransportDto(
       transport.getCategory(),
+      transport.getCategoryExternal(),
       transport.getNumber(),
       transport.getLine(),
       transport.getLabel(),

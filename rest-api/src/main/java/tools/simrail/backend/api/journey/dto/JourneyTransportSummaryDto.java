@@ -36,6 +36,8 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 public record JourneyTransportSummaryDto(
   @Schema(description = "The external category of the transport")
   @NotNull @NotBlank String category,
+  @Schema(description = "The external category of the transport (for example internal can be RPJ, external IR), null if the same as the internal category", types = "null")
+  @Nullable String categoryExternal,
   @Schema(description = "The number of the transport")
   @NotNull @NotBlank String number,
   @Schema(description = "The line of the transport, null in case no line is associated with the transport", types = "null")

@@ -74,6 +74,14 @@ public interface JourneyEventSummaryProjection {
   String getTransportCategory();
 
   /**
+   * Get the external transport category at the event.
+   *
+   * @return the external transport category, null if the same as the internal category.
+   */
+  @Nullable
+  String getTransportCategoryExternal();
+
+  /**
    * Get the transport number at the event.
    *
    * @return the transport number.

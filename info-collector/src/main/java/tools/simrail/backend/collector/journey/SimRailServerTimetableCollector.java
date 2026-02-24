@@ -36,7 +36,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-import java.util.regex.Pattern;
 import org.jspecify.annotations.NonNull;
 import org.jspecify.annotations.Nullable;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,8 +62,6 @@ import tools.simrail.backend.external.sraws.model.SimRailAwsTrainRun;
 
 @Component
 class SimRailServerTimetableCollector {
-
-  private static final Pattern WHITESPACE_PATTERN = Pattern.compile("\\s");
 
   private final SimRailAwsApiClient awsApiClient;
   private final JourneyIdService journeyIdService;
@@ -140,20 +137,8 @@ class SimRailServerTimetableCollector {
     journey.setForeignRunId(runId);
     journey.setServerId(server.id());
 
-    // extract the line information from the display name of the train
-    var cleanedTrainName = WHITESPACE_PATTERN.matcher(run.getTrainDisplayName()).replaceAll("");
-    var trainNameParts = List.of(cleanedTrainName.split("-"));
-    var trainLine = trainNameParts.stream()
-      .skip(1) // skip the first entry as it is always the train category
-      .filter(part -> !part.startsWith("\""))
-      .findFirst()
-      .orElse(null);
-    var trainLabel = trainNameParts.stream()
-      .skip(1) // skip the first entry as it is always the train category
-      .filter(part -> part.startsWith("\"") && part.endsWith("\""))
-      .findFirst()
-      .map(label -> label.replace("\"", "")) // to fix labels such as '\"Zdeněk\"\"'
-      .orElse(null);
+    // extract the line/label/... information from the display name of the train
+    var parsedTrainName = TrainNameParser.parseTrainName(run.getTrainDisplayName());
 
     // create events for all timetable entries
     var inBorder = false; // keeps track if the journey is within the playable border
@@ -206,10 +191,9 @@ class SimRailServerTimetableCollector {
         var prev = previousEvent;
         previousEvent = this.createAndRegisterJourneyEvent(
           journey,
-          trainLine,
-          trainLabel,
           JourneyEventType.ARRIVAL,
           previousEvent,
+          parsedTrainName,
           timetableEntry,
           events);
         if (previousEvent != null && prev != previousEvent) {
@@ -222,10 +206,9 @@ class SimRailServerTimetableCollector {
         var prev = previousEvent;
         previousEvent = this.createAndRegisterJourneyEvent(
           journey,
-          trainLine,
-          trainLabel,
           JourneyEventType.DEPARTURE,
           previousEvent,
+          parsedTrainName,
           timetableEntry,
           events);
         if (previousEvent != null && prev != previousEvent) {
@@ -328,15 +311,14 @@ class SimRailServerTimetableCollector {
 
   private @Nullable JourneyEventEntity createAndRegisterJourneyEvent(
     @NonNull JourneyEntity journey,
-    @Nullable String trainLine,
-    @Nullable String trainLabel,
     @NonNull JourneyEventType eventType,
     @Nullable JourneyEventEntity previousEvent,
+    TrainNameParser.@NonNull Result nameParseResult,
     @NonNull SimRailAwsTimetableEntry timetableEntry,
     @NonNull List<JourneyEventEntity> journeyEvents
   ) {
     var previousTime = previousEvent == null ? null : previousEvent.getScheduledTime();
-    var event = this.createJourneyEvent(journey, trainLine, trainLabel, eventType, previousTime, timetableEntry);
+    var event = this.createJourneyEvent(journey, eventType, previousTime, nameParseResult, timetableEntry);
     if (event != null) {
       journeyEvents.add(event);
       return event;
@@ -347,10 +329,9 @@ class SimRailServerTimetableCollector {
 
   private @Nullable JourneyEventEntity createJourneyEvent(
     @NonNull JourneyEntity journey,
-    @Nullable String trainLine,
-    @Nullable String trainLabel,
     @NonNull JourneyEventType eventType,
     @Nullable LocalDateTime previousEventTime,
+    TrainNameParser.@NonNull Result nameParseResult,
     @NonNull SimRailAwsTimetableEntry timetableEntry
   ) {
     // get the point where the event is happening, return if the point is not registered
@@ -423,13 +404,16 @@ class SimRailServerTimetableCollector {
     transportEntity.setCategory(category);
     transportEntity.setNumber(number);
     transportEntity.setType(transportType);
-    transportEntity.setLabel(trainLabel);
     transportEntity.setMaxSpeed(maxSpeed);
-    if (transportType == JourneyTransportType.REGIONAL_TRAIN
-      || transportType == JourneyTransportType.REGIONAL_FAST_TRAIN) {
-      // these types are the only ones with a line that is actually meaningful
-      transportEntity.setLine(trainLine);
+    transportEntity.setLine(nameParseResult.line());
+    transportEntity.setLabel(nameParseResult.label());
+
+    // set the external category of the journey only if it is different to the main category
+    var externalCategory = nameParseResult.category();
+    if (externalCategory != null && !externalCategory.equals(category)) {
+      transportEntity.setCategoryExternal(externalCategory);
     }
+
     eventEntity.setTransport(transportEntity);
 
     return eventEntity;

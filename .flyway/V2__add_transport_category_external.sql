@@ -22,29 +22,4 @@
  * SOFTWARE.
  */
 
-package tools.simrail.backend.api.board.converter;
-
-import java.util.function.Function;
-import org.jspecify.annotations.NonNull;
-import org.springframework.stereotype.Component;
-import tools.simrail.backend.api.board.data.BoardJourneyProjection;
-import tools.simrail.backend.api.board.dto.BoardTransportDto;
-
-/**
- * Converter for journey projections to dto.
- */
-@Component
-public final class BoardTransportDtoConverter implements Function<BoardJourneyProjection, BoardTransportDto> {
-
-  @Override
-  public @NonNull BoardTransportDto apply(@NonNull BoardJourneyProjection projection) {
-    return new BoardTransportDto(
-      projection.getInitialTransportCategory(),
-      projection.getInitialTransportCategoryExternal(),
-      projection.getInitialTransportNumber(),
-      projection.getInitialTransportLine(),
-      projection.getInitialTransportLabel(),
-      projection.getInitialTransportType(),
-      projection.getInitialTransportMaxSpeed());
-  }
-}
+ALTER TABLE sit_journey_event ADD COLUMN transport_category_external TEXT;
