@@ -35,6 +35,7 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
@@ -63,7 +64,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(701, points.size());
+    Assertions.assertEquals(738, points.size());
   }
 
   @Test
@@ -232,13 +233,17 @@ public final class SimRailPointProviderTest {
       }
     }
 
+    var invalid = new StringJoiner(", ");
     for (var entry : speedLimitsPerPoint.entrySet()) {
       var pointId = entry.getKey();
       var point = this.pointProvider.findPointByIntId(pointId).orElseThrow();
-      Assertions.assertEquals(
-        entry.getValue(),
-        point.getMaxSpeed(),
-        () -> String.format("Expected max speed of %s, got %s at %s", entry.getValue(), point.getMaxSpeed(), pointId));
+      if (entry.getValue() != point.getMaxSpeed()) {
+        invalid.add("[pid=" + point.getId() + "; expected=" + entry.getValue() + "; got=" + point.getMaxSpeed() + "]");
+      }
+    }
+
+    if (invalid.length() > 0) {
+      Assertions.fail(invalid.toString());
     }
   }
 
