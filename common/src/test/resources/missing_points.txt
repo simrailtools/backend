@@ -10,7 +10,6 @@ Wisła
 Pieczyska
 Przełęk
 Żabieniec PZS R24
-Baby GT
 Katowice M. Roz. 233
 Katowice Much. KMB
 Katowice M. Kmb R234
@@ -101,3 +100,10 @@ Dionizów
 Dionizów R3
 Dionizów R4
 Męka
+Szczygłowice
+Gottwald
+Gierałtowice
+Szabelnia
+Mizerów
+Hajduki
+Ruda Wirek
