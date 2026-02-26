@@ -11394,7 +11394,7 @@
   {
     "name": "Łódź Chojny",
     "id": "f02c98b9-56b3-4c11-bcf9-1299db8a2720",
-    "prefix": "2426_LCH",
+    "prefix": "LCH",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -14300,7 +14300,7 @@
   {
     "name": "Rokiciny",
     "id": "d5c31e0b-d1a2-4dd5-83b4-c0ec4f98be99",
-    "prefix": null,
+    "prefix": "Ro",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -14340,7 +14340,7 @@
   {
     "name": "Baby",
     "id": "c822c23e-1cc8-4121-8a60-4a64f91865d2",
-    "prefix": null,
+    "prefix": "Ba",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -15831,7 +15831,7 @@
   {
     "name": "Zgierz",
     "id": "d99b69a3-80d2-47c8-89a9-58bd61bd6341",
-    "prefix": null,
+    "prefix": "Zg",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -15870,7 +15870,7 @@
   {
     "name": "Łódź Żabieniec",
     "id": "ee468ee0-2cca-4a55-bff4-881a9a202cfb",
-    "prefix": null,
+    "prefix": "LZ",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -21179,7 +21179,7 @@
   {
     "name": "Łask",
     "id": "5d03eeb0-c593-4d74-84d4-7d30feceb359",
-    "prefix": null,
+    "prefix": "La",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
@@ -21218,7 +21218,7 @@
   {
     "name": "Sędzice",
     "id": "2b27f203-637b-4f9b-88e3-0145ebe74c77",
-    "prefix": null,
+    "prefix": "3792_Se",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -21257,7 +21257,7 @@
   {
     "name": "Łódź Lublinek",
     "id": "11adda83-1648-4e07-9b1c-69275c9f7cff",
-    "prefix": null,
+    "prefix": "Lb",
     "max_speed": 60,
     "stop_place": false,
     "ids": [
@@ -21335,7 +21335,7 @@
   {
     "name": "Zduńska Wola",
     "id": "db0879b2-690f-4d1a-bb90-34e38d0f83f8",
-    "prefix": null,
+    "prefix": "ZW",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
@@ -21413,7 +21413,7 @@
   {
     "name": "Sieradz",
     "id": "5f97cdad-2b43-411c-9b8e-d9494718eb17",
-    "prefix": null,
+    "prefix": "3827_Si",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -21452,7 +21452,7 @@
   {
     "name": "Pabianice",
     "id": "86fcaee2-627e-4e48-99c3-abd58e6954e8",
-    "prefix": null,
+    "prefix": "Pa",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
