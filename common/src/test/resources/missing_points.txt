@@ -58,8 +58,6 @@ Tarnów Wschód
 Krak.Prb Gt. Odjazd.
 Gajewniki
 Łódź Dąbrowa PBS
-Retkinia
-Retkinia R.2
 Franklinów
 Piwonice
 Stary Staw
@@ -107,3 +105,4 @@ Szabelnia
 Mizerów
 Hajduki
 Ruda Wirek
+Łódź Kaliska PZS R219-R227
