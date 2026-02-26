@@ -39,6 +39,7 @@ import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,6 +126,7 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
+  @Disabled("Currently not correctly set in upstream api")
   void testMaxSpeedAtPointIsValid() {
     var points = this.pointProvider.points;
     for (var point : points) {
