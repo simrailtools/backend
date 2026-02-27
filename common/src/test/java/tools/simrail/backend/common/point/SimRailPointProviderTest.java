@@ -65,7 +65,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(739, points.size());
+    Assertions.assertEquals(740, points.size());
   }
 
   @Test
@@ -280,6 +280,32 @@ public final class SimRailPointProviderTest {
         var missingIdsJoined = osmNodeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
         return String.format("Founds points with invalid osm node ids: %s", missingIdsJoined);
       });
+    }
+  }
+
+  @Test
+  void testAllDispatchPostsHaveAnAssociatedPoint() throws Exception {
+    try (var httpClient = HttpClient.newHttpClient()) {
+      var requestUri = UriComponentsBuilder.fromUriString("https://panel.simrail.eu:8084/stations-open")
+        .queryParam("serverCode", "de1")
+        .build()
+        .toUri();
+      var request = HttpRequest.newBuilder(requestUri)
+        .GET()
+        .timeout(Duration.ofSeconds(30))
+        .version(HttpClient.Version.HTTP_2)
+        .header("Accept", "application/json")
+        .build();
+      var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+      Assertions.assertEquals(200, response.statusCode());
+
+      var posts = this.objectMapper.readTree(response.body()).get("data");
+      for (var post : posts) {
+        var name = post.get("Name").stringValue();
+        var point = this.pointProvider.findPointByName(name).orElse(null);
+        Assertions.assertNotNull(point, "Missing point for dispatch post " + name);
+        Assertions.assertNotNull(point.getPrefix(), "No prefix defined for point " + name);
+      }
     }
   }
 }

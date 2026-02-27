@@ -11260,7 +11260,7 @@
   {
     "name": "Mikołajów",
     "id": "c28d1efd-778e-4482-85da-9e5769a158b4",
-    "prefix": null,
+    "prefix": "2628_Mi",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -11394,7 +11394,7 @@
   {
     "name": "Łódź Chojny",
     "id": "f02c98b9-56b3-4c11-bcf9-1299db8a2720",
-    "prefix": "LCH",
+    "prefix": "2426_LCH",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -14300,7 +14300,7 @@
   {
     "name": "Rokiciny",
     "id": "d5c31e0b-d1a2-4dd5-83b4-c0ec4f98be99",
-    "prefix": "Ro",
+    "prefix": "3594_Ro",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -14340,7 +14340,7 @@
   {
     "name": "Baby",
     "id": "c822c23e-1cc8-4121-8a60-4a64f91865d2",
-    "prefix": "Ba",
+    "prefix": "60_Ba",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -14380,7 +14380,7 @@
   {
     "name": "Piotrków Trybunalski",
     "id": "8d456c56-773a-4f60-9b17-687bb63d9955",
-    "prefix": null,
+    "prefix": "3223_PT",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -14420,7 +14420,7 @@
   {
     "name": "Rozprza",
     "id": "41027dc6-90a0-4d48-b04f-dc63f5aa9441",
-    "prefix": null,
+    "prefix": "3617_Ro",
     "max_speed": 120,
     "stop_place": false,
     "ids": [
@@ -15792,7 +15792,7 @@
   {
     "name": "Zgierz Północ",
     "id": "5f116379-6670-4c00-9449-991ed1f183ac",
-    "prefix": null,
+    "prefix": "5314_ZP",
     "max_speed": 70,
     "stop_place": false,
     "ids": [
@@ -15831,7 +15831,7 @@
   {
     "name": "Zgierz",
     "id": "d99b69a3-80d2-47c8-89a9-58bd61bd6341",
-    "prefix": "Zg",
+    "prefix": "5311_Zg",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -15870,7 +15870,7 @@
   {
     "name": "Łódź Żabieniec",
     "id": "ee468ee0-2cca-4a55-bff4-881a9a202cfb",
-    "prefix": "LZ",
+    "prefix": "2463_LZ",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -15910,7 +15910,7 @@
   {
     "name": "Łódź Kaliska",
     "id": "f4f83261-97d6-4a38-ac68-5657b99097b2",
-    "prefix": null,
+    "prefix": "2432_LK",
     "max_speed": 60,
     "stop_place": false,
     "ids": [
@@ -21178,7 +21178,7 @@
   {
     "name": "Łask",
     "id": "5d03eeb0-c593-4d74-84d4-7d30feceb359",
-    "prefix": "La",
+    "prefix": "2360_La",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
@@ -21256,7 +21256,7 @@
   {
     "name": "Łódź Lublinek",
     "id": "11adda83-1648-4e07-9b1c-69275c9f7cff",
-    "prefix": "Lb",
+    "prefix": "2330_Lb",
     "max_speed": 60,
     "stop_place": false,
     "ids": [
@@ -21334,7 +21334,7 @@
   {
     "name": "Zduńska Wola",
     "id": "db0879b2-690f-4d1a-bb90-34e38d0f83f8",
-    "prefix": "ZW",
+    "prefix": "5291_ZW",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
@@ -21451,7 +21451,7 @@
   {
     "name": "Pabianice",
     "id": "86fcaee2-627e-4e48-99c3-abd58e6954e8",
-    "prefix": "Pa",
+    "prefix": "3093_Pa",
     "max_speed": 110,
     "stop_place": false,
     "ids": [
@@ -27861,7 +27861,7 @@
   {
     "name": "Łódź Marysin",
     "id": "3bd4b196-c694-4ba1-a75a-971e4aa7d4b8",
-    "prefix": null,
+    "prefix": "2437_LM",
     "max_speed": 100,
     "stop_place": true,
     "ids": [
@@ -27978,7 +27978,7 @@
   {
     "name": "Zgierz Kontrewers",
     "id": "0b7d90ce-0930-45eb-9264-feccb09a43de",
-    "prefix": null,
+    "prefix": "5313_ZK",
     "max_speed": 70,
     "stop_place": false,
     "ids": [
@@ -28758,7 +28758,7 @@
   {
     "name": "Glinnik",
     "id": "ad4e06c9-5665-42b9-be9f-771a14c832ef",
-    "prefix": null,
+    "prefix": "1057_Gl",
     "max_speed": 100,
     "stop_place": false,
     "ids": [
@@ -29129,7 +29129,7 @@
   {
     "name": "Retkinia",
     "id": "2563acac-6ab0-42c4-91ac-006532b032b2",
-    "prefix": "Rt",
+    "prefix": "3577_Rt",
     "max_speed": 60,
     "stop_place": false,
     "ids": [
@@ -29164,6 +29164,45 @@
     "position": {
       "lat": 51.7431158,
       "lng": 19.4160605
+    }
+  },
+  {
+    "name": "Gajewniki",
+    "id": "4e914c41-e3a4-4b10-a2dc-80c2ef8e023e",
+    "prefix": "919_Ga",
+    "max_speed": 110,
+    "stop_place": false,
+    "ids": [
+      "919"
+    ],
+    "bb": [
+      [
+        18.9802031086,
+        51.6123161757
+      ],
+      [
+        18.9801634057,
+        51.6127365802
+      ],
+      [
+        18.9856336647,
+        51.6129357897
+      ],
+      [
+        18.9856733675,
+        51.612515387
+      ],
+      [
+        18.9802031086,
+        51.6123161757
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3424844251,
+    "uic_ref": null,
+    "position": {
+      "lat": 51.6126716,
+      "lng": 18.9836805
     }
   }
 ]
