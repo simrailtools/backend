@@ -232,7 +232,7 @@ final class SimRailDispatchPostCollector {
     // send out deletion frames for all deleted servers
     var serverIdString = server.id().toString();
     var allCollectedCacheKeys = dispatchPosts.stream()
-      .map(post -> DispatchPostUpdateHolder.createSecondaryCacheKey(server.id().toString(), post.getId()))
+      .map(post -> DispatchPostUpdateHolder.createSecondaryCacheKey(serverIdString, post.getId()))
       .collect(Collectors.toSet());
     var removedPosts = this.dispatchPostDataCache.findBySecondaryKeyNotIn(allCollectedCacheKeys);
     removedPosts
@@ -246,7 +246,7 @@ final class SimRailDispatchPostCollector {
           .build();
         var dispatchPostRemoveFrame = EventBusProto.DispatchPostRemoveFrame.newBuilder()
           .setBaseData(baseFrameData)
-          .setPostId(post.getIds().getServerId())
+          .setPostId(post.getIds().getDataId())
           .build();
         var subject = EventSubjectFactory.createDispatchPostRemoveSubjectV1(
           post.getIds().getServerId(),
