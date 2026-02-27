@@ -121,9 +121,9 @@ class DispatchPostV2Controller {
       """,
     parameters = {
       @Parameter(name = "serverId", description = "The id of the server on which the dispatch posts should be located"),
-      @Parameter(name = "difficulty", description = "The difficulty of the dispatch posts to return (1-5)"),
+      @Parameter(name = "difficulty", description = "The difficulty of the dispatch posts to return (0-5)"),
       @Parameter(name = "pointId", description = "The id of the point with which the dispatch post is associated"),
-      @Parameter(name = "deleted", description = "If the post should be deleted (removed from the SimRail backend)"),
+      @Parameter(name = "deleted", description = "Filter for the deletion state of the dispatch post"),
       @Parameter(name = "page", description = "The page of elements to return, defaults to 1"),
       @Parameter(name = "limit", description = "The maximum items to return per page, defaults to 20"),
     },
@@ -143,7 +143,7 @@ class DispatchPostV2Controller {
   )
   public @NonNull PaginatedResponseDto<DispatchPostInfoDto> findDispatchPosts(
     @RequestParam(name = "serverId", required = false) @UUID(version = 5, allowNil = false) String serverId,
-    @RequestParam(name = "difficulty", required = false) @Min(1) @Max(5) Integer difficulty,
+    @RequestParam(name = "difficulty", required = false) @Min(0) @Max(5) Integer difficulty,
     @RequestParam(name = "pointId", required = false) @UUID(version = 4, allowNil = false) String pointId,
     @RequestParam(name = "deleted", required = false) Boolean deleted,
     @RequestParam(name = "page", required = false) @Min(1) Integer page,
