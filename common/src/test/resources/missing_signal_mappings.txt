@@ -4,8 +4,6 @@ Poraj
 Wronki
 Dobiegniew
 Tychy Grota Roweckiego
-Łask
-Łaznów
 Lubliniec
 Działdowo
 Twardogóra
@@ -23,7 +21,6 @@ Wykno
 Warszawa Ursus Północny
 Szczecin Dąbie
 Myszków Światowit
-Rokiciny
 Sucha Beskidzka Zamek
 Chorzów Batory
 Nałęczów
@@ -68,7 +65,6 @@ Wodzisław Śląski
 Częstochowa
 Częstochowa Stradom
 Zielonka Bankowa
-Jarosty
 Pionki Zachodnie
 Miąsowa
 Warszawa Mokry Ług
@@ -87,13 +83,10 @@ Katowice Piotrowice
 Lublin Zachodni
 Rybnik
 Chałupki
-Zduńska Wola
 Malbork
-Łódź Chojny
 Katowice Podlesie
 Masłońskie Natalin
 Oleśnica Rataje
-Wolbórka
 Słupca
 Szamotuły
 Gorzkowice
@@ -104,10 +97,7 @@ Zakopane
 Warszawa Rembertów
 Kalisz
 Pleszew
-Sieradz
 Tychy Zachodnie
-Pabianice
-Łódź Kaliska
 Legionowo
 Łowicz Główny
 Katowice Ligota
@@ -118,7 +108,6 @@ Wrocław Mikołajów
 Szydłowiec
 Kalwaria Zebrzydowska Lanckorona
 Zielonka
-Piotrków Trybunalski
 Wrocław Główny
 Warszawa Gołąbki
 Drzewica
@@ -145,18 +134,37 @@ Mława
 Gomunice
 Rożki
 Łódź Fabryczna
-Baby
-Łódź Pabianicka
 Tychy Aleja Bielska
 Łódź Niciarniana
 Rozprza
 Kraków Płaszów
 Wilkoszewice
 Radomsko
-Moszczenica
 Maków Podhalański
 Jaworzno Szczakowa
 Milejów
 Jarocin
 Brzeg
 Iława Główna
+Głowno
+Stryków
+Łęczyca
+Grudze
+Gawrony
+Ozorków
+Jedlicze koło Zgierza
+Głowno Północne
+Kamień Łowicki
+Skalmierz
+Bratoszewice
+Swędów
+Domaniewice
+Błaszki
+Łowicz Przedmieście
+Domaniewice Centrum
+Kalisz Winiary
+Ozorków Nowe Miasto
+Chociszew
+Opatówek
+Sierpów
+Witonia

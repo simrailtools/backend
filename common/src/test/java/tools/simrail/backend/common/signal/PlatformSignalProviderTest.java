@@ -79,7 +79,7 @@ public class PlatformSignalProviderTest {
       .stream()
       .mapToInt(Map::size)
       .sum();
-    Assertions.assertEquals(553, signalCount);
+    Assertions.assertEquals(727, signalCount);
   }
 
   @Test
@@ -120,7 +120,10 @@ public class PlatformSignalProviderTest {
       "Sędziszów", // wrong platform mapping
       "Opoczno Południe", // wrong platform mapping
       "Dąbrowa Górnicza", // wrong platform mapping
-      "Dąbrowa Górnicza Gołonóg" // wrong platform mapping
+      "Dąbrowa Górnicza Gołonóg", // wrong platform mapping
+      "Łódź Kaliska", // wrong platform mapping
+      "Zgierz", // wrong platform mapping
+      "Łódź Olechów Wschód" // scheduled stop on track 21 (it only has 2 tracks)
     );
     var pointsWithMultipleSignalsForSameTrack = Set.of(
       "Żyrardów" // Track 1 Platform 1 can be reached from 3 signals

@@ -35,9 +35,11 @@ import java.time.Duration;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,7 +65,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(665, points.size());
+    Assertions.assertEquals(740, points.size());
   }
 
   @Test
@@ -124,6 +126,7 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
+  @Disabled("Currently not correctly set in upstream api")
   void testMaxSpeedAtPointIsValid() {
     var points = this.pointProvider.points;
     for (var point : points) {
@@ -213,7 +216,7 @@ public final class SimRailPointProviderTest {
     knownMissingPoints.forEach(missingPoints::remove);
     Assertions.assertTrue(missingPoints.isEmpty(), () -> {
       var allMissingPointNames = String.join(", ", missingPoints);
-      return "Found unexpected count of missing points: " + allMissingPointNames;
+      return "Found unexpected missing points: " + allMissingPointNames;
     });
   }
 
@@ -232,13 +235,17 @@ public final class SimRailPointProviderTest {
       }
     }
 
+    var invalid = new StringJoiner(", ");
     for (var entry : speedLimitsPerPoint.entrySet()) {
       var pointId = entry.getKey();
       var point = this.pointProvider.findPointByIntId(pointId).orElseThrow();
-      Assertions.assertEquals(
-        entry.getValue(),
-        point.getMaxSpeed(),
-        () -> String.format("Expected max speed of %s, got %s at %s", entry.getValue(), point.getMaxSpeed(), pointId));
+      if (entry.getValue() != point.getMaxSpeed()) {
+        invalid.add("[pid=" + point.getId() + "; expected=" + entry.getValue() + "; got=" + point.getMaxSpeed() + "]");
+      }
+    }
+
+    if (invalid.length() > 0) {
+      Assertions.fail(invalid.toString());
     }
   }
 
@@ -273,6 +280,32 @@ public final class SimRailPointProviderTest {
         var missingIdsJoined = osmNodeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
         return String.format("Founds points with invalid osm node ids: %s", missingIdsJoined);
       });
+    }
+  }
+
+  @Test
+  void testAllDispatchPostsHaveAnAssociatedPoint() throws Exception {
+    try (var httpClient = HttpClient.newHttpClient()) {
+      var requestUri = UriComponentsBuilder.fromUriString("https://panel.simrail.eu:8084/stations-open")
+        .queryParam("serverCode", "de1")
+        .build()
+        .toUri();
+      var request = HttpRequest.newBuilder(requestUri)
+        .GET()
+        .timeout(Duration.ofSeconds(30))
+        .version(HttpClient.Version.HTTP_2)
+        .header("Accept", "application/json")
+        .build();
+      var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+      Assertions.assertEquals(200, response.statusCode());
+
+      var posts = this.objectMapper.readTree(response.body()).get("data");
+      for (var post : posts) {
+        var name = post.get("Name").stringValue();
+        var point = this.pointProvider.findPointByName(name).orElse(null);
+        Assertions.assertNotNull(point, "Missing point for dispatch post " + name);
+        Assertions.assertNotNull(point.getPrefix(), "No prefix defined for point " + name);
+      }
     }
   }
 }

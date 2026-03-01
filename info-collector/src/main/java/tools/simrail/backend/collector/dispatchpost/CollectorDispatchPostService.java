@@ -46,7 +46,9 @@ import tools.simrail.backend.external.srpanel.model.SimRailPanelDispatchPost;
 class CollectorDispatchPostService {
 
   private static final Map<String, GeoPositionEntity> OVERRIDDEN_STATION_POSITIONS_BY_FOREIGN_ID = Map.of(
-    "675330d44337b38ac4027545", new GeoPositionEntity(50.354694, 20.011680) // Miechów
+    "675330d44337b38ac4027545", new GeoPositionEntity(50.354694, 20.011680), // Miechów
+    "697a10a29fe8a2df5057fa25", new GeoPositionEntity(51.669084, 19.780980), // Rokiciny
+    "6978e5ce5a2d792511278eeb", new GeoPositionEntity(51.538282, 19.717187) // Baby
   );
 
   private final SimRailPointProvider pointProvider;

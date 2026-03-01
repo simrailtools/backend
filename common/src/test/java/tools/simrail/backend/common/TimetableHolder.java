@@ -50,7 +50,7 @@ public final class TimetableHolder {
   /**
    * The location of the tmp directory in which the timetable is locally stored. Uses {@code ../tmp}.
    */
-  private static final Path TMP_DIR = Path.of("").resolve("..").resolve("tmp");
+  private static final Path TMP_DIR = Path.of("").toAbsolutePath().getParent().resolve("tmp");
 
   static {
     // initializes the tmp directory if needed
