@@ -98,7 +98,7 @@ class BoardService {
   ) {
     // resolve and verify server & point id
     var serverTime = this.serverTimeService.resolveServerTime(serverId)
-      .orElseThrow(() -> new IllegalArgumentException("Invalid server id provided"));
+      .orElseThrow(() -> new IllegalRequestParameterException("Invalid server id provided"));
     var point = this.pointProvider.findPointByIntId(UUID.fromString(pointId))
       .orElseThrow(() -> new IllegalRequestParameterException("Invalid point id provided"));
 
