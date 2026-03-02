@@ -16,7 +16,7 @@ lombok = "1.18.42"
 jspecify = "1.0.0"
 redisson = "4.2.0"
 fuzzywuzzy = "1.4.0"
-protobufJava = "4.33.5"
+protobufJava = "4.34.0"
 springDocOpenApi = "3.0.1"
 
 # testing
