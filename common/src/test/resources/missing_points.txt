@@ -56,7 +56,6 @@ Kraków Prokocim Pra
 Kraków Bieżanów PZS R39
 Tarnów Wschód
 Krak.Prb Gt. Odjazd.
-Łódź Dąbrowa PBS
 Franklinów
 Piwonice
 Stary Staw
@@ -88,8 +87,6 @@ Regalica
 Zamków
 Górki
 Malinowo
-Gajewniki Roz.3
-Gajewniki Roz.7
 Mimowola
 Gdańsk Święty Wojciech
 Borysławice
