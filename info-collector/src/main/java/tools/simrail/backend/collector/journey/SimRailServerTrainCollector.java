@@ -204,16 +204,16 @@ class SimRailServerTrainCollector {
           // apply the changed fields to the journey data builder
           var journeyDataBuilder = updateFrameBuilder.getJourneyData().toBuilder();
           var hasNewSignalInFront = updatedTrain.nextSignalId.consumeDirty();
-          var hasNewPosition = updatedTrain.position.ifDirty(journeyDataBuilder::setPosition);
-          updatedTrain.speed.ifDirty(journeyDataBuilder::setSpeed);
-          updatedTrain.driver.ifDirty(driver -> {
+          var hasNewPosition = updatedTrain.position.consume(journeyDataBuilder::setPosition);
+          updatedTrain.speed.consume(journeyDataBuilder::setSpeed);
+          updatedTrain.driver.consume(driver -> {
             if (driver == null) {
               journeyDataBuilder.clearDriver();
             } else {
               journeyDataBuilder.setDriver(driver);
             }
           });
-          updatedTrain.nextSignal.ifDirty(signal -> {
+          updatedTrain.nextSignal.consume(signal -> {
             if (signal == null) {
               journeyDataBuilder.clearNextSignal();
             } else {

@@ -236,17 +236,17 @@ public class SimRailServerCollector implements SimRailServerService {
 
         // apply the changed fields to the server data builder
         var serverDataBuilder = updateFrameBuilder.getServerData().toBuilder();
-        updateHolder.online.ifDirty(serverDataBuilder::setOnline);
-        updateHolder.utcOffsetSeconds.ifDirty(serverDataBuilder::setUtcOffsetSeconds);
-        updateHolder.tags.ifDirty(tags -> serverDataBuilder.clearTags().addAllTags(tags));
-        updateHolder.spokenLanguage.ifDirty(language -> {
+        updateHolder.online.consume(serverDataBuilder::setOnline);
+        updateHolder.utcOffsetSeconds.consume(serverDataBuilder::setUtcOffsetSeconds);
+        updateHolder.tags.consume(tags -> serverDataBuilder.clearTags().addAllTags(tags));
+        updateHolder.spokenLanguage.consume(language -> {
           if (language == null) {
             serverDataBuilder.clearSpokenLanguage();
           } else {
             serverDataBuilder.setSpokenLanguage(language);
           }
         });
-        updateHolder.scenery.ifDirty(serverScenery -> serverDataBuilder.setScenery(serverScenery.name()));
+        updateHolder.scenery.consume(serverScenery -> serverDataBuilder.setScenery(serverScenery.name()));
 
         // insert the server data into the cache
         var serverData = serverDataBuilder.build();

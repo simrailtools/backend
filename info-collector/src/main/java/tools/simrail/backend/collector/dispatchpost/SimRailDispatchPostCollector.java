@@ -198,7 +198,7 @@ final class SimRailDispatchPostCollector {
 
         // update the dispatch post data
         var dispatchPostDataBuilder = updateFrameBuilder.getDispatchPostData().toBuilder();
-        updateHolder.dispatcher.ifDirty(user -> {
+        updateHolder.dispatcher.consume(user -> {
           if (user == null) {
             dispatchPostDataBuilder.clearDispatcher();
           } else {

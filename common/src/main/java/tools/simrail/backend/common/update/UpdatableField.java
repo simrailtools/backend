@@ -78,6 +78,19 @@ public final class UpdatableField<T> {
   }
 
   /**
+   * Provides the current value of this field to the given consumer. The dirty state of this field is reset after the
+   * invocation, the dirty state at invocation time is returned to the caller.
+   *
+   * @param handler the handler to call if this field is dirty.
+   * @return true if the field was dirty, false otherwise.
+   */
+  public boolean consume(@NonNull Consumer<T> handler) {
+    var isDirty = this.consumeDirty();
+    handler.accept(this.currentValue());
+    return isDirty;
+  }
+
+  /**
    * Get the current value of this field. Note that the value can only be null if the field wasn't initialized to any
    * value yet or if null values are explicitly allowed.
    *
