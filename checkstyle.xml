@@ -20,6 +20,9 @@
   <module name="SuppressWarningsFilter"/>
 
   <!-- Miscellaneous -->
+  <module name="LineEnding">
+    <property name="lineEnding" value="lf"/>
+  </module>
   <module name="NewlineAtEndOfFile">
     <property name="lineSeparator" value="lf"/>
   </module>
@@ -286,6 +289,7 @@
     <module name="UnusedLambdaParameterShouldBeUnnamed"/>
     <module name="UnusedLocalVariable"/>
     <module name="WhenShouldBeUsed"/>
+    <module name="UseEnhancedSwitch"/>
 
     <!-- Filters -->
     <module name="SuppressionCommentFilter">
