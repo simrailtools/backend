@@ -4360,5 +4360,65 @@
     "point_id": "52356a16-8f86-481d-8ca5-1d7cdaf8b6bd",
     "track": 1,
     "platform": 1
+  },
+  {
+    "id": "2439_LOB_N11",
+    "point_id": "8c4c75cb-5477-4dd5-aa6d-06556f6c0d99",
+    "track": 1,
+    "platform": 1
+  },
+  {
+    "id": "2439_LOA_E11",
+    "point_id": "8c4c75cb-5477-4dd5-aa6d-06556f6c0d99",
+    "track": 1,
+    "platform": 1
+  },
+  {
+    "id": "2439_LOB_N12",
+    "point_id": "8c4c75cb-5477-4dd5-aa6d-06556f6c0d99",
+    "track": 2,
+    "platform": 2
+  },
+  {
+    "id": "2439_LOA_E12",
+    "point_id": "8c4c75cb-5477-4dd5-aa6d-06556f6c0d99",
+    "track": 2,
+    "platform": 2
+  },
+  {
+    "id": "2439_LOB_N11",
+    "point_id": "74d1ff4a-a11b-49ab-9498-e5af3efcd5ef",
+    "track": 1,
+    "platform": 1
+  },
+  {
+    "id": "2426_LCH_O",
+    "point_id": "74d1ff4a-a11b-49ab-9498-e5af3efcd5ef",
+    "track": 1,
+    "platform": 1
+  },
+  {
+    "id": "2439_LOB_N12",
+    "point_id": "74d1ff4a-a11b-49ab-9498-e5af3efcd5ef",
+    "track": 2,
+    "platform": 2
+  },
+  {
+    "id": "2426_LCH_P",
+    "point_id": "74d1ff4a-a11b-49ab-9498-e5af3efcd5ef",
+    "track": 2,
+    "platform": 2
+  },
+  {
+    "id": "2439_LOC_X1",
+    "point_id": "b18a6026-8cbd-4c5c-bc92-e300e7ecbe69",
+    "track": 1,
+    "platform": 1
+  },
+  {
+    "id": "2439_LOC_X2",
+    "point_id": "b18a6026-8cbd-4c5c-bc92-e300e7ecbe69",
+    "track": 2,
+    "platform": 2
   }
 ]
