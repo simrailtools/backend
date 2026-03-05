@@ -162,6 +162,9 @@
     "name": "Marków",
     "ext_point_ids": [
       "2547"
+    ],
+    "in_border_if_next": [
+      "4338"
     ]
   },
   {
