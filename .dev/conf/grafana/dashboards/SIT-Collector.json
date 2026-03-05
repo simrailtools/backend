@@ -3,7 +3,7 @@
   "kind": "Dashboard",
   "metadata": {
     "name": "0b9eda15-78d7-4946-8236-fc1a88b0a988",
-    "generation": 5,
+    "generation": 6,
     "creationTimestamp": "2026-02-15T23:32:18Z",
     "labels": {},
     "annotations": {}
@@ -2930,7 +2930,7 @@
             "kind": "RowsLayoutRow",
             "spec": {
               "title": "Journey Collect",
-              "collapse": false,
+              "collapse": true,
               "layout": {
                 "kind": "GridLayout",
                 "spec": {
