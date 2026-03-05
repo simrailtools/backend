@@ -27,6 +27,7 @@ package tools.simrail.backend.collector.journey;
 import java.util.Map;
 import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.Supplier;
 import lombok.Getter;
 import org.jspecify.annotations.NonNull;
 import org.springframework.http.HttpHeaders;
@@ -41,6 +42,9 @@ final class ServerCollectorData {
   // mapping for the runs to the foreign id and vice-vera on this server
   final Map<String, UUID> foreignIdToRunId = new ConcurrentHashMap<>();
   final Map<UUID, JourneyUpdateHolder> updateHoldersByRunId = new ConcurrentHashMap<>();
+
+  // realtime updater for journey events for the server
+  private JourneyEventRealtimeUpdater eventRealtimeUpdater;
 
   private String trainsEtag;
   private String trainPositionsEtag;
@@ -61,5 +65,23 @@ final class ServerCollectorData {
    */
   public void updateTrainPositionsEtag(@NonNull FeignJsonResponseTuple<?> responseTuple) {
     this.trainPositionsEtag = responseTuple.firstHeaderValue(HttpHeaders.ETAG).orElse(null);
+  }
+
+  /**
+   * Get the event updater for the server, optionally constructing it using the given factory supplier if it wasn't
+   * initialized before.
+   *
+   * @param factory the factory callback used to initialize the updater once.
+   * @return the event realtime updater for this server.
+   */
+  @NonNull
+  public JourneyEventRealtimeUpdater getOrConstructUpdater(@NonNull Supplier<JourneyEventRealtimeUpdater> factory) {
+    var updater = this.eventRealtimeUpdater;
+    if (updater == null) {
+      updater = factory.get();
+      this.eventRealtimeUpdater = updater;
+    }
+
+    return updater;
   }
 }
