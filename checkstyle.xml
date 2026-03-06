@@ -276,7 +276,9 @@
     <module name="NoFinalizer"/>
     <module name="OneStatementPerLine"/>
     <module name="PackageDeclaration"/>
-    <module name="RequireThis"/>
+    <module name="RequireThis">
+      <property name="validateOnlyOverlapping" value="false"/>
+    </module>
     <module name="SimplifyBooleanExpression"/>
     <module name="SimplifyBooleanReturn"/>
     <module name="StringLiteralEquality"/>
