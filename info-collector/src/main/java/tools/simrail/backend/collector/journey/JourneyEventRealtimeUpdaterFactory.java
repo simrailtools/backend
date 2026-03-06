@@ -69,13 +69,13 @@ final class JourneyEventRealtimeUpdaterFactory {
     Gauge.builder("journey_event_update_queue_size", updateQueue::size)
       .tag("server_code", server.code())
       .description("The updates that are pending processing by the event realtime updater")
-      .register(meterRegistry);
+      .register(this.meterRegistry);
 
     // construct the realtime updater & start the event update thread
     var eventUpdateTimer = Timer.builder("journey_event_update_time_seconds")
       .tag("server_code", server.code())
       .description("Elapsed seconds while processing event updates for a single journey")
-      .register(meterRegistry);
+      .register(this.meterRegistry);
     var updater = new JourneyEventRealtimeUpdater(
       this.journeyIdService,
       this.signalProvider,
