@@ -24,10 +24,7 @@
 
 package tools.simrail.backend.collector.journey;
 
-import io.micrometer.core.instrument.Gauge;
-import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
-import jakarta.annotation.PostConstruct;
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -35,7 +32,6 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
@@ -43,7 +39,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.TransientDataAccessException;
 import org.springframework.data.util.Pair;
-import org.springframework.stereotype.Component;
 import org.springframework.transaction.support.TransactionTemplate;
 import tools.simrail.backend.common.journey.JourneyEntity;
 import tools.simrail.backend.common.journey.JourneyEventEntity;
@@ -56,7 +51,6 @@ import tools.simrail.backend.common.journey.JourneyTransport;
 import tools.simrail.backend.common.point.SimRailPoint;
 import tools.simrail.backend.common.signal.PlatformSignalProvider;
 
-@Component
 final class JourneyEventRealtimeUpdater {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(JourneyEventRealtimeUpdater.class);
@@ -74,26 +68,19 @@ final class JourneyEventRealtimeUpdater {
     @NonNull PlatformSignalProvider signalProvider,
     @NonNull TransactionTemplate transactionTemplate,
     @NonNull JourneyEventRepository journeyEventRepository,
-    @NonNull MeterRegistry meterRegistry
+    @NonNull Timer eventUpdateTimer,
+    @NonNull BlockingQueue<JourneyEventUpdateRequest> updateQueue
   ) {
     this.journeyIdService = journeyIdService;
     this.signalProvider = signalProvider;
     this.transactionTemplate = transactionTemplate;
     this.journeyEventRepository = journeyEventRepository;
 
-    this.pendingUpdates = new LinkedBlockingQueue<>();
-
-    // init metrics
-    this.eventUpdateTimer = Timer.builder("journey_event_update_time_seconds")
-      .description("Elapsed seconds while processing event updates for a single journey")
-      .register(meterRegistry);
-    Gauge.builder("journey_event_update_queue_size", this.pendingUpdates::size)
-      .description("The updates that are pending processing by the event realtime updater")
-      .register(meterRegistry);
+    this.eventUpdateTimer = eventUpdateTimer;
+    this.pendingUpdates = updateQueue;
   }
 
-  @PostConstruct
-  public void startEventUpdates() {
+  void startEventUpdates() {
     Thread.ofPlatform()
       .daemon()
       .stackSize(32)

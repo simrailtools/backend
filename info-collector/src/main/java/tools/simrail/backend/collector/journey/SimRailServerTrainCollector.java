@@ -72,7 +72,7 @@ class SimRailServerTrainCollector {
   private final SimRailServerService serverService;
   private final SimRailPanelApiClient panelApiClient;
   private final CollectorJourneyService journeyService;
-  private final JourneyEventRealtimeUpdater eventRealtimeUpdater;
+  private final JourneyEventRealtimeUpdaterFactory eventRealtimeUpdaterFactory;
 
   private final Connection connection;
   private final ExecutorService trainCollectExecutor;
@@ -89,7 +89,7 @@ class SimRailServerTrainCollector {
     @NonNull SimRailServerService serverService,
     @NonNull SimRailPanelApiClient panelApiClient,
     @NonNull CollectorJourneyService journeyService,
-    @NonNull JourneyEventRealtimeUpdater eventRealtimeUpdater,
+    @NonNull JourneyEventRealtimeUpdaterFactory eventRealtimeUpdaterFactory,
     @NonNull Connection natsConnection,
     @NonNull @Qualifier("journey_realtime_cache") DataCache<EventBusProto.JourneyUpdateFrame> journeyDataCache,
     @NonNull @Qualifier("active_journeys_updated_total") PerServerGauge updatedJourneysCounter,
@@ -100,7 +100,7 @@ class SimRailServerTrainCollector {
     this.serverService = serverService;
     this.panelApiClient = panelApiClient;
     this.journeyService = journeyService;
-    this.eventRealtimeUpdater = eventRealtimeUpdater;
+    this.eventRealtimeUpdaterFactory = eventRealtimeUpdaterFactory;
 
     this.updatedJourneysCounter = updatedJourneysCounter;
     this.collectionDurationTimer = collectionDurationTimer;
@@ -175,6 +175,7 @@ class SimRailServerTrainCollector {
       var collectionTimer = this.collectionDurationTimer.withTag("server_code", server.code());
       this.executeCollectionTask(taskCountLatch, collectionTimer, () -> {
         var collectorData = this.serverCollectorData.computeIfAbsent(server.id(), _ -> new ServerCollectorData());
+        var eventUpdater = collectorData.getOrConstructUpdater(() -> this.eventRealtimeUpdaterFactory.create(server));
 
         // fetch the train data from api
         var activeRunIds = this.fetchFullTrainInformation(server, collectorData);
@@ -244,7 +245,7 @@ class SimRailServerTrainCollector {
               var ppid = prevPointId == null ? null : UUID.fromString(prevPointId);
               var nextSignal = journeyDataBuilder.hasNextSignal() ? journeyDataBuilder.getNextSignal() : null;
               var updateRequest = JourneyEventUpdateRequest.forEventUpdate(jid, server, ppid, currPoint, nextSignal);
-              this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
+              eventUpdater.requestEventUpdate(updateRequest);
             }
           }
 
@@ -259,7 +260,7 @@ class SimRailServerTrainCollector {
               var jid = UUID.fromString(updateFrameBuilder.getIds().getDataId());
               var nextSignalId = updatedTrain.nextSignalId.currentValue();
               var updateRequest = JourneyEventUpdateRequest.forSignalUpdate(jid, server, point, nextSignalId);
-              this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
+              eventUpdater.requestEventUpdate(updateRequest);
             });
           }
 
@@ -317,7 +318,7 @@ class SimRailServerTrainCollector {
             // request an update of the journey events because of the removal
             var journeyIdString = journeyId.toString();
             var updateRequest = JourneyEventUpdateRequest.forRemoval(journeyId, server);
-            this.eventRealtimeUpdater.requestEventUpdate(updateRequest);
+            eventUpdater.requestEventUpdate(updateRequest);
             this.journeyDataCache.removeByPrimaryKey(journeyIdString);
 
             // send out journey removal frame
