@@ -84,12 +84,22 @@
     "name": "Radzice",
     "ext_point_ids": [
       "3519"
+    ],
+    "in_border_if_next": [
+      "1349",
+      "1350",
+      "1351"
     ]
   },
   {
     "name": "Radzice PZS R31",
     "ext_point_ids": [
       "3520"
+    ],
+    "in_border_if_next": [
+      "1349",
+      "1350",
+      "1351"
     ]
   },
   {
