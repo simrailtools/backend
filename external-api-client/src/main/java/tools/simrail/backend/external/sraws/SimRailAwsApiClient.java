@@ -36,7 +36,7 @@ public interface SimRailAwsApiClient {
 
   static @NonNull SimRailAwsApiClient create() {
     return FeignClientProvider.prepareJsonFeignInstance()
-      .target(SimRailAwsApiClient.class, "https://api1.aws.simrail.eu:8082/api");
+      .target(SimRailAwsApiClient.class, "https://api.simrail.eu:8082/api");
   }
 
   /**

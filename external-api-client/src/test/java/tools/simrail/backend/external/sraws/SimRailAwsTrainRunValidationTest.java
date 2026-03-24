@@ -83,7 +83,7 @@ public class SimRailAwsTrainRunValidationTest {
     var client = HttpClient.newHttpClient();
     var request = HttpRequest.newBuilder()
       .GET()
-      .uri(URI.create("https://api1.aws.simrail.eu:8082/api/getAllTimetables?serverCode=de1"))
+      .uri(URI.create("https://api.simrail.eu:8082/api/getAllTimetables?serverCode=de1"))
       .build();
     var response = client.send(request, HttpResponse.BodyHandlers.ofInputStream());
     Assertions.assertEquals(200, response.statusCode());

@@ -92,7 +92,7 @@ public final class TimetableHolder {
         var client = HttpClient.newHttpClient();
         var request = HttpRequest.newBuilder()
           .GET()
-          .uri(URI.create("https://api1.aws.simrail.eu:8082/api/getAllTimetables?serverCode=" + serverCode))
+          .uri(URI.create("https://api.simrail.eu:8082/api/getAllTimetables?serverCode=" + serverCode))
           .build();
         var response = client.send(request, HttpResponse.BodyHandlers.ofFile(cacheFilePath));
         Assertions.assertEquals(200, response.statusCode());
