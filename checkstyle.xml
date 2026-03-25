@@ -354,7 +354,7 @@
     <!-- Modifiers -->
     <module name="ModifierOrder"/>
     <module name="RedundantModifier">
-      <property name="jdkVersion" value="25"/>
+      <property name="jdkVersion" value="26"/>
     </module>
 
     <!-- Naming Conventions -->

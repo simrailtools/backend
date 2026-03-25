@@ -1,10 +1,10 @@
-FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:25-latest AS builder
+FROM --platform=$BUILDPLATFORM azul/zulu-openjdk-debian:26-latest AS builder
 WORKDIR /build
 
 COPY ./ ./
 RUN ./gradlew clean :info-collector:buildForDocker -Pversion.release=true -x test -x checkstyleMain -x checkstyleTest --no-daemon
 
-FROM azul/zulu-openjdk-alpine:25-jre-headless-latest
+FROM azul/zulu-openjdk-alpine:26-jre-headless-latest
 WORKDIR /app
 
 COPY --from=builder /build/info-collector/build/libs/docker/info-collector.jar ./
