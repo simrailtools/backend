@@ -267,6 +267,7 @@ public final class SimRailPointProviderTest {
         .timeout(Duration.ofSeconds(30))
         .version(HttpClient.Version.HTTP_2)
         .header("Accept", "application/json")
+        .header("User-Agent", "gh.com/simrailtools/backend tests")
         .build();
       var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
       Assertions.assertEquals(200, response.statusCode());
