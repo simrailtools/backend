@@ -2,7 +2,7 @@
 # plugins
 protobuf = "0.9.6"
 spotless = "8.4.0"
-springBoot = "4.0.3"
+springBoot = "4.0.5"
 downloadTask = "5.7.0"
 checkstyleTools = "13.3.0"
 springDependencyManagement = "1.1.7"
@@ -16,13 +16,13 @@ lombok = "1.18.44"
 jspecify = "1.0.0"
 redisson = "4.3.0"
 fuzzywuzzy = "1.4.0"
-protobufJava = "4.34.0"
+protobufJava = "4.34.1"
 springDocOpenApi = "3.0.2"
 
 # testing
 junit = "6.0.3"
 mockito = "5.23.0"
-testcontainers = "2.0.3"
+testcontainers = "2.0.4"
 
 [libraries]
 # jackson
