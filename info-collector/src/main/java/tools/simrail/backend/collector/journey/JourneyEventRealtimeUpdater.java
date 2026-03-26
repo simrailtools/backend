@@ -35,6 +35,7 @@ import java.util.concurrent.BlockingQueue;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 import org.jspecify.annotations.NonNull;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.dao.TransientDataAccessException;
@@ -189,26 +190,56 @@ final class JourneyEventRealtimeUpdater {
       .filter(event -> event.getStopType() == JourneyStopType.PASSENGER)
       .collect(Collectors.toMap(JourneyEventEntity::getEventType, Function.identity()));
     var arrivalEvent = eventOfPointByType.get(JourneyEventType.ARRIVAL);
-    if (arrivalEvent == null) {
-      return false;
-    }
-
-    // find the information about the signal that the journey is currently at
-    var signalInfo = this.signalProvider.findSignalInfo(pointId, request.nextSignalId()).orElse(null);
-    if (signalInfo == null) {
-      return false;
-    }
-
-    var realtimeStopInfo = new JourneyPassengerStopInfo(signalInfo.getTrack(), signalInfo.getPlatform());
-    arrivalEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
-
-    // check if an associated departure event exists for the journey, update the signal info of it too
     var departureEvent = eventOfPointByType.get(JourneyEventType.DEPARTURE);
-    if (departureEvent != null) {
-      departureEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+    if (arrivalEvent == null && departureEvent == null) {
+      return false;
     }
 
-    return true;
+    var mainEvent = arrivalEvent != null ? arrivalEvent : departureEvent;
+    var secondaryEvent = mainEvent == arrivalEvent ? departureEvent : null;
+    return this.updateRealtimeStopInfo(request.nextSignalId(), request.currentPoint(), mainEvent, secondaryEvent);
+  }
+
+  private boolean updateRealtimeStopInfo(
+    @Nullable String nextSignalId,
+    @NonNull SimRailPoint currentPoint,
+    @NonNull JourneyEventEntity mainEvent,
+    @Nullable JourneyEventEntity secondaryEvent
+  ) {
+    // check if the journey is even scheduled to stop at the point
+    if (mainEvent.getStopType() != JourneyStopType.PASSENGER) {
+      return false;
+    }
+
+    JourneyPassengerStopInfo realtimeStopInfo = null;
+    if (nextSignalId != null) {
+      // if a signal ahead of the journey is present, get the platform the journey is located at based off that info.
+      // note that signals might be ambiguous (e.g. 2 platforms can reach the same signal), so in case the station is
+      // flagged as such the scheduled stop info is returned
+      realtimeStopInfo = this.signalProvider
+        .findSignalInfo(currentPoint.getId(), nextSignalId)
+        .map(signal -> new JourneyPassengerStopInfo(signal.getTrack(), signal.getPlatform()))
+        .orElseGet(() -> {
+          if (currentPoint.isAssumeCorrectPlatform()) {
+            return mainEvent.getScheduledPassengerStopInfo();
+          }
+          return null;
+        });
+    } else if (currentPoint.isStopPlace()) {
+      // in case the current point is a stop place, there is a high chance of the stop
+      // being at the correct platform. assume this in case we don't have a signal info
+      // to cross-validate that assumption
+      realtimeStopInfo = mainEvent.getScheduledPassengerStopInfo();
+    }
+
+    if (realtimeStopInfo != null) {
+      mainEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+      if (secondaryEvent != null) {
+        secondaryEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
+      }
+    }
+
+    return realtimeStopInfo != null;
   }
 
   private boolean updateEventsDueToArrival(
@@ -272,18 +303,9 @@ final class JourneyEventRealtimeUpdater {
 
     // update the information where the journey actually stopped
     var nextSignal = request.nextSignal();
-    if (arrivalEventOfPoint.getStopType() == JourneyStopType.PASSENGER && nextSignal != null) {
-      this.signalProvider.findSignalInfo(currentPoint.getId(), nextSignal.getName()).ifPresent(signal -> {
-        var realtimeStopInfo = new JourneyPassengerStopInfo(signal.getTrack(), signal.getPlatform());
-        arrivalEventOfPoint.setRealtimePassengerStopInfo(realtimeStopInfo);
-
-        // check if an associated departure event exists for the journey, update the signal info of it too
-        if (hasMoreEvents) {
-          var departureEvent = events.get(eventIndex + 1);
-          departureEvent.setRealtimePassengerStopInfo(realtimeStopInfo);
-        }
-      });
-    }
+    var nextSignalId = nextSignal == null ? null : nextSignal.getName();
+    var departureEvent = hasMoreEvents ? events.get(eventIndex + 1) : null;
+    this.updateRealtimeStopInfo(nextSignalId, currentPoint, arrivalEventOfPoint, departureEvent);
 
     // update the realtime time info of the event and
     // predict the times of the subsequent journey events based on this arrival

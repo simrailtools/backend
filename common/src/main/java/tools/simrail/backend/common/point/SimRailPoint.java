@@ -72,11 +72,20 @@ public final class SimRailPoint {
    */
   @JsonProperty("max_speed")
   private int maxSpeed;
+
   /**
    * Indicates if the point is a stop place (point to stop without switches) or a full station.
    */
   @JsonProperty("stop_place")
   private boolean stopPlace;
+  /**
+   * Marks if the correct platform can be assumed if no platform signal mapping is found for the point. This is useful
+   * in cases where multiple platforms can reach the same signals, which results in a stable mapping being impossible.
+   * Should only be set to true for stations, stop places have this assumption enabled automatically.
+   */
+  @JsonProperty("assume_correct_platform")
+  private boolean assumeCorrectPlatform;
+
   /**
    * The ISO 3166-1 alpha-3 country code where the point is located.
    */

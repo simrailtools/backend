@@ -35,6 +35,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Service;
+import tools.jackson.databind.DeserializationFeature;
 import tools.jackson.databind.ObjectMapper;
 import tools.simrail.backend.common.util.GeoUtil;
 
@@ -53,10 +54,11 @@ public final class SimRailPointProvider {
     @NonNull ObjectMapper objectMapper,
     @Value("classpath:data/points.json") Resource pointsResource
   ) throws IOException {
-    // deserialize the points from the points JSON bundled in the application jar file
     var pointListType = objectMapper.getTypeFactory().constructCollectionType(List.class, SimRailPoint.class);
     try (var inputStream = pointsResource.getInputStream()) {
-      this.points = objectMapper.readValue(inputStream, pointListType);
+      this.points = objectMapper.readerFor(pointListType)
+        .without(DeserializationFeature.FAIL_ON_NULL_FOR_PRIMITIVES) // to default 'assume_correct_platform'
+        .readValue(inputStream);
     }
   }
 

@@ -14352,6 +14352,7 @@
     "prefix": "60_Ba",
     "max_speed": 120,
     "stop_place": false,
+    "assume_correct_platform": true,
     "ids": [
       "60",
       "61"
