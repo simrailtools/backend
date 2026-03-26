@@ -35,6 +35,8 @@ jobs:
         with:
           cache-read-only: true
           add-job-summary: always
+          build-scan-terms-of-use-agree: 'yes'
+          build-scan-terms-of-use-url: 'https://gradle.com/terms-of-service'
 
       - name: Initialize CodeQL
         uses: github/codeql-action/init@v4
