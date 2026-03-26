@@ -1,7 +1,7 @@
 [versions]
 # plugins
 protobuf = "0.9.6"
-spotless = "8.3.0"
+spotless = "8.4.0"
 springBoot = "4.0.3"
 downloadTask = "5.7.0"
 checkstyleTools = "13.3.0"
