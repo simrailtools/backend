@@ -65,7 +65,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(743, points.size());
+    Assertions.assertEquals(745, points.size());
   }
 
   @Test
@@ -154,6 +154,7 @@ public final class SimRailPointProviderTest {
   void testPositionOfStationIsInBoundingBox() {
     var points = this.pointProvider.points;
     var allowedPoints = Set.of(
+      "Łódź Olechów Łoa",
       "Bydgoszcz Wschód Towarowa"
     );
     for (var point : points) {
