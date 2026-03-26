@@ -41,12 +41,10 @@ plugins {
 allprojects {
   group = "tools.simrail.backend"
 
-  // generates a TimeVer version for release builds (determined by gradle property 'version.release')
-  // TimeVer specification: https://gist.github.com/twolfson/de1b004dd22536b8e668
-  // if it is not a release build just use 'dev-SNAPSHOT' as the version
+  // generates a time-based version for release builds (determined by the Gradle property 'version.release')
   val releaseBuild = findProperty("version.release") ?: "false"
   if (releaseBuild == "true") {
-    val timeVerFormatter = DateTimeFormatter.ofPattern("yyyyMMdd.HHmmss.n").withZone(ZoneOffset.UTC)
+    val timeVerFormatter = DateTimeFormatter.ofPattern("yyyy.MM.dd.HHmm").withZone(ZoneOffset.UTC)
     version = timeVerFormatter.format(Instant.now())
   } else {
     version = "dev-SNAPSHOT"
