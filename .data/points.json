@@ -7895,7 +7895,7 @@
     "name": "Bedoń",
     "id": "21f8554e-7de8-4898-b108-29cff853e0ad",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 150,
     "stop_place": true,
     "ids": [
       "110"
@@ -7934,7 +7934,7 @@
     "name": "Justynów",
     "id": "d42c403e-1257-46cf-bd71-08a926f60ddb",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 150,
     "stop_place": true,
     "ids": [
       "1548"
@@ -8012,7 +8012,7 @@
     "name": "Żakowice",
     "id": "9ecdd67d-9a98-48fb-bc5a-223ae6191c31",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 150,
     "stop_place": true,
     "ids": [
       "5375"
@@ -8103,7 +8103,7 @@
     "name": "Wągry",
     "id": "f40c2348-096a-4908-ac77-ce66fb5657bd",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": true,
     "ids": [
       "4857"
@@ -8181,7 +8181,7 @@
     "name": "Przyłęk Duży",
     "id": "e674b62c-c7e4-4206-83e9-2b0504aaa058",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 150,
     "stop_place": true,
     "ids": [
       "3423"
@@ -8220,7 +8220,7 @@
     "name": "Krosnowa",
     "id": "ab212d91-3221-4f3d-9f51-f061c273fab0",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": true,
     "ids": [
       "2059"
@@ -8259,7 +8259,7 @@
     "name": "Lipce Reymontowskie",
     "id": "c2ba0b99-8158-4177-9526-582dd67d95fa",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 140,
     "stop_place": true,
     "ids": [
       "2251"
@@ -8338,7 +8338,7 @@
     "name": "Maków",
     "id": "aacee59f-5358-41ad-bf4f-1d24d74af911",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": true,
     "ids": [
       "2501"
@@ -8377,7 +8377,7 @@
     "name": "Dąbrowice Skierniewickie",
     "id": "173697ec-b722-4e40-9220-744bd77a4ac8",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 150,
     "stop_place": true,
     "ids": [
       "747"
@@ -11151,7 +11151,7 @@
     "name": "Zaosie",
     "id": "6b81e456-15f8-4b40-badb-eb6f7e6afe87",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "5237"
@@ -11190,7 +11190,7 @@
     "name": "Wykno",
     "id": "d7ffb970-bdb0-4d90-ba42-d9bbcaa82e21",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "5146"
@@ -11312,7 +11312,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "2444"
+      "2444",
+      "5694"
     ],
     "bb": [
       [
@@ -11383,7 +11384,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "2443"
+      "2443",
+      "5579"
     ],
     "bb": [
       [
@@ -11446,7 +11448,8 @@
     "max_speed": 80,
     "stop_place": false,
     "ids": [
-      "2442"
+      "2442",
+      "5577"
     ],
     "bb": [
       [
@@ -14284,7 +14287,7 @@
     "name": "Warszawa Rembertów",
     "id": "13baf9e2-70a2-4fb7-bc18-8d14bbf72f1e",
     "prefix": null,
-    "max_speed": 130,
+    "max_speed": 160,
     "stop_place": false,
     "ids": [
       "4795"
@@ -16054,7 +16057,7 @@
     "name": "Łódź Kaliska",
     "id": "f4f83261-97d6-4a38-ac68-5657b99097b2",
     "prefix": "2432_LK",
-    "max_speed": 60,
+    "max_speed": 100,
     "stop_place": false,
     "ids": [
       "2432",
@@ -23714,7 +23717,7 @@
     "name": "Łódź Niciarniana",
     "id": "eb655ac8-e2a8-4166-b58d-f00d1f70628f",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2438"
@@ -23870,7 +23873,7 @@
     "name": "Łaznów",
     "id": "ed636c4f-cbd6-43bc-b936-3ae5e00dbbb0",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2370"
@@ -23909,7 +23912,7 @@
     "name": "Jarosty",
     "id": "e961cad2-9bf7-46f2-ae1a-f2e9c1a7eb01",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "1426"
@@ -23948,7 +23951,7 @@
     "name": "Luciążanka",
     "id": "d54b8cd7-1460-4f0d-bece-03dc708fc970",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2341"
@@ -23987,7 +23990,7 @@
     "name": "Kamieńsk",
     "id": "bb4db6f8-ad6c-44d0-9562-29ac61b46315",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "1593"
@@ -24026,7 +24029,7 @@
     "name": "Wolbórka",
     "id": "f1a1a69b-6452-4ef9-9ef3-97d5e0c7d11b",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "5012"
@@ -24065,7 +24068,7 @@
     "name": "Dobryszyce koło Radomska",
     "id": "fea358f2-bcd4-47db-8c5a-7caa9a35ea29",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "807"
@@ -24104,7 +24107,7 @@
     "name": "Gorzędów",
     "id": "3431a3ca-0d3b-4ee6-862f-a458d59a91e8",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "1152"
@@ -24143,7 +24146,7 @@
     "name": "Chrusty Nowe",
     "id": "97933459-0115-4514-9a47-9ba383c39029",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "521"
@@ -24182,7 +24185,7 @@
     "name": "Wilkoszewice",
     "id": "f3d47823-b361-4799-9a05-ca03001dfc20",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "4947"
@@ -24221,7 +24224,7 @@
     "name": "Moszczenica",
     "id": "3da19e46-61dc-4e7e-ba60-46fcf47060bf",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2726"
@@ -24260,7 +24263,7 @@
     "name": "Milejów",
     "id": "b99a9530-d51d-465a-b220-1cc7d20ed346",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2641"
@@ -27772,7 +27775,7 @@
     "name": "Łódź Retkinia",
     "id": "8bdf2de0-45ff-4e0a-ac12-e2ec740f5e09",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 60,
     "stop_place": true,
     "ids": [
       "5543"
@@ -27889,7 +27892,7 @@
     "name": "Sieradz Męka",
     "id": "b3b9f53e-0c3a-48fe-9fef-823f8983f4a5",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "3828"
@@ -28045,7 +28048,7 @@
     "name": "Sieradz Warta",
     "id": "3fec6a9a-6e16-4ee3-8b2d-4ee4be3ff25f",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "3829"
@@ -28240,7 +28243,7 @@
     "name": "Męcka Wola",
     "id": "742bfe28-e73b-4046-ade0-b12cc9c673bb",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "2580"
@@ -28357,7 +28360,7 @@
     "name": "Chechło",
     "id": "89111a05-525c-4a36-bc5f-46ae5773f645",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 60,
     "stop_place": true,
     "ids": [
       "450"
@@ -28591,7 +28594,7 @@
     "name": "Pabianice Północne",
     "id": "1cf90159-456e-4142-84c9-d64362c34433",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 110,
     "stop_place": true,
     "ids": [
       "5704"
@@ -28630,7 +28633,7 @@
     "name": "Skalmierz",
     "id": "835e274f-6c3c-4706-91f3-dfdab96851f9",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "3850"
@@ -28864,7 +28867,7 @@
     "name": "Kolumna",
     "id": "5b5e0354-1a62-4930-9113-c729f8149ff9",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 110,
     "stop_place": true,
     "ids": [
       "1802"
@@ -29040,7 +29043,7 @@
     "name": "Kalisz Winiary",
     "id": "8f24b47d-d998-4b8d-ac61-4344baa258b4",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "1571"
@@ -29196,7 +29199,7 @@
     "name": "Izabelów",
     "id": "2e03fd20-22fc-4984-8d76-d36212b53ea8",
     "prefix": null,
-    "max_speed": 0,
+    "max_speed": 120,
     "stop_place": true,
     "ids": [
       "5709"
