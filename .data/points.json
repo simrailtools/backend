@@ -14448,6 +14448,7 @@
     "prefix": "3594_Ro",
     "max_speed": 120,
     "stop_place": false,
+    "assume_correct_platform": true,
     "ids": [
       "3594",
       "3595"
