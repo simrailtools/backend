@@ -335,6 +335,7 @@
     <module name="RequireEmptyLineBeforeBlockTagGroup"/>
 
     <!-- Misc -->
+    <module name="IllegalSymbol"/>
     <module name="ArrayTypeStyle"/>
     <module name="AvoidEscapedUnicodeCharacters">
       <property name="allowIfAllCharactersEscaped" value="true"/>
