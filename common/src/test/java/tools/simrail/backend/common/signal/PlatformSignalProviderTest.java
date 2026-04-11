@@ -144,9 +144,8 @@ public class PlatformSignalProviderTest {
           && !missingPoints.contains(pointName)
           && !pointsWithWrongPlatformMapping.contains(pointName)) {
           // get the point associated with the stop
-          var pointId = timetableEntry.get("pointId").asString();
-          var point = this.pointProvider.findPointByPointId(pointId);
-          Assertions.assertTrue(point.isPresent(), "Missing point " + pointId);
+          var point = this.pointProvider.findPointByName(pointName);
+          Assertions.assertTrue(point.isPresent(), "Missing point " + pointName);
 
           // get the track information of the stop and the signal info for the point
           var track = timetableEntry.get("track").asInt();

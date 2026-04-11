@@ -53,22 +53,22 @@ public final class MapBorderPointProviderTest {
 
   @Test
   void testAllBorderPointsWereLoaded() {
-    var borderPoints = this.borderPointProvider.mapBorderPointIds;
+    var borderPoints = this.borderPointProvider.borderPointsByName;
     Assertions.assertEquals(52, borderPoints.size());
   }
 
   @Test
   void testBorderPointIdsAreUnique() throws IOException {
     var jsonMapper = new JsonMapper();
-    var seenPointIds = new HashSet<String>();
+    var seenPointNames = new HashSet<String>();
     try (var stream = this.borderPointsResource.getInputStream()) {
       var borderPoints = jsonMapper.readTree(stream);
       for (var borderPoint : borderPoints) {
-        var pointIds = borderPoint.get("ext_point_ids");
-        for (var pointIdNode : pointIds) {
-          var pointId = pointIdNode.asString();
-          if (!seenPointIds.add(pointId)) {
-            Assertions.fail("Duplicate border point id: " + pointId);
+        var pointNames = borderPoint.get("point_names");
+        for (var pointNameNode : pointNames) {
+          var pointName = pointNameNode.asString();
+          if (!seenPointNames.add(pointName)) {
+            Assertions.fail("Duplicate border point name: " + pointName);
           }
         }
       }
@@ -77,11 +77,11 @@ public final class MapBorderPointProviderTest {
 
   @Test
   void testAllBorderPointsAreMappedUniquely() {
-    var borderPoints = this.borderPointProvider.mapBorderPointIds.keySet();
+    var borderPoints = this.borderPointProvider.borderPointsByName.keySet();
     for (var borderPoint : borderPoints) {
-      this.pointProvider.findPointByPointId(borderPoint).ifPresent(point -> {
-        for (String pointId : point.getSimRailPointIds()) {
-          Assertions.assertTrue(this.borderPointProvider.isMapBorderPoint(pointId), pointId);
+      this.pointProvider.findPointByName(borderPoint).ifPresent(point -> {
+        for (String pointName : point.getPointNames()) {
+          Assertions.assertTrue(this.borderPointProvider.isMapBorderPoint(pointName), pointName);
         }
       });
     }
@@ -101,8 +101,8 @@ public final class MapBorderPointProviderTest {
       MapBorderPoint end = null;
       for (var index = 0; index < timetable.size(); index++) {
         var timetableEntry = timetable.get(index);
-        var pointId = timetableEntry.get("pointId").asString();
-        var borderPoint = this.borderPointProvider.findMapBorderPoint(pointId).orElse(null);
+        var pointName = timetableEntry.get("nameOfPoint").asString();
+        var borderPoint = this.borderPointProvider.findMapBorderPoint(pointName).orElse(null);
         if (borderPoint == null) {
           continue;
         }
@@ -112,7 +112,7 @@ public final class MapBorderPointProviderTest {
           var requiredNext = borderPoint.getRequiredNextPoints();
           if (requiredNext != null) {
             var nextEntry = timetable.get(index + 1);
-            if (nextEntry == null || !requiredNext.contains(nextEntry.get("pointId").asString())) {
+            if (nextEntry == null || !requiredNext.contains(nextEntry.get("nameOfPoint").asString())) {
               continue;
             }
           }

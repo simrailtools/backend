@@ -150,7 +150,7 @@ class SimRailServerTimetableCollector {
       // update the current status if the journey is within the playable border
       var timetableEntry = timetable.get(index);
       var wasInBorder = inBorder; // keeps track if the journey was in border before the border check
-      var borderPoint = this.borderPointProvider.findMapBorderPoint(timetableEntry.getPointId()).orElse(null);
+      var borderPoint = this.borderPointProvider.findMapBorderPoint(timetableEntry.getPointName()).orElse(null);
       if (borderPoint != null && !inBorder) {
         // if we are currently not within the map border we need to check if the journey moved into the
         // map border before recording the events as they should be marked as in-border at the map border
@@ -163,7 +163,7 @@ class SimRailServerTimetableCollector {
         if (requiredNextPoints != null) {
           if (index != lastTimetableIndex) {
             var next = timetable.get(index + 1);
-            if (requiredNextPoints.contains(next.getPointId())) {
+            if (requiredNextPoints.contains(next.getPointName())) {
               inBorder = true;
             }
           }
@@ -174,7 +174,7 @@ class SimRailServerTimetableCollector {
 
       // get the point associated with the event, if the point is not registered
       // we deem it irrelevant and don't want an event for the point
-      var eventPoint = this.pointProvider.findPointByPointId(timetableEntry.getPointId()).orElse(null);
+      var eventPoint = this.pointProvider.findPointByName(timetableEntry.getPointName()).orElse(null);
       if (eventPoint == null) {
         if (borderPoint != null && wasInBorder) {
           // if the current event was at a border point, and we were in border before the check
@@ -335,7 +335,7 @@ class SimRailServerTimetableCollector {
     @NonNull SimRailAwsTimetableEntry timetableEntry
   ) {
     // get the point where the event is happening, return if the point is not registered
-    var point = this.pointProvider.findPointByPointId(timetableEntry.getPointId()).orElse(null);
+    var point = this.pointProvider.findPointByName(timetableEntry.getPointName()).orElse(null);
     if (point == null) {
       return null;
     }
@@ -435,7 +435,7 @@ class SimRailServerTimetableCollector {
       // check if the point of the event is known if not just add it as fixed
       // as the event will be sorted out later anyway
       var entry = timetable.get(index);
-      var point = this.pointProvider.findPointByPointId(entry.getPointId()).orElse(null);
+      var point = this.pointProvider.findPointByName(entry.getPointName()).orElse(null);
       if (point == null) {
         currentEvent = entry;
         fixedEvents.add(entry);
@@ -444,7 +444,7 @@ class SimRailServerTimetableCollector {
 
       // check if the point of the current event and the checking event are the same in our mapping
       // if that is not the case just continue as there is nothing to merge
-      if (!point.getSimRailPointIds().contains(currentEvent.getPointId())) {
+      if (!point.getPointNames().contains(currentEvent.getPointName())) {
         if (seenPointIds.add(point.getId())) {
           currentEvent = entry;
           fixedEvents.add(entry);

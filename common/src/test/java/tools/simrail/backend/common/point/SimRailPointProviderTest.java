@@ -135,14 +135,14 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
-  void testAllSimRailPointIdsAreOnlyAssociatedOnce() {
+  void testAllPointNamesAreOnlyAssociatedOnce() {
     var points = this.pointProvider.points;
-    var seenPointIds = new HashSet<String>();
+    var seenPointNames = new HashSet<String>();
     for (var point : points) {
-      var simRailPointIds = point.getSimRailPointIds();
-      for (var simRailPointId : simRailPointIds) {
-        if (!seenPointIds.add(simRailPointId)) {
-          Assertions.fail("Detected duplicate SimRail point id mapping: " + simRailPointId);
+      var pointNames = point.getPointNames();
+      for (var pointName : pointNames) {
+        if (!seenPointNames.add(pointName)) {
+          Assertions.fail("Detected duplicate SimRail point name mapping: " + pointName);
         }
       }
     }
@@ -174,15 +174,15 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
-  void testFindPointBySimRailPointId() {
-    var point = this.pointProvider.findPointByPointId("5262");
+  void testFindPointByName() {
+    var point = this.pointProvider.findPointByName("Warszawa Wschodnia");
     Assertions.assertTrue(point.isPresent());
-    Assertions.assertEquals("Zawiercie", point.get().getName());
+    Assertions.assertEquals("Warszawa Wschodnia", point.get().getName());
   }
 
   @Test
-  void testFindPointByName() {
-    var point = this.pointProvider.findPointByName("Warszawa Wschodnia");
+  void testFindPointByAlternativeName() {
+    var point = this.pointProvider.findPointByName("Warszawa Wsch. R.58");
     Assertions.assertTrue(point.isPresent());
     Assertions.assertEquals("Warszawa Wschodnia", point.get().getName());
   }
@@ -201,9 +201,8 @@ public final class SimRailPointProviderTest {
     for (var trainRun : trainRuns) {
       var timetable = (ArrayNode) trainRun.get("timetable");
       for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asString();
         var pointName = timetableEntry.get("nameOfPoint").asString();
-        var point = this.pointProvider.findPointByPointId(pointId);
+        var point = this.pointProvider.findPointByName(pointName);
         if (point.isEmpty()) {
           missingPoints.add(pointName);
         }
@@ -226,10 +225,10 @@ public final class SimRailPointProviderTest {
     for (var trainRun : trainRuns) {
       var timetable = trainRun.get("timetable");
       for (var timetableEntry : timetable) {
-        var pointId = timetableEntry.get("pointId").asString();
         var maxSpeed = timetableEntry.get("maxSpeed").asInt();
+        var pointName = timetableEntry.get("nameOfPoint").asString();
         this.pointProvider
-          .findPointByPointId(pointId)
+          .findPointByName(pointName)
           .ifPresent(point -> speedLimitsPerPoint.merge(point.getId(), maxSpeed, Math::max));
       }
     }

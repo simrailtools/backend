@@ -73,23 +73,13 @@ public final class SimRailPointProvider {
   }
 
   /**
-   * Finds a single point based on the given SimRail point id.
-   *
-   * @param pointId the SimRail point id of the point to get.
-   * @return an optional holding the point if one with the given SimRail point id exists.
-   */
-  public @NonNull Optional<SimRailPoint> findPointByPointId(@NonNull String pointId) {
-    return this.points.stream().filter(point -> point.getSimRailPointIds().contains(pointId)).findFirst();
-  }
-
-  /**
    * Finds a single point based on the given point name.
    *
    * @param name the name of the point to get.
    * @return an optional holding the point if one with the given name exists.
    */
   public @NonNull Optional<SimRailPoint> findPointByName(@NonNull String name) {
-    return this.points.stream().filter(point -> point.getName().equals(name)).findFirst();
+    return this.points.stream().filter(point -> point.getPointNames().contains(name)).findFirst();
   }
 
   /**

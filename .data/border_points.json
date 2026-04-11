@@ -1,258 +1,253 @@
 [
   {
     "name": "Katowice Muchowiec Staszic",
-    "ext_point_ids": [
-      "1637"
+    "point_names": [
+      "KATOWICE MUCHOWIEC STASZIC"
     ]
   },
   {
     "name": "Katowice Kostuchna",
-    "ext_point_ids": [
-      "1619"
+    "point_names": [
+      "Katowice Kostuchna"
     ]
   },
   {
     "name": "Brynów",
-    "ext_point_ids": [
-      "333"
+    "point_names": [
+      "Brynów"
     ]
   },
   {
     "name": "Katowice Tow. KTC",
-    "ext_point_ids": [
-      "1653"
-    ]
-  },
-  {
-    "name": "Szabelnia",
-    "ext_point_ids": [
-      "4236"
+    "point_names": [
+      "Katowice Tow. KTC"
     ]
   },
   {
     "name": "Sosnowiec Maczki",
-    "ext_point_ids": [
-      "4006"
+    "point_names": [
+      "Sosnowiec Maczki"
     ]
   },
   {
     "name": "Dąbrowa Górnicza Towarowa",
-    "ext_point_ids": [
-      "728",
-      "729"
+    "point_names": [
+      "Dąbrowa Górnicza Towarowa",
+      "Dąbrowa Górnicza Towarowa DTA"
     ]
   },
   {
     "name": "Myszków",
-    "ext_point_ids": [
-      "2777",
-      "2778"
+    "point_names": [
+      "Myszków",
+      "Myszków GT"
     ]
   },
   {
     "name": "Sędziszów",
-    "ext_point_ids": [
-      "3795",
-      "3797"
+    "point_names": [
+      "Sędziszów",
+      "Sędziszów Towarowy"
     ]
   },
   {
     "name": "Czarnca",
-    "ext_point_ids": [
-      "613",
-      "614",
-      "5461"
+    "point_names": [
+      "Czarnca",
+      "Czarnca "
     ]
   },
   {
     "name": "Koniecpol",
-    "ext_point_ids": [
-      "1828"
+    "point_names": [
+      "Koniecpol"
     ],
     "in_border_if_next": [
-      "4092"
+      "Starzyny"
     ]
   },
   {
     "name": "Żelisławice",
-    "ext_point_ids": [
-      "5392",
-      "5393"
+    "point_names": [
+      "Żelisławice"
     ]
   },
   {
     "name": "Radzice",
-    "ext_point_ids": [
-      "3519"
+    "point_names": [
+      "Radzice"
     ],
     "in_border_if_next": [
-      "1349",
-      "1350",
-      "1351"
+      "Idzikowice",
+      "Idzikowice Roz.12",
+      "Idzikowice Roz.18"
     ]
   },
   {
     "name": "Radzice PZS R31",
-    "ext_point_ids": [
-      "3520"
+    "point_names": [
+      "Radzice PZS R31"
     ],
     "in_border_if_next": [
-      "1349",
-      "1350",
-      "1351"
+      "Idzikowice",
+      "Idzikowice Roz.12",
+      "Idzikowice Roz.18"
     ]
   },
   {
     "name": "Warszawa Grochów",
-    "ext_point_ids": [
-      "4732",
-      "4734"
+    "point_names": [
+      "Warszawa Grochów",
+      "Warszawa Grochów R5"
     ]
   },
   {
     "name": "Warszawa Praga",
-    "ext_point_ids": [
-      "4762",
-      "4785",
-      "4787",
-      "4788"
+    "point_names": [
+      "Warszawa Praga PZS R15",
+      "Warszawa Praga WPT C",
+      "Warszawa Praga WPT M"
     ]
   },
   {
     "name": "Warszawa Gołąbki",
-    "ext_point_ids": [
-      "4727"
+    "point_names": [
+      "Warszawa Gołąbki"
     ]
   },
   {
     "name": "Warszawa Główna Towarowa",
-    "ext_point_ids": [
-      "4718",
-      "4719",
-      "4723"
+    "point_names": [
+      "Warszawa Główna Towarowa",
+      "Warszawa Główna Towarowa WOA",
+      "Warszawa Gł.Tow.Sr18",
+      "Warszawa Gł.Tow. WOA"
     ]
   },
   {
     "name": "Dłubnia",
-    "ext_point_ids": [
-      "783",
-      "784"
+    "point_names": [
+      "Dłubnia",
+      "Dłubnia R2"
     ]
   },
   {
     "name": "Kraków Płaszów",
-    "ext_point_ids": [
-      "1927",
-      "2003"
+    "point_names": [
+      "Kraków Płaszów",
+      "Kraków Płaszów R3-4",
+      "Kr.Płaszów pzs KPA"
     ],
     "in_border_if_next": [
-      "1952"
+      "Kraków Główny"
     ]
   },
   {
     "name": "Kraków Zabłocie",
-    "ext_point_ids": [
-      "2030"
+    "point_names": [
+      "Kraków Zabłocie"
     ]
   },
   {
     "name": "Kraków Olsza",
-    "ext_point_ids": [
-      "1998",
-      "1999"
+    "point_names": [
+      "Kraków Olsza",
+      "Kraków Olsza R2"
     ]
   },
   {
     "name": "Borowa Górka",
-    "ext_point_ids": [
-      "285"
+    "point_names": [
+      "Borowa Górka"
     ]
   },
   {
     "name": "Marków",
-    "ext_point_ids": [
-      "2547"
+    "point_names": [
+      "Marków"
     ],
     "in_border_if_next": [
-      "4338"
+      "Szeligi"
     ]
   },
   {
     "name": "Warszawa Podskarbińska",
-    "ext_point_ids": [
-      "4758"
+    "point_names": [
+      "Warszawa Podskarbińska"
     ]
   },
   {
     "name": "Bełchów",
-    "ext_point_ids": [
-      "113"
+    "point_names": [
+      "Bełchów"
     ]
   },
   {
     "name": "Chrusty Nowe",
-    "ext_point_ids": [
-      "521"
+    "point_names": [
+      "Chrusty Nowe"
     ]
   },
   {
     "name": "Mikołajów",
-    "ext_point_ids": [
-      "2628"
+    "point_names": [
+      "Mikołajów"
     ]
   },
   {
     "name": "Słotwiny",
-    "ext_point_ids": [
-      "3928"
+    "point_names": [
+      "Słotwiny",
+      "Słotwiny R1"
     ]
   },
   {
     "name": "Puszcza Mariańska",
-    "ext_point_ids": [
-      "3459"
+    "point_names": [
+      "Puszcza Mariańska"
     ]
   },
   {
     "name": "Rozprza",
-    "ext_point_ids": [
-      "3617"
+    "point_names": [
+      "Rozprza"
     ]
   },
   {
     "name": "Łódź Fabryczna",
-    "ext_point_ids": [
-      "2431"
+    "point_names": [
+      "Łódź Fabryczna"
     ]
   },
   {
     "name": "Glinnik",
-    "ext_point_ids": [
-      "1057"
+    "point_names": [
+      "Glinnik"
     ]
   },
   {
     "name": "Zgierz Północ",
-    "ext_point_ids": [
-      "5314"
+    "point_names": [
+      "Zgierz Północ"
     ]
   },
   {
     "name": "Zduńska Wola Karsznice",
-    "ext_point_ids": [
-      "5292"
+    "point_names": [
+      "Zduńska Wola Karsznice"
     ]
   },
   {
-    "name": "Dionizów R3",
-    "ext_point_ids": [
-      "780"
+    "name": "Dionizów",
+    "point_names": [
+      "Dionizów",
+      "Dionizów R3"
     ]
   },
   {
     "name": "Sędzice",
-    "ext_point_ids": [
-      "3792"
+    "point_names": [
+      "Sędzice"
     ]
   }
 ]
