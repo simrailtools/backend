@@ -169,45 +169,6 @@ class SimRailPointV1Controller {
   }
 
   /**
-   * Get a point by its SimRail point id.
-   */
-  @GetMapping("/by-point-id/{id}")
-  @Operation(
-    summary = "Get a point by its SimRail point id",
-    description = """
-      Gets a point by its SimRail point id". Note that the resulting points are grouped by their operational unit, for
-      example '2528' (Małogoszcz) and '5460' (Małogoszcz PZS R35) will both return 'Małogoszcz'. Also note that some
-      points might not return any result if they are too close together and one point represents them enough
-      (for example the case for 'Zawiercie' and 'Zawiercie GT')
-      """,
-    parameters = {
-      @Parameter(name = "id", description = "The id of the point in the SimRail backend, e.g. 2371")
-    },
-    responses = {
-      @ApiResponse(
-        responseCode = "200",
-        description = "The point with the given id was successfully resolved"),
-      @ApiResponse(
-        responseCode = "400",
-        description = "One of the filter parameters is invalid",
-        content = @Content(schema = @Schema(hidden = true))),
-      @ApiResponse(
-        responseCode = "404",
-        description = "No point can be found with the given id",
-        content = @Content(schema = @Schema(hidden = true))),
-      @ApiResponse(
-        responseCode = "500",
-        description = "An internal error occurred while processing the request",
-        content = @Content(schema = @Schema(hidden = true))),
-    }
-  )
-  public @NonNull Optional<PointInfoDto> findPointBySimRailPointId(
-    @PathVariable("id") @Pattern(regexp = "[0-9]{2,4}") String pointId
-  ) {
-    return this.pointService.findPointByPointId(pointId);
-  }
-
-  /**
    * Finds points whose name are matching the given search query.
    */
   @GetMapping("/by-name/{searchQuery}")

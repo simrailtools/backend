@@ -45,10 +45,10 @@ public final class MapBorderPoint {
   @JsonProperty("name")
   private String name;
   /**
-   * The external (SimRail) point ids.
+   * The alternative names of the point.
    */
-  @JsonProperty("ext_point_ids")
-  private Set<String> simRailPointIds;
+  @JsonProperty("point_names")
+  private Set<String> pointNames;
   /**
    * The points that must follow the current point to be in the border. Can be null if none are required.
    */

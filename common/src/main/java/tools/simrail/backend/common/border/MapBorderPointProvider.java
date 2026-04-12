@@ -43,7 +43,7 @@ import tools.jackson.databind.ObjectMapper;
 public final class MapBorderPointProvider {
 
   // visible for testing only
-  final Map<String, MapBorderPoint> mapBorderPointIds;
+  final Map<String, MapBorderPoint> borderPointsByName;
 
   @Autowired
   public MapBorderPointProvider(
@@ -55,30 +55,30 @@ public final class MapBorderPointProvider {
     try (var inputStream = borderPointsResource.getInputStream()) {
       List<MapBorderPoint> points = objectMapper.readValue(inputStream, borderPointsType);
 
-      this.mapBorderPointIds = new HashMap<>();
+      this.borderPointsByName = new HashMap<>();
       for (var point : points) {
-        point.getSimRailPointIds().forEach(id -> this.mapBorderPointIds.put(id, point));
+        point.getPointNames().forEach(name -> this.borderPointsByName.put(name, point));
       }
     }
   }
 
   /**
-   * Get if the given point id is at the border of the playable SimRail map.
+   * Get if the given point is at the border of the playable SimRail map.
    *
-   * @param simRailPointId the id of the point to check.
-   * @return true if the given point id is at the border of the playable SimRail map, false otherwise.
+   * @param pointName the name of the point to check.
+   * @return true if the given point is at the border of the playable SimRail map, false otherwise.
    */
-  public boolean isMapBorderPoint(@NonNull String simRailPointId) {
-    return this.mapBorderPointIds.containsKey(simRailPointId);
+  public boolean isMapBorderPoint(@NonNull String pointName) {
+    return this.borderPointsByName.containsKey(pointName);
   }
 
   /**
-   * Finds a border point mapping for the given point id.
+   * Finds a border point mapping for the given point name.
    *
-   * @param simRailPointId the id of the point to get the border point mapping of.
-   * @return an optional holding the map border point for the given point id if one exists.
+   * @param pointName the name of the point to get the border point mapping of.
+   * @return an optional holding the map border point for the given point name if one exists.
    */
-  public @NonNull Optional<MapBorderPoint> findMapBorderPoint(@NonNull String simRailPointId) {
-    return Optional.ofNullable(this.mapBorderPointIds.get(simRailPointId));
+  public @NonNull Optional<MapBorderPoint> findMapBorderPoint(@NonNull String pointName) {
+    return Optional.ofNullable(this.borderPointsByName.get(pointName));
   }
 }

@@ -99,20 +99,6 @@ class SimRailPointService {
   }
 
   /**
-   * Finds the point with the given SimRail id, either by looking it up or from cache.
-   *
-   * @param id the SimRail id of the point to get.
-   * @return an optional holding the point with the given id, if one exists.
-   */
-  @Cacheable(cacheNames = "point_cache", key = "'by_point_id' + #id")
-  public @NonNull Optional<PointInfoDto> findPointByPointId(@NonNull String id) {
-    return this.pointProvider.findPointByPointId(id).map(point -> {
-      var platformSignals = this.platformSignalProvider.findSignalsByPoint(point.getId());
-      return this.pointInfoConverter.apply(point, platformSignals);
-    });
-  }
-
-  /**
    * Lists all points that are registered according to the given filter and paging parameters.
    *
    * @param countries the countries in which the points to return may be located.

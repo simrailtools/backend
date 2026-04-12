@@ -55,11 +55,11 @@ public final class SimRailPoint {
   @JsonProperty("id")
   private UUID id;
   /**
-   * The SimRail point ids that are associated with this point.
+   * The names of points that all map to this point. Contains at least one element.
    */
   @NonNull
-  @JsonProperty("ids")
-  private Set<String> simRailPointIds;
+  @JsonProperty("names")
+  private Set<String> pointNames;
 
   /**
    * The prefix of the point, used for example as a prefix for signal names. Null if the prefix is unknown.
