@@ -32,12 +32,14 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Set;
 import java.util.StringJoiner;
 import java.util.UUID;
 import java.util.stream.Collectors;
+import java.util.stream.Gatherers;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
@@ -64,7 +66,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(745, points.size());
+    Assertions.assertEquals(786, points.size());
   }
 
   @Test
@@ -250,35 +252,40 @@ public final class SimRailPointProviderTest {
   @Test
   void testAllOsmNodesActuallyExist() throws Exception {
     try (var httpClient = HttpClient.newHttpClient()) {
-      var osmNodeIds = this.pointProvider.getPoints().stream()
+      var osmNodeIdBatches = this.pointProvider.getPoints().stream()
         .map(SimRailPoint::getOsmNodeId)
-        .collect(Collectors.toSet());
-      var osmNodeIdsJoined = osmNodeIds.stream()
-        .map(String::valueOf)
-        .collect(Collectors.joining(","));
-      var requestUri = UriComponentsBuilder.fromUriString("https://api.openstreetmap.org/api/0.6/nodes")
-        .queryParam("nodes", osmNodeIdsJoined)
-        .build()
-        .toUri();
-      var request = HttpRequest.newBuilder(requestUri)
-        .GET()
-        .timeout(Duration.ofSeconds(30))
-        .version(HttpClient.Version.HTTP_2)
-        .header("Accept", "application/json")
-        .header("User-Agent", "gh.com/simrailtools/backend tests")
-        .build();
-      var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
-      Assertions.assertEquals(200, response.statusCode());
-      var elements = this.objectMapper.readTree(response.body()).get("elements");
-      for (var element : elements) {
-        var id = element.get("id").asLong();
-        osmNodeIds.remove(id);
-      }
+        .gather(Gatherers.windowFixed(100))
+        .toList();
+      for (var osmNodeIdBatch : osmNodeIdBatches) {
+        var osmNodeIdsJoined = osmNodeIdBatch.stream()
+          .map(String::valueOf)
+          .collect(Collectors.joining(","));
+        var requestUri = UriComponentsBuilder.fromUriString("https://api.openstreetmap.org/api/0.6/nodes")
+          .queryParam("nodes", osmNodeIdsJoined)
+          .build()
+          .toUri();
+        var request = HttpRequest.newBuilder(requestUri)
+          .GET()
+          .timeout(Duration.ofSeconds(30))
+          .version(HttpClient.Version.HTTP_2)
+          .header("Accept", "application/json")
+          .header("User-Agent", "gh.com/simrailtools/backend tests")
+          .build();
+        var response = httpClient.send(request, HttpResponse.BodyHandlers.ofString(StandardCharsets.UTF_8));
+        Assertions.assertEquals(200, response.statusCode());
+        var elements = this.objectMapper.readTree(response.body()).get("elements");
 
-      Assertions.assertTrue(osmNodeIds.isEmpty(), () -> {
-        var missingIdsJoined = osmNodeIds.stream().map(String::valueOf).collect(Collectors.joining(","));
-        return String.format("Founds points with invalid osm node ids: %s", missingIdsJoined);
-      });
+        var unresolvedNodeIds = new ArrayList<>(osmNodeIdBatch);
+        for (var element : elements) {
+          var id = element.get("id").asLong();
+          unresolvedNodeIds.remove(id);
+        }
+
+        Assertions.assertTrue(unresolvedNodeIds.isEmpty(), () -> {
+          var missingIdsJoined = osmNodeIdBatches.stream().map(String::valueOf).collect(Collectors.joining(","));
+          return String.format("Founds points with invalid osm node ids: %s", missingIdsJoined);
+        });
+      }
     }
   }
 
