@@ -37,13 +37,13 @@ import tools.simrail.backend.common.journey.JourneyTransportType;
 public record BoardTransportDto(
   @Schema(description = "The category of the transport")
   @NotNull @NotBlank String category,
-  @Schema(description = "The external category of the transport (for example internal can be RPJ, external IR), null if the same as the internal category", types = "null")
+  @Schema(description = "The external category of the transport (for example internal can be RPJ, external IR), null if the same as the internal category", nullable = true)
   @Nullable String categoryExternal,
   @Schema(description = "The number of the transport")
   @NotNull @NotBlank String number,
-  @Schema(description = "The line of the transport, null in case no line is associated with the transport", types = "null")
+  @Schema(description = "The line of the transport, null in case no line is associated with the transport", nullable = true)
   @Nullable String line,
-  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport", types = "null")
+  @Schema(description = "The label of the transport, for example the marketing name or product name of the transport", nullable = true)
   @Nullable String label,
   @Schema(description = "The higher-level category of the transport")
   @NotNull JourneyTransportType type,
