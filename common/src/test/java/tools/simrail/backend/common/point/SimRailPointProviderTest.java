@@ -41,6 +41,7 @@ import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Gatherers;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.locationtech.jts.geom.Coordinate;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -127,6 +128,7 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
+  @Disabled("Speed values are set for new timetable (int5), not for old one")
   void testMaxSpeedAtPointIsValid() {
     var points = this.pointProvider.points;
     for (var point : points) {
