@@ -128,7 +128,6 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
-  @Disabled("Speed values are set for new timetable (int5), not for old one")
   void testMaxSpeedAtPointIsValid() {
     var points = this.pointProvider.points;
     for (var point : points) {
@@ -223,6 +222,7 @@ public final class SimRailPointProviderTest {
   }
 
   @Test
+  @Disabled("Speed values are set for new timetable (int5), not for old one")
   void testAllPointMappingsHaveAValidMaxSpeed() {
     var speedLimitsPerPoint = new HashMap<UUID, Integer>();
     var trainRuns = TimetableHolder.getDefaultServerTimetable();
