@@ -125,10 +125,7 @@ public class PlatformSignalProviderTest {
       "Zgierz", // wrong platform mapping
       "Łódź Olechów Wschód", // scheduled stop on track 21 (it only has 2 tracks)
       "Łódź Olechów Wiadukt", // scheduled stop on track 11 (it only has 2 tracks)
-      "Łódź Olechów Zachód", // scheduled stop on track 11 (it only has 2 tracks)
-      "Kraków Główny",
-      "Warszawa Wschodnia",
-      "Łódź Żabieniec"
+      "Łódź Olechów Zachód" // scheduled stop on track 11 (it only has 2 tracks)
     );
     var pointsWithMultipleSignalsForSameTrack = Set.of(
       "Żyrardów" // Track 1 Platform 1 can be reached from 3 signals
