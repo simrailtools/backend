@@ -1,6 +1,6 @@
 [versions]
 # plugins
-protobuf = "0.9.6"
+protobuf = "0.10.0"
 spotless = "8.4.0"
 springBoot = "4.0.5"
 downloadTask = "5.7.0"
