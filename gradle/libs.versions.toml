@@ -2,9 +2,9 @@
 # plugins
 protobuf = "0.9.6"
 spotless = "8.4.0"
-springBoot = "4.0.5"
+springBoot = "4.0.6"
 downloadTask = "5.7.0"
-checkstyleTools = "13.4.0"
+checkstyleTools = "13.4.1"
 springDependencyManagement = "1.1.7"
 
 # direct dependencies
@@ -12,7 +12,7 @@ jts = "1.20.0"
 nats = "2.25.2"
 feign = "13.11"
 jackson = "3.1.2"
-lombok = "1.18.44"
+lombok = "1.18.46"
 jspecify = "1.0.0"
 redisson = "4.3.1"
 fuzzywuzzy = "1.4.0"
@@ -22,7 +22,7 @@ springDocOpenApi = "3.0.3"
 # testing
 junit = "6.0.3"
 mockito = "5.23.0"
-testcontainers = "2.0.4"
+testcontainers = "2.0.5"
 
 [libraries]
 # jackson
