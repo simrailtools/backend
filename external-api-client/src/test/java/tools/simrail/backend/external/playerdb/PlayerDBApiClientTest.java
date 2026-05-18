@@ -26,7 +26,6 @@ package tools.simrail.backend.external.playerdb;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Assumptions;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import tools.simrail.backend.external.playerdb.model.PlayerDbResponseWrapper;
 
@@ -55,7 +54,6 @@ public final class PlayerDBApiClientTest {
   }
 
   @Test
-  @Disabled("Bug in upstream API prevents this test from succeeding, see nodecraft/playerdb#58")
   void testSuccessfulXBoxData() {
     var client = PlayerDbApiClient.create(TEST_USER_AGENT);
     var response = Assertions.assertDoesNotThrow(() -> client.getXboxPlayer("2535457121968519"));
@@ -83,7 +81,6 @@ public final class PlayerDBApiClientTest {
   }
 
   @Test
-  @Disabled("Bug in upstream API prevents this test from succeeding, see nodecraft/playerdb#58")
   void testInvalidXBoxId() {
     var client = PlayerDbApiClient.create(TEST_USER_AGENT);
     var response = Assertions.assertDoesNotThrow(() -> client.getXboxPlayer("2535467890123456"));
