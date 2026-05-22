@@ -63,16 +63,19 @@ subprojects {
   }
 
   dependencies {
+    "implementation"(platform(SpringBootPlugin.BOM_COORDINATES))
+    "testImplementation"(platform(rootProject.libs.junitBom))
+
     "compileOnly"(rootProject.libs.lombok)
     "annotationProcessor"(rootProject.libs.lombok)
 
-    "implementation"(platform(SpringBootPlugin.BOM_COORDINATES))
-
-    // testing
     "testImplementation"(rootProject.libs.mockito)
-    "testRuntimeOnly"(rootProject.libs.junitLauncher)
-    "testImplementation"(rootProject.libs.bundles.junit)
     "testImplementation"(rootProject.libs.bundles.testContainers)
+
+    "testImplementation"(rootProject.libs.junitApi)
+    "testImplementation"(rootProject.libs.junitParams)
+    "testImplementation"(rootProject.libs.junitEngine)
+    "testRuntimeOnly"(rootProject.libs.junitLauncher)
   }
 
   tasks.withType<JavaCompile> {

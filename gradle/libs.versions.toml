@@ -20,7 +20,7 @@ protobufJava = "4.34.1"
 springDocOpenApi = "3.0.3"
 
 # testing
-junit = "6.0.3"
+junit = "6.1.0"
 mockito = "5.23.0"
 testcontainers = "2.0.5"
 
@@ -45,10 +45,11 @@ protobufJava = { group = "com.google.protobuf", name = "protobuf-java", version.
 springDocOpenApi = { group = "org.springdoc", name = "springdoc-openapi-starter-webmvc-api", version.ref = "springDocOpenApi" }
 
 # junit
-junitApi = { group = "org.junit.jupiter", name = "junit-jupiter-api", version.ref = "junit" }
-junitParams = { group = "org.junit.jupiter", name = "junit-jupiter-params", version.ref = "junit" }
-junitEngine = { group = "org.junit.jupiter", name = "junit-jupiter-engine", version.ref = "junit" }
-junitLauncher = { group = "org.junit.platform", name = "junit-platform-launcher", version.ref = "junit" }
+junitBom = { module = "org.junit:junit-bom", version.ref = "junit" }
+junitApi = { module = "org.junit.jupiter:junit-jupiter-api" }
+junitParams = { module = "org.junit.jupiter:junit-jupiter-params" }
+junitEngine = { module = "org.junit.jupiter:junit-jupiter-engine" }
+junitLauncher = { module = "org.junit.platform:junit-platform-launcher" }
 
 # general testing
 mockito = { group = "org.mockito", name = "mockito-junit-jupiter", version.ref = "mockito" }
@@ -68,5 +69,4 @@ downloadTask = { id = "de.undercouch.download", version.ref = "downloadTask" }
 springDependencyManagement = { id = "io.spring.dependency-management", version.ref = "springDependencyManagement" }
 
 [bundles]
-junit = ["junitApi", "junitParams", "junitEngine"]
 testContainers = ["testContainers", "testContainersJunit"]
