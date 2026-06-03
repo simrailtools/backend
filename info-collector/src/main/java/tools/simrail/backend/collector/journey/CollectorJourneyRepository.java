@@ -47,26 +47,21 @@ interface CollectorJourneyRepository extends JourneyRepository {
    */
   @NonNull
   @Query(value = """
-    WITH first_playable AS (
+    SELECT j.id AS journey_id
+    FROM sit_journey j
+    JOIN LATERAL (
       SELECT
-        e.journey_id,
-        e.id AS event_id,
-        e.event_index,
         e.scheduled_time,
         e.cancelled,
         e.realtime_time_type
-      FROM (
-        SELECT e.*, ROW_NUMBER() OVER (PARTITION BY e.journey_id ORDER BY e.event_index) AS rn
-        FROM sit_journey_event e
-        WHERE e.in_playable_border = TRUE
-      ) e
-      WHERE e.rn = 1
-    )
-    SELECT j.id AS journey_id
-    FROM sit_journey j
-    JOIN first_playable fp ON fp.journey_id = j.id
+      FROM sit_journey_event e
+      WHERE e.journey_id = j.id AND e.in_playable_border = TRUE
+      ORDER BY e.event_index
+      LIMIT 1
+    ) fp ON TRUE
     WHERE j.server_id = :serverId
       AND j.cancelled = FALSE
+      AND j.first_seen_time IS NULL
       AND fp.cancelled = FALSE
       AND fp.realtime_time_type <> 'REAL'
       AND fp.scheduled_time < :cutoff
