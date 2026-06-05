@@ -67,7 +67,7 @@ public final class SimRailPointProviderTest {
   @Test
   void testPointsWereLoaded() {
     var points = this.pointProvider.points;
-    Assertions.assertEquals(786, points.size());
+    Assertions.assertEquals(820, points.size());
   }
 
   @Test
@@ -237,7 +237,7 @@ public final class SimRailPointProviderTest {
       }
     }
 
-    var invalid = new StringJoiner(", ");
+    var invalid = new StringJoiner("\n");
     for (var entry : speedLimitsPerPoint.entrySet()) {
       var pointId = entry.getKey();
       var point = this.pointProvider.findPointByIntId(pointId).orElseThrow();

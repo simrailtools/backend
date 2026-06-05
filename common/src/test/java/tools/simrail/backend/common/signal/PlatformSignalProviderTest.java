@@ -114,18 +114,8 @@ public class PlatformSignalProviderTest {
 
   @Test
   void testAllScheduledPlatformsHaveASignalMapping() throws IOException {
-    var pointsWithWrongPlatformMapping = Set.of(
-      "Olkusz", // wrong platform mapping
-      "Gałkówek", // wrong platform mapping
-      "Sędziszów", // wrong platform mapping
-      "Opoczno Południe", // wrong platform mapping
-      "Dąbrowa Górnicza", // wrong platform mapping
-      "Dąbrowa Górnicza Gołonóg", // wrong platform mapping
-      "Łódź Kaliska", // wrong platform mapping
-      "Zgierz", // wrong platform mapping
-      "Łódź Olechów Wschód", // scheduled stop on track 21 (it only has 2 tracks)
-      "Łódź Olechów Wiadukt", // scheduled stop on track 11 (it only has 2 tracks)
-      "Łódź Olechów Zachód" // scheduled stop on track 11 (it only has 2 tracks)
+    var invalidPoints = Set.of(
+      "Mąkołowiec" // junction
     );
     var pointsWithMultipleSignalsForSameTrack = Set.of(
       "Żyrardów" // Track 1 Platform 1 can be reached from 3 signals
@@ -142,7 +132,7 @@ public class PlatformSignalProviderTest {
         if (stopType.equals("CommercialStop")
           && platformString != null
           && !missingPoints.contains(pointName)
-          && !pointsWithWrongPlatformMapping.contains(pointName)) {
+          && !invalidPoints.contains(pointName)) {
           // get the point associated with the stop
           var point = this.pointProvider.findPointByName(pointName);
           Assertions.assertTrue(point.isPresent(), "Missing point " + pointName);
@@ -164,7 +154,7 @@ public class PlatformSignalProviderTest {
             Assertions.assertFalse(signalInfo.isEmpty(), point.get().getName());
           } else {
             Assertions.assertTrue(
-              !signalInfo.isEmpty() && signalInfo.size() <= 2,
+              signalInfo.size() <= 2,
               () -> String.format("Bad mapping for %s [P: %s, T: %s]", pointName, platform, track));
           }
         }

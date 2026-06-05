@@ -24,6 +24,17 @@
     ]
   },
   {
+    "name": "Mysłowice",
+    "point_names": [
+      "Mysłowice"
+    ],
+    "in_border_if_next": [
+      "Stawiska",
+      "Katowice Zawodzie",
+      "Katowice Szopienice Południowe"
+    ]
+  },
+  {
     "name": "Sosnowiec Maczki",
     "point_names": [
       "Sosnowiec Maczki"

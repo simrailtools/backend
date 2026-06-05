@@ -42,7 +42,6 @@ Gniewiecin
 Warszawa Zachodnia Szczęśliwicka
 Warszawa Czyste
 Katowice Tow. KTC
-Podchojny
 Kalina
 Staszic
 Droniowiczki
@@ -101,3 +100,4 @@ Mizerów
 Hajduki
 Ruda Wirek
 Łódź Kaliska PZS R219-R227
+Zieliniec

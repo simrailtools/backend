@@ -3,7 +3,7 @@
     "name": "Częstochowa",
     "id": "e3e67982-9b50-492e-8738-45670ea59346",
     "prefix": null,
-    "max_speed": 250,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Częstochowa"
@@ -775,7 +775,7 @@
     "name": "Katowice Zawodzie",
     "id": "d543b681-7dbf-40cd-9088-baf83f3a867b",
     "prefix": "KZ",
-    "max_speed": 90,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Katowice Zawodzie"
@@ -1165,7 +1165,7 @@
     "name": "Tychy Miasto",
     "id": "730cb3dd-e7ca-42d2-afc3-5b7ff91e3b97",
     "prefix": null,
-    "max_speed": 60,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Tychy Miasto"
@@ -1392,28 +1392,33 @@
     "names": [
       "Warszawa Zachodnia",
       "Warszawa Zach. R19",
-      "Warszawa Zach. R10"
+      "Warszawa Zach. R10",
+      "Warszawa Zachodnia peron 8"
     ],
     "bb": [
       [
-        20.9595499865,
-        52.217946677
+        20.9598498534,
+        52.2177028269
       ],
       [
-        20.9585437097,
-        52.2199478025
+        20.958586952,
+        52.2201499263
       ],
       [
-        20.9736943675,
-        52.222807168
+        20.9610731921,
+        52.2231542093
       ],
       [
-        20.9747006443,
-        52.2208061713
+        20.9720455225,
+        52.2232012427
       ],
       [
-        20.9595499865,
-        52.217946677
+        20.9735225815,
+        52.2210198891
+      ],
+      [
+        20.9598498534,
+        52.2177028269
       ]
     ],
     "country": "POL",
@@ -2103,7 +2108,7 @@
     "name": "Kozłów",
     "id": "27f5db2c-07a1-4c23-aaa5-dff759f687ba",
     "prefix": "Kz",
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Kozłów"
@@ -2377,7 +2382,7 @@
     "name": "Kraków Główny",
     "id": "44af7a07-1f5b-4700-b140-576d9d48e0ef",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kraków Główny",
@@ -2534,7 +2539,7 @@
     "name": "Zabrze",
     "id": "52238119-4463-4169-8ca1-aa7ac7585a42",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Zabrze"
@@ -2573,7 +2578,7 @@
     "name": "Gliwice",
     "id": "2168c889-d17b-471a-8b26-8730d5ce1f7a",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Gliwice"
@@ -3081,7 +3086,7 @@
     "name": "Koniecpol",
     "id": "e963d23e-9f33-4de1-bdf2-bd6581468c98",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 110,
     "stop_place": false,
     "names": [
       "Koniecpol"
@@ -3510,7 +3515,7 @@
     "name": "Lubliniec",
     "id": "9b2506bb-afc9-4e3e-9ea5-f92460cd38ff",
     "prefix": null,
-    "max_speed": 250,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Lubliniec"
@@ -3900,7 +3905,7 @@
     "name": "Brzeg",
     "id": "1c738595-1c8b-42a6-9d6b-72f19766177d",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Brzeg"
@@ -4097,7 +4102,7 @@
     "name": "Kielce Herbskie",
     "id": "a93045e7-8d86-4eb5-ad31-2c9f0fd58f8b",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Kielce Herbskie Khb",
@@ -4335,7 +4340,7 @@
     "name": "Czarnca",
     "id": "c698e0ba-040a-4181-ae74-14839b8b04f4",
     "prefix": "Cz",
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Czarnca",
@@ -4571,7 +4576,7 @@
     "name": "Sosnowiec Południowy",
     "id": "15522d10-cc7d-4d08-ba98-0d15034a8ca3",
     "prefix": "Spł1",
-    "max_speed": 30,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Sosnowiec Południowy"
@@ -4610,7 +4615,7 @@
     "name": "Kielce Białogon",
     "id": "34299eb7-d6c8-4724-8b56-b82156202f55",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kielce Białogon"
@@ -4649,7 +4654,7 @@
     "name": "Kielce Słowik",
     "id": "f233abf9-df8e-4f60-9562-9a45f4fbc284",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Kielce Słowik"
@@ -4688,7 +4693,7 @@
     "name": "Sitkówka Nowiny",
     "id": "093cab0a-102a-4faf-8ef7-be9794684495",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Sitkówka Nowiny"
@@ -4727,7 +4732,7 @@
     "name": "Wolica",
     "id": "3899e3dc-e31f-4bc4-b27d-d2d3a6b903b3",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Wolica"
@@ -4766,7 +4771,7 @@
     "name": "Radkowice",
     "id": "5919818a-2804-4c27-980c-a1c5fdaf9209",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Radkowice"
@@ -4805,7 +4810,7 @@
     "name": "Sobków",
     "id": "6bb14771-53cd-47cc-9e35-89a41fb1347d",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Sobków"
@@ -4844,7 +4849,7 @@
     "name": "Miąsowa",
     "id": "e3bb9a07-03fe-4a12-98c5-2f154ac63671",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Miąsowa"
@@ -4883,7 +4888,7 @@
     "name": "Jędrzejów",
     "id": "57bbcc0c-3bd8-458e-8550-2c6bfb5a69fa",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Jędrzejów"
@@ -4922,7 +4927,7 @@
     "name": "Potok",
     "id": "c1421758-de8d-4e66-b670-3f7bd5ab9e6f",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Potok"
@@ -5393,7 +5398,7 @@
     "name": "Bukowno",
     "id": "b04b15b7-66c0-4284-a54a-51482ac49607",
     "prefix": "Bo",
-    "max_speed": 50,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Bukowno"
@@ -5510,7 +5515,7 @@
     "name": "Dąbrowa Górnicza Wschodnia",
     "id": "b6fe5ca4-1f8a-4e72-88a5-9a9fd701202f",
     "prefix": "DW",
-    "max_speed": 70,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Dąbrowa Górnicza Wschodnia"
@@ -7240,7 +7245,8 @@
     "max_speed": 140,
     "stop_place": false,
     "names": [
-      "Radom"
+      "Radom",
+      "Radom Główny"
     ],
     "bb": [
       [
@@ -7315,7 +7321,7 @@
     "name": "Rożki",
     "id": "b21d33a5-e75e-4875-bee1-88d7adff3e75",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 110,
     "stop_place": false,
     "names": [
       "Rożki"
@@ -8700,7 +8706,7 @@
     "name": "Kluczbork",
     "id": "e0f6c66e-591e-45eb-9827-50c9dbf23129",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Kluczbork"
@@ -9090,7 +9096,7 @@
     "name": "Oleśnica",
     "id": "de49caf5-7a28-420f-892d-3c8b1d532b25",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Oleśnica"
@@ -9558,7 +9564,7 @@
     "name": "Kamieniec Ząbkowicki",
     "id": "27568ebe-5566-4744-a555-0f4d7e99ca29",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 80,
     "stop_place": false,
     "names": [
       "Kamieniec Ząbkowicki"
@@ -10260,7 +10266,7 @@
     "name": "Kędzierzyn-Koźle",
     "id": "b5716508-6eed-4792-ad1e-b12e7a8017b6",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 110,
     "stop_place": false,
     "names": [
       "Kędzierzyn-Koźle",
@@ -10457,7 +10463,7 @@
     "name": "Gliwice Łabędy",
     "id": "efc79278-93ef-479d-935c-c38ff31ac8f5",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 80,
     "stop_place": false,
     "names": [
       "Gliwice Łabędy"
@@ -10888,7 +10894,7 @@
     "name": "Jaworzno Szczakowa",
     "id": "d3236b53-3d7d-4321-b84e-b66db9dfebae",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Jaworzno Szczakowa"
@@ -10967,7 +10973,7 @@
     "name": "Dęba Opoczyńska",
     "id": "82b051f5-893b-4359-a673-2ddc3eb49ed7",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Dęba Opoczyńska"
@@ -11593,7 +11599,7 @@
     "name": "Piława Górna",
     "id": "52fa80fc-2452-49dd-b074-97e2e588a6b2",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 80,
     "stop_place": false,
     "names": [
       "Piława Górna"
@@ -11908,7 +11914,7 @@
     "name": "Trzebinia",
     "id": "a0453219-138c-4b07-a1ac-57d8afd33af3",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Trzebinia",
@@ -11948,7 +11954,7 @@
     "name": "Balin",
     "id": "d1fd3ba0-1ec9-4fc7-963f-1c3326605831",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Balin"
@@ -11987,7 +11993,7 @@
     "name": "Jaworzno Ciężkowice",
     "id": "31243441-4538-400a-9589-db10ce53f45e",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Jaworzno Ciężkowice"
@@ -12026,7 +12032,7 @@
     "name": "Mysłowice",
     "id": "7f491ece-85a8-4288-bdc2-17a15f4e1805",
     "prefix": "MW",
-    "max_speed": 90,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Mysłowice"
@@ -12065,7 +12071,7 @@
     "name": "Sosnowiec Jęzor",
     "id": "93d4e9c2-eff6-48d6-8a51-dc83d7e809e7",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Sosnowiec Jęzor"
@@ -12104,7 +12110,7 @@
     "name": "Dulowa",
     "id": "25faa517-01d4-482b-b06d-dd7ea31d36d3",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Dulowa"
@@ -12143,7 +12149,7 @@
     "name": "Wola Filipowska",
     "id": "fa2968eb-f355-43c4-83ba-51111dc9a794",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Wola Filipowska"
@@ -12182,7 +12188,7 @@
     "name": "Krzeszowice",
     "id": "ac21c7f2-8749-456a-84bc-96ee7b482f11",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Krzeszowice"
@@ -12221,7 +12227,7 @@
     "name": "Rudawa",
     "id": "970fdce0-740b-486d-ab33-bb66f8c5ec8d",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Rudawa"
@@ -12260,7 +12266,7 @@
     "name": "Zabierzów",
     "id": "4ee8bc40-677b-48e0-b196-219875abc94e",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Zabierzów"
@@ -12296,12 +12302,13 @@
     }
   },
   {
-    "name": "Kraków Business Park",
+    "name": "Zabierzów Rząska",
     "id": "d145c84f-44be-4306-9aca-36274e79dea9",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
+      "Zabierzów Rząska",
       "Kraków Business Park"
     ],
     "bb": [
@@ -12338,7 +12345,7 @@
     "name": "Kraków Mydlniki Wapiennik",
     "id": "a1b46356-7764-4796-a574-492adcabef9e",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Kraków Mydlniki Wapiennik"
@@ -12377,7 +12384,7 @@
     "name": "Kraków Mydlniki",
     "id": "6a94abda-3132-44c6-a955-facae2024ded",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kraków Mydlniki"
@@ -12416,7 +12423,7 @@
     "name": "Kraków Bronowice",
     "id": "3e9d6076-55cc-456a-8ea5-287261559508",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Kraków Bronowice"
@@ -15009,7 +15016,8 @@
     "stop_place": false,
     "names": [
       "Tarnowskie Góry",
-      "Tarnowskie Góry TGE"
+      "Tarnowskie Góry TGE",
+      "Tarnowskie Góry TGD C"
     ],
     "bb": [
       [
@@ -15358,7 +15366,7 @@
     "name": "Toruń Główny",
     "id": "4fd83eca-80d4-481d-af9e-e3e5347cdf15",
     "prefix": null,
-    "max_speed": 40,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Toruń Główny"
@@ -16179,7 +16187,7 @@
     "name": "Działdowo",
     "id": "2f7496f0-bedf-4d4b-b9dd-d8f77bfa1d97",
     "prefix": null,
-    "max_speed": 150,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Działdowo"
@@ -16218,7 +16226,7 @@
     "name": "Pszczyna",
     "id": "37d71cb7-bdf5-45bc-b51b-a41e6ca25b00",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Pszczyna"
@@ -16335,7 +16343,7 @@
     "name": "Poronin",
     "id": "5d3e6dca-34e2-4bad-bdd1-6c480e44b44c",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Poronin"
@@ -16374,7 +16382,7 @@
     "name": "Nasielsk",
     "id": "00428549-3b84-4593-b5b8-08ad9f9bbc13",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Nasielsk"
@@ -16491,7 +16499,7 @@
     "name": "Sucha Beskidzka Zamek",
     "id": "34708cc2-e2b0-43cd-9ec3-fa8b1ce3c6fc",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 140,
     "stop_place": true,
     "names": [
       "Sucha Beskidzka Zamek"
@@ -16801,13 +16809,14 @@
     }
   },
   {
-    "name": "Lublin",
+    "name": "Lublin Główny",
     "id": "c2d8ac38-cd9f-4ffd-a6ae-e7af5cb91e8c",
     "prefix": null,
     "max_speed": 140,
     "stop_place": false,
     "names": [
-      "Lublin"
+      "Lublin",
+      "Lublin Główny"
     ],
     "bb": [
       [
@@ -17195,7 +17204,7 @@
     "name": "Jelenia Góra",
     "id": "bd40d9b7-0cb5-4a08-a31c-0a23da18d13c",
     "prefix": null,
-    "max_speed": 250,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Jelenia Góra"
@@ -18016,7 +18025,7 @@
     "name": "Kalwaria Zebrzydowska Lanckorona",
     "id": "ed02b144-a506-46bf-a6fb-a428a76ccbe3",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Kalwaria Zebrzydowska Lanckorona"
@@ -18367,7 +18376,7 @@
     "name": "Mława",
     "id": "ff4306c3-3766-484d-a8a3-9d99c4d6b6d8",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Mława"
@@ -18657,7 +18666,7 @@
     "name": "Kraków Zabłocie",
     "id": "1b819b66-77cb-4e9f-a4be-0653cc2ba459",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kraków Zabłocie"
@@ -18852,7 +18861,7 @@
     "name": "Prabuty",
     "id": "44b62c49-88a1-4ae0-bf40-afc2d637a39c",
     "prefix": null,
-    "max_speed": 150,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Prabuty"
@@ -18969,7 +18978,7 @@
     "name": "Gdańsk Oliwa",
     "id": "dad0bf10-0332-4841-ae9c-cc5de34b84fd",
     "prefix": null,
-    "max_speed": 250,
+    "max_speed": 140,
     "stop_place": true,
     "names": [
       "Gdańsk Oliwa"
@@ -19320,7 +19329,7 @@
     "name": "Wałbrzych Główny",
     "id": "c361939a-1411-4f79-916f-c15ed4510753",
     "prefix": null,
-    "max_speed": 250,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Wałbrzych Główny"
@@ -19439,7 +19448,7 @@
     "name": "Jaworzyna Śląska",
     "id": "d24a0774-f880-4201-854f-7fe6ee93d2cd",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Jaworzyna Śląska"
@@ -19759,7 +19768,7 @@
     "name": "Legionowo",
     "id": "45fd17a8-f7fd-469b-8e94-e0ba4ce8b4ed",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Legionowo"
@@ -19798,7 +19807,7 @@
     "name": "Puławy",
     "id": "f30bae33-377a-4ba1-b477-62ed2ad1cae7",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Puławy"
@@ -20151,7 +20160,7 @@
     "name": "Modlin",
     "id": "737f4608-3179-4254-b4ee-602f50fe49a7",
     "prefix": null,
-    "max_speed": 130,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Modlin"
@@ -20385,7 +20394,7 @@
     "name": "Kraków Płaszów",
     "id": "945fcbd7-9775-4473-b061-df6d069687a1",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kraków Płaszów",
@@ -20426,7 +20435,7 @@
     "name": "Maków Podhalański",
     "id": "e73f5dbd-f1ab-4f20-b7ff-c975284795d8",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Maków Podhalański"
@@ -20465,7 +20474,7 @@
     "name": "Pruszcz Gdański",
     "id": "f076dc5a-5fd6-4e42-898d-07ab517417a7",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Pruszcz Gdański PZS R73-75",
@@ -21837,7 +21846,7 @@
     "name": "Mszczonów",
     "id": "fce164ce-4767-4930-8e5a-66cfef48f8cb",
     "prefix": "Ms",
-    "max_speed": 70,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Mszczonów"
@@ -22782,7 +22791,7 @@
     "name": "Tarczyn",
     "id": "6108a34e-c9b5-46b5-91d3-70711dec2ad2",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Tarczyn"
@@ -22864,6 +22873,7 @@
     "max_speed": 120,
     "stop_place": false,
     "names": [
+      "Wrocław Brochów",
       "Wrocław Brochów Wbb",
       "Wrocław Brochów Wbaf",
       "Wrocław Brochów Wbbe",
@@ -24755,7 +24765,7 @@
     "name": "Szczecin Port Centralny",
     "id": "4fc8d396-32a7-431f-ab66-d242221af09b",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Szczecin Port Centralny"
@@ -24806,7 +24816,7 @@
     "name": "Szczecin Główny",
     "id": "56eefc52-93a1-417c-825a-272f770698b1",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Szczecin Główny"
@@ -24923,7 +24933,7 @@
     "name": "Stargard",
     "id": "62a1e0bf-dc26-4112-9ca4-2d739dad0a88",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Stargard Rozrz",
@@ -24971,7 +24981,7 @@
     "name": "Poznań Wschód",
     "id": "180f34f2-e3e2-405c-8dd1-2a665ae735cc",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Poznań Wschód"
@@ -25166,7 +25176,7 @@
     "name": "Krzyż",
     "id": "d99cab00-b021-4e18-8ef1-cb6436d18851",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Krzyż"
@@ -25788,7 +25798,7 @@
     "name": "Drzewica",
     "id": "f724d10c-482c-4c81-a4e9-f01127a92507",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 110,
     "stop_place": false,
     "names": [
       "Drzewica"
@@ -26022,7 +26032,7 @@
     "name": "Przysucha",
     "id": "5eebdfd0-6cf8-4840-902a-5735219ca2b5",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 110,
     "stop_place": false,
     "names": [
       "Przysucha"
@@ -26451,7 +26461,7 @@
     "name": "Zaryń",
     "id": "9d42c826-9854-47b6-bb09-8ce9ca293ed3",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Zaryń"
@@ -26490,7 +26500,7 @@
     "name": "Inowrocław Rąbinek",
     "id": "1692d3b5-96b8-4830-8bb9-fff4e33bd7d3",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Inowrocław Rąbinek"
@@ -26607,7 +26617,7 @@
     "name": "Pruszcz Pomorski",
     "id": "4a53eb00-0f71-4a9f-b950-13ae548b2019",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Pruszcz Pomorski"
@@ -26763,7 +26773,7 @@
     "name": "Zduńska Wola Karsznice",
     "id": "045a0f59-e821-4338-a6b8-348bdd44b03e",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 80,
     "stop_place": false,
     "names": [
       "Zduńska Wola Karsznice"
@@ -27718,7 +27728,7 @@
     "name": "Gdańsk Port Północny",
     "id": "9bee1a8e-bd78-424b-829c-f6ec419f8947",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 80,
     "stop_place": false,
     "names": [
       "Gdańsk Port Północny",
@@ -30647,6 +30657,7 @@
     "max_speed": 120,
     "stop_place": false,
     "names": [
+      "Gdynia Port",
       "Gdynia Port GPA",
       "Gdynia Port GPB"
     ],
@@ -31174,6 +31185,1368 @@
     "position": {
       "lat": 53.7306761,
       "lng": 18.9333904
+    }
+  },
+  {
+    "name": "Sulejówek",
+    "id": "62395023-628c-44e2-a6e7-f6139eb1ead1",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Sulejówek"
+    ],
+    "bb": [
+      [
+        21.2800948959,
+        52.246537939
+      ],
+      [
+        21.2734994312,
+        52.2487413163
+      ],
+      [
+        21.2738013831,
+        52.2490801131
+      ],
+      [
+        21.2803968479,
+        52.2468767527
+      ],
+      [
+        21.2800948959,
+        52.246537939
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3402180090,
+    "uic_ref": "5103654",
+    "position": {
+      "lat": 52.2477849,
+      "lng": 21.2769579
+    }
+  },
+  {
+    "name": "Czachówek Górny",
+    "id": "ecc81505-90a7-49a6-ab89-99b6e2cd0426",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": true,
+    "names": [
+      "Czachówek Górny"
+    ],
+    "bb": [
+      [
+        21.0779482024,
+        51.9667709939
+      ],
+      [
+        21.0769007941,
+        51.968559283
+      ],
+      [
+        21.0774935142,
+        51.9686910569
+      ],
+      [
+        21.0785409224,
+        51.9669027731
+      ],
+      [
+        21.0779482024,
+        51.9667709939
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2499395831,
+    "uic_ref": "5100707",
+    "position": {
+      "lat": 51.9677114,
+      "lng": 21.0777261
+    }
+  },
+  {
+    "name": "Mysłowice Wesoła",
+    "id": "72ceb637-d2f0-46c5-b340-68371edfa894",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Mysłowice Wesoła"
+    ],
+    "bb": [
+      [
+        19.0780498998,
+        50.1760315699
+      ],
+      [
+        19.1064166071,
+        50.1760315699
+      ],
+      [
+        19.1064166071,
+        50.1812258237
+      ],
+      [
+        19.0780498998,
+        50.1812258237
+      ],
+      [
+        19.0780498998,
+        50.1760315699
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 9731051342,
+    "uic_ref": null,
+    "position": {
+      "lat": 50.1784602,
+      "lng": 19.0951874
+    }
+  },
+  {
+    "name": "Węgliniec",
+    "id": "2a5fb21e-6d46-4185-ae9a-65f16e26de4b",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Węgliniec"
+    ],
+    "bb": [
+      [
+        15.2353654478,
+        51.2873650689
+      ],
+      [
+        15.2146656461,
+        51.2896961658
+      ],
+      [
+        15.2156299562,
+        51.2930451254
+      ],
+      [
+        15.2363297579,
+        51.2907141986
+      ],
+      [
+        15.2353654478,
+        51.2873650689
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 410697138,
+    "uic_ref": "5105180",
+    "position": {
+      "lat": 51.2901013,
+      "lng": 15.2229659
+    }
+  },
+  {
+    "name": "Wrzosów",
+    "id": "6f9ec049-08c4-4e74-ae5c-3be1ed709508",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Wrzosów"
+    ],
+    "bb": [
+      [
+        21.4857975721,
+        52.1838375892
+      ],
+      [
+        21.47935447,
+        52.1845793849
+      ],
+      [
+        21.4794725835,
+        52.1849650433
+      ],
+      [
+        21.4859156856,
+        52.1842232539
+      ],
+      [
+        21.4857975721,
+        52.1838375892
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2181024820,
+    "uic_ref": "5104141",
+    "position": {
+      "lat": 52.1843862,
+      "lng": 21.4826932
+    }
+  },
+  {
+    "name": "Rzeszów Główny",
+    "id": "43e180d3-f630-4ae6-a287-f757b78dc9ae",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Rzeszów Główny"
+    ],
+    "bb": [
+      [
+        22.0012145529,
+        50.0420219191
+      ],
+      [
+        22.0009605736,
+        50.0439578119
+      ],
+      [
+        22.0140681144,
+        50.0446670369
+      ],
+      [
+        22.0143220937,
+        50.0427311727
+      ],
+      [
+        22.0012145529,
+        50.0420219191
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3438299348,
+    "uic_ref": "5100229",
+    "position": {
+      "lat": 50.0429915,
+      "lng": 22.0060864
+    }
+  },
+  {
+    "name": "Józefin",
+    "id": "3063c4af-f075-40ee-ac08-a2ec8c7c6461",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Józefin"
+    ],
+    "bb": [
+      [
+        21.3345106051,
+        52.2284544975
+      ],
+      [
+        21.331815351,
+        52.2293577269
+      ],
+      [
+        21.3320491642,
+        52.2296194782
+      ],
+      [
+        21.3347444182,
+        52.2287162542
+      ],
+      [
+        21.3345106051,
+        52.2284544975
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 11264480128,
+    "uic_ref": "5103423",
+    "position": {
+      "lat": 52.2290465,
+      "lng": 21.3332903
+    }
+  },
+  {
+    "name": "Pisary",
+    "id": "460b5452-da1f-44b0-b9bf-a7ddb1a7a275",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Pisary"
+    ],
+    "bb": [
+      [
+        19.6835148291,
+        50.1283892392
+      ],
+      [
+        19.6818564383,
+        50.1286157027
+      ],
+      [
+        19.6819121914,
+        50.1287834919
+      ],
+      [
+        19.6835705822,
+        50.1285570293
+      ],
+      [
+        19.6835148291,
+        50.1283892392
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 12604303704,
+    "uic_ref": "5101903",
+    "position": {
+      "lat": 50.1285264,
+      "lng": 19.6831842
+    }
+  },
+  {
+    "name": "Mnichów",
+    "id": "8ff0bea1-e67f-49b9-9d98-fc57dfa1e1f3",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Mnichów"
+    ],
+    "bb": [
+      [
+        20.3325122147,
+        50.7068854711
+      ],
+      [
+        20.3321287561,
+        50.707099572
+      ],
+      [
+        20.3349542146,
+        50.7091290243
+      ],
+      [
+        20.3353376732,
+        50.7089149326
+      ],
+      [
+        20.3325122147,
+        50.7068854711
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 13408909856,
+    "uic_ref": "5102360",
+    "position": {
+      "lat": 50.7078946,
+      "lng": 20.3336138
+    }
+  },
+  {
+    "name": "Chrzanów",
+    "id": "0b8a4da3-e1ce-4671-9e1b-f20ec3449acc",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": false,
+    "names": [
+      "Chrzanów"
+    ],
+    "bb": [
+      [
+        19.3941270755,
+        50.1300472465
+      ],
+      [
+        19.3933170259,
+        50.1305585833
+      ],
+      [
+        19.4011485015,
+        50.1356565634
+      ],
+      [
+        19.4019585511,
+        50.1351452811
+      ],
+      [
+        19.3941270755,
+        50.1300472465
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1713216893,
+    "uic_ref": "5100728",
+    "position": {
+      "lat": 50.1332834,
+      "lng": 19.3982012
+    }
+  },
+  {
+    "name": "Kraków Łobzów",
+    "id": "471610fb-130d-44bc-8933-12a1f7e26d22",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Kraków Łobzów"
+    ],
+    "bb": [
+      [
+        19.9191982531,
+        50.0817221623
+      ],
+      [
+        19.9162648189,
+        50.0818078254
+      ],
+      [
+        19.9162915358,
+        50.0821845473
+      ],
+      [
+        19.9192249699,
+        50.0820988847
+      ],
+      [
+        19.9191982531,
+        50.0817221623
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1369877098,
+    "uic_ref": "5101633",
+    "position": {
+      "lat": 50.0819461,
+      "lng": 19.9177264
+    }
+  },
+  {
+    "name": "Poznań Piątkowo",
+    "id": "cc28f6df-5a55-4a54-a19f-89709a4571e8",
+    "prefix": null,
+    "max_speed": 70,
+    "stop_place": false,
+    "names": [
+      "Poznań Piątkowo"
+    ],
+    "bb": [
+      [
+        16.8882052379,
+        52.4642847106
+      ],
+      [
+        16.8701758727,
+        52.4645723524
+      ],
+      [
+        16.8702224559,
+        52.4656561479
+      ],
+      [
+        16.888251821,
+        52.4653685132
+      ],
+      [
+        16.8882052379,
+        52.4642847106
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 7096269528,
+    "uic_ref": null,
+    "position": {
+      "lat": 52.4648501,
+      "lng": 16.8807292
+    }
+  },
+  {
+    "name": "Mińsk Mazowiecki",
+    "id": "99e068d9-2a8a-4466-aa84-38c142d8618f",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": false,
+    "names": [
+      "Mińsk Mazowiecki"
+    ],
+    "bb": [
+      [
+        21.5620521037,
+        52.1738695192
+      ],
+      [
+        21.5426848922,
+        52.1763383358
+      ],
+      [
+        21.5431591344,
+        52.1777373919
+      ],
+      [
+        21.5625263459,
+        52.1752686531
+      ],
+      [
+        21.5620521037,
+        52.1738695192
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3456120442,
+    "uic_ref": "5102293",
+    "position": {
+      "lat": 52.1758629,
+      "lng": 21.5522194
+    }
+  },
+  {
+    "name": "Sulejówek Miłosna",
+    "id": "2bb2c839-a5bd-44be-8d84-774e3916c0c8",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": false,
+    "names": [
+      "Sulejówek Miłosna"
+    ],
+    "bb": [
+      [
+        21.3082902046,
+        52.2370673695
+      ],
+      [
+        21.2930206215,
+        52.2420802019
+      ],
+      [
+        21.2935137166,
+        52.2426434019
+      ],
+      [
+        21.3087832997,
+        52.2376306331
+      ],
+      [
+        21.3082902046,
+        52.2370673695
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2181018756,
+    "uic_ref": "5103424",
+    "position": {
+      "lat": 52.2406542,
+      "lng": 21.2986542
+    }
+  },
+  {
+    "name": "Herby Nowe",
+    "id": "c60cad49-d3a8-4d35-894e-da18a6de706d",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": false,
+    "names": [
+      "Herby Nowe GT 1-26"
+    ],
+    "bb": [
+      [
+        18.8549970425,
+        50.7440175209
+      ],
+      [
+        18.8456546128,
+        50.759387275
+      ],
+      [
+        18.8487454563,
+        50.7601391862
+      ],
+      [
+        18.8580878859,
+        50.744769679
+      ],
+      [
+        18.8549970425,
+        50.7440175209
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3206327164,
+    "uic_ref": "5100111",
+    "position": {
+      "lat": 50.7472918,
+      "lng": 18.8545491
+    }
+  },
+  {
+    "name": "Warszawa Wola Grzybowska",
+    "id": "14b5464f-7a01-4c51-89ff-05c16d3211fc",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Warszawa Wola Grzybowska"
+    ],
+    "bb": [
+      [
+        21.2540495418,
+        52.2524932338
+      ],
+      [
+        21.2476105958,
+        52.2527973083
+      ],
+      [
+        21.2476522288,
+        52.2531276999
+      ],
+      [
+        21.2540911748,
+        52.2528236277
+      ],
+      [
+        21.2540495418,
+        52.2524932338
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1883105343,
+    "uic_ref": "5104098",
+    "position": {
+      "lat": 52.2528227,
+      "lng": 21.2508564
+    }
+  },
+  {
+    "name": "Zebrzydowice",
+    "id": "3059bbbb-4e11-485e-b4f5-b23b212f9c6a",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Zebrzydowice"
+    ],
+    "bb": [
+      [
+        18.6272825309,
+        49.8686416292
+      ],
+      [
+        18.6055608288,
+        49.8733882399
+      ],
+      [
+        18.6056491741,
+        49.8746512014
+      ],
+      [
+        18.6160050154,
+        49.8753828181
+      ],
+      [
+        18.6209355862,
+        49.873909202
+      ],
+      [
+        18.6279973396,
+        49.87001341
+      ],
+      [
+        18.6272825309,
+        49.8686416292
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3525511368,
+    "uic_ref": "5100264",
+    "position": {
+      "lat": 49.8715401,
+      "lng": 18.6216353
+    }
+  },
+  {
+    "name": "Przemyśl Główny",
+    "id": "76c0c344-6393-40ff-bc5b-f25baa75e08d",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Przemyśl Główny"
+    ],
+    "bb": [
+      [
+        22.7725229377,
+        49.7830845871
+      ],
+      [
+        22.7898390695,
+        49.7830845871
+      ],
+      [
+        22.7898390695,
+        49.7845572115
+      ],
+      [
+        22.7725229377,
+        49.7845572115
+      ],
+      [
+        22.7725229377,
+        49.7830845871
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 560182965,
+    "uic_ref": "5100234",
+    "position": {
+      "lat": 49.7836100,
+      "lng": 22.7801519
+    }
+  },
+  {
+    "name": "Halinów",
+    "id": "25fc3031-f11e-43b1-8ca4-c61692e5c24d",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Halinów"
+    ],
+    "bb": [
+      [
+        21.352907486,
+        52.2221343645
+      ],
+      [
+        21.34702387,
+        52.2241213602
+      ],
+      [
+        21.3474826092,
+        52.2246310877
+      ],
+      [
+        21.3533662251,
+        52.2226441148
+      ],
+      [
+        21.352907486,
+        52.2221343645
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 36171867,
+    "uic_ref": "5101343",
+    "position": {
+      "lat": 52.2233842,
+      "lng": 21.3502762
+    }
+  },
+  {
+    "name": "Warszawa Wesoła",
+    "id": "0c563f08-e5ee-4974-a1cf-cbb2f666a8b3",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Warszawa Wesoła"
+    ],
+    "bb": [
+      [
+        21.2273564658,
+        52.253807374
+      ],
+      [
+        21.220743766,
+        52.2541141524
+      ],
+      [
+        21.2207796781,
+        52.2544042373
+      ],
+      [
+        21.2273923779,
+        52.2540974609
+      ],
+      [
+        21.2273564658,
+        52.253807374
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2181074450,
+    "uic_ref": "5103992",
+    "position": {
+      "lat": 52.2540876,
+      "lng": 21.2240854
+    }
+  },
+  {
+    "name": "Kolin",
+    "id": "de4fb365-130f-44b5-8e98-14b727332eb9",
+    "prefix": null,
+    "max_speed": 70,
+    "stop_place": true,
+    "names": [
+      "Kolin"
+    ],
+    "bb": [
+      [
+        15.1251885028,
+        53.2430637037
+      ],
+      [
+        15.1219761904,
+        53.2467665559
+      ],
+      [
+        15.1226044259,
+        53.2469617024
+      ],
+      [
+        15.1258167382,
+        53.2432588671
+      ],
+      [
+        15.1251885028,
+        53.2430637037
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1278165710,
+    "uic_ref": "5101723",
+    "position": {
+      "lat": 53.2450044,
+      "lng": 15.1238832
+    }
+  },
+  {
+    "name": "Nowe Dębe Wielkie",
+    "id": "1d3fb3c7-42b9-4900-b48a-3576cb846e94",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Nowe Dębe Wielkie"
+    ],
+    "bb": [
+      [
+        21.4429128294,
+        52.1923348986
+      ],
+      [
+        21.4370363049,
+        52.1942609609
+      ],
+      [
+        21.4372525483,
+        52.1945088758
+      ],
+      [
+        21.4431290728,
+        52.1925828242
+      ],
+      [
+        21.4429128294,
+        52.1923348986
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3402236663,
+    "uic_ref": "5104584",
+    "position": {
+      "lat": 52.1933721,
+      "lng": 21.4402024
+    }
+  },
+  {
+    "name": "Gliwice Port",
+    "id": "34ac77b4-0016-4ee0-9f3a-37fb05e2bae6",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": false,
+    "names": [
+      "Gliwice Port"
+    ],
+    "bb": [
+      [
+        18.6494128981,
+        50.3157134033
+      ],
+      [
+        18.6450844833,
+        50.3203323391
+      ],
+      [
+        18.637064846,
+        50.3230110541
+      ],
+      [
+        18.6269472183,
+        50.3293717419
+      ],
+      [
+        18.6313160338,
+        50.3322341107
+      ],
+      [
+        18.6415935882,
+        50.3259381272
+      ],
+      [
+        18.6467618697,
+        50.3210646739
+      ],
+      [
+        18.6510634624,
+        50.3163031184
+      ],
+      [
+        18.6494128981,
+        50.3157134033
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3735918918,
+    "uic_ref": null,
+    "position": {
+      "lat": 50.3181247,
+      "lng": 18.6484133
+    }
+  },
+  {
+    "name": "Warszawa Aleje Jerozolimskie",
+    "id": "cc6ee848-d2e8-460f-aaa4-37188cf7c247",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": true,
+    "names": [
+      "Warszawa Aleje Jerozolimskie"
+    ],
+    "bb": [
+      [
+        20.9413788157,
+        52.2051566383
+      ],
+      [
+        20.939699923,
+        52.2067317237
+      ],
+      [
+        20.9402657087,
+        52.2069582064
+      ],
+      [
+        20.9419446014,
+        52.2053831291
+      ],
+      [
+        20.9413788157,
+        52.2051566383
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3241851873,
+    "uic_ref": "5128148",
+    "position": {
+      "lat": 52.2060562,
+      "lng": 20.9408396
+    }
+  },
+  {
+    "name": "Dębe Wielkie",
+    "id": "45f6badd-8616-4716-9e2f-42229c8cf881",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Dębe Wielkie"
+    ],
+    "bb": [
+      [
+        21.4256574777,
+        52.1980503619
+      ],
+      [
+        21.4198235073,
+        52.1999681216
+      ],
+      [
+        21.4201164893,
+        52.2003029395
+      ],
+      [
+        21.4259504598,
+        52.1983851943
+      ],
+      [
+        21.4256574777,
+        52.1980503619
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2181022776,
+    "uic_ref": "5100924",
+    "position": {
+      "lat": 52.1991974,
+      "lng": 21.4227753
+    }
+  },
+  {
+    "name": "Sosnowiec Jęzor Południowy",
+    "id": "7b6e55c2-b889-490a-90b6-49e4db440fe1",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Sosnowiec Jęzor Południowy"
+    ],
+    "bb": [
+      [
+        19.1641438985,
+        50.2283706735
+      ],
+      [
+        19.1640418691,
+        50.2287109751
+      ],
+      [
+        19.1668385514,
+        50.2290541303
+      ],
+      [
+        19.1669405809,
+        50.2287138311
+      ],
+      [
+        19.1641438985,
+        50.2283706735
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 11908102978,
+    "uic_ref": "5100417",
+    "position": {
+      "lat": 50.2286545,
+      "lng": 19.1654178
+    }
+  },
+  {
+    "name": "Dęblin Towarowy",
+    "id": "23c823b4-af0b-436a-8b5f-60ae2d159bab",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": false,
+    "names": [
+      "Dęblin Towarowy GT"
+    ],
+    "bb": [
+      [
+        21.845754697,
+        51.5594036377
+      ],
+      [
+        21.8416021346,
+        51.5641301303
+      ],
+      [
+        21.838700655,
+        51.5735835172
+      ],
+      [
+        21.8412019825,
+        51.5746492496
+      ],
+      [
+        21.8453476718,
+        51.5712507794
+      ],
+      [
+        21.8459238438,
+        51.5637388192
+      ],
+      [
+        21.8479066669,
+        51.5600952435
+      ],
+      [
+        21.845754697,
+        51.5594036377
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 13730927341,
+    "uic_ref": null,
+    "position": {
+      "lat": 51.5698853,
+      "lng": 21.8426953
+    }
+  },
+  {
+    "name": "Cisie",
+    "id": "462e5e96-b26d-44b2-b195-56c9b78a1d36",
+    "prefix": null,
+    "max_speed": 110,
+    "stop_place": true,
+    "names": [
+      "Cisie"
+    ],
+    "bb": [
+      [
+        21.3931076799,
+        52.2089558817
+      ],
+      [
+        21.3874057404,
+        52.2108574398
+      ],
+      [
+        21.3876041165,
+        52.2110807906
+      ],
+      [
+        21.393306056,
+        52.2091792421
+      ],
+      [
+        21.3931076799,
+        52.2089558817
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 1181459221,
+    "uic_ref": "5100729",
+    "position": {
+      "lat": 52.2099706,
+      "lng": 21.3904851
+    }
+  },
+  {
+    "name": "Warka",
+    "id": "343bcf49-7828-47e5-9137-8169a176b5dd",
+    "prefix": null,
+    "max_speed": 80,
+    "stop_place": false,
+    "names": [
+      "Warka"
+    ],
+    "bb": [
+      [
+        21.1730087277,
+        51.7897796381
+      ],
+      [
+        21.1586795972,
+        51.8006126359
+      ],
+      [
+        21.1598447863,
+        51.801202098
+      ],
+      [
+        21.1741739168,
+        51.7903692417
+      ],
+      [
+        21.1730087277,
+        51.7897796381
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2499943349,
+    "uic_ref": "5103937",
+    "position": {
+      "lat": 51.7938528,
+      "lng": 21.1686656
+    }
+  },
+  {
+    "name": "Chabówka Stadion",
+    "id": "399274b7-64d1-4d75-9339-4f3c3936b981",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": true,
+    "names": [
+      "Chabówka Stadion"
+    ],
+    "bb": [
+      [
+        19.9200969848,
+        49.588566837
+      ],
+      [
+        19.9195516671,
+        49.5886436875
+      ],
+      [
+        19.9203484226,
+        49.5910196005
+      ],
+      [
+        19.9208937402,
+        49.5909427537
+      ],
+      [
+        19.9200969848,
+        49.588566837
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 11442956158,
+    "uic_ref": "5100093",
+    "position": {
+      "lat": 49.5899556,
+      "lng": 19.9204450
+    }
+  },
+  {
+    "name": "Szklarska Poręba Górna",
+    "id": "2ca3e192-a969-4e29-8e7f-4a3bfe0cd451",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Szklarska Poręba Górna"
+    ],
+    "bb": [
+      [
+        15.52064624,
+        50.8317707075
+      ],
+      [
+        15.5140338945,
+        50.833958588
+      ],
+      [
+        15.5143871003,
+        50.8343843931
+      ],
+      [
+        15.5209994458,
+        50.8321965325
+      ],
+      [
+        15.52064624,
+        50.8317707075
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 560772324,
+    "uic_ref": "5100058",
+    "position": {
+      "lat": 50.8326128,
+      "lng": 15.5186779
+    }
+  },
+  {
+    "name": "Trzemeszno",
+    "id": "dea5c48c-c2eb-4ff1-a2f9-488b1d4c323f",
+    "prefix": null,
+    "max_speed": 70,
+    "stop_place": false,
+    "names": [
+      "Trzemeszno"
+    ],
+    "bb": [
+      [
+        17.8005650017,
+        52.5657064185
+      ],
+      [
+        17.7998726715,
+        52.5669946083
+      ],
+      [
+        17.8195751637,
+        52.5709067145
+      ],
+      [
+        17.8202674938,
+        52.5696186397
+      ],
+      [
+        17.8005650017,
+        52.5657064185
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2003074007,
+    "uic_ref": "5103888",
+    "position": {
+      "lat": 52.5698710,
+      "lng": 17.8178353
+    }
+  },
+  {
+    "name": "Huta",
+    "id": "74a64a60-f11c-4edc-af04-3442411c1316",
+    "prefix": null,
+    "max_speed": 70,
+    "stop_place": true,
+    "names": [
+      "Huta"
+    ],
+    "bb": [
+      [
+        18.9635482298,
+        51.26968924
+      ],
+      [
+        18.9630832727,
+        51.2697041649
+      ],
+      [
+        18.9632163499,
+        51.2713269726
+      ],
+      [
+        18.963681307,
+        51.2713120482
+      ],
+      [
+        18.9635482298,
+        51.26968924
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 529050901,
+    "uic_ref": "5101345",
+    "position": {
+      "lat": 51.2703930,
+      "lng": 18.9633720
+    }
+  },
+  {
+    "name": "Podchojny",
+    "id": "4830dfd4-7803-4a57-9964-6348d98fe116",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Podchojny"
+    ],
+    "bb": [
+      [
+        20.3209751688,
+        50.6634665802
+      ],
+      [
+        20.3206140222,
+        50.6634924417
+      ],
+      [
+        20.3207896695,
+        50.6644779765
+      ],
+      [
+        20.3211508161,
+        50.6644521156
+      ],
+      [
+        20.3209751688,
+        50.6634665802
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 12457483992,
+    "uic_ref": "5100412",
+    "position": {
+      "lat": 50.6639147,
+      "lng": 20.3208710
     }
   }
 ]
