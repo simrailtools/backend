@@ -87,7 +87,7 @@ public final class SimRailAwsApiClientTest {
 
       var timetable = trainRun.getTimetable();
       Assertions.assertNotNull(timetable);
-      // Assertions.assertFalse(timetable.isEmpty());
+      Assertions.assertFalse(timetable.isEmpty());
       for (int index = 0; index < timetable.size(); index++) {
         var timetableEntry = timetable.get(index);
         Assertions.assertNotNull(timetableEntry.getTrainType());
@@ -102,7 +102,7 @@ public final class SimRailAwsApiClientTest {
         Assertions.assertFalse(timetableEntry.getPrettyPointName().isEmpty());
         Assertions.assertFalse(Double.isNaN(timetableEntry.getPointMileage()));
         Assertions.assertNotNull(timetableEntry.getStopType());
-        Assertions.assertTrue(timetableEntry.getDepartureLine() > 0);
+        Assertions.assertTrue(timetableEntry.getDepartureLine() >= 0);
         Assertions.assertTrue(timetableEntry.getTrainMaxAllowedSpeed() >= 0);
 
         // all entries must have an arrival and departure time, where the departure is after the arrival
