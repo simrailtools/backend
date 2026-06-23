@@ -63,8 +63,8 @@ import tools.simrail.backend.external.srpanel.SimRailPanelApiClient;
 @Service
 public class SimRailServerCollector implements SimRailServerService {
 
-  // https://regex101.com/r/8kPxyF/2
-  private static final Pattern SERVER_NAME_REGEX = Pattern.compile("^.+ \\((?<lang>.+)\\) ?(\\[(?<tags>.+)])?$");
+  // https://regex101.com/r/8kPxyF/3
+  private static final Pattern SERVER_NAME_REGEX = Pattern.compile("^.+ \\((?<lang>.+)\\) ?(\\[(?<tags>.+)])?.*$");
 
   private final Connection connection;
   private final UuidV5Factory serverIdFactory;
