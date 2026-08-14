@@ -30,7 +30,9 @@ import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.Meter;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.Timer;
+import io.micrometer.core.instrument.distribution.pause.NoPauseDetector;
 import org.jspecify.annotations.NonNull;
+import org.springframework.boot.micrometer.metrics.autoconfigure.MeterRegistryCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import tools.simrail.backend.collector.util.PerServerGauge;
@@ -40,6 +42,14 @@ import tools.simrail.backend.collector.util.PerServerGauge;
  */
 @Configuration
 public class MetricsConfiguration {
+
+  /**
+   * Disables timer pause compensation.
+   */
+  @Bean
+  public @NonNull MeterRegistryCustomizer<MeterRegistry> noPauseDetectorCustomizer() {
+    return registry -> registry.config().pauseDetector(NoPauseDetector.INSTANCE);
+  }
 
   /**
    * Aspect for intercepting methods annotated with timed.
