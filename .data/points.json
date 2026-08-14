@@ -2109,7 +2109,7 @@
     "name": "Kozłów",
     "id": "27f5db2c-07a1-4c23-aaa5-dff759f687ba",
     "prefix": "Kz",
-    "max_speed": 100,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Kozłów"
@@ -10267,7 +10267,7 @@
     "name": "Kędzierzyn-Koźle",
     "id": "b5716508-6eed-4792-ad1e-b12e7a8017b6",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kędzierzyn-Koźle",
@@ -15720,7 +15720,7 @@
     "name": "Ostrowy",
     "id": "c9ec2e7a-3aed-47dc-a136-ecd361a52586",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Ostrowy"
@@ -15759,7 +15759,7 @@
     "name": "Kutno",
     "id": "f28d8ff6-2131-4af2-b0e2-974be4f142a1",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Kutno Wsch Tow Pprj",
@@ -15799,7 +15799,7 @@
     "name": "Witonia",
     "id": "683a03be-9484-4a5a-985f-c3aa1e0ffd23",
     "prefix": "Wt",
-    "max_speed": 160,
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Witonia"
@@ -15838,7 +15838,7 @@
     "name": "Łęczyca",
     "id": "56971a13-60bc-42c5-8093-c65fe123c2f5",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Łęczyca"
@@ -15877,7 +15877,7 @@
     "name": "Ozorków",
     "id": "a9f51a0d-924b-4d7b-96e5-6be948b6b1f5",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Ozorków"
@@ -15916,7 +15916,7 @@
     "name": "Chociszew",
     "id": "ccf51258-dcda-4945-b528-babc96abb6a9",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Chociszew"
@@ -16307,7 +16307,7 @@
     "name": "Nowy Targ",
     "id": "20024260-7836-4eb2-826e-ef588c306cc1",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Nowy Targ"
@@ -18981,7 +18981,7 @@
     "name": "Gdańsk Oliwa",
     "id": "dad0bf10-0332-4841-ae9c-cc5de34b84fd",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": true,
     "names": [
       "Gdańsk Oliwa"
@@ -19654,7 +19654,7 @@
     "name": "Zakopane",
     "id": "d1f0c429-7b4a-4267-b868-9f46b16617e6",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": true,
     "names": [
       "Zakopane"
@@ -20833,7 +20833,7 @@
     "name": "Kraków Olsza",
     "id": "85418f4a-f92f-411a-bd78-17642643ced5",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 60,
     "stop_place": false,
     "names": [
       "Kraków Olsza",
@@ -20873,7 +20873,7 @@
     "name": "Bochnia",
     "id": "3eed766c-67fe-4d50-9c66-da2c170d2f64",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Bochnia"
@@ -21108,7 +21108,7 @@
     "name": "Tarnów",
     "id": "9db8325e-8442-4612-afc1-df19f1b7b032",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Tarnów"
@@ -23035,7 +23035,7 @@
     "name": "Bobrowniki",
     "id": "21ee3bd2-a819-4734-9f67-34cd928a7c79",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Bobrowniki"
@@ -24364,7 +24364,7 @@
     "name": "Jackowice",
     "id": "c38f86c6-1b69-452e-b3e5-597cddc9127e",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Jackowice"
@@ -24861,7 +24861,7 @@
     "name": "Krzewie",
     "id": "68ad8030-7f2c-437d-aaa0-e49f417de55a",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Krzewie"
@@ -25299,7 +25299,7 @@
     "name": "Bednary",
     "id": "70cf7dfe-4a93-40f9-b652-ba220bf9cc08",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 90,
     "stop_place": false,
     "names": [
       "Bednary"
@@ -27734,7 +27734,7 @@
     "name": "Gdańsk Port Północny",
     "id": "9bee1a8e-bd78-424b-829c-f6ec419f8947",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Gdańsk Port Północny",
@@ -27837,7 +27837,7 @@
     "name": "Głowno",
     "id": "06efeeab-9293-4965-9387-e16d80807719",
     "prefix": "Gn",
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Głowno"
@@ -27876,7 +27876,7 @@
     "name": "Stryków",
     "id": "c40004fd-9a39-4cda-bb15-e94d846e9c6e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Stryków"
@@ -27954,7 +27954,7 @@
     "name": "Stare Grudze",
     "id": "1611e188-11d3-4afe-8554-3435fcc36c43",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Grudze",
@@ -27994,7 +27994,7 @@
     "name": "Gawrony",
     "id": "776594f5-e5ff-408f-a7cb-597fc7bb9c5b",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 70,
     "stop_place": true,
     "names": [
       "Gawrony"
@@ -28111,7 +28111,7 @@
     "name": "Sierpów",
     "id": "fd4f4425-7050-4a7c-9f49-c60ec73cdfe8",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Sierpów"
@@ -28228,7 +28228,7 @@
     "name": "Jedlicze koło Zgierza",
     "id": "0d1117ef-380c-4695-9fdd-16bfdec787fe",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Jedlicze koło Zgierza",
@@ -28463,7 +28463,7 @@
     "name": "Grotniki",
     "id": "481872f8-7d94-439f-a2f0-94cb7b08bb47",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Grotniki"
@@ -28502,7 +28502,7 @@
     "name": "Głowno Północne",
     "id": "33b8ac90-e3e6-4875-873c-2f5e59165679",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Głowno Północne"
@@ -28541,7 +28541,7 @@
     "name": "Kamień Łowicki",
     "id": "732227a7-2c9c-4316-a43b-93533d0a23fc",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Kamień Łowicki"
@@ -28580,7 +28580,7 @@
     "name": "Smardzew",
     "id": "e2ef3c0f-b2bf-46f6-b6b9-8c0082d36379",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Smardzew"
@@ -28736,7 +28736,7 @@
     "name": "Bratoszewice",
     "id": "a5f17c9e-3d86-4c5a-b0a2-3f7a7c2a55fc",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Bratoszewice"
@@ -28814,7 +28814,7 @@
     "name": "Swędów",
     "id": "03be7d23-3697-47f4-acb3-836acbc3ae7e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Swędów"
@@ -28853,7 +28853,7 @@
     "name": "Domaniewice",
     "id": "c3435ddc-d189-4f6b-a753-568e1793b7f1",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Domaniewice"
@@ -28931,7 +28931,7 @@
     "name": "Glinnik",
     "id": "ad4e06c9-5665-42b9-be9f-771a14c832ef",
     "prefix": "1057_Gl",
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Glinnik"
@@ -28970,7 +28970,7 @@
     "name": "Łowicz Przedmieście",
     "id": "0299e972-622d-4bda-8839-444264895020",
     "prefix": "LP",
-    "max_speed": 160,
+    "max_speed": 90,
     "stop_place": false,
     "names": [
       "Łowicz Przedmieście"
@@ -29029,7 +29029,7 @@
     "name": "Domaniewice Centrum",
     "id": "58fb4808-9cdc-432e-b86c-0a52f76d597e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Domaniewice Centrum"
@@ -29107,7 +29107,7 @@
     "name": "Ozorków Nowe Miasto",
     "id": "962413a4-96b7-44c8-8ed3-8e83ae5e062e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Ozorków Nowe Miasto"
@@ -29185,7 +29185,7 @@
     "name": "Zgierz Rudunki",
     "id": "52356a16-8f86-481d-8ca5-1d7cdaf8b6bd",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Zgierz Rudunki"
@@ -29263,7 +29263,7 @@
     "name": "Glinnik Wieś",
     "id": "7398923d-9fbe-4b6e-a6b6-f1263a94f136",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Glinnik Wieś"
@@ -31392,7 +31392,7 @@
     "name": "Rzeszów Główny",
     "id": "43e180d3-f630-4ae6-a287-f757b78dc9ae",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Rzeszów Główny"
@@ -31985,7 +31985,7 @@
     "name": "Kolin",
     "id": "de4fb365-130f-44b5-8e98-14b727332eb9",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 140,
     "stop_place": true,
     "names": [
       "Kolin"
@@ -32063,7 +32063,7 @@
     "name": "Gliwice Port",
     "id": "34ac77b4-0016-4ee0-9f3a-37fb05e2bae6",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Gliwice Port"
