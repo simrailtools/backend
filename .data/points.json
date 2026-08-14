@@ -15758,7 +15758,7 @@
   {
     "name": "Kutno",
     "id": "f28d8ff6-2131-4af2-b0e2-974be4f142a1",
-    "prefix": null,
+    "prefix": "2133_Ku",
     "max_speed": 140,
     "stop_place": false,
     "names": [
@@ -15837,7 +15837,7 @@
   {
     "name": "Łęczyca",
     "id": "56971a13-60bc-42c5-8093-c65fe123c2f5",
-    "prefix": null,
+    "prefix": "2385_Le",
     "max_speed": 120,
     "stop_place": false,
     "names": [
@@ -15876,7 +15876,7 @@
   {
     "name": "Ozorków",
     "id": "a9f51a0d-924b-4d7b-96e5-6be948b6b1f5",
-    "prefix": null,
+    "prefix": "3089_Oz",
     "max_speed": 120,
     "stop_place": false,
     "names": [
@@ -15915,7 +15915,7 @@
   {
     "name": "Chociszew",
     "id": "ccf51258-dcda-4945-b528-babc96abb6a9",
-    "prefix": null,
+    "prefix": "477_Ch",
     "max_speed": 120,
     "stop_place": false,
     "names": [
@@ -22044,7 +22044,7 @@
   {
     "name": "Bełchów",
     "id": "8b600a48-2a02-4bd2-95cb-f3275c5dadb8",
-    "prefix": "113_Be",
+    "prefix": "Be",
     "max_speed": 160,
     "stop_place": false,
     "names": [
@@ -25337,7 +25337,7 @@
   {
     "name": "Stara Wieś koło Kutna",
     "id": "cd839c17-6092-4564-8471-28c2aa5ed542",
-    "prefix": null,
+    "prefix": "4046_SW",
     "max_speed": 140,
     "stop_place": false,
     "names": [
@@ -27875,7 +27875,7 @@
   {
     "name": "Stryków",
     "id": "c40004fd-9a39-4cda-bb15-e94d846e9c6e",
-    "prefix": null,
+    "prefix": "4143_St",
     "max_speed": 100,
     "stop_place": false,
     "names": [
@@ -28852,7 +28852,7 @@
   {
     "name": "Domaniewice",
     "id": "c3435ddc-d189-4f6b-a753-568e1793b7f1",
-    "prefix": null,
+    "prefix": "824_Dm",
     "max_speed": 100,
     "stop_place": false,
     "names": [
@@ -33819,6 +33819,45 @@
     "position": {
       "lat": 49.0762299,
       "lng": 17.4226991
+    }
+  },
+  {
+    "name": "Sklęczki",
+    "id": "6312e29d-b728-4670-965f-d64d63cd64d8",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": true,
+    "names": [
+      "Sklęczki"
+    ],
+    "bb": [
+      [
+        19.4020215936,
+        52.2248771973
+      ],
+      [
+        19.4019460713,
+        52.2251256749
+      ],
+      [
+        19.4089078519,
+        52.2259196437
+      ],
+      [
+        19.4089833742,
+        52.2256711705
+      ],
+      [
+        19.4020215936,
+        52.2248771973
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3393485020,
+    "uic_ref": "5103435",
+    "position": {
+      "lat": 52.2253793,
+      "lng": 19.4054378
     }
   }
 ]
