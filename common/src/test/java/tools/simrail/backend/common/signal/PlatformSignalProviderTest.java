@@ -79,7 +79,7 @@ public class PlatformSignalProviderTest {
       .stream()
       .mapToInt(Map::size)
       .sum();
-    Assertions.assertEquals(737, signalCount);
+    Assertions.assertEquals(835, signalCount);
   }
 
   @Test

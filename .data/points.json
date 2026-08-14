@@ -46,7 +46,8 @@
     "stop_place": false,
     "names": [
       "Częstochowa Towarowa",
-      "Częstochowa Tow Ctb"
+      "Częstochowa Tow Ctb",
+      "Częstochowa Towarowa CTB"
     ],
     "bb": [
       [
@@ -2108,7 +2109,7 @@
     "name": "Kozłów",
     "id": "27f5db2c-07a1-4c23-aaa5-dff759f687ba",
     "prefix": "Kz",
-    "max_speed": 100,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Kozłów"
@@ -10266,7 +10267,7 @@
     "name": "Kędzierzyn-Koźle",
     "id": "b5716508-6eed-4792-ad1e-b12e7a8017b6",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Kędzierzyn-Koźle",
@@ -11877,6 +11878,7 @@
     "names": [
       "Warszawa Główna Towarowa",
       "Warszawa Główna Towarowa WOA",
+      "Warszawa Główna Towarowa Sr18",
       "Warszawa Gł.Tow.Sr18",
       "Warszawa Gł.Tow. WOA"
     ],
@@ -14543,7 +14545,8 @@
     "stop_place": false,
     "names": [
       "Piotrków Tryb Tow",
-      "Piotrków Trybunalski"
+      "Piotrków Trybunalski",
+      "Piotrków Trybunalski Towarowy"
     ],
     "bb": [
       [
@@ -15717,7 +15720,7 @@
     "name": "Ostrowy",
     "id": "c9ec2e7a-3aed-47dc-a136-ecd361a52586",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Ostrowy"
@@ -15755,8 +15758,8 @@
   {
     "name": "Kutno",
     "id": "f28d8ff6-2131-4af2-b0e2-974be4f142a1",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "2133_Ku",
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Kutno Wsch Tow Pprj",
@@ -15795,8 +15798,8 @@
   {
     "name": "Witonia",
     "id": "683a03be-9484-4a5a-985f-c3aa1e0ffd23",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "Wt",
+    "max_speed": 70,
     "stop_place": false,
     "names": [
       "Witonia"
@@ -15834,8 +15837,8 @@
   {
     "name": "Łęczyca",
     "id": "56971a13-60bc-42c5-8093-c65fe123c2f5",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "2385_Le",
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Łęczyca"
@@ -15873,8 +15876,8 @@
   {
     "name": "Ozorków",
     "id": "a9f51a0d-924b-4d7b-96e5-6be948b6b1f5",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "3089_Oz",
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Ozorków"
@@ -15912,8 +15915,8 @@
   {
     "name": "Chociszew",
     "id": "ccf51258-dcda-4945-b528-babc96abb6a9",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "477_Ch",
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Chociszew"
@@ -16304,7 +16307,7 @@
     "name": "Nowy Targ",
     "id": "20024260-7836-4eb2-826e-ef588c306cc1",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Nowy Targ"
@@ -18978,7 +18981,7 @@
     "name": "Gdańsk Oliwa",
     "id": "dad0bf10-0332-4841-ae9c-cc5de34b84fd",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": true,
     "names": [
       "Gdańsk Oliwa"
@@ -19651,7 +19654,7 @@
     "name": "Zakopane",
     "id": "d1f0c429-7b4a-4267-b868-9f46b16617e6",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 250,
     "stop_place": true,
     "names": [
       "Zakopane"
@@ -20399,7 +20402,8 @@
     "names": [
       "Kraków Płaszów",
       "Kraków Płaszów R3-4",
-      "Kr.Płaszów pzs KPA"
+      "Kr.Płaszów pzs KPA",
+      "Kraków Płaszów PZS KPA"
     ],
     "bb": [
       [
@@ -20829,7 +20833,7 @@
     "name": "Kraków Olsza",
     "id": "85418f4a-f92f-411a-bd78-17642643ced5",
     "prefix": null,
-    "max_speed": 50,
+    "max_speed": 60,
     "stop_place": false,
     "names": [
       "Kraków Olsza",
@@ -20869,7 +20873,7 @@
     "name": "Bochnia",
     "id": "3eed766c-67fe-4d50-9c66-da2c170d2f64",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Bochnia"
@@ -21104,7 +21108,7 @@
     "name": "Tarnów",
     "id": "9db8325e-8442-4612-afc1-df19f1b7b032",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Tarnów"
@@ -22040,7 +22044,7 @@
   {
     "name": "Bełchów",
     "id": "8b600a48-2a02-4bd2-95cb-f3275c5dadb8",
-    "prefix": "113_Be",
+    "prefix": "Be",
     "max_speed": 160,
     "stop_place": false,
     "names": [
@@ -23031,7 +23035,7 @@
     "name": "Bobrowniki",
     "id": "21ee3bd2-a819-4734-9f67-34cd928a7c79",
     "prefix": null,
-    "max_speed": 110,
+    "max_speed": 160,
     "stop_place": true,
     "names": [
       "Bobrowniki"
@@ -23264,11 +23268,13 @@
   {
     "name": "Łowicz Główny",
     "id": "0d0b1b13-0f48-4c73-806c-b9f6070714e3",
-    "prefix": null,
+    "prefix": "LG",
     "max_speed": 160,
     "stop_place": false,
     "names": [
-      "Łowicz Główny"
+      "Łowicz Główny",
+      "Łowicz Główny PZS R1",
+      "Łowicz Główny PZS R12"
     ],
     "bb": [
       [
@@ -24358,7 +24364,7 @@
     "name": "Jackowice",
     "id": "c38f86c6-1b69-452e-b3e5-597cddc9127e",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Jackowice"
@@ -24855,7 +24861,7 @@
     "name": "Krzewie",
     "id": "68ad8030-7f2c-437d-aaa0-e49f417de55a",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 160,
     "stop_place": false,
     "names": [
       "Krzewie"
@@ -25293,7 +25299,7 @@
     "name": "Bednary",
     "id": "70cf7dfe-4a93-40f9-b652-ba220bf9cc08",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 90,
     "stop_place": false,
     "names": [
       "Bednary"
@@ -25331,7 +25337,7 @@
   {
     "name": "Stara Wieś koło Kutna",
     "id": "cd839c17-6092-4564-8471-28c2aa5ed542",
-    "prefix": null,
+    "prefix": "4046_SW",
     "max_speed": 140,
     "stop_place": false,
     "names": [
@@ -27728,7 +27734,7 @@
     "name": "Gdańsk Port Północny",
     "id": "9bee1a8e-bd78-424b-829c-f6ec419f8947",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Gdańsk Port Północny",
@@ -27830,8 +27836,8 @@
   {
     "name": "Głowno",
     "id": "06efeeab-9293-4965-9387-e16d80807719",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "Gn",
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Głowno"
@@ -27869,8 +27875,8 @@
   {
     "name": "Stryków",
     "id": "c40004fd-9a39-4cda-bb15-e94d846e9c6e",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "4143_St",
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Stryków"
@@ -27948,7 +27954,7 @@
     "name": "Stare Grudze",
     "id": "1611e188-11d3-4afe-8554-3435fcc36c43",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Grudze",
@@ -27988,7 +27994,7 @@
     "name": "Gawrony",
     "id": "776594f5-e5ff-408f-a7cb-597fc7bb9c5b",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 70,
     "stop_place": true,
     "names": [
       "Gawrony"
@@ -28105,7 +28111,7 @@
     "name": "Sierpów",
     "id": "fd4f4425-7050-4a7c-9f49-c60ec73cdfe8",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Sierpów"
@@ -28222,7 +28228,7 @@
     "name": "Jedlicze koło Zgierza",
     "id": "0d1117ef-380c-4695-9fdd-16bfdec787fe",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Jedlicze koło Zgierza",
@@ -28457,7 +28463,7 @@
     "name": "Grotniki",
     "id": "481872f8-7d94-439f-a2f0-94cb7b08bb47",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Grotniki"
@@ -28496,7 +28502,7 @@
     "name": "Głowno Północne",
     "id": "33b8ac90-e3e6-4875-873c-2f5e59165679",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Głowno Północne"
@@ -28535,7 +28541,7 @@
     "name": "Kamień Łowicki",
     "id": "732227a7-2c9c-4316-a43b-93533d0a23fc",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Kamień Łowicki"
@@ -28574,7 +28580,7 @@
     "name": "Smardzew",
     "id": "e2ef3c0f-b2bf-46f6-b6b9-8c0082d36379",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Smardzew"
@@ -28730,7 +28736,7 @@
     "name": "Bratoszewice",
     "id": "a5f17c9e-3d86-4c5a-b0a2-3f7a7c2a55fc",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Bratoszewice"
@@ -28808,7 +28814,7 @@
     "name": "Swędów",
     "id": "03be7d23-3697-47f4-acb3-836acbc3ae7e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Swędów"
@@ -28846,8 +28852,8 @@
   {
     "name": "Domaniewice",
     "id": "c3435ddc-d189-4f6b-a753-568e1793b7f1",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "824_Dm",
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Domaniewice"
@@ -28925,7 +28931,7 @@
     "name": "Glinnik",
     "id": "ad4e06c9-5665-42b9-be9f-771a14c832ef",
     "prefix": "1057_Gl",
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Glinnik"
@@ -28963,8 +28969,8 @@
   {
     "name": "Łowicz Przedmieście",
     "id": "0299e972-622d-4bda-8839-444264895020",
-    "prefix": null,
-    "max_speed": 160,
+    "prefix": "LP",
+    "max_speed": 90,
     "stop_place": false,
     "names": [
       "Łowicz Przedmieście"
@@ -29023,7 +29029,7 @@
     "name": "Domaniewice Centrum",
     "id": "58fb4808-9cdc-432e-b86c-0a52f76d597e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Domaniewice Centrum"
@@ -29101,7 +29107,7 @@
     "name": "Ozorków Nowe Miasto",
     "id": "962413a4-96b7-44c8-8ed3-8e83ae5e062e",
     "prefix": null,
-    "max_speed": 160,
+    "max_speed": 120,
     "stop_place": true,
     "names": [
       "Ozorków Nowe Miasto"
@@ -29179,7 +29185,7 @@
     "name": "Zgierz Rudunki",
     "id": "52356a16-8f86-481d-8ca5-1d7cdaf8b6bd",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Zgierz Rudunki"
@@ -29257,7 +29263,7 @@
     "name": "Glinnik Wieś",
     "id": "7398923d-9fbe-4b6e-a6b6-f1263a94f136",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": true,
     "names": [
       "Glinnik Wieś"
@@ -31386,7 +31392,7 @@
     "name": "Rzeszów Główny",
     "id": "43e180d3-f630-4ae6-a287-f757b78dc9ae",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 250,
     "stop_place": false,
     "names": [
       "Rzeszów Główny"
@@ -31979,7 +31985,7 @@
     "name": "Kolin",
     "id": "de4fb365-130f-44b5-8e98-14b727332eb9",
     "prefix": null,
-    "max_speed": 70,
+    "max_speed": 140,
     "stop_place": true,
     "names": [
       "Kolin"
@@ -32057,7 +32063,7 @@
     "name": "Gliwice Port",
     "id": "34ac77b4-0016-4ee0-9f3a-37fb05e2bae6",
     "prefix": null,
-    "max_speed": 100,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Gliwice Port"
@@ -32547,6 +32553,1311 @@
     "position": {
       "lat": 50.6639147,
       "lng": 20.3208710
+    }
+  },
+  {
+    "name": "Praha Hlavní Nádraží",
+    "id": "356a930b-1311-4276-b680-f6fc5784533e",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Praha Hlavní Nádraží"
+    ],
+    "bb": [
+      [
+        14.4348329825,
+        50.078798259
+      ],
+      [
+        14.4321038714,
+        50.0796369089
+      ],
+      [
+        14.4372595783,
+        50.0865455944
+      ],
+      [
+        14.4399886894,
+        50.0857070653
+      ],
+      [
+        14.4348329825,
+        50.078798259
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3134751791,
+    "uic_ref": "5457076",
+    "position": {
+      "lat": 50.0829628,
+      "lng": 14.4360939
+    }
+  },
+  {
+    "name": "Hodonín",
+    "id": "8fd34e39-8334-430c-83be-2d2a4648488e",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Hodonín"
+    ],
+    "bb": [
+      [
+        17.1100538693,
+        48.8496516399
+      ],
+      [
+        17.1085649624,
+        48.851005506
+      ],
+      [
+        17.1279932685,
+        48.8602561056
+      ],
+      [
+        17.1294821754,
+        48.8589024896
+      ],
+      [
+        17.1100538693,
+        48.8496516399
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 5278533873,
+    "uic_ref": "5433845",
+    "position": {
+      "lat": 48.8563155,
+      "lng": 17.1220509
+    }
+  },
+  {
+    "name": "Wien Meidling",
+    "id": "32a403d1-7387-4701-afa7-a3d554b00ec9",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Wien Meidling"
+    ],
+    "bb": [
+      [
+        16.3305911275,
+        48.173194326
+      ],
+      [
+        16.3300700603,
+        48.1744134048
+      ],
+      [
+        16.3419374093,
+        48.1766691367
+      ],
+      [
+        16.3424584764,
+        48.1754501115
+      ],
+      [
+        16.3305911275,
+        48.173194326
+      ]
+    ],
+    "country": "AUT",
+    "osm_id": 66432827,
+    "uic_ref": "8100514",
+    "position": {
+      "lat": 48.1745297,
+      "lng": 16.3339652
+    }
+  },
+  {
+    "name": "Berlin Ostbahnhof",
+    "id": "cab76627-f732-499e-98d6-89c630ba0a3a",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Berlin Ostbahnhof"
+    ],
+    "bb": [
+      [
+        13.4421287799,
+        52.5069237836
+      ],
+      [
+        13.4335915548,
+        52.5101424793
+      ],
+      [
+        13.4269756374,
+        52.5115010123
+      ],
+      [
+        13.4273359754,
+        52.5126907084
+      ],
+      [
+        13.4341224645,
+        52.5118595263
+      ],
+      [
+        13.4432837223,
+        52.5082204318
+      ],
+      [
+        13.4421287799,
+        52.5069237836
+      ]
+    ],
+    "country": "DEU",
+    "osm_id": 3419894993,
+    "uic_ref": "8003004",
+    "position": {
+      "lat": 52.5103817,
+      "lng": 13.4349112
+    }
+  },
+  {
+    "name": "Frankfurt (Oder)",
+    "id": "33fc8634-30d0-4626-872b-8d0bf8feadea",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Frankfurt/Oder"
+    ],
+    "bb": [
+      [
+        14.5491638054,
+        52.3322491917
+      ],
+      [
+        14.5387760264,
+        52.3393746895
+      ],
+      [
+        14.5400656634,
+        52.3408210986
+      ],
+      [
+        14.5471909569,
+        52.3382861647
+      ],
+      [
+        14.5517946334,
+        52.3327551938
+      ],
+      [
+        14.5491638054,
+        52.3322491917
+      ]
+    ],
+    "country": "DEU",
+    "osm_id": 321555238,
+    "uic_ref": "8010113",
+    "position": {
+      "lat": 52.3365359,
+      "lng": 14.5466945
+    }
+  },
+  {
+    "name": "Wien Hauptbahnhof",
+    "id": "a60d7857-1df0-4dc8-bf96-1a87774a0e87",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Wien Hauptbahnhoh"
+    ],
+    "bb": [
+      [
+        16.3939624708,
+        48.1750198395
+      ],
+      [
+        16.3860464286,
+        48.1799020662
+      ],
+      [
+        16.3810721043,
+        48.1835963207
+      ],
+      [
+        16.3745997611,
+        48.184377321
+      ],
+      [
+        16.3630004696,
+        48.1805607263
+      ],
+      [
+        16.36159843,
+        48.1821207407
+      ],
+      [
+        16.3732707318,
+        48.1860978843
+      ],
+      [
+        16.3837139178,
+        48.1850882319
+      ],
+      [
+        16.3957308847,
+        48.1758034863
+      ],
+      [
+        16.3939624708,
+        48.1750198395
+      ]
+    ],
+    "country": "AUT",
+    "osm_id": 1839787470,
+    "uic_ref": "8101003",
+    "position": {
+      "lat": 48.1849883,
+      "lng": 16.3779391
+    }
+  },
+  {
+    "name": "Słupsk",
+    "id": "0adbaffc-2454-45c2-949b-892f2915963c",
+    "prefix": null,
+    "max_speed": 250,
+    "stop_place": false,
+    "names": [
+      "Słupsk"
+    ],
+    "bb": [
+      [
+        17.0173226034,
+        54.4636989676
+      ],
+      [
+        17.0145313935,
+        54.4637955344
+      ],
+      [
+        17.0154858338,
+        54.4731139414
+      ],
+      [
+        17.0182770436,
+        54.4730173966
+      ],
+      [
+        17.0173226034,
+        54.4636989676
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 7760719622,
+    "uic_ref": "5100055",
+    "position": {
+      "lat": 54.4682207,
+      "lng": 17.0164523
+    }
+  },
+  {
+    "name": "Otrokovice",
+    "id": "110ac9fe-1545-49bd-93cb-19a48acd7495",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Otrokovice"
+    ],
+    "bb": [
+      [
+        17.5308906559,
+        49.1984113937
+      ],
+      [
+        17.5285120168,
+        49.2074387752
+      ],
+      [
+        17.5312046788,
+        49.2077416352
+      ],
+      [
+        17.5335833179,
+        49.198714309
+      ],
+      [
+        17.5308906559,
+        49.1984113937
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3309263057,
+    "uic_ref": "5435575",
+    "position": {
+      "lat": 49.2025088,
+      "lng": 17.5312710
+    }
+  },
+  {
+    "name": "Dębica",
+    "id": "4fbc0cc7-8af7-482e-b510-c279c727c1c4",
+    "prefix": null,
+    "max_speed": 250,
+    "stop_place": false,
+    "names": [
+      "Dębica"
+    ],
+    "bb": [
+      [
+        21.3959569512,
+        50.0502857877
+      ],
+      [
+        21.395060141,
+        50.0512809441
+      ],
+      [
+        21.4089459061,
+        50.0564399719
+      ],
+      [
+        21.4098427163,
+        50.0554449225
+      ],
+      [
+        21.3959569512,
+        50.0502857877
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 48288325,
+    "uic_ref": "5100228",
+    "position": {
+      "lat": 50.0539148,
+      "lng": 21.4041605
+    }
+  },
+  {
+    "name": "Koszalin",
+    "id": "9f976448-6903-4a4e-acd8-ddf4fa9962fe",
+    "prefix": null,
+    "max_speed": 250,
+    "stop_place": false,
+    "names": [
+      "Koszalin"
+    ],
+    "bb": [
+      [
+        16.1687426636,
+        54.1868413126
+      ],
+      [
+        16.1677177061,
+        54.186899931
+      ],
+      [
+        16.168433353,
+        54.1905630005
+      ],
+      [
+        16.1701122443,
+        54.1950840134
+      ],
+      [
+        16.1712423763,
+        54.1950327948
+      ],
+      [
+        16.1707728221,
+        54.1920441089
+      ],
+      [
+        16.1692665954,
+        54.1886851539
+      ],
+      [
+        16.1687426636,
+        54.1868413126
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 293360032,
+    "uic_ref": "5100027",
+    "position": {
+      "lat": 54.1906752,
+      "lng": 16.1697156
+    }
+  },
+  {
+    "name": "Olomouc Hlavní Nádraží",
+    "id": "2f757a59-3ea6-4e72-85ee-5aa16929515c",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Olomouc Hlavní Nádraží"
+    ],
+    "bb": [
+      [
+        17.2796113916,
+        49.5880383458
+      ],
+      [
+        17.2764130306,
+        49.5956774677
+      ],
+      [
+        17.2786171338,
+        49.5960652036
+      ],
+      [
+        17.2818154948,
+        49.5884261424
+      ],
+      [
+        17.2796113916,
+        49.5880383458
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 2506544888,
+    "uic_ref": "5434362",
+    "position": {
+      "lat": 49.5928438,
+      "lng": 17.2783453
+    }
+  },
+  {
+    "name": "Břeclav",
+    "id": "a7c65849-40f8-4639-8536-b4414eb9fcfe",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Břeclav"
+    ],
+    "bb": [
+      [
+        16.8905551435,
+        48.7481654471
+      ],
+      [
+        16.8871040153,
+        48.7495063765
+      ],
+      [
+        16.896801377,
+        48.7603557017
+      ],
+      [
+        16.9002525052,
+        48.7590150618
+      ],
+      [
+        16.8905551435,
+        48.7481654471
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3315724401,
+    "uic_ref": "5433425",
+    "position": {
+      "lat": 48.7539713,
+      "lng": 16.8932662
+    }
+  },
+  {
+    "name": "Zábřeh na Moravě",
+    "id": "1fe94410-0ae3-4d62-97aa-d1a44d6ed1da",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Zábřeh na Moravě"
+    ],
+    "bb": [
+      [
+        16.8960277275,
+        49.8662905601
+      ],
+      [
+        16.883661317,
+        49.8733018808
+      ],
+      [
+        16.8850342479,
+        49.8743077427
+      ],
+      [
+        16.8974006583,
+        49.8672965681
+      ],
+      [
+        16.8960277275,
+        49.8662905601
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 4274477550,
+    "uic_ref": "5435502",
+    "position": {
+      "lat": 49.8722061,
+      "lng": 16.8870821
+    }
+  },
+  {
+    "name": "Praha-Libeň",
+    "id": "925ecc9e-45eb-4c58-8b91-475ee6a7966f",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Praha-Libeň"
+    ],
+    "bb": [
+      [
+        14.5076815343,
+        50.0995914365
+      ],
+      [
+        14.4983121461,
+        50.1006200076
+      ],
+      [
+        14.4986089378,
+        50.1017323595
+      ],
+      [
+        14.507978326,
+        50.1007038123
+      ],
+      [
+        14.5076815343,
+        50.0995914365
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 9969044666,
+    "uic_ref": "5457176",
+    "position": {
+      "lat": 50.1007584,
+      "lng": 14.5018122
+    }
+  },
+  {
+    "name": "Ostrava Hlavní Nádraží",
+    "id": "9f3bcaed-0278-4cbb-a6e5-c20382b8768a",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Ostrava Hlavní Nádraží"
+    ],
+    "bb": [
+      [
+        18.2671256399,
+        49.8459236563
+      ],
+      [
+        18.2584364614,
+        49.8489337323
+      ],
+      [
+        18.2595906442,
+        49.8530443679
+      ],
+      [
+        18.2680332323,
+        49.8573989064
+      ],
+      [
+        18.2822248107,
+        49.8602950113
+      ],
+      [
+        18.2832782483,
+        49.859486112
+      ],
+      [
+        18.2713812997,
+        49.852566415
+      ],
+      [
+        18.2733093051,
+        49.8483584533
+      ],
+      [
+        18.2671256399,
+        49.8459236563
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3036772660,
+    "uic_ref": "5434364",
+    "position": {
+      "lat": 49.8506705,
+      "lng": 18.2670720
+    }
+  },
+  {
+    "name": "Mokra",
+    "id": "769c3903-31ec-407e-94c0-0a249e580bed",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Mokra"
+    ],
+    "bb": [
+      [
+        20.1020103654,
+        51.9772974965
+      ],
+      [
+        20.0967695906,
+        51.9800538153
+      ],
+      [
+        20.0970809065,
+        51.9802783846
+      ],
+      [
+        20.1023216813,
+        51.9775220796
+      ],
+      [
+        20.1020103654,
+        51.9772974965
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3232189638,
+    "uic_ref": "5102303",
+    "position": {
+      "lat": 51.9787833,
+      "lng": 20.0995155
+    }
+  },
+  {
+    "name": "Berlin Hauptbahnhof",
+    "id": "1f35feb7-6c3c-4c09-90ae-3a4e86a42284",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Berlin Hauptbahnhof"
+    ],
+    "bb": [
+      [
+        13.3638795711,
+        52.5226043731
+      ],
+      [
+        13.362961752,
+        52.5232780465
+      ],
+      [
+        13.3671551357,
+        52.5253142022
+      ],
+      [
+        13.3721232979,
+        52.5256530976
+      ],
+      [
+        13.3761518108,
+        52.5244224447
+      ],
+      [
+        13.3751304759,
+        52.5238425746
+      ],
+      [
+        13.3719579649,
+        52.5246500202
+      ],
+      [
+        13.3668690613,
+        52.5239961552
+      ],
+      [
+        13.3638795711,
+        52.5226043731
+      ]
+    ],
+    "country": "DEU",
+    "osm_id": 3856100103,
+    "uic_ref": "8065969",
+    "position": {
+      "lat": 52.5249451,
+      "lng": 13.3696614
+    }
+  },
+  {
+    "name": "Rzepin",
+    "id": "3094f345-b4ca-4139-91ea-20db369dc2d3",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Rzepin"
+    ],
+    "bb": [
+      [
+        14.7917275589,
+        52.3482539368
+      ],
+      [
+        14.7915432387,
+        52.3502456949
+      ],
+      [
+        14.8190896468,
+        52.3511968498
+      ],
+      [
+        14.8192739669,
+        52.3492051345
+      ],
+      [
+        14.7917275589,
+        52.3482539368
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3258261975,
+    "uic_ref": "5100082",
+    "position": {
+      "lat": 52.3499173,
+      "lng": 14.8152866
+    }
+  },
+  {
+    "name": "Wolbrom Zachodni",
+    "id": "2ca64cab-cdfc-49af-b41b-e45a7062f5b5",
+    "prefix": null,
+    "max_speed": 100,
+    "stop_place": false,
+    "names": [
+      "Wolbrom Zachodni"
+    ],
+    "bb": [
+      [
+        19.7535799138,
+        50.3792532534
+      ],
+      [
+        19.7534860359,
+        50.3795005577
+      ],
+      [
+        19.7556018677,
+        50.3798271792
+      ],
+      [
+        19.7556957457,
+        50.3795798766
+      ],
+      [
+        19.7535799138,
+        50.3792532534
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 10253639546,
+    "uic_ref": "5104069",
+    "position": {
+      "lat": 50.3795391,
+      "lng": 19.7545614
+    }
+  },
+  {
+    "name": "Kołobrzeg",
+    "id": "37dcd58c-4a7a-49fc-bbe5-8d0730858d25",
+    "prefix": null,
+    "max_speed": 250,
+    "stop_place": false,
+    "names": [
+      "Kołobrzeg"
+    ],
+    "bb": [
+      [
+        15.5759661923,
+        54.1817912373
+      ],
+      [
+        15.5680691828,
+        54.1820186887
+      ],
+      [
+        15.5681220763,
+        54.182647617
+      ],
+      [
+        15.5760190858,
+        54.1824201691
+      ],
+      [
+        15.5759661923,
+        54.1817912373
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3006832228,
+    "uic_ref": "5100025",
+    "position": {
+      "lat": 54.1822496,
+      "lng": 15.5715496
+    }
+  },
+  {
+    "name": "Lębork",
+    "id": "a8b07a45-a3e4-42b2-a84f-679376771f6a",
+    "prefix": null,
+    "max_speed": 250,
+    "stop_place": false,
+    "names": [
+      "Lębork"
+    ],
+    "bb": [
+      [
+        17.7427323316,
+        54.5302055324
+      ],
+      [
+        17.7415821288,
+        54.5312898694
+      ],
+      [
+        17.7561470816,
+        54.5364915059
+      ],
+      [
+        17.7572972844,
+        54.5354073071
+      ],
+      [
+        17.7427323316,
+        54.5302055324
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 293143821,
+    "uic_ref": "5100129",
+    "position": {
+      "lat": 54.5336204,
+      "lng": 17.7502364
+    }
+  },
+  {
+    "name": "Wien Westbahnhof",
+    "id": "86db71d9-4a33-4a12-8c56-bd85dd066174",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Wien Westbahnhof"
+    ],
+    "bb": [
+      [
+        16.3203610085,
+        48.1904088268
+      ],
+      [
+        16.3159822198,
+        48.191594221
+      ],
+      [
+        16.3157620272,
+        48.192812778
+      ],
+      [
+        16.3377031714,
+        48.1982830771
+      ],
+      [
+        16.338865909,
+        48.1955740941
+      ],
+      [
+        16.3203610085,
+        48.1904088268
+      ]
+    ],
+    "country": "AUT",
+    "osm_id": 60093107,
+    "uic_ref": "8101001",
+    "position": {
+      "lat": 48.1965445,
+      "lng": 16.3362817
+    }
+  },
+  {
+    "name": "Świebodzin",
+    "id": "aa98bc60-31db-41f2-b4c0-8f85adf99759",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Świebodzin"
+    ],
+    "bb": [
+      [
+        15.5374229163,
+        52.2441023658
+      ],
+      [
+        15.5366605782,
+        52.2452499422
+      ],
+      [
+        15.5575224134,
+        52.2504451488
+      ],
+      [
+        15.5582847515,
+        52.2492977067
+      ],
+      [
+        15.5374229163,
+        52.2441023658
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3254868376,
+    "uic_ref": "5103284",
+    "position": {
+      "lat": 52.2452509,
+      "lng": 15.5399619
+    }
+  },
+  {
+    "name": "Česká Třebová",
+    "id": "38acde27-2f2b-4865-91e9-1cba731cbf95",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Česká Třebová"
+    ],
+    "bb": [
+      [
+        16.4525760792,
+        49.8930287346
+      ],
+      [
+        16.4390945665,
+        49.898119939
+      ],
+      [
+        16.4408017898,
+        49.8999957764
+      ],
+      [
+        16.4542833025,
+        49.89490477
+      ],
+      [
+        16.4525760792,
+        49.8930287346
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3129289404,
+    "uic_ref": "5453913",
+    "position": {
+      "lat": 49.8970763,
+      "lng": 16.4466776
+    }
+  },
+  {
+    "name": "Sierakowice Skierniewickie",
+    "id": "28860dce-60d1-4a3b-b753-ca4f04b7f7ea",
+    "prefix": null,
+    "max_speed": 160,
+    "stop_place": true,
+    "names": [
+      "Sierakowice Skierniewickie"
+    ],
+    "bb": [
+      [
+        20.0641660096,
+        51.9971561377
+      ],
+      [
+        20.0588432018,
+        51.999944159
+      ],
+      [
+        20.0592232793,
+        52.0002192105
+      ],
+      [
+        20.0645460871,
+        51.9974312063
+      ],
+      [
+        20.0641660096,
+        51.9971561377
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3458286157,
+    "uic_ref": "5103413",
+    "position": {
+      "lat": 51.9986723,
+      "lng": 20.0616460
+    }
+  },
+  {
+    "name": "Hranice na Moravě",
+    "id": "5e0445de-4d3e-403e-a089-9255d1d9fce0",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Hranice na Moravě"
+    ],
+    "bb": [
+      [
+        17.7334629964,
+        49.5621339384
+      ],
+      [
+        17.7329348095,
+        49.5631134852
+      ],
+      [
+        17.742505351,
+        49.5666903567
+      ],
+      [
+        17.74781034,
+        49.5709077601
+      ],
+      [
+        17.7490559733,
+        49.5703691861
+      ],
+      [
+        17.7453793366,
+        49.5650805115
+      ],
+      [
+        17.7367598877,
+        49.5623811175
+      ],
+      [
+        17.7334629964,
+        49.5621339384
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3266743006,
+    "uic_ref": "5433722",
+    "position": {
+      "lat": 49.5654401,
+      "lng": 17.7420009
+    }
+  },
+  {
+    "name": "Přerov",
+    "id": "f4e94e23-6784-407b-a938-7229f0e8c0a1",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Přerov"
+    ],
+    "bb": [
+      [
+        17.4498267296,
+        49.4417642353
+      ],
+      [
+        17.4388782065,
+        49.4489779846
+      ],
+      [
+        17.4409086388,
+        49.4505526393
+      ],
+      [
+        17.4499920208,
+        49.4454103176
+      ],
+      [
+        17.4519152485,
+        49.4421792031
+      ],
+      [
+        17.4498267296,
+        49.4417642353
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3266780396,
+    "uic_ref": "5434662",
+    "position": {
+      "lat": 49.4470511,
+      "lng": 17.4448050
+    }
+  },
+  {
+    "name": "Ostrava-Svinov",
+    "id": "f530a33b-aca0-41dd-8822-377a64bb8da3",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Ostrava-Svinov"
+    ],
+    "bb": [
+      [
+        18.2079518793,
+        49.8122576095
+      ],
+      [
+        18.2049183559,
+        49.8128023648
+      ],
+      [
+        18.2100532758,
+        49.8247075027
+      ],
+      [
+        18.2130867992,
+        49.8241628815
+      ],
+      [
+        18.2079518793,
+        49.8122576095
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3268545280,
+    "uic_ref": "5434434",
+    "position": {
+      "lat": 49.8210342,
+      "lng": 18.2098888
+    }
+  },
+  {
+    "name": "Pardubice Hlavní Nádraží",
+    "id": "4fc70883-a570-47ad-a59b-6d16c557416e",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Parubice Hlavní Nádraží"
+    ],
+    "bb": [
+      [
+        15.7503375632,
+        50.0302281937
+      ],
+      [
+        15.7702980218,
+        50.0302281937
+      ],
+      [
+        15.7702980218,
+        50.0325711559
+      ],
+      [
+        15.7503375632,
+        50.0325711559
+      ],
+      [
+        15.7503375632,
+        50.0302281937
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 3129312254,
+    "uic_ref": "5400161",
+    "position": {
+      "lat": 50.0317084,
+      "lng": 15.7560881
+    }
+  },
+  {
+    "name": "Staré Město u Uherského Hradiště",
+    "id": "112a6548-f5f3-4f1e-aba6-e73fce3dce7e",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Staré Město u Uher. Hradiště"
+    ],
+    "bb": [
+      [
+        17.4125340492,
+        49.0658974981
+      ],
+      [
+        17.4110820801,
+        49.0665785963
+      ],
+      [
+        17.4279145848,
+        49.0819798267
+      ],
+      [
+        17.4293665538,
+        49.0812989396
+      ],
+      [
+        17.4125340492,
+        49.0658974981
+      ]
+    ],
+    "country": "CZE",
+    "osm_id": 5648139217,
+    "uic_ref": "5436145",
+    "position": {
+      "lat": 49.0762299,
+      "lng": 17.4226991
+    }
+  },
+  {
+    "name": "Sklęczki",
+    "id": "6312e29d-b728-4670-965f-d64d63cd64d8",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": true,
+    "names": [
+      "Sklęczki"
+    ],
+    "bb": [
+      [
+        19.4020215936,
+        52.2248771973
+      ],
+      [
+        19.4019460713,
+        52.2251256749
+      ],
+      [
+        19.4089078519,
+        52.2259196437
+      ],
+      [
+        19.4089833742,
+        52.2256711705
+      ],
+      [
+        19.4020215936,
+        52.2248771973
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 3393485020,
+    "uic_ref": "5103435",
+    "position": {
+      "lat": 52.2253793,
+      "lng": 19.4054378
     }
   }
 ]

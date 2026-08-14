@@ -30,7 +30,6 @@ Ostrów Wielkopolski
 Tychy
 Myszków
 Żarki-Letnisko
-Kutno
 Wrocław Nadodrze
 Szczecin Główny
 Skrzynki
@@ -99,7 +98,6 @@ Kalisz
 Pleszew
 Tychy Zachodnie
 Legionowo
-Łowicz Główny
 Katowice Ligota
 Stargard
 Dobryszyce koło Radomska
@@ -146,28 +144,11 @@ Milejów
 Jarocin
 Brzeg
 Iława Główna
-Głowno
-Stryków
-Łęczyca
-Grudze
 Gawrony
-Ozorków
-Jedlicze koło Zgierza
-Głowno Północne
-Kamień Łowicki
 Skalmierz
-Bratoszewice
-Swędów
-Domaniewice
 Błaszki
-Łowicz Przedmieście
-Domaniewice Centrum
 Kalisz Winiary
-Ozorków Nowe Miasto
-Chociszew
 Opatówek
-Sierpów
-Witonia
 Gądki
 Biniew
 Balin
@@ -201,7 +182,6 @@ Elbląg
 Kalisz Szczypiorno
 Halinów
 Kraków Mydlniki
-Stare Grudze
 Smogorzów Przysuski
 Chocicza
 Warka
@@ -268,3 +248,33 @@ Szklarska Poręba Górna
 Kórnik
 Pruszcz Gdański
 Rzerzęczyce
+Dębica
+Koszalin
+Ostrava Hlavní Nádraží
+Lębork
+Česká Třebová
+Přerov
+Frankfurt/Oder
+Olomouc Hlavní Nádraží
+Břeclav
+Zábřeh na Moravě
+Kolin
+Ostrava-Svinov
+Hodonín
+Świebodzin
+Bochnia
+Parubice Hlavní Nádraží
+Praha Hlavní Nádraží
+Wien Meidling
+Berlin Ostbahnhof
+Wien Hauptbahnhoh
+Słupsk
+Otrokovice
+Praha-Libeň
+Berlin Hauptbahnhof
+Rzepin
+Kołobrzeg
+Wien Westbahnhof
+Tarnów
+Hranice na Moravě
+Staré Město u Uher. Hradiště
