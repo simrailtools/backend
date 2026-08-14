@@ -131,6 +131,7 @@
     "point_names": [
       "Warszawa Główna Towarowa",
       "Warszawa Główna Towarowa WOA",
+      "Warszawa Główna Towarowa Sr18",
       "Warszawa Gł.Tow.Sr18",
       "Warszawa Gł.Tow. WOA"
     ]
@@ -147,7 +148,8 @@
     "point_names": [
       "Kraków Płaszów",
       "Kraków Płaszów R3-4",
-      "Kr.Płaszów pzs KPA"
+      "Kr.Płaszów pzs KPA",
+      "Kraków Płaszów PZS KPA"
     ],
     "in_border_if_next": [
       "Kraków Główny"
@@ -188,12 +190,6 @@
     ]
   },
   {
-    "name": "Bełchów",
-    "point_names": [
-      "Bełchów"
-    ]
-  },
-  {
     "name": "Chrusty Nowe",
     "point_names": [
       "Chrusty Nowe"
@@ -231,18 +227,6 @@
     ]
   },
   {
-    "name": "Glinnik",
-    "point_names": [
-      "Glinnik"
-    ]
-  },
-  {
-    "name": "Zgierz Północ",
-    "point_names": [
-      "Zgierz Północ"
-    ]
-  },
-  {
     "name": "Zduńska Wola Karsznice",
     "point_names": [
       "Zduńska Wola Karsznice"
@@ -259,6 +243,36 @@
     "name": "Sędzice",
     "point_names": [
       "Sędzice"
+    ]
+  },
+  {
+    "name": "Jackowice",
+    "point_names": [
+      "Jackowice"
+    ]
+  },
+  {
+    "name": "Bednary",
+    "point_names": [
+      "Bednary"
+    ]
+  },
+  {
+    "name": "Stara Wieś koło Kutna",
+    "point_names": [
+      "Stara Wieś koło Kutna"
+    ]
+  },
+  {
+    "name": "Ostrowy",
+    "point_names": [
+      "Ostrowy"
+    ]
+  },
+  {
+    "name": "Krzewie",
+    "point_names": [
+      "Krzewie"
     ]
   }
 ]
