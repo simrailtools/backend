@@ -32,6 +32,7 @@ dependencies {
   implementation(libs.redisson)
   implementation(libs.protobufJava)
   implementation("io.micrometer:micrometer-core")
+  implementation("org.latencyutils:LatencyUtils:2.0.3") // temp workaround for https://github.com/micrometer-metrics/micrometer/issues/7815
 
   implementation("org.springframework.boot:spring-boot-starter-web")
   implementation("org.springframework.boot:spring-boot-starter-data-jpa")
