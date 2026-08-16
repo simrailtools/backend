@@ -15369,7 +15369,7 @@
     "name": "Toruń Główny",
     "id": "4fd83eca-80d4-481d-af9e-e3e5347cdf15",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Toruń Główny"
@@ -15603,7 +15603,7 @@
     "name": "Włocławek",
     "id": "839a9115-4e92-44a1-ac36-ed58fdbf117c",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Włocławek"
@@ -23274,7 +23274,8 @@
     "names": [
       "Łowicz Główny",
       "Łowicz Główny PZS R1",
-      "Łowicz Główny PZS R12"
+      "Łowicz Główny PZS R12",
+      "Łowicz Główny PZS R24-R31"
     ],
     "bb": [
       [
@@ -24403,7 +24404,7 @@
     "name": "Dobiegniew",
     "id": "d46f58e8-7381-44c7-90f2-f3bb48c3ffed",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Dobiegniew"
@@ -24489,7 +24490,7 @@
     "name": "Szczecin Dąbie",
     "id": "a8ab83a1-731d-4467-b6b0-4aae974f76ac",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Szczecin Dąbie Sda",
@@ -24529,7 +24530,7 @@
     "name": "Kostrzyn Wielkopolski",
     "id": "738ddda3-3dd9-4484-8aa3-cee8e19dd9f0",
     "prefix": null,
-    "max_speed": 140,
+    "max_speed": 120,
     "stop_place": false,
     "names": [
       "Kostrzyn Wielkopolski"
@@ -24685,7 +24686,7 @@
     "name": "Choszczno",
     "id": "607c4972-2e90-456d-a6af-7eddd20c218c",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Choszczno"
@@ -25299,7 +25300,7 @@
     "name": "Bednary",
     "id": "70cf7dfe-4a93-40f9-b652-ba220bf9cc08",
     "prefix": null,
-    "max_speed": 90,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Bednary"
@@ -25687,7 +25688,7 @@
     "name": "Szamotuły",
     "id": "fd3f5a28-970a-450a-b8fb-cc1a528abaa1",
     "prefix": null,
-    "max_speed": 120,
+    "max_speed": 140,
     "stop_place": false,
     "names": [
       "Szamotuły"
@@ -27460,7 +27461,7 @@
     "name": "Laskowice Pomorskie",
     "id": "acdbf0b7-39db-4ce6-b180-23ed08462bdc",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Laskowice Pomorskie"
@@ -27616,7 +27617,7 @@
     "name": "Gdańsk Olszynka",
     "id": "c9d44732-d48f-4cb1-9541-b6cec3ebba69",
     "prefix": null,
-    "max_speed": 80,
+    "max_speed": 100,
     "stop_place": false,
     "names": [
       "Gdańsk Olszynka R1 PZS",
@@ -33858,6 +33859,84 @@
     "position": {
       "lat": 52.2253793,
       "lng": 19.4054378
+    }
+  },
+  {
+    "name": "Stara Wieś",
+    "id": "7aa09253-02b8-4421-9168-5632c58fcf70",
+    "prefix": null,
+    "max_speed": 140,
+    "stop_place": false,
+    "names": [
+      "Stara Wieś"
+    ],
+    "bb": [
+      [
+        19.4229490058,
+        52.2269638043
+      ],
+      [
+        19.4226715382,
+        52.2278756534
+      ],
+      [
+        19.4398049275,
+        52.2298316655
+      ],
+      [
+        19.4400823951,
+        52.2289198566
+      ],
+      [
+        19.4229490058,
+        52.2269638043
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 2506857896,
+    "uic_ref": null,
+    "position": {
+      "lat": 52.2274677,
+      "lng": 19.4237723
+    }
+  },
+  {
+    "name": "Poznań Franowo",
+    "id": "a93c0e51-2fc0-413b-9a53-5ad6917a1733",
+    "prefix": null,
+    "max_speed": 120,
+    "stop_place": false,
+    "names": [
+      "Poznań Franowo"
+    ],
+    "bb": [
+      [
+        16.9746369984,
+        52.3618463371
+      ],
+      [
+        16.9674907403,
+        52.36776647
+      ],
+      [
+        17.0257381555,
+        52.3939739119
+      ],
+      [
+        17.0328844136,
+        52.3880572917
+      ],
+      [
+        16.9746369984,
+        52.3618463371
+      ]
+    ],
+    "country": "POL",
+    "osm_id": 4634131656,
+    "uic_ref": null,
+    "position": {
+      "lat": 52.3806965,
+      "lng": 17.0041653
     }
   }
 ]
