@@ -4,7 +4,7 @@ protobuf = "0.10.0"
 spotless = "8.10.0"
 springBoot = "4.1.0"
 downloadTask = "5.7.0"
-checkstyleTools = "13.10.0"
+checkstyleTools = "13.11.0"
 springDependencyManagement = "1.1.7"
 
 # direct dependencies

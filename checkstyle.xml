@@ -325,6 +325,7 @@
     <module name="JavadocMissingLeadingAsterisk"/>
     <module name="JavadocLeadingAsteriskAlign"/>
     <module name="JavadocMissingWhitespaceAfterAsterisk"/>
+    <module name="PreferLiteralJavadocInlineTag"/>
     <module name="JavadocType">
       <property name="allowMissingParamTags" value="true"/>
     </module>
