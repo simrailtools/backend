@@ -10,7 +10,7 @@ springDependencyManagement = "1.1.7"
 # direct dependencies
 jts = "1.20.0"
 nats = "2.26.2"
-feign = "13.13"
+feign = "13.14"
 jackson = "3.2.2"
 lombok = "1.18.46"
 jspecify = "1.0.1"
