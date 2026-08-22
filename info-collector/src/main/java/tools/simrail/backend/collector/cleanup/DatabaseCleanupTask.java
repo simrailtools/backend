@@ -63,7 +63,7 @@ class DatabaseCleanupTask {
   public void cleanupDatabase() {
     this.cleanupDurationTimer.record(() -> {
       // find the journeys without a data update in the last three months, remove all associated events & vehicles as well
-      var cleanupStartDate = Instant.now().minus(90, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS);
+      var cleanupStartDate = Instant.now().minus(14, ChronoUnit.DAYS).truncatedTo(ChronoUnit.DAYS);
       var journeyIdsToRemove = this.journeyRepository.findJourneyIdsByCleanupStartDate(cleanupStartDate);
       if (!journeyIdsToRemove.isEmpty()) {
         for (var batchStart = 0; batchStart < journeyIdsToRemove.size(); batchStart += DELETE_BATCH_SIZE) {
