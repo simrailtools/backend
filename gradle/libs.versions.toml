@@ -17,7 +17,7 @@ jspecify = "1.0.1"
 redisson = "4.7.0"
 fuzzywuzzy = "1.4.0"
 protobufJava = "4.35.1"
-springDocOpenApi = "3.1.0"
+springDocOpenApi = "3.2.0"
 
 # testing
 junit = "6.1.3"
